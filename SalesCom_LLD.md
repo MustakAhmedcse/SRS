@@ -149,17 +149,17 @@ Everything is deployed in **Docker** except the production database (bare-metal 
 
 ## 2.2 Component Responsibilities
 
-| Component | Responsibility | Does NOT do |
-|---|---|---|
-| **Web app (Next.js)** | Render UI; collect wizard input; call `/api/v1`; hold the JWT; show demo previews, run status, approval queues, dashboard. | No SQL, no business rules, no direct DB/queue access. |
-| **.NET API (4 layers)** | Auth & JWT issuance; CRUD for data sources, reports, flows; **own the IR** (validate shape before save into `report_setups.definition`); **trusted-path writes** of `final_commissions` and `ev_disburse`; approval state machine (`report_approvals.overall_status`); publish RabbitMQ events; host Hangfire workers; send SMS/email. | Does not generate or execute the calc SQL (that's Python); does not let generated SQL touch money tables. |
-| **SQL Generator (Python)** | Consume `report.saved`; compile the IR into per-stage SQL using **SQLGlot AST builders** (never string concat); write `section_wise_report_sqls` (one row per `stage_order`, frozen at Final Save). | Does not run the SQL; does not write business data. |
-| **SQL Executor (Python)** | Consume `run.requested`; snapshot `section_wise_report_sqls` → `run_stages` (frozen `sql_text` per stage); **re-parse each stage's SQL through the allowlist** (only `SELECT/WITH/JOIN`, aggregates, `CASE`, and `CREATE/DROP TEMP TABLE`); execute stage-by-stage with a **least-privilege** DB role; create per-stage temp/output tables (`run_stages.output_table_name`), record row counts (guardrails G1–G4); hand the last stage's output to the .NET trusted path for `final_commissions`. | Does not bypass the allowlist; does not write `final_commissions`/`ev_disburse` directly. |
-| **RabbitMQ** | Decouple API from workers; carry `report.saved` (triggers SQL generation), `run.requested` (priority queues: RunNow/Demo/Schedule), `run.completed`, `ev.disburse` (triggers per-recipient EV payout). | Does not carry POS or notification events. |
-| **SeaweedFS (S3)** | Store raw uploads, per-stage outputs. | — |
-| **Hangfire workers** | **Scheduler** (publish `run.requested` for due scheduled reports), **EV Disbursement** (on approval-complete, drive EV payout via `ev.disburse` queue), **Notification** (send SMS/email for approval events). | Does not handle POS or user sync — those run in Airflow. |
-| **Airflow (ETL + POS)** | Daily POS disbursement job (generate CSV, hand off to POS); hourly user sync from the **POS system** (direct DB connection → dump → upsert `users` + `user_rights`; Central Login handles auth only, no rights API); bring source data (DWH, In-house, vPeople, POSDMSDB) into prepared `data_sources` tables. | Does not handle EV disbursement or run execution. |
-| **PostgreSQL (Percona 18)** | Authoritative store: schema `salescomdbtst`, 20 tables + per-run temp tables; JSONB IR; hot (3-month) + archive split. | — |
+| Component | Responsibility |
+|---|---|
+| **Web app (Next.js)** | Render UI; collect wizard input; call `/api/v1`; hold the JWT; show demo previews, run status, approval queues, dashboard. |
+| **.NET API (4 layers)** | Auth & JWT issuance; CRUD for data sources, reports, flows; **own the IR** (validate shape before save into `report_setups.definition`); **trusted-path writes** of `final_commissions` and `ev_disburse`; approval state machine (`report_approvals.overall_status`); publish RabbitMQ events; host Hangfire workers; send SMS/email. |
+| **SQL Generator (Python)** | Consume `report.saved`; compile the IR into per-stage SQL using **SQLGlot AST builders** (never string concat); write `section_wise_report_sqls` (one row per `stage_order`, frozen at Final Save). |
+| **SQL Executor (Python)** | Consume `run.requested`; snapshot `section_wise_report_sqls` → `run_stages` (frozen `sql_text` per stage); **re-parse each stage's SQL through the allowlist** (only `SELECT/WITH/JOIN`, aggregates, `CASE`, and `CREATE/DROP TEMP TABLE`); execute stage-by-stage with a **least-privilege** DB role; create per-stage temp/output tables (`run_stages.output_table_name`), record row counts (guardrails G1–G4); hand the last stage's output to the .NET trusted path for `final_commissions`. |
+| **RabbitMQ** | Decouple API from workers; carry `report.saved` (triggers SQL generation), `run.requested` (priority queues: RunNow/Demo/Schedule), `run.completed`, `ev.disburse` (triggers per-recipient EV payout). |
+| **SeaweedFS (S3)** | Store raw uploads, per-stage outputs. |
+| **Hangfire workers** | **Scheduler** (publish `run.requested` for due scheduled reports), **EV Disbursement** (on approval-complete, drive EV payout via `ev.disburse` queue), **Notification** (send SMS/email for approval events). |
+| **Airflow (ETL + POS)** | Daily POS disbursement job (generate CSV, hand off to POS); hourly user sync from the **POS system** (direct DB connection → dump → upsert `users` + `user_rights`; Central Login handles auth only, no rights API); bring source data (DWH, In-house, vPeople, POSDMSDB) into prepared `data_sources` tables. |
+| **PostgreSQL (Percona 18)** | Authoritative store: schema `salescomdbtst`, 21 tables + per-run temp tables; JSONB IR; hot (3-month) + archive split. |
 
 ## 2.3 Technology Stack
 
@@ -191,8 +191,7 @@ This section is the authoritative, runnable physical schema for SalesCom. All ob
 - **PK** = `id int8 GENERATED BY DEFAULT AS IDENTITY` (bigint identity — NOT `BIGSERIAL`, NOT UUID).
 - **FK** columns = `int8` (bigint).
 - **Money** = `numeric(18,4)` (BDT).
-- **Timestamps** = `timestamptz` (stored UTC).
-- **Enums** are stored as `int4` codes (no `text + CHECK`); each value list is documented inline as a comment and must be kept in sync with Appendix B of the LLD. The app owns code→meaning mapping.
+- **Timestamps** = `timestamptz` (stored UTC). Exception: user-facing date/time inputs such as `report_setups.start_date`, `end_date`, `run_start_date`, `run_end_date`, and `ev_disbursement_time` are stored as `date` or `time` in the DB exactly as the user enters them — no timezone conversion applied.
 - Audit columns where present: `created_at` / `updated_at` (timestamptz), `created_by` / `updated_by` (varchar user_name).
 
 ### 3.1 Module grouping (21 tables)
@@ -611,29 +610,9 @@ CREATE INDEX ix_audit_logs_entity ON salescomdbtst.audit_logs USING btree (entit
 
 ---
 
-### 3.10 Compact `TABLE: columns` reference
+### 3.10 Entity Relationship Diagram
 
-- **users:** id, user_name, user_id (external Central-Login id), full_name, mobile_no, email, department, created_at, updated_at, created_by, updated_by
-- **user_rights:** id, user_id (FK->users.id), rights_code (10=Maker / 20=Checker / 30=Admin)
-- **login_log:** id, user_name, full_name, login_time, login_status (1=Success / 2=Failed), remarks
-- **channels:** id, channel_name
-- **data_sources:** id, source_table_name, table_description, is_active, created_at, updated_at, created_by, updated_by
-- **report_setups:** id, report_name, report_type, channel_type_id (FK->channels.id), commission_cycle, start_date, end_date, "IsSetupComplete" (bool, quoted), is_recurrent, recurrent_type, is_ev_disbursement, ev_disbursement_time, is_pos_disbursement, definition (JSONB=IR), run_start_date, run_end_date, is_report_stop, sms_content, created_at, updated_at, created_by, updated_by, approval_flow_id (FK->approval_flows.id)
-- **report_supporting_uploads:** id, report_setup_id (FK->report_setups.id), db_table_name, db_schema, object_bucket, object_key, file_name, row_count, uploaded_at, uploaded_by
-- **section_wise_report_sqls:** id, report_setup_id (FK->report_setups.id), stage_order, sql_text
-- **report_runs:** id, report_setup_id (FK->report_setups.id), run_date, run_type (1=Demo / 2=Final), triggered_by, run_status (0=Pending / 1=Running / 2=Completed / 3=Failed), disburse_status (varchar: NONE/PENDING/IN_PROGRESS/DONE/FAILED), started_at, ended_at
-- **run_stages:** id, run_id (FK->report_runs.id), sql_text, sort_order, run_status, started_at, ended_at, document_type, bucket, object_url, file_name, file_generated_at, output_table_name, cleanup_status
-- **final_commissions:** id, report_run_id (FK->report_runs.id), channel_id (FK->channels.id), channel_code, "Msisdn" (text, quoted), commission_amount
-- **approval_flows:** id, flow_name, description, created_at, updated_at, created_by, updated_by
-- **approval_flow_levels:** id, approval_flow_id (FK->approval_flows.id), approval_type (1=PRE_RUN / 2=POST_RUN), level_order, level_name, created_at, updated_at, created_by, updated_by
-- **approval_flow_level_users:** id, approval_flow_level_id (FK->approval_flow_levels.id), user_id (FK->users.id)
-- **report_approvals:** id, report_setup_id (FK->report_setups.id), approval_flow_id (FK->approval_flows.id), current_level_order, overall_status (0-4), initiated_by, initiated_at
-- **report_approval_details:** id, approval_request_id (FK->report_approvals.id), level_order, approval_status (1=Approved / 2=Rejected), remarks, approval_by, approval_at
-- **ev_disburse:** id, report_run_id (FK->report_runs.id), channel_code, ev_msisdn (recipient phone), amount, disburse_status (0=Pending/1=Sent/2=Success/3=Failed/4=Retry), disburse_at
-- **pos_disbursement:** id, report_run_id (FK->report_runs.id), dump_status (0=Pending/1=Dumped/2=Failed), disburse_at
-- **email_notifications:** id, to_address, cc, bcc, subject, body, from_address, status, attempt_count, error_message, sent_at, created_at
-- **sms_notifications:** id, phone_number, messages, status, attempt_count, error_message, sent_at, created_at
-- **audit_logs:** id, application_name, entity_name, entity_id, action_type, changed_by_user_id (uuid), changed_by, changed_at, changed_columns, old_values, new_values
+For the full table-and-column visual reference, see the ERD file: **`commission_system_erd_5.drawio`** (Downloads folder). It covers all 21 tables, their columns, and FK relationships. The DDL in §3.2–§3.9 above is the authoritative source; the ERD is the visual companion.
 ---
 
 # §4 Authentication & Session
@@ -646,10 +625,8 @@ The flow in one line: the web app posts credentials to the **SalesCom backend** 
 
 Two background mechanics keep the session honest:
 
-- **3-hour inactivity logout** — the frontend drops the JWT after **3 hours** of no user activity; the user must sign in again from the start. (Per Team LLD v2.)
+- **3-hour inactivity logout** — the frontend drops the JWT after **3 hours** of no user activity; the user must sign in again from the start.
 - **Hourly provisioning sync** — an Airflow DAG runs every hour and pulls SalesCom users and their rights directly from the **POS system database** (via DB connection string — no API), dumps the data on the Airflow server, then upserts `users` and `user_rights` in SalesCom. Only users who exist in SalesCom are pulled. Role/right changes take effect within an hour.
-
-> **JWT expiry duration:** the JWT carries a standard `exp` claim, but the **explicit expiry duration is intentionally left unspecified** in this build spec (Team LLD v2) and is to be set from server-side configuration. The **3-hour frontend inactivity logout** is the session control the user experiences; absolute token lifetime is a config value, not a contract.
 
 The exact `authToken` format, the verify-endpoint contract, and the redirect parameter set are pinned in the **Central Login ICD** (D4, contracts-first); this section specifies the SalesCom-side behavior that does not depend on those final details.
 
