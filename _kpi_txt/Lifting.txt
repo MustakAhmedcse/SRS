@@ -1,0 +1,179 @@
+Banglalink SRF
+Unique KPI Conditions
+Campaign Folder: Retailer EV Lifting / Itop Lifting Campaigns
+Total SRFs Analyzed: 13  |  Prepared: May 2026
+Index
+[TABLE]
+| # | Section |
+| 1 | Campaign Overview |
+| 2 | Campaign Types & Naming Conventions |
+| 3 | Discount Rate Conditions |
+| 4 | Minimum Lifting Target Conditions |
+| 5 | Maximum Discount Cap |
+| 6 | Distributor / DH Code Scope Conditions |
+| 7 | New Retailer Default Target |
+| 8 | Multi-Day Campaign & Target Consistency |
+| 9 | DMS Retailer Type Exclusions |
+| 10 | Agent List Condition |
+| 11 | Retailer Lifting Definition |
+| 12 | Reimbursement Mechanism |
+| 13 | Fixed / Invariant General Conditions |
+| 14 | SRF Reference Summary Table (All 13 SRFs) |
+[/TABLE]
+1. Campaign Overview
+The EV Lifting / Itop Lifting campaign incentivizes retailers to lift Electronic Value (EV / i'top-up) during specific campaign windows. Retailers who meet a minimum lifting target within a single day earn an upfront discount from their RSO. Distributors are reimbursed post-campaign. Campaigns are strictly ad-hoc and cover a defined set of campaign dates.
+[TABLE]
+| Product | EV / i'top-up (SR to Retailer and Distributor to Retailer) |
+| Recharge Type | I-TOP Lifting |
+| Recipient | Retailer |
+| Disbursement | Disbursement slot (upfront discount by RSO to retailer) |
+| Periodicity | Ad-hoc; frequency = Campaign Period |
+| SRFs Analyzed | 13 SRFs across Mar 2025 – Apr 2026 |
+[/TABLE]
+2. Campaign Types & Naming Conventions
+Two distinct campaign name patterns appear across the 13 SRFs. Both follow the same KPI logic but differ in geographic scope and targeting approach.
+[TABLE]
+| Campaign Name Pattern | SRFs | Scope / Notes |
+| Retailer EV Lifting Campaign_[Date] | Mar25, May-Jun25, Jul25, Feb26, Mar26 | Broad retailer base; all eligible retailers nationally or all-DH |
+| Tiger Retailer EV Lifting Campaign_[Date] | Jun25 (22-23 Jun) | Special 'Tiger' brand naming; retailer list by B2C |
+| Itop Lifting Campaign_[Date] | Aug25, Sep25 (3 campaigns) | Renamed format; specific DH code scope |
+| Retailer EV Lifting Campaign_North East Cluster_[Date] | Feb26 (11 Feb), Mar26 (18-19 Mar) | Cluster-specific SRFs for North East Cluster only |
+| Retailer EV Lifting Campaign_[DH Codes]_[Date] | Apr26 (MYMSHE07_MYMSHE08) | DH-code-specific SRFs; named with DH codes in title |
+[/TABLE]
+3. Discount Rate Conditions
+Two distinct discount rate tiers are used across the 13 SRFs. The higher tier (0.78%/0.7%) was used in early campaigns (Mar25, May-Jun25) and revived in Mar26 SRFs. The lower tier (0.55%/0.5%) was introduced from Jun25 onward and remains the standard for most subsequent campaigns. A minor spelling variant ('0.556%' vs '0.55%') appears in Feb26 SRFs. In Apr26, the rate is explicitly written as '0.5556%'.
+Tier A — Higher Rate
+[TABLE]
+| Rate (before AIT) | 0.78% |
+| Rate (after AIT) | 0.7% |
+| Max Discount (incl. AIT) | BDT 778 per retailer per day |
+| Max Discount (excl. AIT) | BDT 700 per retailer per day |
+| Max Lifting Value | BDT 1,00,000 per day (above which no incremental discount) |
+| Applicable SRFs | Mar25, May-Jun25, Mar26 (12-19 Mar), NE Cluster Mar26 |
+[/TABLE]
+Tier B — Lower Rate
+[TABLE]
+| Rate (before AIT) | 0.55% (written as '0.55%', '0.556%', or '0.5556%' across SRFs) |
+| Rate (after AIT) | 0.5% |
+| Max Discount (incl. AIT) | BDT 555.556 (or BDT 555.5556 in Apr26) per retailer per day |
+| Max Discount (excl. AIT) | BDT 500 per retailer per day |
+| Max Lifting Value | BDT 1,00,000 per day (above which no incremental discount) |
+| Applicable SRFs | Tiger Jun25, Jul25, Itop Aug25-Sep25, Feb26, NE Cluster Feb26, Apr26 |
+[/TABLE]
+Note: Rate variants in SRF text: '0.55%' (Jun25-Sep25), '0.556%' (Feb26), '0.5556%' (Apr26). All represent the same effective rate — difference is rounding convention only.
+4. Minimum Lifting Target Conditions
+Two patterns exist for how the minimum lifting threshold is defined. In most SRFs, a retailer-wise target is provided by B2C and must be met in a single day. In DH-specific / Itop campaigns (Jul25 onward through Sep25), a flat BDT 1,000 minimum is stated.
+[TABLE]
+| Target Type | Condition | Applicable SRFs |
+| Retailer-Wise Target (B2C provided) | Retailer must lift the specified target amount or more in a single day. Target is retailer-specific and shared by B2C via retailer list. | Mar25, May-Jun25, Tiger Jun25, Feb26, NE Feb26, Mar26, NE Mar26, Apr26 |
+| Flat Minimum: BDT 1,000 | Any retailer in scope must lift at least BDT 1,000 in a single day to qualify. | Jul25, Itop Aug25, Itop Sep25 (7th, 9th, 12th) |
+[/TABLE]
+Note: In all cases, qualification is per-day (single-day gate). Lifting on one campaign day does not count toward another.
+5. Maximum Discount Cap
+In every SRF, the maximum discount cap per retailer per day is linked to a maximum lifting value of BDT 1,00,000. Lifting above this cap does not earn additional discount. Two cap amounts correspond to the two rate tiers.
+[TABLE]
+| Rate Tier | Max Lifting Value / Day | Max Discount incl. AIT | Max Discount excl. AIT |
+| Tier A (0.78%/0.7%) | BDT 1,00,000 | BDT 778 | BDT 700 |
+| Tier B (0.55%/0.5%) | BDT 1,00,000 | BDT 555.556 | BDT 500 |
+[/TABLE]
+6. Distributor / DH Code Scope Conditions
+Most campaigns cover all eligible retailers nationally (list provided by B2C). However, several SRFs restrict eligibility to specific Distributor House (DH) codes or clusters.
+[TABLE]
+| Scope Type | DH / Cluster | SRF(s) |
+| All retailers (B2C retailer list) | — | Mar25, May-Jun25, Tiger Jun25, Feb26, Mar26 |
+| Specific DH codes: DHKGOP08, DHKGOP09, DHKGOP10, DHKGOP11 | DHKGOP cluster | Jul25 (19th Jul) |
+| Specific DH codes: KHUBAG04, KHUBAG06, KHUBAG07, KHUBAG13, KHUBAG16, KHUBAG17, KHUBAG18, KHUBAG19, KHUBAG20 | KHUBAG cluster | Itop Aug25 (24th), Itop Sep25 (7th & 9th) |
+| Expanded DH codes: KHUBAG04/06/07/13/16/17/18/19/20 + DHKFAR04 + DHKFAR09 | KHUBAG + DHKFAR | Itop Sep25 (12th) |
+| North East Cluster only | NE Cluster | NE Cluster Feb26 (11th Feb), NE Cluster Mar26 (18-19 Mar) |
+| Specific DH codes: MYMSHE07, MYMSHE08 | MYMSHE cluster | Apr26 (6-7 Apr) |
+[/TABLE]
+Note: For DH-code-specific SRFs, the 'Distributor Campaign Calendar' condition from B2C may not apply; the scope is fixed by DH code.
+7. New Retailer Default Target
+For retailers not present in the B2C-provided retailer list, a default target applies. Three variants are observed across SRFs.
+[TABLE]
+| Variant | Default Target | SRF(s) |
+| Core / Non-Core tiered | BDT 2,000 (Core Market) / BDT 1,000 (Non-Core) in a single day | Mar25, May-Jun25, Feb26, NE Feb26, Mar26, NE Mar26 |
+| Flat default (no Core/Non-Core split) | BDT 2,000 in a single day | Apr26 (MYMSHE07/MYMSHE08) |
+| Not mentioned | No new retailer default stated in SRF | Tiger Jun25, Jul25, Itop Aug25-Sep25 |
+[/TABLE]
+Note: Where not mentioned, it is likely because the campaign scope is restricted to a specific retailer/DH list and new retailers outside it would not qualify.
+8. Multi-Day Campaign & Target Consistency
+In all multi-day SRFs, the retailer-wise target is explicitly stated as being the same across all campaign days (each day evaluated independently). An exception is the Feb26 SRF, which introduces a 'Distributor-wise Campaign Calendar' condition.
+[TABLE]
+| Campaign | Duration | Target Consistency Condition | Campaign Calendar? |
+| Mar25 (20-31 Mar) | 12 days (4 campaign days) | Same target for all campaign days | No |
+| May-Jun25 (29 May–6 Jun) | 9 days | Same target for campaign days | No |
+| Tiger Jun25 (22-23 Jun) | 2 days | Target per day (same) | No |
+| Jul25 (19 Jul) | 1 day | Single day | No |
+| Itop Aug25 (24 Aug) | 1 day | Single day | No |
+| Itop Sep25 (7, 9, 12 Sep) | 1 day each | Single day | No |
+| Feb26 (8-11 Feb) | 4 days | Same target each day; distributor calendar governs eligible days per distributor | Yes — Distributor-wise eligible days |
+| NE Cluster Feb26 (11 Feb) | 1 day | Single day | No |
+| Mar26 (12-19 Mar) | 8 days | Same target for individual/each days | Yes — Distributor-wise eligible days |
+| NE Cluster Mar26 (18-19 Mar) | 2 days | Same target each day | Yes — Distributor-wise eligible days |
+| Apr26 MYMSHE07/08 (6-7 Apr) | 2 days | Same target each day | Yes — Distributor-wise eligible days |
+[/TABLE]
+Note: Distributor Campaign Calendar: introduced from Feb26 SRFs. It specifies which campaign days are eligible for each distributor. Shared by B2C team.
+9. DMS Retailer Type Exclusions
+From the Itop Aug25 SRF onward, certain DMS retailer types are explicitly excluded from the campaign. Earlier SRFs (Mar25 through Tiger Jun25) do not mention any exclusions.
+[TABLE]
+| Exclusion Condition | Excluded DMS Types | SRF(s) |
+| No exclusions stated | — | Mar25, May-Jun25, Tiger Jun25, Jul25 |
+| Explicit DMS type exclusions | BL Franchise Store; Enterprise; SME Direct BDO | Itop Aug25, Itop Sep25 (all 3), Feb26, NE Feb26, Mar26, NE Mar26, Apr26 |
+[/TABLE]
+Note: These exclusions prevent non-traditional trade retailers (franchise, enterprise, direct SME) from claiming the EV lifting discount.
+10. Agent List Condition
+All 13 SRFs include the following standard condition:
+[TABLE]
+| Condition | Agent list of each day will be considered for evaluating performance on that day |
+| Purpose | Ensures performance is assessed against the active agent list on the exact campaign date |
+| Implication | An RSO not in the agent list on a given day is not credited for that day's lifting activity |
+[/TABLE]
+11. Retailer Lifting Definition
+All 13 SRFs use a consistent definition of 'retailer lifting':
+[TABLE]
+| Definition | Retailer Lifting means: SR to Retailer AND Distributor to Retailer |
+| Product | EV / i'top-up only |
+| Recharge | I-TOP Lifting (valid recharges only) |
+[/TABLE]
+Note: Both SR-to-Retailer and Distributor-to-Retailer transaction types count toward the retailer's lifting total for the day.
+12. Reimbursement Mechanism
+The reimbursement flow is identical across all 13 SRFs:
+[TABLE]
+| Step 1 (Upfront) | RSO gives up-front discount to retailer at the time of lifting |
+| Step 2 (Post-promo) | Distributor is reimbursed after the promotional period ends |
+| Timing | Reimbursement happens post-campaign via commission calculation report |
+[/TABLE]
+13. Fixed / Invariant General Conditions
+The following conditions are identical across all 13 Lifting SRFs and do not vary:
+[TABLE]
+| Factor | Consideration | Condition |
+| SAF — DMS Post Date | a) DMS Post Date | 7 days within Activation |
+| SAF — Vetting Date | b) Vetting Date | 14th date of Activation following month |
+| Recharge | All Valid Recharges | Considering the valid recharge. I-TOP Lifting |
+| Product | N/A | EV / i'top-up (SR to Retailer and Distributor to Retailer) |
+| Disconnection | N/A | Latest data up to report maturity date |
+| Lifting/Issue | N/A | Needs to be activated within 180 days of lifting |
+| Activation | FAD (First Activity Date) | Activation During the Promotion Period |
+| Report Sharing Slot | Disbursement | Post-campaign disbursement slot |
+| Input Data Sources | IT SC, IT BI, DWH, DMS, POS, EV Platform | All standard sources consistent across SRFs |
+[/TABLE]
+14. SRF Reference Summary Table (All 13 SRFs)
+Complete reference of all 13 SRFs in the Lifting folder with their key KPI conditions at a glance.
+[TABLE]
+| SRF / Campaign | Date(s) | Rate (pre/post AIT) | Max Disc. | Min Target | Scope | DMS Excl. | New Retailer Default | Camp. Cal. |
+| Retailer EV Lifting Campaign (Mar25) | 20-31 Mar 2025 | 0.78% / 0.7% | 778/700 | B2C target | All retailers | No | 2,000/1,000 (Core/Non-Core) | No |
+| Retailer EV Lifting Campaign (May-Jun25) | 29 May–6 Jun 2025 | 0.78% / 0.7% | 778/700 | B2C target | All retailers | No | 2,000/1,000 (Core/Non-Core) | No |
+| Tiger Retailer EV Lifting Campaign (Jun25) | 22-23 Jun 2025 | 0.55% / 0.5% | 555.556/500 | B2C target | B2C list | No | Not stated | No |
+| Retailer EV Lifting Campaign (Jul25) | 19 Jul 2025 | 0.55% / 0.5% | 555.556/500 | BDT 1,000 flat | DHKGOP08/09/10/11 | No | Not stated | No |
+| Itop Lifting Campaign (Aug25) | 24 Aug 2025 | 0.55% / 0.5% | 555.556/500 | BDT 1,000 flat | KHUBAG 9 DH codes | Yes | Not stated | No |
+| Itop Lifting Campaign (7 Sep25) | 7 Sep 2025 | 0.55% / 0.5% | 555.556/500 | BDT 1,000 flat | KHUBAG 9 DH codes | Yes | Not stated | No |
+| Itop Lifting Campaign (9 Sep25) | 9 Sep 2025 | 0.55% / 0.5% | 555.556/500 | BDT 1,000 flat | KHUBAG 9 DH codes | Yes | Not stated | No |
+| Itop Lifting Campaign (12 Sep25) | 12 Sep 2025 | 0.55% / 0.5% | 555.556/500 | BDT 1,000 flat | KHUBAG codes + DHKFAR04/09 | Yes | Not stated | No |
+| Retailer EV Lifting Campaign (Feb26) | 8-11 Feb 2026 | 0.556% / 0.5% | 555.556/500 | B2C target | All retailers | Yes | 2,000/1,000 (Core/Non-Core) | Yes |
+| Retailer EV Lifting Campaign NE Cluster (Feb26) | 11 Feb 2026 | 0.556% / 0.5% | 555.556/500 | B2C target | NE Cluster | Yes | 2,000/1,000 (Core/Non-Core) | No |
+| Retailer EV Lifting Campaign (Mar26) | 12-19 Mar 2026 | 0.78% / 0.7% | 778/700 | B2C target | All retailers | Yes | 2,000/1,000 (Core/Non-Core) | Yes |
+| Retailer EV Lifting Campaign NE Cluster (Mar26) | 18-19 Mar 2026 | 0.78% / 0.7% | 778/700 | B2C target | NE Cluster | Yes | 2,000/1,000 (Core/Non-Core) | Yes |
+| Retailer EV Lifting Campaign MYMSHE07/08 (Apr26) | 6-7 Apr 2026 | 0.5556% / 0.5% | 555.5556/500 | B2C target | MYMSHE07, MYMSHE08 | Yes | 2,000 flat | Yes |
+[/TABLE]
+Note: DMS Excl. = DMS Retailer Type Exclusions (BL Franchise Store, Enterprise, SME Direct BDO). Camp. Cal. = Distributor-wise Campaign Calendar from B2C. Max Disc. = BDT values (incl. AIT / excl. AIT).

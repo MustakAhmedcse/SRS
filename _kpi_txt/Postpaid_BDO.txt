@@ -1,0 +1,509 @@
+BANGLALINK
+POSTPAID BDO FOLDER
+Unique KPI Conditions
+All Unique Commissioning Conditions Across All Campaign Types
+Total SRFs Analysed: 26
+Department: Alternate Channel and Digital Recharge
+Recipient Roles: B2C Postpaid BDO / BDO Supervisor / BDO Coordinator
+Prepared: May 2026
+INDEX — Postpaid BDO Folder Campaign Types
+[TABLE]
+| # | Campaign Type | Brief Description |
+| 1 | BDO Variable Incentive (Regular Monthly) | BDO gets incentive based on GA+MNP achievement under own retailer code — slab-based, max BDT 7,000 |
+| 2 | BDO Supervisor Variable Incentive (Regular Monthly) | Supervisor gets incentive based on all GA+MNP under their DDCODE — slab-based, max BDT 7,000 |
+| 3 | BDO Coordinator Variable Incentive (Regular Monthly) | Coordinator gets incentive based on all GA+MNP under their 3–5 DDCodes — slab-based, max BDT 5,000 |
+| 4 | BDO Supervisor GA Campaign Incentive (Ad-hoc) | Tiered fixed incentive for Supervisor: BDT 3,000 for 100% target, BDT 2,000 for 90% — Mar25 campaign |
+| 5 | BDO Coordinator GA Campaign Incentive (Ad-hoc) | Tiered fixed incentive for Coordinator: BDT 5,000 for 100% target, BDT 3,000 for 90% — Mar25 campaign |
+| 6 | Postpaid Acquisition Bonus — BDO (Count-Based) | BDO gets bonus based on total monthly GA count: BDT 3,000 or BDT 6,000 depending on threshold met |
+| 7 | Postpaid GA Achievement Commission — BDO (Target % Based) | BDO gets BDT 2,000 for achieving 100% GA target with minimum 60 GA per month |
+| 8 | M2 Survival Commission — BDO | BDO gets commission based on M2 (3rd month) revenue generation rate of M0 activations |
+| 9 | BDO VLR Active Incentive | BDO must achieve ≥75% GA AND ≥75% VLR active rate; max BDT 3,000 at actual proportion |
+| 10 | BDO Supervisor VLR Active Incentive | Supervisor must achieve ≥80% GA AND ≥80% VLR active rate; max BDT 4,000 at actual proportion |
+[/TABLE]
+[TABLE]
+| All commission types in this folder share the same postpaid product IDs and security deposit framework. See Appendix A for the complete product ID list and Appendix B for the security deposit evolution table. |
+[/TABLE]
+Section 1: BDO Variable Incentive (Regular Monthly)
+Individual BDO (Business Development Officer) earns monthly variable incentive based on Gross Add (GA) + MNP acquisition performance under their own retailer code. Commission is slab-based — proportional to achievement between 75%–100% of target.
+1.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual retailer code) |
+| Commission Basis | GA + MNP count under BDO's own retailer code |
+| Max Incentive | BDT 3,000 (from Jan26 with VLR condition added; see Section 9 for VLR variant) |
+| Periodicity | Regular — Monthly |
+| Report Slot | Disbursement |
+| AIT | Applicable |
+| Salescom to POS | No |
+| Salescom to IN HOUSE | No |
+| Maturity Date | 8th of following month |
+| Data Source | IT SC, DWH, DMS, Channel Mapping |
+[/TABLE]
+1.2 Incentive Slab
+[TABLE]
+| GA+MNP Achievement % | Incentive Payable |
+| Less than 75% | BDT 0 (no incentive) |
+| 75% to 100% | At Actual (proportional up to BDT 3,000 max) |
+[/TABLE]
+[TABLE]
+| NOTE: 'At Actual' means the incentive is paid proportionally. Example: 90% achievement = 90% of BDT 3,000 = BDT 2,700. The BDO must achieve at least 75% GA target to qualify for any incentive. |
+[/TABLE]
+1.3 Eligibility Conditions
+Specific Conditions
+[TABLE]
+| 1 | BDO must achieve at least 75% of monthly GA target (GA includes MNP). |
+| 2 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 3 | Only eligible subscription IDs and option group bundles will be counted (see Appendix A). |
+| 4 | Security deposit must be ensured on the same day as activation. |
+| 5 | Security deposit must be equal to or greater than the bundle-wise minimum amount (see Appendix B). |
+| 6 | Security deposit top-up can be done via i-top number list (to be shared) OR via BL Power App (any registered BL Power number). |
+| 7 | Top-up for security deposit can be in one shot or multiple — but total must add up to required deposit. |
+| 8 | For TK200 (non-bundle) packs, deposit amount must be extracted from DWH (Table: POSTPAID_COMMISSION_DATA_MONTHLY_DWH). |
+| 9 | 98% ETSAF must be submitted by 7th of the following month by all retailer codes under his DDCODE. |
+| 10 | Disconnection data: latest data up to report generation date (T-6). |
+| 11 | AIT will be applicable on all commission amounts. |
+| 12 | Data source for BL Power deposits: File bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+[/TABLE]
+1.4 GA Criteria (New Activation)
+GA (New Activation) Conditions
+[TABLE]
+| 1 | New Activation must be on Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) base package. |
+| 2 | Option group bundle activation also required alongside base package. |
+| 3 | Security deposit must be ensured on the same day as activation. |
+| 4 | Security deposit equals to or greater than bundle-wise minimum amount. |
+| 5 | Top-up can be one shot or multiple — must accumulate to required minimum. |
+[/TABLE]
+1.5 MNP Criteria
+MNP Conditions
+[TABLE]
+| 1 | MNP to subscription ID: Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid). |
+| 2 | With mentioned bundle or non-bundle. |
+| 3 | Security deposit must be ensured on the same day as MNP activation. |
+| 4 | Security deposit equals to or greater than bundle/non-bundle wise minimum amount. |
+| 5 | Top-up can be one shot or multiple — must accumulate to required minimum. |
+[/TABLE]
+1.6 General Conditions Table
+[TABLE]
+| Factor | Consideration | Condition Detail |
+| Activation | FCD (First Call Date) | Activation during the promotion period; Retail2Postpaid/BL Select Postpaid base + option group bundle |
+| SAF | ETSAF | 98% ETSAF must be submitted by 7th of following month by all retailer codes under his DDCODE |
+| Lifting/Issue | N/A | N/A |
+| Recharge | All Valid Recharges | Minimum security deposit as per bundle-wise table; one shot or multiple from any source |
+| Disconnection | N/A | Latest data up to report maturity date (T-6) |
+| Product | N/A | Banglalink Postpaid connections and MNP as per product details in Appendix A |
+[/TABLE]
+Section 2: BDO Supervisor Variable Incentive (Regular Monthly)
+BDO Supervisor earns monthly variable incentive based on the cumulative GA+MNP of ALL retailer codes under their mapped DDCODE. Same slab structure as BDO (Section 1) but covers the entire DD Code scope. Max BDT 7,000.
+2.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | BDO Supervisor (mapped to DDCode) |
+| Commission Scope | ALL retailer codes under the Supervisor's DDCODE |
+| Commission Basis | Cumulative GA + MNP across all retailers under the DDCode |
+| Max Incentive | BDT 7,000 |
+| Periodicity | Regular — Monthly (from Feb25 onwards; also run as ad-hoc for Jul25, Sep25 campaign periods) |
+| Mapping | DDCode and Retailer code tagging, i-top number and target shared by B2C Postpaid team |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| Data Source | IT SC, DWH, DMS, Channel Mapping |
+[/TABLE]
+2.2 Incentive Slab
+[TABLE]
+| GA+MNP Achievement % | Incentive Payable |
+| Less than 75% | BDT 0 (no incentive) |
+| 75% to 100% | At Actual (proportional up to BDT 7,000 max) |
+[/TABLE]
+2.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Condition covers Gross Add and MNP of ALL retailer codes under each respective Supervisor DDCode. |
+| 2 | Cumulative target of all tagged retailers/BDOs under the Supervisor is considered as monthly target. |
+| 3 | DDCode, retailer code tagging, i-top number and target shared by B2C Postpaid team before commission run. |
+| 4 | 98% ETSAF must be submitted by 7th of following month by all retailer codes under his DDCODE. |
+| 5 | Security deposit must be ensured on same day as activation. |
+| 6 | Security deposit must be equal to or greater than bundle-wise minimum (see Appendix B). |
+| 7 | Top-up for security deposit: one shot (early SRFs Feb25-Jul25) OR one shot or multiple (Nov25+). |
+| 8 | Deposit can also be done via BL Power App with any registered BL Power number (from Nov25+). |
+| 9 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 10 | Only eligible subscription IDs and option group bundles count (see Appendix A). |
+| 11 | AIT applicable on all commission amounts. |
+| 12 | Disconnection data: T-6. |
+[/TABLE]
+[TABLE]
+| CHANGE FROM FEB25: From Nov25 onwards, deposit can be done via BL Power App (any registered BL Power number), expanding from the earlier constraint of i-top number list only. Also, from Nov25, deposits can be multiple installments (not just one shot). |
+[/TABLE]
+Section 3: BDO Coordinator Variable Incentive (Regular Monthly)
+BDO Coordinator earns variable incentive based on cumulative GA+MNP across ALL retailer codes under their mapped 3–5 DDCodes. Same slab structure but max BDT 5,000.
+3.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | BDO Coordinator (mapped to 3 DDCodes in regular; 5 DDCodes in Jul25 campaign) |
+| Commission Scope | ALL retailer codes under the Coordinator's 3–5 DDCodes |
+| Commission Basis | Cumulative GA + MNP across all retailers under all mapped DDCodes |
+| Max Incentive | BDT 5,000 |
+| Periodicity | Regular — Monthly (from Feb25; also ad-hoc Jul25, Sep25) |
+| Mapping | Coordinator number, DDCode, retailer code tagging, i-top number and target shared by B2C Postpaid team |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+[/TABLE]
+3.2 Incentive Slab
+[TABLE]
+| GA+MNP Achievement % | Incentive Payable |
+| Less than 75% | BDT 0 (no incentive) |
+| 75% to 100% | At Actual (proportional up to BDT 5,000 max) |
+[/TABLE]
+3.3 Key Differentiator vs. Supervisor
+[TABLE]
+| DIFFERENCE FROM SUPERVISOR: Coordinator covers 3–5 DDCodes (not 1). Max incentive is BDT 5,000 (vs. BDT 7,000 for Supervisor). Cumulative target of all supervisors/DDCodes tagged with the Coordinator is used as the campaign target. All other conditions are identical to Supervisor. |
+[/TABLE]
+3.4 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Condition covers Gross Add and MNP of ALL retailer codes under each respective Coordinator's DDCodes. |
+| 2 | Cumulative target of 3 supervisors/DDCodes tagged with the Coordinator is the campaign target. |
+| 3 | Coordinator number, DDCode, retailer code tagging, i-top number and target shared by B2C Postpaid team. |
+| 4 | 98% ETSAF must be submitted by 7th of following month by all retailer codes under his DDCODE. |
+| 5 | Security deposit on same day as activation; equal to or greater than bundle-wise minimum. |
+| 6 | Top-up: one shot (early periods) OR one shot or multiple (Nov25+); BL Power App deposit also accepted (Nov25+). |
+| 7 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 8 | Only eligible subscription IDs and option group bundles count (Appendix A). |
+| 9 | AIT applicable. |
+| 10 | Disconnection data: T-6. |
+[/TABLE]
+Section 4: BDO Supervisor GA Campaign Incentive (Ad-hoc)
+Ad-hoc campaign incentive for BDO Supervisors — tiered fixed BDT amounts for hitting 90% or 100% of target. Unlike the regular variable incentive (Section 2), this is a FIXED amount at each tier, not proportional.
+4.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | BDO Supervisor (mapped to DDCode) |
+| Incentive Type | Fixed-tier (not proportional) |
+| Periodicity | Ad-hoc (observed: Mar25 campaign only) |
+| Commission Scope | ALL retailer codes under the Supervisor's DDCODE |
+| Mapping | Retailer list tagged with Supervisor shared before commission run |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+[/TABLE]
+4.2 Incentive Tiers
+[TABLE]
+| GA+MNP Achievement | Commission Amount (BDT) |
+| 100% of target achieved | BDT 3,000 |
+| 90% of target achieved | BDT 2,000 |
+| Below 90% | BDT 0 |
+[/TABLE]
+[TABLE]
+| KEY DIFFERENCE from Regular Supervisor Variable Incentive: This is FIXED at each tier (BDT 2,000 or BDT 3,000), not proportional. The slab threshold here is 90% and 100%, not 75%. This was an ad-hoc Mar25 campaign incentive. |
+[/TABLE]
+4.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Cumulative target of tagged retailers/BDOs under the Supervisor is considered as monthly target. |
+| 2 | Retailer list tagged with Supervisor shared before running the commission. |
+| 3 | DDCode, retailer code tagging, i-top number and target shared by B2C Postpaid team. |
+| 4 | 98% ETSAF must be submitted by 7th of following month (noted as a condition but marked N/A in SAF general conditions row — ETSAF still referenced in GA condition text). |
+| 5 | Security deposit on same day as activation; one shot only (early period); equal to or greater than minimum. |
+| 6 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 7 | Only eligible subscription IDs and bundles count (see Appendix A). |
+| 8 | AIT applicable. |
+[/TABLE]
+Section 5: BDO Coordinator GA Campaign Incentive (Ad-hoc)
+Ad-hoc campaign incentive for BDO Coordinators — tiered fixed BDT amounts for hitting 90% or 100% of cumulative target across their 3 DDCodes.
+5.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | BDO Coordinator (mapped to 3 DDCodes) |
+| Incentive Type | Fixed-tier (not proportional) |
+| Periodicity | Ad-hoc (observed: Mar25 campaign only) |
+| Commission Scope | ALL retailer codes under Coordinator's 3 DDCodes |
+| Target Basis | Cumulative target of 3 supervisors/DDCodes tagged with Coordinator |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+[/TABLE]
+5.2 Incentive Tiers
+[TABLE]
+| GA+MNP Achievement | Commission Amount (BDT) |
+| 100% of target achieved | BDT 5,000 |
+| 90% of target achieved | BDT 3,000 |
+| Below 90% | BDT 0 |
+[/TABLE]
+[TABLE]
+| KEY DIFFERENCE from Regular Coordinator Variable Incentive: Fixed tiers (BDT 3,000 or BDT 5,000), not proportional. Target thresholds are 90%/100%, not 75%. |
+[/TABLE]
+5.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Cumulative target of 3 supervisors/DDCodes tagged with Coordinator is the campaign target. |
+| 2 | Target and mapping shared before running commission. |
+| 3 | Coordinator number, DDCode, retailer code tagging shared by B2C Postpaid team. |
+| 4 | 98% ETSAF must be submitted by 7th of following month. |
+| 5 | Security deposit on same day as activation; one shot; equal to or greater than minimum. |
+| 6 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 7 | AIT applicable. |
+[/TABLE]
+Section 6: Postpaid Acquisition Bonus — BDO (Count-Based)
+Individual BDO earns a FIXED BONUS based on total monthly GA count (not % achievement). Two slabs based on count thresholds. The count threshold changed from Jul25 onwards.
+6.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual) |
+| Commission Basis | Total monthly GA count (includes MNP) |
+| Commission Type | Fixed bonus per count slab (not % of target) |
+| Periodicity | Regular — Monthly |
+| Report Slot | Disbursement |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| ETSAF Condition | 98% ETSAF within 7th of following month |
+[/TABLE]
+6.2 Bonus Slab — Period Variants
+[TABLE]
+| Period | Slab 1 (Lower) | Bonus | Slab 2 (Upper) | Bonus |
+| Feb25–Jun25 | 60–69 GA/month | BDT 3,000 | 70+ GA/month | BDT 6,000 |
+| Jul25 onwards | 70–79 GA/month | BDT 3,000 | 80+ GA/month | BDT 6,000 |
+[/TABLE]
+[TABLE]
+| IMPORTANT CHANGE: From July 2025, the count thresholds increased — lower slab moved from 60–69 to 70–79, and upper slab moved from 70+ to 80+. This reflects increased performance expectations. The BDT amounts remained the same (BDT 3,000 / BDT 6,000). |
+[/TABLE]
+6.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Bonus is based on total GA count per BDO per month, not percentage of target. |
+| 2 | GA includes both New Activations and MNP. |
+| 3 | Field force (B2C Postpaid BDO) is eligible for monthly bonus. AIT applicable. |
+| 4 | 98% ETSAF must be submitted by 7th of following month. |
+| 5 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 6 | Only eligible subscription IDs and option group bundles count (see Appendix A). |
+| 7 | Security deposit must be equal to or greater than bundle-wise minimum (see Appendix B). |
+| 8 | Security deposit must be on same day as activation. |
+| 9 | Security deposit top-up: one shot or multiple — must accumulate to required minimum. |
+| 10 | Security deposit top-up number list shared; BL Power App also accepted. |
+| 11 | For TK200 packs, deposit amount extracted from DWH (POSTPAID_COMMISSION_DATA_MONTHLY_DWH). |
+| 12 | Disconnection data: T-6. |
+| 13 | One shot or multiple recharge from any source considered — must add up as deposit. |
+[/TABLE]
+6.4 Report Detail Format
+[TABLE]
+| Retailer Code | Target | GA Before Disconnection | Total GA | Disconnection Count | ETSAF Qualified Count | Deposit Count | Commission Amount |
+| [from system] | [shared] | [computed] | [computed] | [computed] | [computed] | [computed] | [BDT 3000/6000] |
+[/TABLE]
+Section 7: Postpaid GA Achievement Commission — BDO (Target % Based)
+Individual BDO earns a fixed BDT 2,000 bonus for achieving exactly 100% of their GA target, provided the minimum absolute GA count is at least 60 per month. This is different from the Count-Based Bonus (Section 6) — here, it is percentage of TARGET achieved.
+7.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual) |
+| Commission Basis | 100% GA target achievement with minimum count of 60 |
+| Commission Amount | BDT 2,000 (fixed) |
+| Minimum GA Count | 60 GAs per month (GA includes MNP) |
+| Periodicity | Regular — Monthly (from Nov25 onwards) |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| Data Source | ED, IT BI, DWH, TABS, DMS, POS |
+| DWH Table | POSTPAID_COMMISSION_DATA_MONTHLY_DWH |
+[/TABLE]
+7.2 Eligibility Criteria
+[TABLE]
+| Condition | Requirement |
+| GA Achievement | Must achieve 100% of BDO's monthly GA target |
+| Minimum Count | Minimum GA target must be 60 per month (GA includes MNP) |
+| Commission Amount | BDT 2,000 if both conditions met; BDT 0 otherwise |
+| AIT | Applicable |
+[/TABLE]
+7.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | BDO wise variable is paid ONLY if BDO achieves 100% GA target with minimum count of 60 per month. |
+| 2 | Commission payout is monthly. |
+| 3 | GA count includes MNP. |
+| 4 | Security deposit must be ensured on same day as activation. |
+| 5 | Deposit can be done via i-top number OR via BL Power App with any registered BL Power number. |
+| 6 | For TK200 packs, deposit amount from DWH source (bl_power_recharge_dwh_yyyymmdd.csv). |
+| 7 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 8 | 98% ETSAF must be submitted by 7th of following month. |
+| 9 | Disconnection data: T-6. |
+| 10 | Product: B2C postpaid base package and bundles (see Appendix A). |
+| 11 | Security deposit must be equal to or greater than bundle-wise minimum (Appendix B). |
+[/TABLE]
+[TABLE]
+| KEY DIFFERENCE from Section 6 (Count-Based): Section 6 pays bonus based on absolute GA COUNT thresholds (e.g., 70-79 or 80+). Section 7 pays BDT 2,000 only when BDO achieves exactly 100% of their ASSIGNED TARGET (minimum 60 GAs). A BDO with 90% achievement gets nothing in Section 7. |
+[/TABLE]
+Section 8: M2 Survival Commission — BDO
+BDO earns monthly commission based on whether customers acquired in month M0 generate any revenue in month M2 (3rd month = 2 months after activation). This is a retention-quality metric on top of acquisition.
+8.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual retailer code) |
+| Commission Concept | M2 Survival = M0 activations that generate any revenue in their 3rd month |
+| Commission Basis | GA % achievement AND M2 revenue generating rate (both conditions must be met) |
+| Periodicity | Regular — Monthly |
+| Effective From | Nov25 (first version); Jan26 (revised with higher tiers and minimum target threshold) |
+| AIT | Applicable |
+| Maturity Date | 1st of following month (not 8th — different from all other BDO commissions) |
+| Data Source | ED, IT BI, DWH, TABS, DMS, POS |
+[/TABLE]
+8.2 Commission Structure by Version
+[TABLE]
+| Version | GA Achievement Required | M2 Revenue Generating Rate Required | Commission (BDT) |
+| Nov25 (original) | Min 50% of GA target (any BDO) | 80% or more of M0 GAs generate revenue in M2 | BDT 3,000 |
+| Jan26 (revised) | 93% of GA target (min target ≥ 50) | 80% or more of M0 GAs generate revenue in M2 | BDT 3,000 |
+| Jan26 (revised) | 100% of GA target (min target ≥ 50) | 80% or more of M0 GAs generate revenue in M2 | BDT 5,000 |
+| Jan26 | Monthly target < 50 | N/A | NOT ELIGIBLE |
+[/TABLE]
+[TABLE]
+| IMPORTANT: Maturity date is 1st of following month (not 8th). M2 Survival commission for M0 activations is published 2 months after the activation month. Example: Nov25 activations → Jan26 M2 survival month → Commission published 1st Feb26. |
+[/TABLE]
+8.3 Example Calculation (Jan26 version)
+[TABLE]
+| Retailer Code | Activation Month | Minimum GA | Monthly Achievement | % Achiev. | Revenue Month | M2 Revenue Base | M2 % | Commission |
+| RXXXXXX | Jan-2026 | 50 | 47 | 93% | Mar-2026 | 37 | 80% | BDT 3,000 |
+| RXXXXXX | Jan-2026 | 50 | 50 | 100% | Mar-2026 | 40 | 80% | BDT 5,000 |
+| RXXXXXX | Jan-2026 | 45 | 40 | 89% | Mar-2026 | 32 | 80% | NOT ELIGIBLE (target <50) |
+[/TABLE]
+8.4 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Activation retailer type must be 'B2C_postpaid' in DMS; activation month-end DMS mapping is considered. |
+| 2 | Field force (B2C postpaid) is eligible for monthly commission. AIT applicable. |
+| 3 | Monthly GA must generate any revenue in the 3rd month (M2) of activation. |
+| 4 | BDO-wise M2 Survival and concern month's GA (as per BI) shared with commission team before run. |
+| 5 | BDOs with monthly target less than 50 are NOT eligible for this commission (from Jan26). |
+| 6 | M2 revenue generating count must be 80% or more of total M0 GAs. |
+| 7 | Only eligible subscription IDs and option group bundles count as M0 GA (see Appendix A). |
+| 8 | No security deposit condition applies to M2 survival commission calculation directly. |
+| 9 | Data source: ED, IT BI, DWH, TABS, DMS, POS. |
+| 10 | Maturity date: 1st of the following month (unique — all other BDO commissions use 8th). |
+[/TABLE]
+Section 9: BDO VLR Active Incentive
+BDO earns incentive based on a dual condition: GA achievement percentage AND VLR (Visitor Location Register) Active rate of their activations. Both conditions must meet minimum thresholds. Introduced from Jan26.
+9.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual) |
+| Commission Concept | Dual condition: GA% achievement AND VLR Active rate of activations |
+| Max Incentive | BDT 3,000 |
+| Commission Type | Proportional (At Actual) — commission = (GA%) × BDT 3,000 |
+| GA Threshold | Must achieve at least 75% of monthly GA target |
+| VLR Threshold | At least 75% of total monthly activations must be VLR Active |
+| Periodicity | Regular — Monthly (from Jan26) |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| VLR Data | VLR report shared monthly by Postpaid Team until Salescom can validate independently |
+[/TABLE]
+9.2 Dual Eligibility Conditions
+[TABLE]
+| Condition | Minimum Threshold | Notes |
+| GA % Achievement | ≥ 75% | If <75%, BDT 0 — no incentive payable regardless of VLR |
+| VLR Active Rate | ≥ 75% | At least 75% of monthly GA count must be VLR active |
+| Commission Amount | At Actual × BDT 3,000 | Proportional to GA% if both thresholds met |
+[/TABLE]
+[TABLE]
+| IMPORTANT: Both conditions (GA ≥75% AND VLR Active ≥75%) must be met. If GA is ≥75% but VLR is <75%, no incentive is paid. The commission is proportional to the GA% (not VLR%). Example: GA = 95%, VLR Active = 79% → Commission = 95% × 3,000 = BDT 2,850. |
+[/TABLE]
+9.3 Example Calculation
+[TABLE]
+| BDO Code | GA Target | GA Count | GA% | Monthly GA Count | VLR Active Count | VLR% | Commission |
+| R235476 | 100 | 95 | 95% | 95 | 75 | 79% | BDT 2,370 (eligible) |
+| R235476 | 100 | 90 | 90% | 90 | 60 | 67% | BDT 0 (VLR <75%) |
+| R235476 | 100 | 74 | 74% | 74 | 60 | 81% | BDT 0 (GA <75%) |
+[/TABLE]
+9.4 Specific Conditions
+Conditions
+[TABLE]
+| 1 | BDO must achieve at least 93% of monthly GA target to be eligible (note: the incentive slab table shows 75%, but the conditions text states 93% minimum — 93% applies to eligibility for commission, 75% is the slab threshold for proportional calculation). |
+| 2 | At least 75% of total monthly activations under BDO code must be VLR Active. |
+| 3 | VLR report is shared monthly by Postpaid Team until Salescom validates independently. |
+| 4 | Security deposit on same day as activation; one shot or multiple; BL Power App accepted. |
+| 5 | For TK200 packs, deposit from DWH source (POSTPAID_COMMISSION_DATA_MONTHLY_DWH). |
+| 6 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 7 | Only eligible subscription IDs and option group bundles count (Appendix A). |
+| 8 | AIT applicable. |
+| 9 | Disconnection data: T-6. |
+[/TABLE]
+Section 10: BDO Supervisor VLR Active Incentive
+BDO Supervisor earns incentive based on dual condition: GA% achievement AND VLR Active rate across ALL retailers under their DDCODE. Higher thresholds (80% vs 75% for BDO) and higher max incentive (BDT 4,000 vs BDT 3,000). Introduced from Jan26.
+10.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | BDO Supervisor (mapped to DDCode) |
+| Commission Scope | ALL retailer codes under the Supervisor's DDCODE |
+| Max Incentive | BDT 4,000 |
+| Commission Type | Proportional (At Actual) — commission = (GA%) × BDT 4,000 |
+| GA Threshold | Must achieve at least 80% of monthly GA target (stricter than BDO's 75%) |
+| VLR Threshold | At least 80% of total monthly activations must be VLR Active (stricter than BDO's 75%) |
+| Periodicity | Regular — Monthly (from Jan26) |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| VLR Data | VLR report shared monthly by Postpaid Team |
+| Mapping | DDCode and retailer code tagging, i-top number and target shared by B2C Postpaid team |
+[/TABLE]
+10.2 Dual Eligibility Conditions
+[TABLE]
+| Condition | Supervisor Threshold | BDO Threshold (Section 9) |
+| GA % Achievement | ≥ 80% (0 if <80%) | ≥ 75% (0 if <75%) |
+| VLR Active Rate | ≥ 80% | ≥ 75% |
+| Max Commission | BDT 4,000 | BDT 3,000 |
+[/TABLE]
+10.3 Example Calculation
+[TABLE]
+| BDO Code | GA Target | GA Count | GA% | Monthly GA Count | VLR Active Count | VLR% | Commission |
+| B2CDHK01 | 700 | 680 | 97% | 680 | 600 | 88% | BDT 3,520 (97%×4,000) |
+| B2CDHK01 | 700 | 550 | 79% | 550 | — | — | BDT 0 (GA <80%) |
+[/TABLE]
+10.4 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Condition covers GA and MNP of ALL retailer codes under the Supervisor's DDCODE. |
+| 2 | Supervisor must achieve at least 80% of monthly GA target to qualify for any incentive. |
+| 3 | At least 80% of total monthly activations under all retailer codes in the DDCODE must be VLR Active. |
+| 4 | VLR report shared monthly by Postpaid Team until Salescom can validate from their end. |
+| 5 | DDCode, retailer code tagging, i-top number and target shared by B2C Postpaid team. |
+| 6 | 98% ETSAF must be submitted by 7th of following month. |
+| 7 | Security deposit on same day as activation; one shot or multiple; BL Power App accepted. |
+| 8 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 9 | Only eligible subscription IDs and option group bundles count (Appendix A). |
+| 10 | AIT applicable. |
+| 11 | Disconnection data: T-6. |
+[/TABLE]
+Appendix A: Eligible Product IDs for Postpaid Acquisition
+All BDO commission types require activations to use the following subscription IDs. Product eligibility evolved over time — some EQUIPIDs were added or removed across periods.
+[TABLE]
+| Type | EQUIPID | Segment | Service Type | Period Active |
+| Base Package (Activation) | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) | B2C | Base package | All periods |
+| Non-Bundle/Non-Renewal | TK200NB30DPOSTOG | B2C | NON-BUNDLE | All periods |
+| Non-renewal bundle | TK394POSTGAUMIXBDNLOG | B2C | Bundle | All periods |
+| Non-renewal bundle | TK494POSTGAUSSDMIXOG | B2C | Bundle | All periods |
+| Non-renewal bundle | TK794POSTGAUMIXBDNLOG | B2C | Bundle | All periods |
+| Non-renewal bundle | TK214USSD30DPOSTOG | B2C | Bundle | Feb25–Jul25 only; DISCONTINUED from ~May25 |
+| Renewal bundle | RCTK394POSTGAUMIXBDNLOG | B2C | Bundle | Feb25–Mar25 only |
+| Renewal bundle | RCTK494POSTGAUSSDMIXOG | B2C | Bundle | Feb25–Mar25 only |
+| Renewal bundle | RCTK794POSTGAUMIXBDNLOG | B2C | Bundle | Feb25–Mar25 only |
+| Non-renewal bundle | TK1143CGAMXBOGPOST | B2C | Bundle | Dec25 onwards |
+| Non-renewal bundle | TK2343CGAMXBOGPOST | B2C | Bundle | Dec25 onwards |
+[/TABLE]
+[TABLE]
+| PRODUCT EVOLUTION: TK214 (non-renewal bundle, BDT 214 pack) was present Feb25–early May25, then discontinued from 13 May 2025. Renewal bundles (RCTK prefix) appeared only in Feb25–Mar25 SRFs. TK1143 and TK2343 (higher-value packs) were added from Dec25 SRF onwards. |
+[/TABLE]
+Appendix B: Security Deposit Amounts by Bundle (Evolution)
+Minimum security deposit amounts changed over time. All deposits must be on the same day as activation, equal to or greater than the minimum shown. For TK200 packs, extract actual deposit amounts from DWH (POSTPAID_COMMISSION_DATA_MONTHLY_DWH).
+[TABLE]
+| Bundle Value (incl. Tax) | Till 27 Jan 2025 | 28 Jan–12 May 2025 | 13 May 2025 onwards | Dec25 onwards (new packs) |
+| TK 200 | BDT 200 | BDT 150 | BDT 170 | BDT 170 |
+| TK 214 | BDT 0 | BDT 220 | Discontinued | N/A |
+| TK 394 | BDT 400 | BDT 400 | BDT 350 | BDT 350 |
+| TK 494 | BDT 500 | BDT 500 | BDT 450 | BDT 450 |
+| TK 794 | BDT 800 | BDT 800 | BDT 750 | BDT 750 |
+| TK 1143 | N/A | N/A | N/A | BDT 1,150 |
+| TK 2343 | N/A | N/A | N/A | BDT 2,350 |
+[/TABLE]
+Appendix C: Commission Type Quick Reference Matrix
+[TABLE]
+| Section | Commission Type | Recipient | Max Amount | Basis | Periodicity | Maturity |
+| 1 | BDO Variable Incentive | BDO | BDT 3,000 | GA% (75%–100%) | Regular Monthly | 8th of next month |
+| 2 | Supervisor Variable Incentive | Supervisor | BDT 7,000 | GA% (75%–100%) all DDCode | Regular Monthly | 8th of next month |
+| 3 | Coordinator Variable Incentive | Coordinator | BDT 5,000 | GA% (75%–100%) all DDCodes | Regular Monthly | 8th of next month |
+| 4 | Supervisor GA Campaign (Ad-hoc) | Supervisor | BDT 3,000 | Fixed: 90%=2k, 100%=3k | Ad-hoc | 8th of next month |
+| 5 | Coordinator GA Campaign (Ad-hoc) | Coordinator | BDT 5,000 | Fixed: 90%=3k, 100%=5k | Ad-hoc | 8th of next month |
+| 6 | Acquisition Bonus (Count-Based) | BDO | BDT 6,000 | GA count slabs | Regular Monthly | 8th of next month |
+| 7 | GA Achievement Commission | BDO | BDT 2,000 | 100% target + min 60 GA | Regular Monthly | 8th of next month |
+| 8 | M2 Survival Commission | BDO | BDT 5,000 | GA% + M2 revenue rate 80% | Regular Monthly | 1st of next month |
+| 9 | BDO VLR Active Incentive | BDO | BDT 3,000 | GA ≥75% AND VLR ≥75% | Regular Monthly | 8th of next month |
+| 10 | Supervisor VLR Active Incentive | Supervisor | BDT 4,000 | GA ≥80% AND VLR ≥80% | Regular Monthly | 8th of next month |
+[/TABLE]

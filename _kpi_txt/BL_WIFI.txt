@@ -1,0 +1,438 @@
+BANGLALINK WIFI CAMPAIGN
+Unique KPI Conditions & Incentive Rules
+[TABLE]
+| FWA (Fixed Wireless Access) Device Installation Campaign  |  Channel Planning Dept  |  Banglalink |
+[/TABLE]
+[TABLE]
+| Campaign Product | BL WiFi — Fixed Wireless Access (FWA) Device |
+| Scope | Jan 2026 – Apr 2026 (Monthly campaigns) |
+| Recipient Types | Distributor | RSO | Cluster | Region | SZM/ZM/TO/MDO |
+| Total SRFs Analysed | 17 SRFs |
+| Core KPI | Successful FWA Device Installation |
+| Prepared by | Channel Planning — IT Sales Commissioning |
+[/TABLE]
+Table of Contents
+[TABLE]
+| 1 | Campaign Overview & Structure | 3 |
+| 2 | KPI-01 — Successful FWA Device Installation | 4 |
+| 3 | Incentive Rules by Recipient Type | 5 |
+| 4 | Distributor Incentive Conditions | 6 |
+| 5 | RSO Incentive Conditions | 7 |
+| 6 | Recharge Incentive (Distributor — Feb, Mar, Apr 2026) | 8 |
+| 7 | Cluster Eligibility & Award Conditions | 9 |
+| 8 | Region Eligibility & Award Conditions | 10 |
+| 9 | SZM/ZM/TO/MDO Eligibility & Award Conditions | 11 |
+| 10 | Eligibility Threshold Evolution by Period | 12 |
+| 11 | Winner Evaluation Rules | 13 |
+| 12 | Campaign Type & Periodicity | 14 |
+| 13 | General Conditions Table | 15 |
+| 14 | Input Data Sources | 16 |
+| 15 | Quick Reference Summary — All Unique KPI Conditions | 17 |
+[/TABLE]
+1. Campaign Overview & Structure
+The Banglalink WiFi Campaign is a monthly performance incentive programme for distribution channel stakeholders promoting Fixed Wireless Access (FWA) device installation. The campaign runs from January 2026 to April 2026 across five distinct recipient tiers, each with its own incentive model.
+Unlike traditional mobile sales KPIs (Recharge, GA), the BL WiFi Campaign centres entirely on a single new-product KPI: successful FWA device installation — tracking deployment of Banglalink's home internet WiFi routers/devices.
+Recipient Tiers & Incentive Models
+[TABLE]
+| Tier | Incentive Model | SRF Count | Periods Covered |
+| Distributor | BDT 166.6667 per FWA installation + 10% of plan recharge (from Feb 26) | 4 | Jan, Feb, Mar, Apr 2026 |
+| RSO | BDT 277.7778 per FWA installation | 4 | Jan, Feb, Mar, Apr 2026 |
+| Cluster | GIFT reward — Top 1 Cluster Nationally | 3 | 17–28 Feb, Mar, Apr 2026 |
+| Region | GIFT reward — Top 3 or Top 5 Regions Nationally | 3 | 17–28 Feb, Mar, Apr 2026 |
+| SZM/ZM/TO/MDO | GIFT reward — Top 12 or Top 20 Nationally | 3 | 17–28 Feb, Mar, Apr 2026 |
+[/TABLE]
+Campaign Timeline
+[TABLE]
+| Period | Start Date | End Date | Tiers Active |
+| January 2026 | 1-Jan-2026 | 31-Jan-2026 | Distributor, RSO only |
+| 17–28 Feb 2026 | 17-Feb-2026 | 28-Feb-2026 | Cluster, Region, SZM/ZM/TO/MDO |
+| February 2026 | 1-Feb-2026 | 28-Feb-2026 | Distributor, RSO |
+| March 2026 | 1-Mar-2026 | 31-Mar-2026 | All 5 tiers |
+| April 2026 | 1-Apr-2026 | 30-Apr-2026 | All 5 tiers |
+[/TABLE]
+[TABLE]
+| Note: Cluster, Region, and SZM/ZM/TO/MDO tiers did not have separate Jan 2026 SRFs — they were introduced from 17 Feb 2026. Distributor and RSO ran full monthly from Jan 2026. |
+[/TABLE]
+2. KPI-01 — Successful FWA Device Installation
+The sole primary KPI across all 17 BL WiFi Campaign SRFs is Successful FWA Device Installation. This measures the number of Fixed Wireless Access (FWA) devices successfully installed at subscriber premises.
+[TABLE]
+| FWA-INSTALL | Successful Installation | All 17 SRFs |
+[/TABLE]
+Definition
+FWA = Fixed Wireless Access — Banglalink's home internet WiFi device/router.
+A 'Successful' installation means the device has been physically installed and commissioned at the subscriber's premises.
+Performance data for FWA installations is shared by B2C for each recipient tier.
+KPI Scope Rules
+[TABLE]
+| Rule | Details | All SRFs? |
+| KPI Name | Successful FWA Device Installation | Yes — all 17 |
+| Product Type | FWA (Fixed Wireless Access) — Home WiFi device | Yes — all 17 |
+| Data source | B2C team — performance report shared directly | Yes — all 17 |
+| Measurement unit | Count of devices installed (integer units) | Yes — all 17 |
+| Product field | General Conditions: Product = Prepaid; FWA noted | Yes — all 17 |
+| IT Data source | IT SC + IT BI + DWH | Yes — all 17 |
+| Maturity date | 1st of the following month | Yes — all 17 |
+| Report published | As per tracker | Yes — all 17 |
+[/TABLE]
+What is NOT a KPI in BL WiFi Campaign
+Unlike other Banglalink campaigns, the following KPIs are explicitly NOT used in any BL WiFi SRF:
+[TABLE]
+| KPI NOT Used | Notes |
+| Recharge (EV Secondary) | Not a primary KPI; only appears as follow-on incentive for Distributors from Feb 2026 |
+| GA (Gross Addition) | Not used in any BL WiFi SRF |
+| GA Productivity | Not used |
+| BSO / LSO / SSO | Not used — field is blank in all SRFs |
+| Total Bundle | Not used |
+| HIT % Achievement | Not used — no slab-based percentage targets |
+[/TABLE]
+[TABLE]
+| The BL WiFi Campaign is a pure count-based installation campaign — BDT per unit or GIFT reward. No percentage achievement slabs, no HIT targets, no seller metrics. |
+[/TABLE]
+3. Incentive Rules by Recipient Type
+Each recipient tier has a distinct incentive model. Distributor and RSO receive BDT-per-installation cash incentives. Cluster, Region, and SZM/ZM/TO/MDO receive GIFT rewards based on ranking after meeting minimum eligibility thresholds.
+[TABLE]
+| Tier | Incentive Type | Amount / Award | Eligibility Required? |
+| Distributor (Jan 2026) | Cash — BDT per installation | BDT 166.6667 per FWA installation | No minimum — per unit |
+| Distributor (Feb–Apr 26) | Cash — BDT per install + recharge bonus | BDT 166.6667 per install + 10% of plan for recharge next month | No minimum — per unit |
+| RSO (all months) | Cash — BDT per installation | BDT 277.7778 per FWA installation | No minimum — per unit |
+| Cluster (Feb 26 partial) | GIFT (non-cash recognition) | Top 1 Cluster Nationally | Min 100 devices per Cluster |
+| Cluster (Mar, Apr 2026) | GIFT (non-cash recognition) | Top 1 Cluster Nationally | Min 80 devices per Cluster |
+| Region (Feb 26 partial) | GIFT (non-cash recognition) | Top 3 Regions Nationally | Min 10 devices per Region |
+| Region (Mar, Apr 2026) | GIFT (non-cash recognition) | Top 5 Regions Nationally | Min 20 devices per Region |
+| SZM/ZM/TO/MDO (Feb 26) | GIFT (non-cash recognition) | Top 12 Nationally | Min 3 devices per SZM/ZM/TO/MDO |
+| SZM/ZM/TO/MDO (Mar, Apr) | GIFT (non-cash recognition) | Top 20 Nationally | Min 5 devices per SZM/ZM/TO/MDO |
+[/TABLE]
+[TABLE]
+| BDT amounts: BDT 166.6667 = BDT 500/3 installations (monthly base rate). BDT 277.7778 = BDT 500 / 1.8 (RSO premium rate). These fractional values suggest the incentive is structured around a BDT 500 base divided across the distribution chain. |
+[/TABLE]
+4. Distributor Incentive Conditions
+Core Incentive Rule (All Distributor SRFs)
+KPI: Successful FWA Device Installation
+Incentive: BDT 166.6667 PER successful FWA installation
+No minimum installation threshold required — paid per unit from the first installation
+Distributor-wise performance data (FWA installation list) shared by B2C
+January 2026 — Distributor
+[TABLE]
+| Field | Value |
+| SRF Title | Distributor BANGLALINK WIFI Campaign_Jan26 |
+| Effective Date | 1-Jan-2026 |
+| End Date | 31-Jan-2026 |
+| Incentive | BDT 166.6667 per FWA installation |
+| Recharge Bonus | Not included |
+| Data shared by | B2C — Distributor wise FWA installation list |
+| Periodicity | Regular Monthly |
+| Maturity Date | 1st of the following month |
+[/TABLE]
+February 2026 — Distributor (New: Recharge Bonus Added)
+[TABLE]
+| Field | Value |
+| SRF Title | BANGLALINK WIFI Campaign_Distributor_Feb26 |
+| Effective Date | 1-Feb-2026 |
+| End Date | 28-Feb-2026 |
+| Incentive 1 | BDT 166.6667 per FWA installation (same as Jan) |
+| Incentive 2 | 10% of the plan — for successful recharge on the following month |
+| Data shared by | B2C — Distributor wise FWA installation along with Recharge |
+| Periodicity | Ad-hoc Monthly |
+| Maturity Date | 1st of the following month |
+[/TABLE]
+[TABLE]
+| Key change from Feb 2026: A second incentive layer added — distributor earns 10% of the recharge plan value if the FWA subscriber recharges in the following month. This creates a two-part incentive: installation + recharge retention. |
+[/TABLE]
+March & April 2026 — Distributor
+Same structure as February 2026 — both installation incentive and recharge bonus apply:
+[TABLE]
+| Field | March 2026 | April 2026 |
+| Effective Date | 1-Mar-2026 | 1-Apr-2026 |
+| End Date | 31-Mar-2026 | 30-Apr-2026 |
+| Install BDT | BDT 166.6667 per install | BDT 166.6667 per install |
+| Recharge Bonus | 10% of the plan (next month recharge) | 10% of the plan (next month recharge) |
+| Data by | B2C | B2C |
+| Maturity Date | 1st of following month | 1st of following month |
+[/TABLE]
+5. RSO Incentive Conditions
+Core Incentive Rule (All RSO SRFs)
+KPI: Successful FWA Device Installation
+Incentive: BDT 277.7778 PER successful FWA installation
+No minimum installation threshold — paid per unit from first installation
+RSO-wise performance data (FWA installation list) shared by B2C
+No recharge bonus for RSO (only Distributor gets recharge incentive)
+RSO Incentive Consistency — All Periods
+[TABLE]
+| Period | Effective Date | End Date | BDT per Install | Recharge Bonus |
+| January 2026 | 1-Jan-2026 | 31-Jan-2026 | BDT 277.7778 | None |
+| February 2026 | 1-Feb-2026 | 28-Feb-2026 | BDT 277.7778 | None |
+| March 2026 | 1-Mar-2026 | 31-Mar-2026 | BDT 277.7778 | None |
+| April 2026 | 1-Apr-2026 | 30-Apr-2026 | BDT 277.7778 | None |
+[/TABLE]
+[TABLE]
+| RSO incentive is fully consistent across all 4 months — BDT 277.7778 per installation, no recharge bonus, no minimum threshold. The RSO rate (277.7778) is approximately 1.67x the Distributor rate (166.6667), reflecting the RSO's direct role in the installation process. |
+[/TABLE]
+RSO vs. Distributor Incentive Comparison
+[TABLE]
+| Dimension | Distributor | RSO |
+| BDT per install | BDT 166.6667 | BDT 277.7778 |
+| Ratio | 1.0x (base) | 1.667x (premium) |
+| Recharge bonus | Yes (from Feb 2026) — 10% of plan | No |
+| Minimum threshold | None | None |
+| Data source | B2C shared list | B2C shared list |
+| Periodicity | Jan: Regular; Feb–Apr: Ad-hoc | Jan: Regular; Feb–Apr: Ad-hoc |
+[/TABLE]
+6. Recharge Incentive (Distributor — Feb, Mar, Apr 2026)
+From February 2026, Distributors earn a second incentive tied to recharge retention of FWA subscribers. This is a unique condition that appears only in Distributor SRFs and only from Feb 2026 onwards.
+Recharge Bonus Rule
+[TABLE]
+| Field | Details |
+| Condition | Subscriber installed with FWA device must recharge in the following month |
+| Incentive amount | 10% of the plan value (recharge plan amount) |
+| Who earns it | Distributor only — RSO does not get recharge bonus |
+| When paid | Following month after successful FWA installation and recharge |
+| Data source | B2C — Distributor wise FWA installation along with Recharge data |
+| Jan 2026 | NOT applicable — recharge bonus not in Jan SRF |
+| Feb 2026 | Applicable — introduced in Feb 2026 |
+| Mar 2026 | Applicable — continued |
+| Apr 2026 | Applicable — continued |
+[/TABLE]
+Recharge Incentive Logic
+The recharge bonus creates a two-step incentive chain for Distributors:
+Step 1 — Installation: Earn BDT 166.6667 per successful FWA device installed during the campaign month.
+Step 2 — Retention: Earn 10% of the subscriber's recharge plan value if that subscriber recharges in the month following installation.
+This retention mechanism incentivises Distributors not just to install devices but to ensure subscribers are properly onboarded and generate active recharges.
+[TABLE]
+| The exact recharge plan denominations are not specified in the SRF — the B2C team provides the detailed recharge data. '10% of the plan' means 10% of whatever plan amount the subscriber recharges with. |
+[/TABLE]
+7. Cluster Eligibility & Award Conditions
+Core Rules (All Cluster SRFs)
+KPI: Successful FWA Device Installation
+Award type: GIFT (non-cash recognition award)
+Winner: Top 1 Cluster Nationally
+Eligibility gate: Minimum device sales threshold per Cluster must be met
+Performance data: Cluster-wise FWA performance shared by B2C
+Cluster Eligibility Threshold Evolution
+[TABLE]
+| Period | Minimum Devices per Cluster | Winner Count | Award |
+| 17–28 Feb 2026 | 100 Devices | Top 1 Nationally | GIFT |
+| March 2026 | 80 Devices | Top 1 Nationally | GIFT |
+| April 2026 | 80 Devices | Top 1 Nationally | GIFT |
+[/TABLE]
+[TABLE]
+| The minimum eligibility threshold dropped from 100 to 80 devices between Feb and Mar 2026. This may reflect a recalibration based on actual market capacity after the Feb campaign run. Winner count remained Top 1 Nationally throughout. |
+[/TABLE]
+Cluster — Unique Conditions
+[TABLE]
+| Condition | Rule |
+| Eligibility type | Minimum volume gate — must sell >= threshold to qualify for ranking |
+| Winner basis | Highest FWA installation count among eligible Clusters |
+| Incentive nature | Non-cash GIFT — no BDT per installation |
+| Periodicity | Ad-hoc (not regular monthly like Distributor/RSO) |
+| Recipient description | Cluster level field force / territory |
+| Data source | B2C — Cluster wise performance |
+| Report sharing | Disbursement (not Provision) |
+[/TABLE]
+8. Region Eligibility & Award Conditions
+Core Rules (All Region SRFs)
+KPI: Successful FWA Device Installation
+Award type: GIFT (non-cash recognition award)
+Eligibility gate: Minimum device sales per Region
+Performance data: Region-wise FWA performance data shared by B2C
+Region Eligibility Threshold & Winner Count Evolution
+[TABLE]
+| Period | Minimum Devices per Region | Winner Count | Award |
+| 17–28 Feb 2026 | 10 Devices | Top 3 Nationally | GIFT |
+| March 2026 | 20 Devices | Top 5 Nationally | GIFT |
+| April 2026 | 20 Devices | Top 5 Nationally | GIFT |
+[/TABLE]
+Key Changes — Feb vs. Mar/Apr 2026 (Region)
+Both the minimum eligibility threshold and the winner count changed significantly between Feb 26 (partial month) and March 2026:
+[TABLE]
+| Dimension | 17–28 Feb 2026 | March 2026 | April 2026 |
+| Min threshold | 10 devices | 20 devices | 20 devices |
+| Winners | Top 3 | Top 5 | Top 5 |
+| Period length | 12 days | Full month | Full month |
+[/TABLE]
+[TABLE]
+| The Feb 2026 campaign was a partial month (17–28 Feb = 12 days), hence the lower threshold of 10 devices. From March onwards with a full month, the threshold doubled to 20 and the winner pool expanded to Top 5, reflecting higher expected volume. |
+[/TABLE]
+9. SZM/ZM/TO/MDO Eligibility & Award Conditions
+Core Rules (All SZM/ZM/TO/MDO SRFs)
+KPI: Successful FWA Device Installation
+Award type: GIFT (non-cash recognition award)
+Eligibility gate: Minimum device sales per individual SZM/ZM/TO/MDO
+Performance data: SZM/ZM/TO/MDO performance report shared by B2C
+SZM/ZM/TO/MDO Eligibility Threshold & Winner Count Evolution
+[TABLE]
+| Period | Min Devices per Person | Winner Count | Award |
+| 17–28 Feb 2026 | 3 Devices | Top 12 Nationally | GIFT |
+| March 2026 | 5 Devices | Top 20 Nationally | GIFT |
+| April 2026 | 5 Devices | Top 20 Nationally | GIFT |
+[/TABLE]
+Key Changes — Feb vs. Mar/Apr 2026 (SZM/ZM/TO/MDO)
+[TABLE]
+| Dimension | 17–28 Feb 2026 | March 2026 | April 2026 |
+| Min threshold | 3 devices | 5 devices | 5 devices |
+| Winners | Top 12 | Top 20 | Top 20 |
+| Period length | 12 days | Full month | Full month |
+[/TABLE]
+[TABLE]
+| The SZM/ZM/TO/MDO tier has the lowest per-person eligibility threshold (3–5 devices vs. 10–100 for Region/Cluster) reflecting that each individual ZM/TO covers a smaller geographic territory. The larger winner pool (Top 20) compensates for the granular individual-level evaluation. |
+[/TABLE]
+10. Eligibility Threshold Evolution by Period
+The minimum eligibility thresholds vary by tier and period. This section provides a complete cross-tier view.
+[TABLE]
+| Tier | 17–28 Feb 2026 | March 2026 | April 2026 |
+| Distributor | No minimum (per unit) | No minimum (per unit) | No minimum (per unit) |
+| RSO | No minimum (per unit) | No minimum (per unit) | No minimum (per unit) |
+| Cluster | 100 devices | 80 devices | 80 devices |
+| Region | 10 devices | 20 devices | 20 devices |
+| SZM/ZM/TO/MDO | 3 devices | 5 devices | 5 devices |
+[/TABLE]
+Winner Pools — Cross-Tier View
+[TABLE]
+| Tier | 17–28 Feb 2026 | March 2026 | April 2026 |
+| Distributor | N/A (per unit) | N/A (per unit) | N/A (per unit) |
+| RSO | N/A (per unit) | N/A (per unit) | N/A (per unit) |
+| Cluster | Top 1 National | Top 1 National | Top 1 National |
+| Region | Top 3 National | Top 5 National | Top 5 National |
+| SZM/ZM/TO/MDO | Top 12 National | Top 20 National | Top 20 National |
+[/TABLE]
+[TABLE]
+| January 2026: Only Distributor and RSO had active SRFs. The recognition tiers (Cluster/Region/SZM) were not launched until 17 Feb 2026 — likely after the Jan pilot showed sufficient FWA installation volumes to justify competitive ranking. |
+[/TABLE]
+11. Winner Evaluation Rules
+Distributor & RSO — No Ranking
+For Distributor and RSO tiers, there is no competitive ranking or winner evaluation. Every eligible installation earns the fixed BDT incentive. The model is purely transactional: install = earn.
+Cluster, Region, SZM/ZM/TO/MDO — Ranking-Based
+For the three recognition tiers, winner evaluation is based on:
+Step 1 — Eligibility check: Only participants meeting the minimum device threshold are eligible.
+Step 2 — Ranking: Among eligible participants, rank by total successful FWA installations (highest to top).
+Step 3 — Award: Top N (per SRF) receive the GIFT award.
+[TABLE]
+| Tier | Tie-Break Rule | Data Source for Ranking |
+| Cluster | Not explicitly specified — B2C shares cluster-wise data | B2C — Cluster wise performance |
+| Region | Not explicitly specified — B2C shares region-wise data | B2C — Region wise performance data |
+| SZM/ZM/TO/MDO | Not explicitly specified | B2C — SZM/ZM/TO/MDO performance report |
+[/TABLE]
+[TABLE]
+| Unlike the BCL campaign (which uses Retail Recharge % as a tie-break), the BL WiFi SRFs do not specify an explicit tie-break rule. Tie resolution would likely default to a B2C decision based on secondary metrics. |
+[/TABLE]
+Award Nature
+[TABLE]
+| Tier | Award Type | Cash Value | Notes |
+| Distributor | Cash BDT | BDT 166.6667 per install + 10% recharge (Feb+) | Disbursement model |
+| RSO | Cash BDT | BDT 277.7778 per install | Disbursement model |
+| Cluster | GIFT | Non-cash | Recognition award |
+| Region | GIFT | Non-cash | Recognition award |
+| SZM/ZM/TO/MDO | GIFT | Non-cash | Recognition award |
+[/TABLE]
+12. Campaign Type & Periodicity
+Campaign Type Classification
+[TABLE]
+| Tier | Periodicity | Type | Notes |
+| Distributor Jan 26 | Regular | Monthly | Standard monthly reporting |
+| Distributor Feb–Apr | Ad-hoc | Monthly | Marked as Ad-hoc from Feb 2026 |
+| RSO Jan 26 | Regular | Monthly | Standard monthly reporting |
+| RSO Feb–Apr 26 | Ad-hoc | Monthly | Marked as Ad-hoc from Feb 2026 |
+| Cluster (all) | Ad-hoc | Monthly | End of campaign frequency |
+| Region (all) | Ad-hoc | Monthly | End of campaign frequency |
+| SZM/ZM/TO/MDO (all) | Ad-hoc | Monthly | End of campaign frequency |
+[/TABLE]
+[TABLE]
+| The shift from 'Regular' (Jan 2026) to 'Ad-hoc' (Feb 2026 onwards) for Distributor and RSO reflects that the BL WiFi incentive was initially launched as a standard programme in Jan, then reclassified as a campaign-specific ad-hoc initiative from Feb 2026. |
+[/TABLE]
+Report Sharing Slot
+[TABLE]
+| Tier | Disbursement Slot | YES Checked |
+| Distributor | Disbursement | Yes |
+| RSO | Disbursement | No (blank in most) |
+| Cluster | Disbursement | Yes |
+| Region | Disbursement | Yes |
+| SZM/ZM/TO/MDO | Disbursement | Yes |
+[/TABLE]
+13. General Conditions Table
+All 17 BL WiFi Campaign SRFs share a standard General Conditions table. The following shows which factors are checked and their specifications.
+[TABLE]
+| Factor | Status | Specification |
+| FAD (First Activity Date) | Not checked | Not used as measurement basis |
+| FCD (First Call Date) | Not checked | Not relevant — FWA is device-based, not SIM call based |
+| Activation | Not checked | Traditional SIM activation not applicable for FWA |
+| TABS | Not checked | Not applicable |
+| SAF (ETSAF) | Not checked | Not applicable — FWA installation has no ETSAF requirement |
+| Lifting / Issue | Not checked | N/A — no traditional lifting/SC for FWA |
+| Recharge | Not checked (primary) | Not checked as primary KPI; recharge is a secondary bonus only for Distributors |
+| Usage | Not checked | Not applicable |
+| Disconnection | Not checked | Not applicable |
+| Product | Checked — FWA | Product = Prepaid; FWA device noted specifically |
+| Reactivation | Not checked | Not applicable |
+[/TABLE]
+[TABLE]
+| Important: The BL WiFi General Conditions table is almost entirely unchecked — unlike traditional mobile campaigns (Recharge, GA, BSO/LSO). Only Product is checked, and it specifies 'Prepaid; FWA'. This confirms FWA installation is treated as a standalone product metric outside normal mobile KPI frameworks. |
+[/TABLE]
+Maturity Date for Data
+[TABLE]
+| SRF | Maturity Date for Data |
+| All Distributor SRFs | 1st of the following month |
+| All RSO SRFs | 1st of the following month |
+| All Cluster SRFs | 1st of the following month |
+| All Region SRFs | 1st of the following month |
+| All SZM/ZM/TO/MDO SRFs | 1st of the following month |
+[/TABLE]
+[TABLE]
+| Maturity Date is consistently the 1st of the following month across ALL 17 BL WiFi SRFs — earlier than most other Banglalink campaigns (which use 3rd or 6th of following month). This faster data maturity timeline reflects that FWA installation records are available quickly after month-end. |
+[/TABLE]
+14. Input Data Sources
+[TABLE]
+| Source | Type | Used For |
+| IT SC (Sales Commissioning) | Channel Operation (checked) | Primary commission computation for FWA installations |
+| IT BI (Business Intelligence) | Channel Operation (checked) | Analytics and reporting layer |
+| DWH (Data Warehouse) | IT (checked) | Underlying data store for all installation records |
+| Target (B2C) | Channel Operation (checked) | FWA installation data, performance reports per tier |
+| DMS | Other (unchecked) | Not used in BL WiFi Campaign |
+| POS | Other (unchecked) | Not used in BL WiFi Campaign |
+| IN House | Technical (unchecked) | Not used |
+[/TABLE]
+B2C Data Sharing Responsibilities
+The B2C team is responsible for sharing the following data directly:
+[TABLE]
+| Tier | Data Shared by B2C |
+| Distributor | Distributor-wise Successful FWA installation list (Jan); + Recharge data (Feb–Apr) |
+| RSO | RSO-wise Successful FWA installation list |
+| Cluster | Cluster-wise FWA performance |
+| Region | Region-wise FWA performance data |
+| SZM/ZM/TO/MDO | SZM/ZM/TO/MDO performance report |
+[/TABLE]
+[TABLE]
+| Unlike other Banglalink campaigns where IT SC computes KPIs from raw DWH data, the BL WiFi Campaign relies heavily on B2C-provided performance data. IT SC's role is to apply the incentive calculation on top of the B2C-provided FWA installation list. |
+[/TABLE]
+15. Quick Reference Summary — All Unique KPI Conditions
+This table consolidates every distinct KPI condition, rule, and structural characteristic identified across all 17 Banglalink WiFi Campaign SRFs.
+[TABLE]
+| Code | Condition / Rule | Category | Applies To | Period |
+| KPI-01 | Successful FWA Device Installation — sole primary KPI | Core KPI | All 17 SRFs | Jan–Apr 2026 |
+| INC-D1 | Distributor: BDT 166.6667 per successful FWA installation | Incentive | Distributor (all) | Jan–Apr 2026 |
+| INC-D2 | Distributor: 10% of recharge plan — next-month subscriber recharge | Incentive | Distributor | Feb–Apr 2026 |
+| INC-R1 | RSO: BDT 277.7778 per successful FWA installation | Incentive | RSO (all) | Jan–Apr 2026 |
+| ELG-C1 | Cluster eligibility gate: minimum 100 FWA device sales per Cluster | Gate | Cluster | 17–28 Feb 2026 |
+| ELG-C2 | Cluster eligibility gate: minimum 80 FWA device sales per Cluster | Gate | Cluster | Mar, Apr 2026 |
+| ELG-R1 | Region eligibility gate: minimum 10 FWA device sales per Region | Gate | Region | 17–28 Feb 2026 |
+| ELG-R2 | Region eligibility gate: minimum 20 FWA device sales per Region | Gate | Region | Mar, Apr 2026 |
+| ELG-S1 | SZM/ZM/TO/MDO gate: minimum 3 FWA device sales per person | Gate | SZM/ZM/TO/MDO | 17–28 Feb 2026 |
+| ELG-S2 | SZM/ZM/TO/MDO gate: minimum 5 FWA device sales per person | Gate | SZM/ZM/TO/MDO | Mar, Apr 2026 |
+| WIN-C1 | Winner: Top 1 Cluster Nationally — GIFT award | Winner Rule | Cluster | All Cluster SRFs |
+| WIN-R1 | Winner: Top 3 Regions Nationally — GIFT award | Winner Rule | Region | 17–28 Feb 2026 |
+| WIN-R2 | Winner: Top 5 Regions Nationally — GIFT award | Winner Rule | Region | Mar, Apr 2026 |
+| WIN-S1 | Winner: Top 12 SZM/ZM/TO/MDO Nationally — GIFT award | Winner Rule | SZM/ZM/TO/MDO | 17–28 Feb 2026 |
+| WIN-S2 | Winner: Top 20 SZM/ZM/TO/MDO Nationally — GIFT award | Winner Rule | SZM/ZM/TO/MDO | Mar, Apr 2026 |
+| DAT-01 | Performance data shared by B2C per tier (not computed by IT SC) | Data Source | All 17 SRFs | Jan–Apr 2026 |
+| DAT-02 | Maturity date: 1st of the following month | Data Source | All 17 SRFs | Jan–Apr 2026 |
+| PER-01 | Periodicity: Regular Monthly (Jan 2026 Distributor & RSO only) | Periodicity | Dist + RSO Jan 26 | Jan 2026 |
+| PER-02 | Periodicity: Ad-hoc (all Feb–Apr and all Cluster/Region/SZM SRFs) | Periodicity | All others | Feb–Apr 2026 |
+| PRD-01 | Product type: Prepaid; FWA device (only checked field in Gen. Cond.) | Product | All 17 SRFs | Jan–Apr 2026 |
+| SCO-01 | No recharge, GA, HIT, BSO/LSO/SSO, or bundle KPIs used | Exclusion | All 17 SRFs | Jan–Apr 2026 |
+| SCO-02 | No minimum installation threshold for Distributor or RSO tiers | Exclusion | Dist + RSO | Jan–Apr 2026 |
+| SCO-03 | No tie-break rule specified for recognition tier ranking | Exclusion | Cluster/Region/SZM | All periods |
+| CHN-01 | Campaign tier expansion: Cluster/Region/SZM launched 17 Feb 2026 | Change | Cluster/Region/SZM | Feb 2026 |
+| CHN-02 | Eligibility thresholds increased from Feb to Mar 2026 for all tiers | Change | Cluster/Region/SZM | Mar 2026+ |
+| CHN-03 | Recharge bonus introduced for Distributor from Feb 2026 | Change | Distributor | Feb 2026+ |
+[/TABLE]
+[TABLE]
+| Prepared by: IT Sales Commissioning | Source: 17 Banglalink WiFi Campaign SRFs (Jan 2026 – Apr 2026) | Document purpose: Catalogue of all unique KPI condition types for SalesCom automation development. |
+[/TABLE]

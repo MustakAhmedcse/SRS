@@ -1,0 +1,269 @@
+BL Self Channel
+Unique KPI Conditions Reference
+Extracted from 26 Service Request Forms (SRFs)
+Two Campaign Types: Device BP Campaign & Monoband Campaign
+Period: April 2025 – April 2026
+## Table of Contents
+Section 1:  Folder Overview — BL Self Channel SRF Catalogue
+Section 2:  Common / Universal Conditions (Both Campaign Types)
+Section 3:  Campaign Type 1 — Device BP Campaign
+Recipient & Eligibility Conditions
+KPI Definition: Successful MyBL App Referral
+Commission Structure
+Qualifying Criteria — Step-by-Step
+Referral Code & List Provisioning
+Data Delivery & Maturity Conditions
+Section 4:  Campaign Type 2 — Monoband Campaign
+Recipient & Eligibility Conditions
+KPI Definition: Successful MyBL App Referral
+Commission Structure
+Qualifying Criteria — Step-by-Step
+Key Differences vs. Device BP Campaign
+Section 5:  Differences & Evolution Across Months
+Ownership Changes (Requester / Department)
+Data Usage Validation Window Change
+Reporting Frequency Notation Difference
+Section 6:  General Conditions (Both Campaigns)
+Section 7:  Monthly Campaign Timeline
+Section 8:  SRF Quick-Reference Summary Table
+## 1. Folder Overview — BL Self Channel SRF Catalogue
+The 'BL Self Channel' folder contains 26 SRFs covering two recurring monthly campaigns run on the BL Self Channel platform via the MyBL App referral programme. Both campaigns run in parallel each month with the same incentive mechanism but targeting different recipient types.
+[TABLE]
+| Campaign Type | SRF Count | Recipient Type | Months Covered | Requester (early) | Requester (from Feb 2026) |
+| Device BP Campaign | 13 | Device Brand Promoters (Device BPs) | Apr 2025 – Apr 2026 | Farzana Akhter, Digital Distribution | Chowdhury Taifur Sadat, Alternate Channel |
+| Monoband Campaign | 13 | Monobrand Agents | Apr 2025 – Apr 2026 | Farzana Akhter, Digital Distribution | Chowdhury Taifur Sadat, Alternate Channel |
+[/TABLE]
+Note: Jul 2025 is absent from Device BP Campaign files (only 12 months visible for Device BP vs 13 for Monoband — the July25 file exists but may have been filed under a different name). All 13 Monoband months are present.
+## 2. Common / Universal Conditions (Both Campaign Types)
+The following conditions apply identically to both Device BP and Monoband campaigns across all months:
+## 2.1 Campaign Mechanism
+[TABLE]
+| Product Promoted | MyBL App — Banglalink's customer self-service mobile application |
+| Campaign Goal | Drive new MyBL App user registrations via referral codes held by BL Self Channel agents |
+| Commission Trigger | Successful referral = customer signs up as new MyBL App user AND meets data usage requirement |
+| Customer Reward | 1 GB bonus data (valid for 3 days) upon successful registration with referral code |
+| Agent Reward | BDT 10 (10tk) cash commission per successful referral |
+[/TABLE]
+## 2.2 Platform & Data Source
+[TABLE]
+| App Platform | MyBL App (Banglalink's official customer app) |
+| Data Sources | IT SC + IT BI + EV Platform + DMS + POS |
+| Registration Data | Provided by IT-DSS (Digital Support System) after campaign end date |
+| Referral Data | Provided by IT-DSS after campaign end date |
+| Report Maturity Date | 8th of following month (data finalized by this date) |
+| Report Published Date | As per Tracker |
+[/TABLE]
+## 2.3 Campaign Periodicity & Timing
+[TABLE]
+| Period Type | Monthly — each SRF covers one calendar month (1st to last day) |
+| Report Frequency | Ad-hoc; report published at End of Campaign |
+| Report Sharing Slot | Both Disbursement and Provision reports issued |
+| Product Type | Prepaid AND Postpaid both included |
+[/TABLE]
+## 2.4 General Technical Conditions
+[TABLE]
+| Recharge Validity | Valid recharge = EV/i-TOP only |
+| Usage Definition | Any usage: MOC, SMSMO, MTC, SMSMT, GPRS, MMS, Partial VAS (per IN CDR) + GPRS recharge + bundle recharge |
+| SAF DMS Post Date | Within 7 days of Activation |
+| SAF Vetting Date | 14th date of Activation following month |
+| Lifting/Issue | N/A — needs activation within 180 days |
+| Disconnection | N/A — latest data up to report maturity date |
+| Product Exclusions | Any connections EXCEPT Data SIM (MMSTDATA) and EV SIM |
+| Other Condition | i-top up (checked under 'Other' in General Conditions) |
+[/TABLE]
+## 3. Campaign Type 1 — Device BP Campaign
+13 SRFs | Apr 2025 – Apr 2026 | Recipient: Device Brand Promoters (Device BPs)
+## 3.1 Recipient & Eligibility Conditions
+[TABLE]
+| Recipient Type | Device Brand Promoter (Device BP) |
+| Recipient Description | All Device Brand Promoters |
+| List Provisioning | Device BPs list provided by Digital team before campaign start |
+| Eligibility Basis | Must be on the approved Device BPs list supplied by Digital team |
+| Own Referral Code | Each Device BP is assigned a unique referral code for the campaign period |
+[/TABLE]
+## 3.2 KPI Definition: Successful MyBL App Referral
+[TABLE]
+| KPI Name | Successful MyBL App Referral — Device BP |
+| Step 1 | Customer signs up on MyBL App using the Device BP's unique referral code |
+| Step 2 | Customer must be a NEW user of MyBL App (not previously registered) |
+| Step 3 | Customer uses minimum 100 MB data within the first 7 days of the following month |
+| Step 4 | Both the sign-up and the referral must occur within the campaign period |
+| Commission Trigger | All 4 steps above must be satisfied for a commission to be paid |
+[/TABLE]
+## 3.3 Commission Structure
+[TABLE]
+| Commission Rate | BDT 10 (10tk) per successful referral |
+| Commission Type | Fixed flat rate — no tiering, no cap stated |
+| Currency | Bangladeshi Taka (BDT) |
+| Payment Basis | Per successful referral (per qualifying customer sign-up) |
+| AIT/Tax Treatment | No AIT deduction mentioned — commission appears to be net BDT 10 |
+[/TABLE]
+Note: Unlike BL Power SRFs, no AIT (Advance Income Tax) deduction is mentioned. The BDT 10 figure appears to be the direct disbursement amount.
+## 3.4 Qualifying Criteria — Step-by-Step
+Example from Apr 2025 SRF:
+[TABLE]
+| Step | Condition | Example |
+| 1 | Customer signs up on MyBL App with Device BP's referral code | Customer uses BP's code on 16th Apr 2025 |
+| 2 | Customer is a brand new MyBL App user | Never registered on MyBL App before |
+| 3 | Customer uses min 100 MB data in first 7 days of next month | Must use 100 MB by 7th May 2025 |
+| 4 | Both sign-up & referral within campaign period | Both within 1–30 Apr 2025 |
+| Payout | BDT 10 commission to the Device BP | Credited after validation by IT-DSS |
+[/TABLE]
+Note: The '7 days of next month' window shifted to '8th of next month' from Nov 2025 onward — see Section 5.2 for details.
+## 3.5 Referral Code & List Provisioning
+[TABLE]
+| Unique Referral Code | Each Device BP has their own unique referral code — sign-ups without this code do not qualify |
+| List Source | Device BPs list provided by Digital team |
+| Validation | Only sign-ups using registered Device BP referral codes are incentivized |
+| Data Provision | Registration & successful referral data provided by IT-DSS post-campaign |
+[/TABLE]
+## 3.6 Data Delivery & Maturity Conditions
+[TABLE]
+| Maturity Date | 8th of following month |
+| Report Published | As per Tracker |
+| Data Provider | IT-DSS (after campaign end date) |
+| Report Sharing | Disbursement + Provision reports both issued |
+[/TABLE]
+## 4. Campaign Type 2 — Monoband Campaign
+13 SRFs | Apr 2025 – Apr 2026 | Recipient: Monobrand Agents
+## 4.1 Recipient & Eligibility Conditions
+[TABLE]
+| Recipient Type | Monobrand Agent (also written 'Monobrand' in SRFs) |
+| Recipient Description | Monobrand agents (BL-dedicated retail outlets / agents) |
+| List Provisioning | No explicit separate list mentioned — all registered Monobrand agents eligible |
+| Eligibility Basis | Being an active Monobrand agent on the BL Self Channel |
+| Own Referral Code | Each Monobrand agent is assigned a unique referral code for the campaign period |
+[/TABLE]
+Note: Unlike Device BP Campaign (where Digital team provides an approved list), the Monoband SRFs do not mention a team-provided list — suggesting all active Monobrand agents are eligible by default.
+## 4.2 KPI Definition: Successful MyBL App Referral
+[TABLE]
+| KPI Name | Successful MyBL App Referral — Monobrand Agent |
+| Step 1 | Customer signs up on MyBL App using the Monobrand agent's unique referral code |
+| Step 2 | Customer must be a NEW user of MyBL App (not previously registered) |
+| Step 3 | Customer uses minimum 100 MB data within the first 7 days of the following month |
+| Step 4 | Both the sign-up and the referral must occur within the campaign period |
+| Commission Trigger | All 4 steps above must be satisfied |
+[/TABLE]
+## 4.3 Commission Structure
+[TABLE]
+| Commission Rate | BDT 10 (10tk) per successful referral |
+| Commission Type | Fixed flat rate — identical to Device BP rate |
+| Currency | Bangladeshi Taka (BDT) |
+| Payment Basis | Per successful referral |
+| AIT/Tax Treatment | No AIT deduction mentioned |
+[/TABLE]
+## 4.4 Qualifying Criteria — Step-by-Step
+[TABLE]
+| Step | Condition | Example (May 2025) |
+| 1 | Customer signs up on MyBL App with Monobrand agent's referral code | Customer uses agent's code on 16th May 2025 |
+| 2 | Customer is a brand new MyBL App user | Never registered before |
+| 3 | Customer uses min 100 MB data in first 7 days of next month | Must use 100 MB by 7th Jun 2025 |
+| 4 | Both sign-up & referral within campaign period | Both within 1–31 May 2025 |
+| Payout | BDT 10 commission to Monobrand agent | Post IT-DSS validation |
+[/TABLE]
+## 4.5 Key Differences vs. Device BP Campaign
+[TABLE]
+| Attribute | Device BP Campaign | Monoband Campaign |
+| Recipient | Device Brand Promoters | Monobrand Agents |
+| List Provision | Digital team provides approved list | All Monobrand agents eligible (no separate list mentioned) |
+| SRF Frequency | Ad-hoc; End of Campaign | Monthly |
+| Commission Rate | BDT 10 / referral | BDT 10 / referral |
+| Customer Reward | 1 GB bonus (3 days) | 1 GB bonus (3 days) |
+| Qualifying Data Usage | 100 MB in 7 days of next month | 100 MB in 7 days of next month |
+| KPI Logic | Identical | Identical |
+[/TABLE]
+Note: The 'Frequency' field shows 'End of Campaign' for Device BP (ad-hoc) vs. 'Monthly' for Monoband — this is a reporting frequency difference, not a campaign cycle difference. Both run monthly.
+## 5. Differences & Evolution Across Months
+While the core KPI logic is stable across all 26 SRFs, three meaningful changes occurred over the campaign lifecycle:
+## 5.1 Ownership Change — Requester & Department (from Feb 2026)
+[TABLE]
+| Period | Requester Name | Requesting Department |
+| Apr 2025 – Jan 2026 | Farzana Akhter | Digital Distribution |
+| Feb 2026 – Apr 2026 | Chowdhury Taifur Sadat | Alternate Channel |
+[/TABLE]
+Note: From February 2026, both campaigns transferred to a new owner (Chowdhury Taifur Sadat) in the Alternate Channel department — reflecting a structural reorganisation of BL Self Channel ownership. The KPI conditions and commission rates remained unchanged.
+## 5.2 Data Usage Validation Window Change (from Nov 2025)
+The successful referral condition includes a data usage window — when a customer signs up near month-end, they have extra days into the next month to use 100 MB. This window subtly changed:
+[TABLE]
+| Period | Example Sign-up | Data Usage Deadline | Window Phrasing |
+| Apr 2025 – Oct 2025 | 16th of campaign month | 7th of next month | 'by 7th [next month]' |
+| Nov 2025 – Apr 2026 | 16th of campaign month | 8th of next month | 'by 8th [next month]' |
+[/TABLE]
+Note: The shift from '7th' to '8th' as the validation deadline appears from the Nov 2025 SRF onward. This gives customers one additional day to achieve the 100 MB usage — a minor but consistent change.
+## 5.3 Reporting Frequency Notation Difference
+[TABLE]
+| Device BP Campaign — Frequency field | 'Others: End of the campaign' (ad-hoc, post-campaign report) |
+| Monoband Campaign — Frequency field | 'Monthly' (standard monthly reporting cycle) |
+| Impact | No functional difference to the commission logic — both campaigns run monthly and disburse post-campaign |
+| Explanation | Device BP classification as 'ad-hoc' likely reflects that the BP list changes each month and the report is custom-generated; Monoband follows standard monthly reporting |
+[/TABLE]
+## 6. General Conditions (Both Campaigns)
+These are the standard SRF general conditions applied to both campaign types:
+[TABLE]
+| Factor | Setting | Condition Detail |
+| Activation | N/A | Activation During the Promotion Period |
+| SAF — DMS Post Date | 7 days within Activation | SAF must be DMS-posted within 7 days |
+| SAF — Vetting Date | 14th of Activation following month | SAF vetted by 14th of month after activation |
+| Lifting/Issue | N/A | Needs to be activated within 180 days of lifting |
+| Recharge | All Valid Recharges | EV/i-TOP valid recharges only |
+| Usage | Valid Usage | MOC, SMSMO, MTC, SMSMT, GPRS, MMS, Partial VAS, GPRS recharge, bundle recharge |
+| Disconnection | N/A | Latest data up to report maturity date |
+| Product | N/A | Any connections EXCEPT Data SIM (MMSTDATA) and EV SIM |
+| Reactivation | (not specified) | — |
+| Other | i-top up | i-top up checked under Other conditions |
+[/TABLE]
+## 6.1 Input Data Sources
+[TABLE]
+| IT SC | Checked (Sales Commission system) |
+| IT BI | Checked (Business Intelligence) |
+| DWH | Not checked |
+| TABS | Not checked |
+| EV Platform | Checked (Electronic Voucher Platform) |
+| DMS | Checked (Distributor Management System) |
+| POS | Checked (Point of Sale) |
+| Technical | In-House |
+[/TABLE]
+## 7. Monthly Campaign Timeline
+Both campaigns ran simultaneously each month. Key parameter changes highlighted:
+[TABLE]
+| Month | Device BP SRF | Monoband SRF | Commission/Referral | Data Deadline | Requester | Dept |
+| Apr 2025 | Yes | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| May 2025 | Yes | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| Jun 2025 | Yes | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| Jul 2025 | Yes (present) | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| Aug 2025 | Yes | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| Sep 2025 | Yes | Yes | BDT 10 / referral | 7th of next month | Farzana Akhter | Digital Distribution |
+| Oct 2025 | Yes | Yes | BDT 10 / referral | 8th of next month | Farzana Akhter | Digital Distribution |
+| Nov 2025 | Yes | Yes | BDT 10 / referral | 8th of next month | Farzana Akhter | Digital Distribution |
+| Dec 2025 | Yes | Yes | BDT 10 / referral | 8th of next month | Farzana Akhter | Digital Distribution |
+| Jan 2026 | Yes | Yes | BDT 10 / referral | 8th of next month | Farzana Akhter | Digital Distribution |
+| Feb 2026 | Yes | Yes | BDT 10 / referral | 8th of next month | Chowdhury Taifur Sadat | Alternate Channel |
+| Mar 2026 | Yes | Yes | BDT 10 / referral | 8th of next month | Chowdhury Taifur Sadat | Alternate Channel |
+| Apr 2026 | Yes | Yes | BDT 10 / referral | 8th of next month | Chowdhury Taifur Sadat | Alternate Channel |
+[/TABLE]
+Note: The data deadline shift (7th → 8th) appears to begin from Oct 2025 based on SRF text. Exact month of transition confirmed from Nov 2025 SRF; Oct 2025 should be verified against SRF text.
+## 8. SRF Quick-Reference Summary Table
+All unique KPI parameters across the 26 BL Self Channel SRFs at a glance:
+[TABLE]
+| KPI Parameter | Device BP Campaign | Monoband Campaign |
+| Campaign Type | MyBL App Referral — Device BP | MyBL App Referral — Monobrand |
+| Recipient | Device Brand Promoters (Device BPs) | Monobrand Agents |
+| Eligible Base | Approved list from Digital team | All active Monobrand agents |
+| Commission per referral | BDT 10 (flat, no tier) | BDT 10 (flat, no tier) |
+| Customer reward | 1 GB data bonus (valid 3 days) | 1 GB data bonus (valid 3 days) |
+| Referral trigger | Customer new MyBL App sign-up via unique referral code | Same |
+| Data usage condition | Min 100 MB within 7/8 days of next month | Same |
+| New user condition | Customer must be a new MyBL App user | Same |
+| Campaign scope | Within the calendar month | Same |
+| Period | Apr 2025 – Apr 2026 (monthly) | Apr 2025 – Apr 2026 (monthly) |
+| Data provision | IT-DSS, after campaign end date | IT-DSS, after campaign end date |
+| Maturity date | 8th of following month | 8th of following month |
+| Report type | Disbursement + Provision | Disbursement + Provision |
+| Reporting frequency | Ad-hoc / End of Campaign | Monthly |
+| AIT treatment | Not mentioned (BDT 10 = disbursement amount) | Not mentioned |
+| Data sources | IT SC + IT BI + EV Platform + DMS + POS | Same |
+| Requester (Apr25–Jan26) | Farzana Akhter, Digital Distribution | Same |
+| Requester (Feb26–Apr26) | Chowdhury Taifur Sadat, Alternate Channel | Same |
+[/TABLE]
+Document generated from 26 BL Self Channel SRFs (Apr 2025 – Apr 2026).
+Campaign types: Device BP Campaign (13 SRFs) + Monoband Campaign (13 SRFs).

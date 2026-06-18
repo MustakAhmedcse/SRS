@@ -1,0 +1,440 @@
+Digital Distribution
+Unique KPI Conditions — All SRFs
+Partners: bKash | Nagad | Rocket (DBBL) | Upay (UCB Fintech) | Techno Index
+SalesCom Automation Reference | Compiled May 2026
+INDEX
+[TABLE]
+| Section | Title |
+| 1 | Programme Overview — Digital Distribution |
+| 2 | Partner Summary & SRF Inventory |
+| 3 | Commission Model Types — Classification |
+| 4 | bKash Commission Conditions |
+| 4.1 | Regular Bi-Monthly Drive (Standard Deno-Based) |
+| 4.2 | Special Drive |
+| 4.3 | USSD Drive |
+| 4.4 | Hourly / Flash Drive (Time-Gated) |
+| 4.5 | Winback Campaign (Segmented Base) |
+| 4.6 | 1st Time Recharge Campaign |
+| 4.7 | Self-Recharge Campaign |
+| 4.8 | Sequential / Tiered Recharge Campaign |
+| 4.9 | Minute-Winner / CB Drive (Fastest Recharger) |
+| 4.10 | 100% CB (Cashback) Drive |
+| 4.11 | Asia Cup / Event Flash Drive |
+| 5 | Nagad Commission Conditions |
+| 5.1 | Regular Bi-Monthly Drive |
+| 5.2 | Special Drive |
+| 5.3 | Hourly Drive (Time-Gated) |
+| 5.4 | 1st Time Recharge Campaign (Segmented Base) |
+| 5.5 | Segmented Base Drive (Multi-Base, Multi-Deno) |
+| 5.6 | Winback Drive (Segmented Base, FCD-gated) |
+| 6 | Rocket (DBBL) Commission Conditions |
+| 6.1 | Regular Drive |
+| 6.2 | Hourly Drive |
+| 7 | Upay (UCB Fintech) Commission Conditions |
+| 7.1 | Regular Drive |
+| 7.2 | Hourly Drive |
+| 8 | Techno Index Commission Conditions |
+| 8.1 | Volume-Based Percentage Commission |
+| 9 | Universal Commission Rules (All Partners) |
+| 10 | General Conditions Comparison — Standard vs Winback/FCD |
+| 11 | Input Data Sources & Report Format |
+| 12 | Key Definitions & Glossary |
+[/TABLE]
+1. Programme Overview — Digital Distribution
+[TABLE]
+| Department | Digital Distribution (Banglalink) |
+| Recipient Type | Digital Distributor (top-up seller / RSO) — NOT traditional SIM sellers |
+| Channel Type | Mobile Banking / Digital Recharge |
+| Product Type | Prepaid & Postpaid (both checked in all SRFs) |
+| Commission Nature | Deno-specific fixed commission amount (BDT) per recharge transaction, OR percentage of total recharge (Techno Index only) |
+| Report Type | Ad-hoc (campaign-period driven) |
+| Report Slot | Disbursement (not Provision) |
+| Requester(s) | Muhit Mehedi Khan / Nahid Rahman Shovon / Sarzanul Haque Sabid (Digital Distribution) |
+| Total SRF Count | 111 SRFs across 5 partners |
+| Period Covered | April 2025 – March 2026 |
+[/TABLE]
+2. Partner Summary & SRF Inventory
+[TABLE]
+| Partner | Legal Entity | Retailer MSISDN Count | Drive Types Used | Approx SRF Count |
+| bKash | bKash Limited | 21 MSISDNs | Regular, Special, USSD, Hourly, Flash, Winback, 1st Recharge, Self-Recharge, Sequential, Minute-Winner, CB Drive, Event Flash | ~67 |
+| Nagad | Nagad Limited | 3 MSISDNs (later 2) | Regular, Special, Hourly, 1st Recharge, Segmented, Winback (FCD-gated) | ~29 |
+| Rocket | DBBL (Dutch-Bangla Bank Ltd) | 3 MSISDNs | Regular, Hourly | ~8 |
+| Upay | UCB Fintech Company Limited | 1 MSISDN | Regular, Hourly | ~6 |
+| Techno Index | Techno Index Limited | 1 MSISDN | Volume-Based % Commission | ~1 |
+[/TABLE]
+Note: SRF counts are approximate; some files are Revisions of earlier SRFs.
+3. Commission Model Types — Classification
+[TABLE]
+| Model Type | Description | Trigger | Cap | Partners |
+| Regular Deno-Based | Fixed BDT commission per transaction on specified deno(s). Different denos may apply in different sub-periods within the campaign. | Any qualifying recharge of that deno from authorized MSISDN | No ceiling | bKash, Nagad, Rocket, Upay |
+| Hourly / Time-Gated | Commission applies ONLY during a specified time window (e.g., 4PM–6PM) on qualifying denos. | Recharge must occur within the hourly window | No ceiling (unless stated) | bKash, Nagad, Rocket, Upay |
+| Flash Drive (Time+Date) | Like hourly but applies to specific dates AND hours. Date-time combination gates eligibility. | Date AND time must both match | No ceiling | bKash |
+| Winback / Segmented Base | Commission only for recharges to a pre-selected subscriber base. Per-subscriber, per-campaign limit (usually once). IRIS excluded. | Specific deno + selected base subscriber | Once per subscriber per campaign | bKash, Nagad |
+| 1st Time Recharge | Commission for recharges to subscribers who are receiving the deno for the first (or Nth) time. Subscriber-level counter applied. | Subscriber's Nth recharge of that deno in the period | Defined count per subscriber (1x or 2x) | bKash, Nagad |
+| Self-Recharge Campaign | Subscriber recharges their own number (not retailer-to-subscriber). Same deno-based commission structure. | Self-recharge of specified deno | No ceiling | bKash |
+| Sequential / Tiered | Two-tier commission: 1st recharge gets amount A, 2nd recharge gets amount B for same subscriber and deno. | Subscriber's 1st then 2nd recharge of deno | 2 times per subscriber | bKash |
+| Minute-Winner / CB Drive | Only the fastest recharger(s) per minute or per hour wins. Winner count limited per hour/day. | 1st recharger of the minute or hour with specified deno | Max winners per hour/day defined | bKash |
+| 100% Cashback (CB) Drive | Subscriber effectively receives cashback equal to recharge amount. Commission = deno amount. | 1st recharger per minute wins; 120 winners/day | 1 winner per minute, 120/day | bKash |
+| Volume-Based % Commission | Commission = fixed % of total recharge volume during campaign. Requires hitting a recharge target. | Total recharge during period from authorized MSISDN | Max BDT 40,000 ceiling applies | Techno Index |
+[/TABLE]
+4. bKash Commission Conditions
+4.1 Regular Bi-Monthly Drive (Standard Deno-Based)
+The most common drive type. bKash receives a fixed BDT commission per qualifying recharge on specified denos. Campaign is split into two sub-periods (e.g., 1st–7th and 8th–15th) with different deno-commission tables.
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — bKash |
+| Commission Basis | Fixed BDT amount per transaction on specified deno(s) |
+| Sub-Period Split | Typically 2 sub-periods within each half-month (e.g., 1–7 and 8–15). Each sub-period has its own deno list and commission rates. |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Transactions | Excluded — no commission on IRIS transactions |
+| I-top Definition | I-top sales = sales to end customer only; not lifting |
+| Recharge Source | Must originate from authorized bKash retailer EV MSISDNs (21 MSISDNs listed) |
+| Transaction Type | Recharge (retailer EV to subscriber) — EV/I-TOP method |
+| Maturity | Campaign end date + 1 day (e.g., period ends 15-May, maturity 16-May) |
+| Data Source | IT SC + EV Platform + DMS + POS |
+| Report Format | Customer_MSISDN | RET_MSISDN | RECHARGE_AMOUNT | TOP_UP_DATE | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT |
+[/TABLE]
+Note: Deno lists and commission amounts change every period. The commission structure (fixed per deno) is consistent.
+4.2 Special Drive
+Same structure as Regular Drive but covers specific high-value or promotional denos (often higher-denomination bundles like 497, 729, 998, 1258). Same conditions apply.
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — bKash |
+| Commission Basis | Fixed BDT per transaction on special promotional denos |
+| Typical Denos | High-value: 497, 729, 998, 1258 and similar bundle denos |
+| Sub-Period Split | Yes — typically 4 sub-periods (1–3, 6–7, 9–11, 13–14 May pattern) |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Transactions | Excluded |
+| Recharge Source | Authorized bKash retailer EV MSISDNs only |
+| Maturity | Campaign end date (same-day maturity in some cases) |
+| All other conditions | Identical to Regular Drive |
+[/TABLE]
+4.3 USSD Drive
+Targets a specific deno associated with USSD recharge behaviour (e.g., deno 335). Single deno, simple structure.
+[TABLE]
+| Condition | Details |
+| Commission Basis | Single fixed deno; one commission rate for the entire period |
+| Typical Deno | 335, 275, 325 (varies by period) |
+| Sub-Period Split | Sometimes split (e.g., Aug: 8–14 @ 335, 15–23 @ 275, 24–31 @ 325) |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Transactions | Excluded |
+| All other conditions | Identical to Regular Drive |
+[/TABLE]
+4.4 Hourly / Flash Drive (Time-Gated)
+Commission applies ONLY within a defined time window (typically 4:00 PM – 5:59 PM or 4:00 PM – 6:00 PM). Outside those hours, no commission is earned even on qualifying denos.
+[TABLE]
+| Condition | Details |
+| Time Window | Typically 4:00:00 PM to 05:59:59 PM (2-hour window). Some variants: 5:00 PM–7:00 PM, 3:00 PM–6:00 PM. |
+| Granularity | Seconds-level: 16:00:00 to 17:59:59 (inclusive) |
+| Commission Basis | Fixed BDT per qualifying recharge within the time window |
+| Date Scope | Can span multiple days (e.g., 27–30 Apr) or specific individual dates |
+| Typical Denos | Low-to-mid: 79, 124, 147, 169, 174, 199, 998 and similar |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Transactions | Excluded |
+| Recharge Source | Authorized bKash retailer EV MSISDNs only |
+| Report includes | Both Gross Commission (including AIT) and Net Commission (without AIT) reported |
+| All other conditions | Identical to Regular Drive |
+[/TABLE]
+Note: Flash drives are essentially hourly drives with specific date+time combinations. The commission table may include both a Gross Commission column and a Gross Commission (including AIT) column — verify which column to use for payout.
+4.5 Winback Campaign (Segmented Base)
+Commission is limited to recharges made to a pre-selected ('selected base') list of subscribers. Retailer earns commission only once per subscriber per campaign period.
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — bKash |
+| Base Restriction | Selected/segmented subscriber base only. Non-base subscribers do NOT qualify. |
+| Per-Subscriber Limit | Commission payable ONCE per subscriber per campaign period |
+| Consumer Incentive Rule | Each consumer gets incentive ONE TIME ONLY for the specified deno recharge |
+| Typical Deno | Small denos: 20 (most common) |
+| Campaign Length | ~7–14 days (e.g., 25–31 Oct, 18–31 Jan, 8–31 May, 24–30 Jun) |
+| IRIS Transactions | Excluded |
+| Ceiling | No ceiling on total payouts; ceiling is per-subscriber limit |
+| Standard General Conditions | Recharge-based (EV/I-TOP). Same maturity rules as regular drive. |
+| Mar 2026 Version | Uses FCD activation gate + ETSAF SAF condition + Prepaid product scope (see Section 10 for full comparison) |
+[/TABLE]
+Note: Winback Nov 2025 onwards uses a newer SRF format (requester: Sarzanul Haque Sabid) with additional activation gate (FCD) and enhanced SAF conditions (98% ETSAF). Earlier Winback SRFs use the standard format.
+4.6 1st Time Recharge Campaign
+Commission triggered by a subscriber's 1st (or 2nd) recharge of a specific deno during the campaign. A sequential commission tier may apply.
+[TABLE]
+| Condition | Details |
+| Typical Structure | Two-tier: 1st recharge of deno = commission rate A; 2nd recharge of same deno = commission rate B |
+| Per-Subscriber Limit | Defined count (e.g., 2 times per subscriber). After 2nd recharge, no more commission for that subscriber. |
+| Example (Jul 2025) | Deno 29: 1st recharge = BDT 10 net (11.11 gross), 2nd recharge = BDT 15 net (16.67 gross) |
+| Base Restriction | Selected base considered (segmented base) |
+| Typical Deno | Small denos: 29, 35 |
+| IRIS Transactions | Excluded |
+| Ceiling | No ceiling — capped by per-subscriber limit only |
+| All other conditions | Same as Winback / Segmented campaign |
+[/TABLE]
+4.7 Self-Recharge Campaign
+Subscriber recharges their OWN number (self-recharge). Commission paid to the digital distributor for facilitating the transaction. Structure is otherwise identical to regular deno-based drive.
+[TABLE]
+| Condition | Details |
+| Transaction Type | Subscriber self-recharge (not retailer-to-subscriber) |
+| Commission Basis | Fixed BDT per qualifying self-recharge transaction on specified deno(s) |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Transactions | Excluded |
+| Example (Jul 2025) | Denos 199 and 117 with fixed commission amounts |
+| All other conditions | Identical to Regular Drive |
+[/TABLE]
+4.8 Sequential / Tiered Recharge Campaign
+Similar to 1st Time Recharge but explicitly labelled 'sequential'. Subscriber gets a lower commission for their 1st qualifying recharge and a higher amount for their 2nd.
+[TABLE]
+| Condition | Details |
+| Tier Structure | 2 tiers: 1st recharge = lower rate; 2nd recharge = higher rate |
+| Per-Subscriber Limit | Exactly 2 incentives per subscriber; no further commission after 2nd |
+| Example (Aug 2025) | Deno 35: 1st = BDT 9.6 net (10.67 gross), 2nd = BDT 12 net (13.34 gross) |
+| Base Restriction | Selected/segmented base |
+| IRIS Transactions | Excluded |
+| Ceiling | Capped by per-subscriber count only |
+[/TABLE]
+4.9 Minute-Winner / CB Drive (Fastest Recharger)
+Only the FASTEST recharger(s) in each minute (or hour) wins the commission. A cap on total winners per day/hour applies.
+[TABLE]
+| Condition | Details |
+| Winner Selection | 1st recharger per minute = winner. OR: 1st N rechargers per hour = winners. |
+| Daily Winner Cap | Defined per SRF (e.g., 180 winners/day, max 60 per hour) |
+| Hourly Winner Cap | Max winners per hour specified (e.g., first 20 customers per hour in Sep 2025 morning drive) |
+| Time Windows | Multiple time windows may apply in same SRF (e.g., 10AM–10PM hourly winners + 3PM–6PM minute winners) |
+| Typical Denos | 156 (Sep 2025), others vary |
+| Ceiling | No monetary ceiling but winner count cap acts as the ceiling |
+| IRIS Transactions | Excluded |
+| All other conditions | Same as regular drive for non-winner conditions |
+[/TABLE]
+4.10 100% Cashback (CB) Drive
+Subscriber receives a commission equal to the recharge deno amount. Fastest recharger per minute wins. 120 winners per day maximum.
+[TABLE]
+| Condition | Details |
+| Commission = Deno Amount | Commission per winner = deno value (100% cashback to customer via retailer) |
+| Winner Rule | Only 1st recharger per minute eligible. One winner per minute. |
+| Daily Cap | 120 winners per day (= 120 minutes of 2-hour window) |
+| Time Window | 4:00:00 PM to 5:59:59 PM (2 hours = 120 minutes) |
+| Example (May 2025) | Deno 29: Gross commission 32.22 (including AIT), Net 29 |
+| IRIS Transactions | Excluded |
+| All other conditions | Same as regular drive |
+[/TABLE]
+4.11 Asia Cup / Event Flash Drive
+Same as Hourly/Flash Drive but tied to a sporting event (Asia Cup). Specific match-day dates and time windows.
+[TABLE]
+| Condition | Details |
+| Time Windows | Match-specific hours (e.g., 5PM–7PM, 4PM–6PM on specific match dates) |
+| Dates | Individual match dates (not continuous period) |
+| Example (Sep 2025) | Deno 169, BDT 5 net (5.56 gross) — specific days: 11th, 13th, 14th, 16th Sep |
+| All other conditions | Identical to standard Flash/Hourly Drive |
+[/TABLE]
+5. Nagad Commission Conditions
+Nagad SRFs follow the same base structure as bKash but with key differences: fewer authorized MSISDNs (3), no IRIS exclusion clause, and a distinct Winback format with FCD activation gate.
+5.1 Regular Bi-Monthly Drive
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — Nagad |
+| Commission Basis | Fixed BDT per qualifying recharge on specified denos |
+| Authorized MSISDNs | 3 MSISDNs: 1967021241, 1409947364, 1409947365 |
+| Sub-Period Split | Typically 2 sub-periods (e.g., 1–7 and 8–15) |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Clause | NOT explicitly mentioned (unlike bKash which explicitly excludes IRIS) |
+| Report Format | Identical to bKash: Customer_MSISDN | RET_MSISDN | RECHARGE_AMOUNT | TOP_UP_DATE | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT |
+| Maturity | Campaign end date + 1 day |
+| Data Source | IT SC + EV Platform + DMS + POS |
+[/TABLE]
+5.2 Special Drive
+[TABLE]
+| Condition | Details |
+| Commission Basis | Fixed BDT per transaction on special/high-value denos |
+| Typical Denos | 719, 1899, 199, 319, 649, 348, 548, 998, 397, 798, 699, 698, 799, 497 and others |
+| Structure | Multiple sub-periods (up to 5 segments) within campaign |
+| All other conditions | Identical to Nagad Regular Drive |
+[/TABLE]
+5.3 Hourly Drive (Time-Gated)
+[TABLE]
+| Condition | Details |
+| Time Window | Typically 4:00:00 PM to 5:59:59 PM (16:00:00–17:59:59). Single-day or multi-day. |
+| Per-Subscriber Limit | Some hourly drives: 'one customer can avail this offer only 3 times in the campaign period' |
+| Report Format | Net Commission (Without AIT) column also reported alongside Gross |
+| Example — Single Day (Apr 2025) | 7-Apr only, deno 100, 6PM–8PM, BDT 10 net (11.11 gross). 3 times limit per customer. |
+| Example — Multi-Day (Apr 2025) | Denos 698 (25–27 Apr) and 115 (25–30 Apr), 4PM–6PM |
+| All other conditions | Identical to Nagad Regular Drive |
+[/TABLE]
+5.4 1st Time Recharge Campaign (Segmented Base)
+[TABLE]
+| Condition | Details |
+| Base Restriction | Selected segmented base only |
+| Per-Subscriber Limit | Once per subscriber for self recharge (1 incentive per consumer) |
+| Example (Jul–Aug 2025) | Deno 29, 28 Jul–2 Aug: BDT 12 net (13.34 gross). One-time incentive for self recharge. |
+| IRIS Transactions | Not explicitly excluded (Nagad standard) |
+| All other conditions | Identical to Nagad segmented campaign |
+[/TABLE]
+5.5 Segmented Base Drive (Multi-Base, Multi-Deno)
+Commission varies by both subscriber base AND deno. Multiple base segments (Base 1, Base 2, Base 3) each have different deno and commission combinations.
+[TABLE]
+| Condition | Details |
+| Base Segments | Multiple named bases (e.g., Nagad Base 1, Base 2, Base 3) within same SRF |
+| Commission Matrix | Each base-deno combination has its own commission amount |
+| Example (Nov–Dec 2025) | Base 1: deno 698 @ BDT 65 net; Base 1: deno 798 @ BDT 5 net; Base 2: deno 599 @ BDT 55 net; Base 3: deno 297 @ BDT 27 net; Base 3: deno 639 @ BDT 60 net |
+| Time Window | Campaign start from 6:00:00 PM on start date to 11:59:59 PM on end date |
+| IRIS Transactions | Excluded (explicitly stated in later Nagad SRFs) |
+| Per-Subscriber Limit | Commission only for the matching base-deno combination; no per-subscriber count limit stated |
+[/TABLE]
+5.6 Winback Drive (Segmented Base, FCD-Gated)
+A significantly different SRF format used for Nagad Winback (Mar 2026). Uses FCD activation gate, enhanced SAF, expanded recharge definition, and Prepaid product scope.
+[TABLE]
+| Condition | Details |
+| SRF Format Version | Newer format (SRN: XXXX, Revenue Assurance approval added) |
+| Recipient Description | RSO (not just top-up seller) |
+| Product Type | Prepaid + Others: EV+SC, LSO, Strike Rate |
+| Activation Gate | FCD (First Call Date) — checked (unlike standard which uses no activation gate) |
+| SAF Condition | 98% of ETSAF must be vetted and accepted by Banglalink within 7th of following month |
+| Recharge Definition (expanded) | EV (R2RT + D2RT) + DTR (Manual and Daily Commission from Salescom) + OTF (EV OTF + IRIS OTF) + SC (Retail lifting per DMS entry). Also covers Data bundle, Voice bundle, Mix bundle (I-TOP up). |
+| Usage Condition | No Play — any outgoing call or internet usage in calendar month in min 93% GA |
+| Disconnection | Between FCD and latest data up to report generation date (T-6) |
+| Product Scope | All Prepaid & for MNP all connections |
+| Per-Subscriber Limit | Once per subscriber per campaign |
+| Typical Deno | 25 (Mar 2026: BDT 7.5 net / 8.33 gross) |
+| Data Sources | IT SC + IT BI + DWH + POS (expanded vs standard) |
+[/TABLE]
+6. Rocket (DBBL) Commission Conditions
+Rocket (Dutch-Bangla Bank Limited mobile banking) follows the same base structure. Authorized via 3 DBBL MSISDNs. No IRIS exclusion clause.
+6.1 Regular Drive
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — Rocket (DBBL) |
+| Commission Basis | Fixed BDT per qualifying recharge on specified denos |
+| Authorized MSISDNs | 3 MSISDNs: 1949272025, 1984224870, 1984225046 |
+| Typical Denos | Broader range including large: 1899, 1999 (high-value); 348, 448, 719 (mid-range) |
+| Sub-Period Split | Yes — 2 sub-periods typical (e.g., 1–3 Apr high-value, 4–6 Apr mid-value) |
+| Ceiling | No maximum or minimum ceiling |
+| IRIS Clause | No IRIS exclusion stated (unlike bKash) |
+| All other conditions | Same as bKash regular drive structure |
+[/TABLE]
+6.2 Hourly Drive
+[TABLE]
+| Condition | Details |
+| Time Window | 4:00:00 PM to 5:59:59 PM (16:00–17:59) |
+| Example (Apr 2025) | Deno 110, 27–30 Apr, BDT 10 net (11.11 gross) |
+| Report Format | Includes Net Commission (Without AIT) column |
+| All other conditions | Identical to Rocket Regular Drive |
+[/TABLE]
+7. Upay (UCB Fintech) Commission Conditions
+Upay (UCB Fintech Company Limited) follows the same structure. Only 1 authorized MSISDN. No IRIS exclusion clause.
+7.1 Regular Drive
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — Upay (UCB Fintech Company Limited) |
+| Commission Basis | Fixed BDT per qualifying recharge on specified denos |
+| Authorized MSISDNs | 1 MSISDN only: 1907411883 |
+| Typical Denos | 1899, 1999 (high-value); 719, 499, 548, 227 (mid-range) |
+| Sub-Period Split | Yes — 2 sub-periods (e.g., 1–3 and 4–6) |
+| Ceiling | No maximum or minimum ceiling |
+| All other conditions | Identical to Rocket Regular Drive |
+[/TABLE]
+7.2 Hourly Drive
+[TABLE]
+| Condition | Details |
+| Time Window | 4:00:00 PM to 5:59:59 PM |
+| Example (Apr 2025) | Denos 199 and 110, 25–30 Apr, BDT 33.33 and 11.11 gross |
+| All other conditions | Identical to Upay Regular Drive |
+[/TABLE]
+8. Techno Index Commission Conditions
+Unique commission model — the only partner using a percentage-of-volume model with a monetary ceiling.
+8.1 Volume-Based Percentage Commission
+[TABLE]
+| Condition | Details |
+| Recipient | Digital Distributor — Techno Index Limited |
+| Commission Model | Percentage of total recharge volume (NOT per-deno fixed amount) |
+| Rate | 0.75% net / 0.833% gross (including AIT) of total recharge during campaign period |
+| Recharge Target | Must achieve a minimum recharge target (e.g., 3,990,000 BDT for Jan–Feb 2026) |
+| Maximum Ceiling | BDT 40,000 maximum commission — the ONLY SRF in the folder with a ceiling |
+| Campaign Duration | Long-form: 6 weeks (e.g., 18 Jan – 28 Feb 2026) |
+| Authorized MSISDNs | 1 MSISDN: 1925820014 |
+| Report Format | RET_MSISDN | RECHARGE_AMOUNT | Date | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT (no Customer_MSISDN in report) |
+| IRIS Transactions | Not explicitly excluded |
+| Maturity | 1 day after campaign end (e.g., 1-Mar-2026) |
+| Data Source | IT SC + EV Platform + DMS + POS |
+[/TABLE]
+Note: Techno Index is the only partner where: (1) commission is % of volume not per-deno, (2) a BDT ceiling applies, (3) a recharge TARGET threshold is set, and (4) the report excludes Customer_MSISDN.
+9. Universal Commission Rules (All Partners)
+These conditions appear consistently across all Digital Distribution SRFs regardless of partner or drive type.
+[TABLE]
+| Rule | Condition | Detail |
+| I-top Definition | Standard | I-top sales = sales to end customer only; NOT lifting from distributor |
+| Ceiling | Standard (most SRFs) | No maximum or minimum ceiling on commission |
+| Exception to ceiling | Techno Index only | BDT 40,000 maximum ceiling applies |
+| Recharge Validity | All SRFs | Valid recharge = EV/I-TOP only. IRIS transactions excluded for bKash (not always stated for others). |
+| Authorized MSISDNs | All SRFs | Recharge MUST originate from the listed authorized retailer EV MSISDNs. Transactions from other MSISDNs are not eligible. |
+| Product Eligibility | Standard | Any connections EXCEPT Data SIM (MMSTDATA) and EV SIM |
+| SAF (Standard) | Standard SRFs | (a) DMS Post Date: 7 days within Activation; (b) Vetting Date: 14th of activation following month |
+| SAF (Enhanced — Winback) | Newer format SRFs | 98% of ETSAF must be vetted and accepted by Banglalink within 7th of following month |
+| Activation Gate | Standard SRFs | No activation gate checked (recharge-only basis) |
+| Activation Gate | Newer Winback SRFs | FCD (First Call Date) gate checked |
+| Report Maturity | Standard | Maturity date = day after campaign ends OR campaign end date itself |
+| Report Format | All except Techno Index | Customer_MSISDN | RET_MSISDN | RECHARGE_AMOUNT | TOP_UP_DATE | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT |
+| Report Sharing | All SRFs | Disbursement slot (not Provision) |
+| Report Published Date | All SRFs | As per tracker |
+| AIT Gross vs Net | Hourly/Segmented SRFs | Report includes both Gross (including AIT) and Net (excluding AIT) commission amounts. Regular drives show Gross (including AIT) only. |
+[/TABLE]
+10. General Conditions Comparison — Standard vs Winback/FCD Format
+[TABLE]
+| Factor | Standard SRF (most drives) | Winback / FCD Format (bKash Mar26, Nagad Mar26) |
+| Activation Gate | None checked | FCD (First Call Date) checked |
+| SAF Condition | 7 days DMS Post Date + Vetting 14th of next month | 98% ETSAF vetted by 7th of following month |
+| Recharge Definition | EV/I-TOP valid recharge | EV (R2RT + D2RT) + DTR + OTF (EV OTF + IRIS OTF) + SC (DMS entry). Also Data/Voice/Mix bundle I-TOP. |
+| Usage Condition | Not checked | No Play — outgoing call or internet usage in calendar month in min 93% GA |
+| Disconnection | Not checked | Between FCD and report generation date (T-6) |
+| Product Scope | Any except Data SIM (MMSTDATA) and EV SIM | All Prepaid + MNP all connections |
+| Recipient Description | Top-up seller | RSO |
+| Data Sources | IT SC + EV Platform | IT SC + IT BI + DWH + POS |
+| Revenue Assurance Sign-off | Not required | Required (additional approval row) |
+| SRF Number | 2016/0000 (placeholder) | XXXX (newer placeholder) |
+[/TABLE]
+Note: The FCD-format Winback SRFs represent a structural evolution of the Digital SRF — more conditions, more data sources, and a different commission eligibility gate. Automation logic must branch for these.
+11. Input Data Sources & Report Format
+11.1 Standard Data Sources
+[TABLE]
+| Source | Used By | Checked in SRF |
+| IT SC (Sales Commission IT) | All SRFs | Yes |
+| EV Platform | All SRFs | Yes (Other: EV Platform) |
+| DMS (Distribution Management System) | All SRFs | Yes |
+| POS (Point of Sale) | All SRFs | Yes |
+| IT BI (Business Intelligence) | Standard: No; Winback FCD format: Yes | Only in newer format |
+| DWH (Data Warehouse) | Standard: No; Winback FCD format: Yes | Only in newer format |
+| TABS | Not checked in any SRF | No |
+[/TABLE]
+11.2 Standard Report Output Format
+[TABLE]
+| Field | Description |
+| Customer_MSISDN | Subscriber's mobile number (the recharge recipient) |
+| RET_MSISDN | Retailer's EV MSISDN (must be in the authorized list) |
+| RECHARGE_AMOUNT | Amount recharged (must match qualifying deno) |
+| TOP_UP_DATE | Date of the recharge transaction |
+| HIT | Whether the transaction qualifies (hit/miss indicator) |
+| TOTAL_RECHARGE | Total recharge amount for the subscriber in the period |
+| COMMISSION_AMOUNT | Commission earned for that transaction |
+[/TABLE]
+Note: Techno Index report excludes Customer_MSISDN. Hourly drives may have additional Time column for time-window validation.
+12. Key Definitions & Glossary
+[TABLE]
+| Term | Definition |
+| Digital Distributor | A partner organization (bKash, Nagad, etc.) acting as a digital recharge distribution channel. Commission recipient in all Digital SRFs. |
+| Deno | Denomination — the specific recharge amount (e.g., BDT 29, 199, 729). Commission rates are deno-specific. |
+| EV / I-TOP | Electronic Voucher / I-Top — the valid recharge methods. Only EV and I-TOP transactions count; IRIS and lifting are excluded. |
+| IRIS Transaction | An internal transaction type excluded from bKash commission calculations. Not always stated for other partners. |
+| Lifting | Distributor-to-retailer stock transfer — NOT considered a sale to end customer and NOT eligible for commission. |
+| Authorized MSISDN | The specific retailer EV MSISDNs through which recharges must be made to qualify. bKash has 21, Nagad 3, Rocket 3, Upay 1, Techno Index 1. |
+| Gross Commission (incl. AIT) | Commission amount inclusive of Advance Income Tax (AIT). This is the amount Banglalink pays. |
+| Net Commission (excl. AIT) | Commission amount excluding AIT — the amount the partner actually retains after tax. |
+| AIT | Advance Income Tax — deducted from commission at source. Gross = Net + AIT. |
+| Segmented Base | A pre-selected list of subscriber MSISDNs targeted in Winback/1st Recharge campaigns. Only recharges to these subscribers qualify. |
+| FCD | First Call Date — the date on which a subscriber first makes a call. Used as an activation gate in newer Winback SRFs. |
+| FAD | First Activity Date — alternative activation gate (not used in any checked Digital SRF). |
+| ETSAF | End-to-end SAF compliance metric. In Winback SRFs: 98% of activations must be vetted within 7th of following month. |
+| SAF | Subscriber Acquisition Form — subscriber verification process. DMS Post Date within 7 days of activation; Vetting by 14th of following month (standard). |
+| R2RT | Retailer-to-Retailer Transfer — one form of EV recharge in expanded Winback definition. |
+| D2RT | Distributor-to-Retailer Transfer — another form of EV recharge in expanded Winback definition. |
+| DTR | Daily Transaction Report — manual and daily commission component from SalesCom, included in Winback recharge definition. |
+| OTF | Over The Form — EV OTF and IRIS OTF, included in Winback recharge definition. |
+| Minute-Winner | The subscriber who recharges first within a given minute in a CB drive. One winner per minute. |
+| CB Drive | Cashback Drive — subscriber receives cashback (commission equivalent to deno value). 100% CB = commission equals recharge amount. |
+| RSO | Retail Sales Officer — recipient description in newer Winback format SRFs. |
+| T-6 | Report generation date minus 6 days — used as the cutoff for disconnection data in FCD-format SRFs. |
+| Recharge Target | Minimum total recharge volume required to earn commission (used only in Techno Index SRF). |
+| Ceiling | Maximum commission cap. No ceiling in most SRFs; BDT 40,000 ceiling in Techno Index only. |
+[/TABLE]

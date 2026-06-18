@@ -1,0 +1,279 @@
+Campaign Somridi
+Unique KPI Conditions — All SRFs
+SalesCom Automation Reference | Banglalink
+1. Index
+[TABLE]
+| Section | Title |
+| 1 | Index |
+| 2 | Folder Overview & SRF Summary |
+| 3 | Campaign Structure — Gold vs Platinum vs Unified |
+| 4 | Offer Amount (% of Recharge) — Evolution by Month |
+| 5 | Recharge KPI — Definition, Components & Cluster Modalities |
+| 6 | GA (Gross Add) KPI — Definition, Rules & Exclusions |
+| 7 | VLR KPI — Definition & Payout Tiers |
+| 8 | GA Productivity KPI — Definition & Calculation |
+| 9 | Bundle Sales KPI — Definitions & Rules |
+| 10 | Active LSO KPI — Definition |
+| 11 | BSO / SSO KPI — Definitions |
+| 12 | DD SCR (Distributor Scratch Card Rate) KPI |
+| 13 | Retail SCR (Retailer Scratch Card Rate) KPI |
+| 14 | Individual KPI Assessment — C2C & SC Evaluation Rule |
+| 15 | GA Max Payout Cap & Non-GA DH Classification |
+| 16 | Platinum Campaign — Specific Rules & Cluster Variation |
+| 17 | Revision SRF Policy — Specific DH List Rule |
+| 18 | Growth-Based KPI (Mar 2026) |
+| 19 | Universal / General Conditions |
+| 20 | Quick Reference Summary Table — All 14 SRFs |
+[/TABLE]
+2. Folder Overview & SRF Summary
+[TABLE]
+| Folder | Campaign Somridi |
+| Total SRFs | 14 |
+| Campaign Types | 3 tiers: Gold (primary), Platinum (bonus overlay), Unified (Nov25 onwards — single SRF covers both) |
+| Date Range | Sep 2025 – Mar 2026 |
+| Recipient | Distributors (DH — Distributor Houses) |
+| Dept | Channel Planning |
+| Disbursement | End of campaign (monthly) |
+| Maturity Date | 8th of the following month (all SRFs) |
+| KPI Variability | KPI and weightage may vary from DD to DD — specific weights shared by B2C in excel |
+| Target Sharing | B2C shares targets in separate Excel files | DD-wise targets shared individually |
+[/TABLE]
+2.1 SRF List
+[TABLE]
+| SRF Title | Period | Type | Offer Amount | Key Feature |
+| Distributor Campaign Somridi Gold Sep25 | Sep 2025 | Gold | 0.6% of Recharge | 2-cluster modality. C2C+SC individual KPI rule (95% min). Retail SCR. |
+| Distributor Campaign Somridi Gold Sep25_Revision | Sep 2025 | Gold (Revision) | 0.6% | Specific DH list. Single cluster modality. BSO/LSO deduction. |
+| Distribution Campaign_Somridi Platinum_Sep25 | Sep 2025 | Platinum | 0.2% of Recharge | Bonus layer on Gold. Recharge/GA/LSO/BSO from Gold SRF. |
+| Distribution Campaign_Somridi Platinum_Sep25_Revision | Sep 2025 | Platinum (Revision) | 0.2% | Specific DH list only. |
+| Distributor Campaign Somridi Gold Oct25 | Oct 2025 | Gold | 0.7% of Recharge | VLR split-date (pre/post 17 Oct). Non-GA DH defined (CHICOX09/11). C2C+SC (70% min). |
+| Distributor Campaign Somridi Gold Oct25_Revision | Oct 2025 | Gold (Revision) | 0.7% | Specific DH list. Same structure as Oct25 Gold. |
+| Distribution Campaign_Somridi Platinum_Oct25 | Oct 2025 | Platinum | 0.3% of Recharge | Employee pool phone recharge excluded. BSO/LSO deduction from shared file. |
+| Distribution Campaign_Somridi Platinum_Oct25_Revision | Oct 2025 | Platinum (Revision) | 0.3% | Specific DH list only. |
+| Distributor Campaign Somridi Nov25 | Nov 2025 | Unified | 1% of Recharge | Single SRF. GA Productivity added. Best 24 days avg. VLR report from B2C. |
+| Distributor Campaign Somridi Nov25_Revision | Nov 2025 | Unified (Revision) | 1% | Specific DH list only. |
+| Distributor Campaign Somridi Dec25 | Dec 2025 | Unified | 1% of Recharge | SSO introduced. GA Productivity best 20 days. DD SCR replaces Retail SCR. |
+| Distributor Campaign Somridi Jan26 | Jan 2026 | Unified | 1% of Recharge | 120% max payout cap on GA. MNP+RYZE in GA. Active EV SIM excluded from GA. |
+| Distributor Campaign Somridi Feb26 | Feb 2026 | Unified | 1% of Recharge | RSO Productivity added to data sharing. Product scope: itop-up, SC, GA, LSO only. |
+| Distributor Campaign Somridi Mar26 | Mar 2026 | Unified | 1% of Recharge | Growth-based KPI introduced (day-normalised LM vs CM comparison). |
+[/TABLE]
+3. Campaign Structure — Gold vs Platinum vs Unified
+[TABLE]
+| Period | Gold | Platinum | Notes |
+| Sep 2025 | Separate SRF — primary KPI performance | Separate SRF — bonus layer (0.2%). References Gold SRF for Recharge/GA/LSO/BSO data | 2 SRFs per month + 2 revision SRFs = 4 SRFs for Sep |
+| Oct 2025 | Separate SRF — primary KPI performance | Separate SRF — bonus layer (0.3%). References Gold SRF for Recharge/GA/LSO/BSO data | Same structure as Sep + employee pool exclusion added |
+| Nov 2025+ | Merged into single Unified SRF | Merged into single Unified SRF | 1% offer rate — both tiers consolidated. Simpler structure from Nov onward. |
+[/TABLE]
+Note: Platinum acts as a top-up bonus on top of Gold. Platinum offer amount is calculated on the same base (total EV Secondary + SC Primary Recharge), but at a lower % rate. Recharge/GA/LSO/BSO achievement figures are taken directly from the corresponding Gold SRF.
+4. Offer Amount (% of Recharge) — Evolution by Month
+[TABLE]
+| Month | Gold/Unified Offer % | Platinum Offer % | Combined Max % | Base |
+| Sep 2025 | 0.6% | 0.2% | 0.8% | Total Recharge (EV Secondary + SC Primary) of Sep 2025 |
+| Oct 2025 | 0.7% | 0.3% | 1.0% | Total Recharge (EV Secondary + SC Primary) of Oct 2025 |
+| Nov 2025 | 1.0% (unified) | N/A (merged) | 1.0% | Total Recharge (EV Secondary + SC Primary) of Nov 2025 |
+| Dec 2025 | 1.0% (unified) | N/A (merged) | 1.0% | Total Recharge (EV Secondary + SC Primary) of Dec 2025 |
+| Jan 2026 | 1.0% (unified) | N/A (merged) | 1.0% | Total Recharge (EV Secondary + SC Primary) of Jan 2026 |
+| Feb 2026 | 1.0% (unified) | N/A (merged) | 1.0% | Total Recharge (EV Secondary + SC Primary) of Jan 2026 (note: SRF references Jan26 RDB) |
+| Mar 2026 | 1.0% (unified) | N/A (merged) | 1.0% | Total Recharge (EV Secondary + SC Primary) of Jan 2026 (note: SRF references Jan26 RDB) |
+[/TABLE]
+Note: The offer amount is the maximum incentive pool for each DH. Actual payout depends on KPI achievement across all weighted gates. Month end RDB (Recharge Data Base) is used for settlement.
+5. Recharge KPI — Definition, Components & Cluster Modalities
+[TABLE]
+| KPI Name | Recharge (EV Secondary + SC Primary) |
+| EV Secondary Definition | RSO to Retailer (R2RT) + Distributor to Retailer (D2RT) i-top-up sales + Manual and Daily Commission from Salescom + EV OTF + IRIS OTF |
+| SC Primary Definition | Scratch Card sales = SCs lifted from Warehouse to DD (primary lifting). S.C means Retail lifting as per DMS entry. |
+| Recharge Formula | EV Secondary + SC Primary, LESS Withdrawal (taken as usual process) |
+| C2C Inclusion | C2C from Digital Distribution Retailers is included. Retailer list shared by B2C. |
+| DRC Exclusion | DRC EV Secondary excluded from achievement. B2C shares DRC list. |
+| Employee Pool Exclusion | Any recharge at BL employee pool phone number NOT considered (from Oct 2025 onwards) |
+| Withdrawal | Less withdrawal applied — as usual process |
+[/TABLE]
+5.1 Cluster-Based Recharge Modalities (Sep–Oct 2025 Gold SRFs)
+[TABLE]
+| Cluster Group | Modality |
+| Central Cluster, North-East Cluster (excl. Sylhet), West Cluster (excl. Barisal) | Modality 1 — defined payout structure for these clusters (specific slab tables shared by B2C) |
+| East Cluster, North Cluster, Barisal & Sylhet Region | Modality 2 — separate payout structure for these clusters |
+[/TABLE]
+Note: From Nov 2025 (Unified SRF), a single Campaign Modality applies to all clusters — the two-cluster split is removed.
+5.2 Individual KPI Assessment — Recharge Gate Threshold
+[TABLE]
+| SRF Period | Min Recharge Achievement to Trigger Individual KPI Fallback | Other Parameter Min for Individual KPI |
+| Sep 2025 Gold | <95% Recharge KPI Payout → evaluate C2C (30%) + SC (10%) individually | CHICOX09/11: C2C=40%, SC=10% | 75% minimum of other parameter |
+| Oct 2025 Gold | <70% Recharge KPI Payout → evaluate C2C (30%) + SC (10%) individually | CHICOX09/11: C2C=40%, SC=10% | 80% minimum of other parameter |
+[/TABLE]
+Note: The individual KPI fallback means: if Recharge fails its minimum threshold, C2C and SC primary are evaluated separately, and the DH gets paid whichever is higher — cumulative vs. individual assessment. From Nov 2025 this specific mechanism is not documented in the SRF text.
+6. GA (Gross Add) KPI — Definition, Rules & Exclusions
+[TABLE]
+| Definition | Successful new SIM activation attributed to the DD/RSO during the campaign month |
+| Attribution Date | FCD (First Call Date) |
+| Eligible Products | Prepaid (Sep–Oct 2025) | Prepaid + MNP + RYZE (Jan 2026 onwards) |
+| ETSAF Gate | 98% of ETSAF must be vetted and accepted by Banglalink within 7th of following month |
+| Disconnection Exclusion | Disconnected numbers excluded from GA count |
+| DRC GA Exclusion | DRC GA excluded from achievement — B2C shares DRC list (from Jan 2026 explicitly stated) |
+| Active EV SIM Exclusion | Only active EV SIM (ITOPUPNUMBER) excluded from GA achievement (Jan 2026+) |
+| Non-GA DH | CHICOX09 & CHICOX11 DH classified as Non-GA — these DHs use separate modality for recharge only |
+| Max Payout Cap | 120% max payout cap for GA KPI (Jan 2026+) |
+| Usage Condition | No Play: any outgoing call or internet usage in calendar month in min 93% of GA |
+[/TABLE]
+6.1 VLR Split-Date Rule (Oct 2025)
+[TABLE]
+| Rule | GA achievement from 1st–16th October 2025 follows the CURRENT policy (pre-Oct). New VLR-linked calculation criteria applies for GA from 17th October 2025 onwards. |
+| Implication | Two calculation periods within Oct 2025: 1–16 Oct (old method) and 17–31 Oct (VLR-linked new method) |
+| Data Source | VLR data shared by B2C |
+[/TABLE]
+7. VLR KPI — Definition & Payout Tiers
+[TABLE]
+| Applies From | Oct 2025 onwards (new calculation from 17 Oct 2025). Referenced in Nov 2025, Dec 2025, Jan–Mar 2026. |
+| Definition | Visitor Location Register — measures how many activated SIMs are actively registered/using the network |
+| Data Source | VLR & GA Productivity report shared by B2C | DD SCR shared by B2C | Retail SCR shared by B2C (Sep–Oct) |
+[/TABLE]
+Note: Specific VLR payout slabs are defined in pictorial/table format in the SRFs but not extractable as text from these PDFs. The VLR metric determines partial vs full GA incentive payout.
+8. GA Productivity KPI — Definition & Calculation
+[TABLE]
+| Introduced In | Nov 2025 (not present in Sep–Oct 2025 SRFs) |
+| Full Name | Daily Average GA Participation |
+| Calculation Base | Retail Code + RSO Own Code + BP Code |
+| GA Count per Code | 1 GA per Code (unique code counts once regardless of multiple activations) |
+| Monthly Average — Nov 2025 | Best 24 Days out of the month |
+| Monthly Average — Dec 2025 onwards | Best 20 Days out of the month |
+| Data Source | VLR & GA Productivity report shared by B2C |
+[/TABLE]
+Note: Best N Days methodology means the N highest daily GA participation days are averaged, ignoring the worst days. This protects distributors from outlier low-activity days.
+9. Bundle Sales KPI — Definitions & Rules
+[TABLE]
+| Bundle Types | Data + Voice + MXB (Mix Bundle) C2S — Excluding SC |
+| Deno Handling | If any Deno bundle is sold on any day of the month, full month's hit may be considered to ease reporting and payout calculation |
+| Deno List | Shared by B2C |
+| Presence | Sep–Oct 2025 Gold SRFs explicitly mentioned. Not prominently listed in Nov25+ SRFs (merged into product scope) |
+| C2S | Customer-to-Subscriber bundle sales — excludes SC-funded bundles |
+[/TABLE]
+10. Active LSO KPI — Definition
+[TABLE]
+| LSO | Line Sales Officer — field sales agents under each DD |
+| Active LSO KPI | Tracks the number of LSOs who are actively generating sales/activations during the month |
+| Data Source | Achievement data from Distributor Campaign Gold SRF (for Platinum). B2C shares file. |
+| Deduction Rule | BSO and LSO achievement deducted based on shared file from B2C when below target |
+| Present In | All 14 SRFs — consistent throughout |
+[/TABLE]
+Note: Specific Active LSO threshold/slab details are defined in pictorial/diagram format in the SRFs and not extractable as text from these PDFs.
+11. BSO / SSO KPI — Definitions
+[TABLE]
+| Metric | Full Name | Introduced | Description |
+| BSO | Business Support Officer | Sep 2025 onwards | Measures BSO-level performance/activity under the DD. Defined in diagram in SRF — specific criteria shared via B2C file. |
+| SSO | Sub-Sales Officer | Dec 2025 onwards | New metric replacing or supplementing BSO from Dec 2025. Defined in diagram. Shared by B2C. |
+[/TABLE]
+Note: BSO and SSO achievement deductions are applied based on shared files from B2C. If achievement falls below target, the shortfall amount is deducted from the DH's incentive.
+12. DD SCR (Distributor Scratch Card Rate) KPI
+[TABLE]
+| Full Name | DD SCR — Distributor Scratch Card Rate (or Range) |
+| Introduced | Oct 2025 (referenced in Gold Oct25). Fully active Dec 2025 onwards replacing Retail SCR. |
+| Definition | Measures the DD-level scratch card sales performance against a defined rate/target |
+| Data Source | DD SCR shared by B2C |
+| Replaces | Retail SCR (which was used in Sep 2025 and partially Oct 2025 Gold) |
+[/TABLE]
+13. Retail SCR (Retailer Scratch Card Rate) KPI
+[TABLE]
+| Full Name | Retail SCR — Retailer-level Scratch Card Rate |
+| Present In | Sep 2025 Gold, Sep 2025 Gold Revision, Oct 2025 Gold SRFs |
+| Definition | Measures SC sales at the retailer level attributed to the DD — rate of SC distribution/sales vs. target |
+| Data Source | Retail SCR shared by B2C |
+| Superseded By | DD SCR from Oct 2025 Gold onward — the shift moves measurement from retailer level to distributor level |
+[/TABLE]
+14. Individual KPI Assessment — C2C & SC Evaluation Rule
+When a DH fails to meet the minimum Recharge KPI threshold, C2C and SC are evaluated individually (instead of cumulatively). The DH is paid the higher of: (a) Cumulative EV+SC assessment, or (b) Individual KPI assessment.
+14.1 Threshold Rules by Version
+[TABLE]
+| SRF | Recharge Min Threshold | C2C Weight (standard DH) | C2C Weight (CHICOX09/11) | SC Weight | Other Parameter Min |
+| Gold Sep 2025 | 95% | 30% | 40% | 10% | 75% of other parameter |
+| Gold Oct 2025 | 70% | 30% | 40% | 10% | 80% of other parameter |
+[/TABLE]
+14.2 Individual KPI Logic (Example)
+[TABLE]
+| Scenario | C2C Ach | SC Ach | Result | Reason |
+| C2C passes, SC passes (Sep25) | 100% | >=85% | 100% C2C KPI payout | C2C 100% + SC >=85% (75% min met) |
+| C2C passes, SC fails (Sep25) | 100% | <85% | Not eligible | SC below 75% minimum of other parameter |
+| SC passes, C2C passes (Sep25) | >=85% | 100% | 100% SC KPI payout | SC 100% + C2C >=85% (75% min met) |
+| SC passes, C2C fails (Sep25) | <85% | 100% | Not eligible | C2C below 75% minimum of other parameter |
+| C2C passes, SC passes (Oct25) | 100% | >=80% | 100% C2C KPI payout | C2C 100% + SC >=80% (80% min met) |
+| C2C passes, SC fails (Oct25) | 100% | <80% | Not eligible | SC below 80% minimum |
+[/TABLE]
+Note: Both EV & SC are assessed separately AND cumulatively for every DH. The DH receives whichever assessment gives the higher payout amount.
+15. GA Max Payout Cap & Non-GA DH Classification
+[TABLE]
+| GA Max Payout Cap | 120% — maximum payout percentage for GA KPI (Jan 2026 onwards explicitly stated) |
+| Non-GA DH Definition | CHICOX09 & CHICOX11 are classified as Non-GA DH meaning these distributor houses do not have a GA KPI target |
+| Non-GA DH Treatment | These DHs only have Recharge KPI. For individual KPI fallback, their C2C weight is 40% (vs 30% for regular DHs) reflecting GA absence |
+| Non-GA RSO | RSOs under CHICOX09 & CHICOX11 DH are also classified as Non-GA RSOs |
+| First Applied | Non-GA DH classification: Oct 2025 onwards | GA max cap: explicitly stated Jan 2026 |
+[/TABLE]
+16. Platinum Campaign — Specific Rules & Cluster Variation
+[TABLE]
+| Campaign Role | Platinum is a bonus incentive layer on top of Gold — a distributor earns Gold commission first, then qualifies for Platinum if performance targets met |
+| Offer Amount | 0.2% of total Recharge (Sep 2025) | 0.3% of total Recharge (Oct 2025) — smaller % than Gold |
+| Data Source | Recharge, GA, Active LSO & BSO achievement taken from the corresponding Gold SRF — no separate data collection |
+| Cluster Variation (Sep 2025) | Central Cluster, NE Cluster (excl. Sylhet) & West Cluster (excl. Barisal): Modality 1 | East Cluster, North Cluster, Barisal & Sylhet: Modality 2 |
+| Cluster Variation (Oct 2025) | Same two-cluster structure. Additional rule: Bundle/BSO/LSO achievement deducted based on shared B2C file. |
+| Employee Pool Exclusion | Oct 2025 Platinum: any recharge at BL employee pool phone number not considered |
+| Revision SRFs | Platinum Revision SRFs run for specific DH list only — same rules as original but narrower eligibility |
+[/TABLE]
+17. Revision SRF Policy — Specific DH List Rule
+[TABLE]
+| Pattern | Each month with revision SRFs (Sep25, Oct25, Nov25) has an original SRF (for all eligible DHs) and a Revision SRF (for a specific subset of DHs) |
+| Revision Rule | Revision SRF contains condition: "This report will be generated for specific DHs. List will be shared by B2C." |
+| Purpose | Handles exceptional cases — DHs that need re-processing, corrections, or late inclusion |
+| KPI Rules | All KPI conditions identical to original SRF — only the DH scope differs |
+| Months with Revisions | Sep 2025 (Gold + Platinum), Oct 2025 (Gold + Platinum), Nov 2025 (Unified) |
+| Months without Revisions | Dec 2025, Jan 2026, Feb 2026, Mar 2026 — single SRF per month |
+[/TABLE]
+18. Growth-Based KPI (Mar 2026)
+[TABLE]
+| Introduced In | Distributor Campaign Somridi Mar26 (new feature vs prior months) |
+| Concept | Month-over-month GA growth rate, normalised for different day counts between Last Month (LM) and Current Month (CM) |
+| Formula | Growth % = ((CM GA / CM Days) - (LM GA / LM Days)) / (LM GA / LM Days) × 100 |
+| Purpose | Compares daily average GA across months with unequal day counts (e.g., Feb=28 days vs Mar=31 days) |
+[/TABLE]
+18.1 Growth Calculation Example (from SRF)
+[TABLE]
+| LM Day Count | CM Day Count | LM GA | CM GA | Growth % |
+| 28 | 31 | 100 | 102 | -8%  (102/31 vs 100/28 — lower daily avg) |
+| 28 | 31 | 120 | 121 | -9%  (121/31 vs 120/28 — lower daily avg) |
+| 28 | 31 | 115 | 135 | 6%  (135/31 vs 115/28 — higher daily avg) |
+[/TABLE]
+Note: The growth calculation normalises absolute GA counts by dividing by the number of days in each month before comparing, ensuring fair comparison between months of different lengths.
+19. Universal / General Conditions
+[TABLE]
+| Condition | Value / Rule |
+| Activation Date | FCD (First Call Date) — activation during the promotion period (calendar month) |
+| ETSAF | 98% of ETSAF (total against activation before disconnection) must be vetted and accepted by Banglalink within 7th of following month |
+| Lifting/SC Primary | Primary SC = DD lifting. SC sales = scratch cards lifted from Warehouse to DD. |
+| Valid Recharge (EV) | EV Secondary: R2RT + D2RT i-top-up + Manual & Daily Commission from Salescom + EV OTF + IRIS OTF. Less withdrawal. |
+| Valid Recharge (SC) | SC Primary: Retail lifting as per DMS entry. |
+| DRC Exclusion | DRC EV excluded. B2C shares DRC list. |
+| Employee Pool Exclusion | BL employee pool phone number recharges excluded (from Oct 2025 onwards) |
+| Usage / No Play | Any outgoing call or internet usage in calendar month in minimum 93% of GA |
+| Disconnection | Between FCD and latest data up to report generation date (T-6) |
+| Product Scope (Sep–Nov) | i-top-up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle upsell |
+| Product Scope (Feb–Mar 26) | i-top-up, SC, GA, LSO (narrower — Mix Bundle and Voice Bundle upsell removed from explicit listing) |
+| RDB | Month end RDB used for settlement — Recharge Data Base snapshot at month end |
+| Rounding | General mathematical rounding: <0.5 rounds down, >=0.5 rounds up — applies to all KPI achievement calculations |
+| Data Sources | IT SC, IT BI, DWH, POS (all SRFs) |
+| Maturity Date | 8th of the following month (all 14 SRFs) |
+| Target Sharing | B2C shares DD-wise targets in separate Excel files prior to calculation |
+[/TABLE]
+20. Quick Reference Summary Table — All 14 SRFs
+[TABLE]
+| SRF | Period | Type | Offer % | Key KPIs | Unique Feature |
+| Gold Sep25 | Sep 2025 | Gold | 0.6% | Recharge, GA, Bundle, Active LSO, BSO, Retail SCR | 2-cluster modality, C2C+SC individual fallback at 95% |
+| Gold Sep25_Rev | Sep 2025 | Gold Rev | 0.6% | Same as Gold Sep25 | Specific DH list |
+| Platinum Sep25 | Sep 2025 | Platinum | 0.2% | Recharge, GA, LSO, BSO (from Gold) | Bonus layer; data from Gold SRF |
+| Platinum Sep25_Rev | Sep 2025 | Plat Rev | 0.2% | Same as Platinum Sep25 | Specific DH list |
+| Gold Oct25 | Oct 2025 | Gold | 0.7% | Recharge, GA, Bundle, LSO, BSO, Retail SCR, VLR | VLR split-date 17 Oct; Non-GA DH defined; C2C+SC fallback at 70% |
+| Gold Oct25_Rev | Oct 2025 | Gold Rev | 0.7% | Same as Gold Oct25 | Specific DH list |
+| Platinum Oct25 | Oct 2025 | Platinum | 0.3% | Recharge, GA, LSO, BSO (from Gold) | Employee pool exclusion; Bundle/BSO/LSO deduction from B2C file |
+| Platinum Oct25_Rev | Oct 2025 | Plat Rev | 0.3% | Same as Platinum Oct25 | Specific DH list |
+| Nov25 | Nov 2025 | Unified | 1.0% | Recharge, GA, VLR, GA Productivity, LSO, BSO, DD SCR | GA Productivity introduced; Best 24 days; Single modality |
+| Nov25_Revision | Nov 2025 | Unified Rev | 1.0% | Same as Nov25 | Specific DH list |
+| Dec25 | Dec 2025 | Unified | 1.0% | Recharge, GA, VLR, GA Productivity, LSO, BSO, SSO, DD SCR | SSO introduced; Best 20 days avg; DD SCR replaces Retail SCR |
+| Jan26 | Jan 2026 | Unified | 1.0% | Recharge, GA, VLR, GA Productivity, LSO, SSO, DD SCR | 120% GA cap; MNP+RYZE in GA; Active EV SIM excluded from GA |
+| Feb26 | Feb 2026 | Unified | 1.0% | Recharge, GA, VLR, GA Productivity, LSO, SSO, DD SCR | RSO Productivity data added; C2C from digital dist. (no list required) |
+| Mar26 | Mar 2026 | Unified | 1.0% | Recharge, GA, VLR, GA Productivity, LSO, SSO, DD SCR | Growth-based KPI (day-normalised LM vs CM comparison) introduced |
+[/TABLE]

@@ -1,0 +1,190 @@
+Campaign_Win Together
+Unique KPI Conditions — All SRFs
+SalesCom Automation Reference | Banglalink
+1. Index
+[TABLE]
+| Section | Title |
+| 1 | Index |
+| 2 | Folder Overview & SRF Summary |
+| 3 | Campaign Structure — Decadal (10-day) Cycle |
+| 4 | KPI 1: C2S / C2C Volume — Definition & Difference |
+| 5 | KPI 2: Winning Retail — Definition & Measurement |
+| 6 | Slab-Based Payout Structure & Max Cap |
+| 7 | Selective Retail List — Target Assignment Mechanism |
+| 8 | C2S vs C2C Terminology Evolution (Jan to Feb 2026) |
+| 9 | Cluster-Specific SRF — West and East Cluster (1st to 10th Jan26) |
+| 10 | Usage Quality Gate |
+| 11 | ETSAF / SAF Condition |
+| 12 | Agent List Snapshot Policy |
+| 13 | Maturity Date per SRF |
+| 14 | Universal / General Conditions |
+| 15 | Quick Reference Summary Table — All 5 SRFs |
+[/TABLE]
+2. Folder Overview & SRF Summary
+[TABLE]
+| Folder | Campaign_Win Together |
+| Total SRFs | 5 |
+| Campaign Period | Jan 2026 – Feb 2026 |
+| Recipient | Distributors (DD — Distributor Houses) |
+| Department | Channel Planning |
+| KPIs | 2 per SRF: (1) C2S / C2C Volume + (2) Winning Retail |
+| Payout Basis | Slab-based on % achievement vs. target for both KPIs independently |
+| Max Payout Cap | 120% in both KPIs (from 11th Jan 2026 onwards) |
+| Disbursement | End of each campaign period (ad-hoc) |
+| Salescom to EV Auto | 1st–10th Jan (C2S) = Yes | West & East Cluster Jan = Yes | 11–20 Jan = No | 21–30 Jan = No | 1–10 Feb = No |
+[/TABLE]
+2.1 SRF List
+[TABLE]
+| SRF Title | Effective Period | KPI Type | Cluster Scope | Maturity Date | Key Distinction |
+| Win Together_1st to 10th Jan26 | 1–10 Jan 2026 | C2S + Winning Retail | All clusters | 11th Jan 2026 | First SRF. C2S (recharge to customer). Salescom to EV: Yes. |
+| Win Together_West and East Cluster_1st to 10th Jan26 | 1–10 Jan 2026 | C2C + Winning Retail | West & East Cluster only | 11th Jan 2026 | Cluster-specific parallel SRF. C2C (DD/RSO to retailer). Salescom to EV: Yes. |
+| Win Together_11th to 20th Jan26 | 11–20 Jan 2026 | C2C + Winning Retail | All clusters | 21st Jan 2026 | 120% cap introduced. Distributor total campaign incentive shared by B2C. |
+| Win Together_21st to 30th Jan26 | 21–30 Jan 2026 | C2C + Winning Retail | All clusters | 31st Jan 2026 | Same structure as 11–20 Jan. Maturity 31st Jan. |
+| Win Together_1st to 10th Feb26 | 1–10 Feb 2026 | C2C + Winning Retail | All clusters | 31st Jan 2026 | February cycle begins. Maturity date still 31st Jan (data cutoff). Same structure. |
+[/TABLE]
+3. Campaign Structure — Decadal (10-day) Cycle
+Campaign Win Together runs on a decadal cycle — each SRF covers a ~10-day period within a calendar month. This allows for mid-month incentive adjustments and targeted cluster-specific campaigns within the same period.
+[TABLE]
+| Period | SRF(s) | Notes |
+| 1–10 Jan 2026 | 2 SRFs: (a) All clusters — C2S; (b) West+East only — C2C | Two parallel SRFs for same dates but different clusters and different KPI type (C2S vs C2C) |
+| 11–20 Jan 2026 | 1 SRF — All clusters — C2C | Standard decadal. 120% cap introduced. |
+| 21–30 Jan 2026 | 1 SRF — All clusters — C2C | Standard decadal. |
+| 1–10 Feb 2026 | 1 SRF — All clusters — C2C | February cycle. Same structure. Note: Maturity date is 31st Jan (retroactive/cutoff). |
+[/TABLE]
+Note: The 1st–10th Jan 2026 period has TWO simultaneous SRFs: one for all clusters using C2S metric, and one for West & East cluster only using C2C metric. Both cover the same dates but are processed as separate reports.
+4. KPI 1: C2S / C2C Volume — Definition & Difference
+[TABLE]
+| Metric | Full Form | Direction | Definition | SRF(s) Using It |
+| C2S | Customer to Subscriber | Recharge goes from DD/RSO → Retailer → Customer (end user) | Any amount recharged to a customer (end subscriber). Includes valid bundle recharge upsell. Valid recharge = I-TOP up. | 1st–10th Jan (all cluster SRF) |
+| C2C | Customer to Customer (trade channel) | Transfer from DD/RSO → Retailer (trade-level) | Any amount transferred to a Retailer from DD or RSO. Measured as trade-level recharge flow — DD/RSO crediting retailer accounts. | West+East Jan, 11–20 Jan, 21–30 Jan, 1–10 Feb |
+[/TABLE]
+Note: Despite the name "Customer to Customer", C2C in this context refers to the channel transfer — DD/RSO pushing recharge credit to retailer accounts. C2S refers to the downstream flow where recharge reaches the end customer.
+Note: From 11 Jan 2026 onwards, all SRFs (including all-cluster) switched to C2C. The initial all-cluster SRF (1–10 Jan) uniquely used C2S.
+4.1 Measurement Rules
+[TABLE]
+| Target Assignment | DD-wise Selective Retail List and C2S/C2C Target shared by B2C |
+| Target Scope | Total C2S/C2C Volume from/to selected retailers only — not all retailers |
+| Retailer List | Provided by B2C — selective list, not entire retailer base |
+| Achievement Basis | Total volume achieved vs. target, expressed as % achievement |
+| Total Campaign Incentive | Distributor-wise total campaign incentive amount shared by B2C (from 11 Jan 2026 SRFs) |
+[/TABLE]
+5. KPI 2: Winning Retail — Definition & Measurement
+[TABLE]
+| Definition | Number of retailers from the selective list who individually achieve their C2S/C2C target — called "Winning Retailers" |
+| Target | DD must achieve both: (a) Total C2S/C2C volume target AND (b) Winning Retailer count target |
+| Winning Retailer | A retailer who achieves its individual C2S/C2C target within the selective list |
+| Measurement | Winning Retail Count vs. Total Retail Count from selective list = % Winning Retail Achievement |
+| Data Source | Retailer list provided by B2C. Retail-wise C2S/C2C targets also shared by B2C. |
+| Payout | Separate slab-based payout for Winning Retail KPI — independent of C2S/C2C Volume payout |
+| Max Cap | 120% payout cap applies to Winning Retail KPI (from 11 Jan 2026 onwards) |
+[/TABLE]
+Note: Both KPIs (C2S/C2C Volume AND Winning Retail) must be achieved for the DD to earn incentive. Each KPI has its own independent achievement % and slab-based payout.
+6. Slab-Based Payout Structure & Max Cap
+Both KPI 1 (C2S/C2C Volume) and KPI 2 (Winning Retail) use slab-based payout structures. The specific slab thresholds and BDT amounts per slab are shared by B2C in a distributor-wise incentive file — they are not printed directly in the SRF text (they appear as a table/chart in the PDF which is not text-extractable). The rules governing the slabs are:
+[TABLE]
+| Slab Basis | % Achievement vs. Target for each KPI independently |
+| Max Payout Cap | 120% — DD can earn maximum 120% payout in BOTH KPIs (applied from 11 Jan 2026 onwards) |
+| 1st–10th Jan SRF Cap | Not explicitly stated — max cap rule introduced from 11 Jan SRF onwards |
+| Incentive Amount Basis | Distributor-wise total campaign incentive amount shared by B2C — the % slab determines what fraction of that total is earned |
+| KPI Independence | Volume KPI and Winning Retail KPI are assessed independently — each has its own slab and payout |
+| Rounding | General mathematical rounding: <0.5 rounds down, >=0.5 rounds up — applies to all achievement calculations |
+[/TABLE]
+6.1 Detail Report Format (from SRF)
+[TABLE]
+| Report Row Type | Columns | Purpose |
+| C2S/C2C Volume Row | DD Code | C2S/C2C Target | Target Achievement | % Achievement | Incentive Amount | Tracks volume KPI per DD |
+| Winning Retail Row | DD Code | Total Retail Count | Winning Retail Count | % Achievement | Incentive Amount | Tracks retailer success rate per DD |
+[/TABLE]
+7. Selective Retail List — Target Assignment Mechanism
+[TABLE]
+| List Source | B2C provides a selective/curated list of retailers per DD — not all retailers in the DD's territory |
+| Scope Restriction | DD must achieve C2S/C2C volume TARGET specifically from/to THESE selected retailers only |
+| Winning Retail Target | Based on the count of retailers from this selective list who individually hit their target |
+| List Update | Agent list (for eligibility) is determined as of the END DATE of each campaign period (e.g., 10th Jan, 20th Jan, 30th Jan, etc.) |
+| Target Sharing | DD-wise Selective Retail List and C2S/C2C Target shared by B2C before campaign start |
+| Campaign Incentive | Distributor-wise Total Campaign Incentive amount also shared by B2C |
+[/TABLE]
+Note: The selective retail list approach means not all retailers under a DD are included in the campaign. Only the pre-approved list matters for both Volume and Winning Retail KPIs.
+8. C2S vs C2C Terminology Evolution (Jan to Feb 2026)
+[TABLE]
+| SRF | Period | Product Type in SRF Header | KPI Name Used | C2S/C2C Definition in SRF |
+| 1st–10th Jan (all cluster) | 1–10 Jan | C2S | C2S + Winning Retail | C2S = Any amount recharge to customer |
+| West+East 1st–10th Jan | 1–10 Jan | C2C | C2C + Winning Retail | C2C = Any amount transfer to Retailer from DD/RSO |
+| 11th–20th Jan | 11–20 Jan | C2C | C2C + Winning Retail | C2C = Any amount transfer to Retailer from DD/RSO |
+| 21st–30th Jan | 21–30 Jan | C2C | C2C + Winning Retail | C2C = Any amount transfer to Retailer from DD/RSO |
+| 1st–10th Feb | 1–10 Feb | C2C | C2C + Winning Retail | C2C = Any amount transfer to Retailer from DD/RSO |
+[/TABLE]
+Note: The 1st–10th Jan all-cluster SRF uses "C2S" (recharge to customer = downstream). All other SRFs use "C2C" (transfer to retailer = trade channel). Despite different labels, the Detail Format table in the 1st–10th Jan all-cluster SRF still shows "C2S Target" column headers, confirming C2S is the correct term for that SRF.
+9. Cluster-Specific SRF — West and East Cluster (1st to 10th Jan26)
+[TABLE]
+| SRF Title | Distributor Campaign_Win Together_West and East Cluster_1st to 10th Jan26 |
+| Clusters Covered | West Cluster + East Cluster only |
+| Period | 1–10 Jan 2026 |
+| KPI | C2C + Winning Retail |
+| Parallel SRF | Runs simultaneously with the all-cluster 1–10 Jan SRF (which uses C2S) |
+| Maturity Date | 11th Jan 2026 (same as all-cluster SRF) |
+| Salescom to EV Auto | Yes (EV automation enabled — same as all-cluster SRF) |
+| Reason for Cluster Split | West and East Cluster DDs measure C2C (trade-level transfer) while other clusters were measured on C2S (customer recharge) in the same period |
+| Max Cap | Not explicitly stated in this SRF — 120% cap rule appears from 11 Jan SRF |
+[/TABLE]
+10. Usage Quality Gate
+[TABLE]
+| Condition | At least 95% of total GA must have more than 5 TK usages within 7th of next month |
+| Gate Name | Usage / Valid Usage |
+| Threshold | >=95% of GA |
+| Usage Minimum | More than BDT 5 in usage per SIM |
+| Deadline | Within 7th of the following month |
+| Status | Defined in General Conditions section but NOT marked with a checkmark (tick) in the SRF form — suggesting it is a reference condition, not an actively gated requirement |
+| Applied To | All 5 SRFs — same condition text across all |
+[/TABLE]
+Note: The Usage condition appears in the General Conditions table but is not ticked as "active" in the SRF form (unlike Recharge and Product which are ticked). This may indicate it is a background reference condition rather than a hard gate that triggers incentive forfeiture.
+11. ETSAF / SAF Condition
+[TABLE]
+| SAF Status | Not ticked as active in General Conditions — listed as reference: "Above ETSAF QC condition will be considered which implemented" |
+| Meaning | ETSAF QC conditions that are in effect at the time of commission calculation will be applied — dynamic reference to existing policy rather than a specific numeric gate defined in this SRF |
+| Contrast | Unlike BSP CCR KPI SRFs which specify "98% ETSAF by 7th of following month", this SRF defers to whatever ETSAF QC condition is currently implemented |
+| Applied To | All 5 SRFs — same ETSAF reference text |
+[/TABLE]
+12. Agent List Snapshot Policy
+[TABLE]
+| Rule | The agent list (DD eligibility) is taken as a snapshot of the end date of each campaign period |
+| Purpose | Only DDs who are active/listed on the last day of the period are eligible for that period's incentive |
+| Snapshot Dates | 1–10 Jan: 10th Jan | 11–20 Jan: 20th Jan | 21–30 Jan: 30th Jan | 1–10 Feb: 10th Feb |
+| Retail List | Retailer eligibility list is also fixed at the campaign end date (via B2C selective list) |
+| New DDs | DDs who join or are assigned after the period end date are not eligible for that period |
+[/TABLE]
+13. Maturity Date per SRF
+[TABLE]
+| SRF Title | Effective Period | Maturity Date for Data | Notes |
+| Win Together_1st to 10th Jan26 | 1–10 Jan 2026 | 11th Jan 2026 | Next day after period end — quick turnaround |
+| Win Together_West and East Cluster_1st to 10th Jan26 | 1–10 Jan 2026 | 11th Jan 2026 | Same maturity as all-cluster SRF for same period |
+| Win Together_11th to 20th Jan26 | 11–20 Jan 2026 | 21st Jan 2026 | Next day after period end |
+| Win Together_21st to 30th Jan26 | 21–30 Jan 2026 | 31st Jan 2026 | Last day of January — month-end close |
+| Win Together_1st to 10th Feb26 | 1–10 Feb 2026 | 31st Jan 2026 | Unusual: maturity is BEFORE the campaign end — uses January data cutoff. Data for Feb 1–10 evaluated against Jan 31 baseline. |
+[/TABLE]
+Note: The Feb 2026 SRF (1–10 Feb) has a maturity date of 31st January — which is BEFORE the campaign end date of 10th Feb. This suggests the Feb SRF evaluates C2C/Winning Retail performance against a January data snapshot or baseline, not a post-campaign data pull.
+14. Universal / General Conditions
+[TABLE]
+| Condition | Status in SRF | Value / Rule |
+| Activation | Reference only (not ticked) | FCD (First Call Date) — activation during promotion period |
+| SAF/ETSAF | Reference only (not ticked) | Above ETSAF QC condition will be considered which implemented |
+| Lifting/Issue | Reference only (not ticked) | N/A — SIM needs to be activated within 180 days of lifting |
+| Recharge | ACTIVE (ticked) | All Valid C2S Recharges — valid bundle recharge upsell. Valid recharge = I-TOP up. |
+| Usage | Reference only (not ticked) | At least 95% of total GA must have more than 5 TK usages within 7th of next month |
+| Disconnection | Not ticked | N/A — Latest data up to report generation date (T-6) |
+| Product | ACTIVE (ticked) | Prepaid & Postpaid — All Prepaid & successful MNP |
+| Reactivation | Not applicable | N/A |
+| Rounding | Universal | General mathematical rounding: <0.5 rounds down; >=0.5 rounds up |
+| Data Sources | Universal | IT SC, IT BI, DWH, POS (all SRFs) |
+| Approval Flow | Universal | Channel Planning dept — Requester: Noyemul Islam | Manager: Md Hasibul Karim |
+[/TABLE]
+15. Quick Reference Summary Table — All 5 SRFs
+[TABLE]
+| SRF | Period | Cluster | KPI Type | Volume KPI | Winning Retail KPI | Max Cap | EV Auto | Maturity |
+| 1st–10th Jan (all) | 1–10 Jan | All | C2S + Win Retail | C2S Volume vs Target % | Winning Retailer Count vs Total Count % | Not stated | Yes | 11 Jan |
+| 1st–10th Jan (W+E) | 1–10 Jan | West+East | C2C + Win Retail | C2C Volume vs Target % | Winning Retailer Count vs Total Count % | Not stated | Yes | 11 Jan |
+| 11th–20th Jan | 11–20 Jan | All | C2C + Win Retail | C2C Volume vs Target % | Winning Retailer Count vs Total Count % | 120% | No | 21 Jan |
+| 21st–30th Jan | 21–30 Jan | All | C2C + Win Retail | C2C Volume vs Target % | Winning Retailer Count vs Total Count % | 120% | No | 31 Jan |
+| 1st–10th Feb | 1–10 Feb | All | C2C + Win Retail | C2C Volume vs Target % | Winning Retailer Count vs Total Count % | 120% | No | 31 Jan |
+[/TABLE]
+Note: Slab thresholds (% achievement to payout %) and BDT amounts are shared by B2C in distributor-wise target files — not embedded in SRF text. The SRF defines the rules and methodology; the actual numbers are operationalised via B2C data files.

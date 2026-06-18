@@ -1,0 +1,302 @@
+BSP Retailer GA
+Unique KPI Conditions — All SRFs
+SalesCom Automation Reference | Banglalink
+1. Index
+[TABLE]
+| Section | Title |
+| 1 | Index |
+| 2 | Folder Overview & SRF Summary |
+| 3 | Campaign Type 1 — BSP RYZE Incentive (Apr 2025) |
+| 4 | Campaign Type 2 — BL Prepaid GA Monthly Campaign (May 2025 – Feb 2026) |
+| 5 | Gross Add (GA) Definition & Attribution |
+| 6 | Commission Slab Structure Evolution (Monthly Campaign) |
+| 7 | First Recharge (1st Recharge) Gate — Conditions & Window |
+| 8 | VLR Attachment Gate (Jul 2025 SRF) |
+| 9 | Jun 2025 Special — Multi-Modality Campaign |
+| 9.1 | Jun 2025: Upfront + Conditional Weekly/Monthly Pack Commission |
+| 9.2 | Jun 2025: Daily Participation Modality |
+| 9.3 | Jun 2025: App Installation Requirements |
+| 10 | Assist Mode GA Requirement (Aug 2025 onwards) |
+| 11 | Campaign Type 3 — BSP Retailer Weekly GA Campaign (Mar–Apr 2026) |
+| 11.1 | 48-Hour Usage Gate — VLR Payout Tiers |
+| 11.2 | MMSTR vs Standard Retailer Rate Differentiation |
+| 11.3 | Weekly Cumulative Deduction Mechanism |
+| 11.4 | GA Cap & Agent List Policy |
+| 12 | ETSAF Conditions |
+| 13 | Universal / General Conditions |
+| 14 | Maturity Date Evolution |
+| 15 | AIT & Rounding Rules |
+| 16 | Quick Reference Summary Table — All 15 SRFs |
+[/TABLE]
+2. Folder Overview & SRF Summary
+[TABLE]
+| Folder | BSP Retailer GA |
+| Total SRFs | 15 |
+| Campaign Types | 3 (RYZE Incentive | BL Prepaid Monthly GA | Weekly BSP Retailer GA) |
+| Date Range | Apr 2025 – Apr 2026 |
+| Recipient | BSP CCR (Business Support Point Customer Care Representatives) |
+| Product Types | RYZE Prepaid (Srf 1) | BL Prepaid excl. RYZE / incl. RYZE (monthly) | All Prepaid + MNP (weekly) |
+| Disbursement | Monthly (Types 1 & 2) | Weekly cumulative (Type 3) |
+| Dept — Monthly | Alternate Channel and Digital Recharge |
+| Dept — Weekly | Channel Planning |
+[/TABLE]
+2.1 SRF List
+[TABLE]
+| SRF Title | Effective Period | Type | Key Feature |
+| BSP RIZE Incentive from Apr25 | Apr 2025 (ongoing) | Type 1 — RYZE | Pure slab-based on RYZE GA count. No target %. Max 100 GA. AIT exempt. |
+| BL Prepaid_GA_Campaign_BSP_May25 | May 2025 | Type 2 — Monthly | Prepaid excl. RYZE. 2-slab. Max 100 GA. ETSAF gate 98%. |
+| BL Prepaid_GA_Campaign_BSP_Jun25 | 1–22 Jun 2025 | Type 2 — Monthly | Incl. RYZE. Multi-modality: upfront + weekly/monthly pack conditional + daily participation. App install required. |
+| BL Prepaid_GA_Campaign_BSP_July25 | Jul 2025 | Type 2 — Monthly | VLR attachment gate introduced. 3 slabs. Max 100 GA. |
+| BL Prepaid_GA_Campaign_BSP_Aug25 | Aug 2025 | Type 2 — Monthly | 1st Recharge gate (30 days). Assist mode required. 3 slabs. |
+| BL Prepaid_GA_Campaign_BSP_Sep25 | Sep 2025 | Type 2 — Monthly | Tighter lower slab (>=90% to <93%). Same 1st Recharge gate. |
+| BL Prepaid_GA_Campaign_BSP from Oct25 | Oct 2025 – Dec 2025 | Type 2 — Monthly | Same as Aug25. Regular periodicity. Covers 3 months. |
+| BL Prepaid_GA_Campaign_BSP from Feb26 | Feb 2026 (ongoing) | Type 2 — Monthly | Slab threshold raised to 93%/101%. 1st Recharge window extended to 45 days. |
+| BSP Retailer GA Campaign_1st to 7th Mar26 | 1–7 Mar 2026 | Type 3 — Weekly | 48hr usage gate. MMSTR BDT 20/GA, others BDT 30/GA. Min 2 GA for full month. |
+| BSP Retailer GA Campaign_1st to 21st Mar26 | 1–21 Mar 2026 | Type 3 — Weekly | Cumulative: deducts 1st-to-7th Mar commission. |
+| BSP Retailer GA Campaign_1st to 31st Mar26 | 1–31 Mar 2026 | Type 3 — Weekly | Cumulative: deducts 1st-to-21st Mar commission. |
+| BSP Retailer GA Campaign_1st to 7th Apr26 | 1–7 Apr 2026 | Type 3 — Weekly | Same structure as Mar. Cap 150 GA. |
+| BSP Retailer GA Campaign_1st to 14th Apr26 | 1–14 Apr 2026 | Type 3 — Weekly | Cumulative: deducts 1st-to-7th Apr commission. |
+| BSP Retailer GA Campaign_1st to 21st Apr26 | 1–21 Apr 2026 | Type 3 — Weekly | Cumulative: deducts 1st-to-14th Apr commission. |
+| BSP Retailer GA Campaign_1st to 30th Apr26 | 1–30 Apr 2026 | Type 3 — Weekly | Cumulative: deducts 1st-to-21st Apr commission. |
+[/TABLE]
+3. Campaign Type 1 — BSP RYZE Incentive (Apr 2025)
+[TABLE]
+| Report Title | BSP RIZE Incentive from Apr25 |
+| Product | RYZE Prepaid only (Product Code: RYZ1001, RYZ1001-ESIM in DMS) |
+| Effective | 01-Apr-2025 | End: Until further notice |
+| Recipient | Listed BSP CCR only (list with Retailer Code shared at calculation) |
+| Attribution | FCD (First Call Date) — activation during calendar month |
+| AIT | NOT applicable (this commission is for Sales Team category — AIT exempt) |
+| Max GA Cap | 100 GA — incentive eligible up to 100 GA in Slab 3 even if actual > 100 |
+| ETSAF | Not explicitly required in this SRF |
+| Maturity Date | 1st of following month |
+[/TABLE]
+3.1 Commission Slabs — RYZE
+[TABLE]
+| Slab | GA Count Range | Commission Rate |
+| Slab 1 | 15 – 29 GA | BDT 50 / Activation |
+| Slab 2 | 30 – 59 GA | BDT 70 / Activation |
+| Slab 3 | 60 – 100 GA | BDT 100 / Activation (capped at 100 GA) |
+[/TABLE]
+Note: Minimum entry threshold: 15 GA. Below 15 GA, no commission applies.
+4. Campaign Type 2 — BL Prepaid GA Monthly Campaign (May 2025 – Feb 2026)
+[TABLE]
+| SRFs Covered | 7 (May25, Jun25, Jul25, Aug25, Sep25, Oct25+, Feb26+) |
+| Product | BL Prepaid excl. RYZE (May25) | BL Prepaid incl. RYZE (Jun25+) |
+| Recipient | Listed BSP CCR only — list + target shared during calculation |
+| Attribution | FCD (First Call Date) — activation during calendar month |
+| ETSAF Gate | 98% ETSAF by 8th of following month (all versions) |
+| AIT | NOT applicable (Sales Team category — AIT exempt) |
+| GA Cap | Max 100 GA per agent per month (May–Oct25) | Max 100 GA (Feb26+) |
+| Periodicity | Ad-hoc (May–Sep25) | Regular (Oct25, Feb26) |
+| Maturity Date | Variable by version — see Section 14 |
+[/TABLE]
+5. Gross Add (GA) Definition & Attribution
+[TABLE]
+| GA Definition | Successful BL Prepaid (or RYZE Prepaid) activation from stipulated BSP CCR |
+| Attribution Date | FCD — First Call Date |
+| Promotion Period | Activation must occur during the campaign promotion period (calendar month or specific date range) |
+| Product Scope | Type 1 (RYZE): RYZE Prepaid only Type 2 (Monthly): BL Prepaid excl. RYZE (May25) | BL Prepaid incl. RYZE (Jun25+) Type 3 (Weekly): All Prepaid + successful MNP |
+| Measurement Base | Type 2: Achievement % vs. monthly target Type 3: Absolute GA count (no target %) |
+| Assist Mode | Required from Aug 2025 onwards (Type 2): BSP CCR must activate new GA through Assist mode |
+[/TABLE]
+6. Commission Slab Structure Evolution (Monthly Campaign)
+[TABLE]
+| SRF Period | Slab 1 | Slab 2 | Slab 3 | 1st Recharge Gate | Notes |
+| May 2025 | 21–40 GA: BDT 20/GA | 41–100 GA: BDT 30/GA | N/A | Not required | Excl. RYZE. Max 100 GA at slab 2. |
+| Jun 2025 | 90–115% ach: BDT 1,000/agent upfront | >115% ach: BDT 1,500/agent upfront | N/A (separate daily modality) | Not in slab — weekly/monthly pack conditional | Multi-modality. See Section 9. |
+| Jul 2025 | 90% ach + >=90% VLR: BDT 20/GA | >90–95% ach + >=90% VLR: BDT 30/GA | >95% ach + >=95% VLR: BDT 40/GA | Not required | VLR attachment gate. Max 100 GA. |
+| Aug 2025 | >=90% ach + >=95% 1st Rech: BDT 10/GA | >90–95% ach + >=95% 1st Rech: BDT 30/GA | >=95% ach + >=95% 1st Rech: BDT 40/GA | >=95% GA with 1st Recharge within 30 days | Assist mode required. |
+| Sep 2025 | >=90% to <93% ach + >=90% 1st Rech: BDT 10/GA | >=93% to <95% ach + >=95% 1st Rech: BDT 30/GA | >=95% ach + >=95% 1st Rech: BDT 40/GA | Slab-1: >=90%; Slab-2,3: >=95% 1st Rech within 30 days | Different 1st Rech % per slab. |
+| Oct 2025 | >=90% ach + >=95% 1st Rech: BDT 10/GA | >90–95% ach + >=95% 1st Rech: BDT 30/GA | >=95% ach + >=95% 1st Rech: BDT 40/GA | >=95% GA with 1st Recharge within 30 days | Same as Aug25. Covers Oct–Dec 2025. |
+| Feb 2026 | >=93% ach + >=95% 1st Rech: BDT 10/GA | >93% to <101% ach + >=95% 1st Rech: BDT 30/GA | >=101% ach + >=95% 1st Rech: BDT 40/GA | >=95% GA with 1st Recharge within 45 days | Higher slab thresholds. 45-day recharge window. |
+[/TABLE]
+Note: All Type 2 slabs: Max 100 GA per agent per month. Achievement above slab max gets capped at max rate.
+7. First Recharge (1st Recharge) Gate — Conditions & Window
+[TABLE]
+| Applied From | Aug 2025 onwards (not present in May, Jun, Jul 2025 SRFs) |
+| Purpose | Quality gate — ensures new activations make a first recharge, indicating genuine usage |
+| Threshold | >=95% of GA must have 1st Recharge (Aug–Feb26) | >=90% for Slab 1 only in Sep25 |
+| Recharge Window | 30 days after activation date (Aug–Oct 2025) | 45 days after activation date (Feb 2026+) |
+| Valid Recharge | All Valid Recharges (C2S recharges — valid bundle recharge/upsell; I-TOP up — in Weekly SRFs) |
+| Effect of Gate | If 1st Recharge % falls below threshold → that agent's incentive for the slab is not paid |
+| Data Source | System data for 1st Recharge tracking. 30/45 day window counted from FCD. |
+[/TABLE]
+Note: Sep 2025 introduced differentiated 1st Recharge thresholds per slab: Slab 1 requires only >=90% while Slabs 2 and 3 require >=95%.
+8. VLR Attachment Gate (Jul 2025 SRF)
+[TABLE]
+| Applied Period | July 2025 only (this SRF). Not present in other versions. |
+| Gate Name | % VLR (Visitor Location Register) Attachment with GA |
+| Purpose | Ensures SIMs are active in the network — VLR checks if SIM is registered/active on network |
+| Data Source | Activation detail data including VLR Attachment information shared by User team |
+[/TABLE]
+8.1 VLR Attachment Slab Rules (Jul 2025)
+[TABLE]
+| GA Achievement vs Target | VLR Attachment Required | Commission |
+| 90% | >=90% VLR | BDT 20 / Activation |
+| >90% to <=95% | >=90% VLR | BDT 30 / Activation |
+| >95% | >=95% VLR | BDT 40 / Activation |
+[/TABLE]
+Note: Both GA achievement slab AND VLR attachment threshold must be met simultaneously. Max 100 GA cap applies.
+9. Jun 2025 Special — Multi-Modality Campaign
+The Jun 2025 SRF (effective 1–22 Jun 2025) introduced a unique multi-modality structure not seen in other BSP Retailer GA SRFs. It combines three commission modalities in a single campaign.
+9.1 Modality 1 — Upfront + Conditional Weekly/Monthly Pack Commission
+[TABLE]
+| Structure | Per-agent upfront commission based on GA achievement % vs. target, PLUS per-activation conditional commissions for pack purchases |
+| Products | BL Prepaid including RYZE Prepaid |
+| Max GA Cap | 100 GA for both slabs |
+[/TABLE]
+[TABLE]
+| GA Ach % vs Target | Upfront Commission | Conditional 1: Weekly Pack in Jul25 | Conditional 2: Monthly Pack in Jul25 |
+| 90% to 115% | BDT 1,000 / Agent | BDT 10 / Activation | BDT 20 / Activation |
+| > 115% | BDT 1,500 / Agent | BDT 10 / Activation | BDT 20 / Activation |
+[/TABLE]
+Note: For both weekly and monthly pack purchases in July 2025, the maximum commission should be considered (i.e., take the higher of the two if both apply).
+Note: Eligible pack prices listed in SRF: Weekly Packs (BDT 19, 60, 86, 96, 116, 129, 149, 156, 169, 177, 198, 199, 209, 219, 227, 239, 277, 298, 319, 358, 398, 458, 498, 558, 658, 854) and Monthly Packs (BDT 50, 86, 96, 100, 146, 156, 196, 216, 219, 296, 299, 306, 348, 377, 396, 399, 448, 449, 498, 499, 548, 549, 577, 648, 649, 677, 706, 707, 719, 729, 748, 777, 848, 849, 859, 898, 977, 998, 1199, 1258, 1299, 1599) and others.
+9.2 Modality 2 — Daily Participation in GA
+[TABLE]
+| Commission | BDT 500 / CCR |
+| Condition | >=100% — number of unique GA activation days vs. scheduled working days in the month |
+| Rule | Count of unique calendar days with at least one activation must equal or exceed all scheduled working days |
+[/TABLE]
+9.3 App Installation Requirements (Jun 2025)
+[TABLE]
+| RYZE App | MUST be installed for New RYZE Prepaid GA. Valid if any RYZE App activity found in source from activation date to any date. |
+| MyBL App | MUST be installed for new BL Prepaid GA for smartphone users. Valid if any MyBL App activity found in source from activation date to any date. |
+[/TABLE]
+Note: Maturity date for Jun 2025 SRF: Last day of following month (July 31, 2025) — to allow time for pack purchase tracking in July.
+10. Assist Mode GA Requirement (Aug 2025 onwards)
+[TABLE]
+| Applied From | Aug 2025 onwards (Type 2 Monthly Campaign) |
+| Rule | BSP CCR must activate new GA through Assist mode. GA activated via Assist mode is applicable for commission. |
+| Purpose | Ensures that the BSP CCR is actively guiding the customer through the activation process via the Assist channel/tool |
+| Absent in | May, Jun, Jul 2025 SRFs — Assist mode not mentioned |
+| Present in | Aug 2025, Sep 2025, Oct 2025+, Feb 2026+ |
+[/TABLE]
+11. Campaign Type 3 — BSP Retailer Weekly GA Campaign (Mar–Apr 2026)
+[TABLE]
+| SRFs Covered | 7 SRFs (3 for March, 4 for April 2026) |
+| Dept | Channel Planning (different from Type 2 which is Alternate Channel and Digital Recharge) |
+| Recipient | BSP Retailer (listed agents — list shared by B2C / already shared with SRF) |
+| Product | All Prepaid + successful MNP |
+| Attribution | FCD (First Call Date) — activation during promotion period |
+| Disbursement | Weekly (cumulative — each new SRF covers full month to date and deducts prior disbursement) |
+| Frequency | Weekly (ad-hoc per week) |
+| Min GA Gate (Mar26) | Minimum 2 GA for full month required to be eligible (1st to 7th Mar26 SRF only) |
+| GA Cap | 150 GA for full month (Mar 2026 and Apr 2026) |
+| SMS Automation | Salescom to EV Auto Upload: Yes — agent receives SMS confirmation after disbursement |
+| AIT | Implied applicable (SMS mentions "AIT katar por" — after AIT deduction) |
+[/TABLE]
+11.1 48-Hour Usage Gate — VLR Payout Tiers
+[TABLE]
+| Gate Name | 48-Hour Usage Gate |
+| Rule | New activations must show valid usage within 48 hours of activation |
+| Data Source | 48-hour data taken from system |
+[/TABLE]
+[TABLE]
+| % SIM with 48hr Usage | Payout Rule |
+| >=95% of SIM | Full incentive payment |
+| 80% to <95% of SIM | Prorated incentive — only zero-usage SIM incentive deducted |
+| <80% of SIM | No incentive payment — complete forfeiture |
+[/TABLE]
+Note: Prorated rule: for 80–94.99% usage compliance, only the incentive for SIMs with zero usage is deducted. SIMs that DO have usage still get full commission.
+11.2 MMSTR vs Standard Retailer Rate Differentiation
+[TABLE]
+| MMSTR Rate | BDT 20 / GA |
+| All Other BSP Retailer Products | BDT 30 / GA |
+| Application | Consistent across all 7 weekly SRFs (Mar and Apr 2026) |
+| MMSTR | A specific BSP product/retailer classification; exact classification criteria not detailed in SRF |
+[/TABLE]
+11.3 Weekly Cumulative Deduction Mechanism
+Each week's SRF covers the FULL month up to that date, and deducts the prior week's commission amount to avoid double payment. This creates a cumulative progressive disbursement:
+[TABLE]
+| SRF | Coverage Period | Deduction from Prior SRF | Agent List Date |
+| Mar Week 1 | 1–7 Mar | None (first SRF) | 7th Mar 2026 |
+| Mar Week 2 | 1–21 Mar | Deducts 1st–7th Mar amount | 21st Mar 2026 |
+| Mar Week 3 | 1–31 Mar | Deducts 1st–21st Mar amount | 31st Mar 2026 |
+| Apr Week 1 | 1–7 Apr | None (first Apr SRF) | 7th Apr 2026 |
+| Apr Week 2 | 1–14 Apr | Deducts 1st–7th Apr amount | 14th Apr 2026 |
+| Apr Week 3 | 1–21 Apr | Deducts 1st–14th Apr amount | 21st Apr 2026 |
+| Apr Week 4 | 1–30 Apr | Deducts 1st–21st Apr amount | 30th Apr 2026 |
+[/TABLE]
+Note: Agent list used for eligibility corresponds to the END date of the coverage period for each SRF (snapshot of active agents on that date).
+11.4 GA Cap & Agent List Policy
+[TABLE]
+| GA Cap | 150 GA for full calendar month — incentive capped even if actual GA exceeds 150 |
+| Agent List | BSP list already shared with SRF (for weekly campaigns) | BSP Retailer list shared by B2C (for later weeks) |
+| Eligibility | Only listed BSP CCRs eligible — list with respective Retailer Code shared during calculation |
+| Lifting Rule | SIM needs to be activated within 180 days of lifting |
+[/TABLE]
+12. ETSAF Conditions
+[TABLE]
+| SRF / Period | ETSAF Required? | Threshold | Deadline | Notes |
+| Apr 2025 (RYZE) | No | N/A | N/A | Not mentioned in SRF |
+| May 2025 | Yes | 98% | 8th next mo | ETSAF vetting gate for eligibility |
+| Jun 2025 | Yes | 98% | 8th next mo | Same as May25 |
+| Jul 2025 | Yes | 98% | 8th next mo | Same |
+| Aug 2025 | No | N/A | N/A | SAF not checked in general conditions |
+| Sep 2025 | No | N/A | N/A | Same as Aug25 |
+| Oct 2025+ | No | N/A | N/A | Not in general conditions section |
+| Feb 2026 | No | N/A | N/A | Not in general conditions section |
+| Mar–Apr 2026 (Type3) | Yes (conditional) | Above ETSAF QC condition as implemented | N/A | Noted as "ETSAF QC condition will be considered which implemented" |
+[/TABLE]
+13. Universal / General Conditions
+[TABLE]
+| Condition | Type 2 — Monthly (May–Feb26) | Type 3 — Weekly (Mar–Apr26) |
+| Activation | FCD — during calendar month | FCD — during promotion period |
+| SAF/ETSAF | 98% by 8th next month (May–Jul25 only) | ETSAF QC as implemented |
+| Valid Recharge | All Valid Recharges | All Valid C2S Recharges (I-TOP up) |
+| Usage | Valid Usage | 48-hour usage (gate) |
+| Disconnection | Disconnection check | Latest data up to report generation date (T-6) |
+| Product | BL Prepaid (incl./excl. RYZE per SRF) | All Prepaid + successful MNP |
+| Lifting | N/A | Activated within 180 days of lifting |
+| Rounding | Below 0.5 rounds down; >=0.5 rounds up | Same |
+| AIT | NOT applicable (Sales Team category) | Applicable — mentioned in SMS template |
+| Data Sources | ED, IT BI, DWH, TABS, DMS, POS | IT SC, IT BI, DWH, POS |
+[/TABLE]
+14. Maturity Date Evolution
+[TABLE]
+| SRF / Period | Maturity Date for Data |
+| Apr 2025 (RYZE) | 1st of following month |
+| May 2025 | 8th of following month |
+| Jun 2025 | Last day of following month (Jul 31, 2025) |
+| Jul 2025 | 8th July 2025 (same month) |
+| Aug 2025 | 30 days after activation |
+| Sep 2025 | 30 days after activation |
+| Oct 2025+ | 30 days after activation |
+| Feb 2026+ | 45 days after activation |
+| Mar 2026 (1–7 Mar) | 10th Mar 2026 |
+| Mar 2026 (1–21 Mar) | 24th Mar 2026 |
+| Mar 2026 (1–31 Mar) | 3rd Apr 2026 |
+| Apr 2026 (1–7 Apr) | 10th Apr 2026 |
+| Apr 2026 (1–14 Apr) | 17th Apr 2026 |
+| Apr 2026 (1–21 Apr) | 23rd Apr 2026 |
+| Apr 2026 (1–30 Apr) | 3rd May 2026 |
+[/TABLE]
+Note: Weekly campaign maturity dates are fixed calendar dates (approx. 3 days after period end). Monthly campaign shifted from 8th-of-month to 30-day rolling window from Aug 2025, then to 45-day window from Feb 2026 — aligning with the extended 1st Recharge window.
+15. AIT & Rounding Rules
+[TABLE]
+| AIT — Type 1 (RYZE) | NOT applicable — explicitly stated: "AIT will not be applicable for this commission (This is applicable for Sales Team)" |
+| AIT — Type 2 (Monthly) | NOT applicable — same explicit statement across all monthly SRFs |
+| AIT — Type 3 (Weekly) | APPLICABLE — SMS template says "AIT katar por" (after AIT deduction) implying AIT IS deducted before disbursement |
+| Rounding Rule | General mathematical rounding: values < 0.5 round down; >= 0.5 round up. Applies to all KPI end achievement calculations across all SRF types. |
+[/TABLE]
+16. Quick Reference Summary Table — All 15 SRFs
+[TABLE]
+| Period | Type | Product | Modality | Gate | Rate | Cap | Maturity |
+| Apr 25 | RYZE | RYZE Prepaid | Slab on GA count | Min 15 GA | BDT 50/70/100 | 100 GA | 1st next mo |
+| May 25 | Monthly | BL Prepaid excl RYZE | Slab on % ach | ETSAF 98% | BDT 20/30 | 100 GA | 8th next mo |
+| Jun 25 | Monthly | BL Prepaid incl RYZE | Multi-modality | ETSAF+App Install | BDT 1000/1500 upfront + BDT 10/20 conditional + BDT 500 daily | 100 GA | Last day next mo |
+| Jul 25 | Monthly | BL Prepaid | Slab + VLR gate | VLR >=90/95% | BDT 20/30/40 | 100 GA | 8th Jul25 |
+| Aug 25 | Monthly | BL Prepaid | Slab + 1st Rech | 1st Rech >=95% in 30d | BDT 10/30/40 | 100 GA | 30d after act |
+| Sep 25 | Monthly | BL Prepaid | Slab + 1st Rech | 1st Rech >=90/95% in 30d | BDT 10/30/40 | 100 GA | 30d after act |
+| Oct–Dec25 | Monthly | BL Prepaid | Slab + 1st Rech | 1st Rech >=95% in 30d | BDT 10/30/40 | 100 GA | 30d after act |
+| Feb 26+ | Monthly | BL Prepaid | Slab + 1st Rech | 1st Rech >=95% in 45d | BDT 10/30/40 | 100 GA | 45d after act |
+| Mar 26 wk1 | Weekly | All Prepaid+MNP | Per GA (min 2) | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 10th Mar |
+| Mar 26 wk2 | Weekly | All Prepaid+MNP | Cumulative | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 24th Mar |
+| Mar 26 wk3 | Weekly | All Prepaid+MNP | Cumulative | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 3rd Apr |
+| Apr 26 wk1 | Weekly | All Prepaid+MNP | Per GA | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 10th Apr |
+| Apr 26 wk2 | Weekly | All Prepaid+MNP | Cumulative | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 17th Apr |
+| Apr 26 wk3 | Weekly | All Prepaid+MNP | Cumulative | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 23rd Apr |
+| Apr 26 wk4 | Weekly | All Prepaid+MNP | Cumulative | 48hr usage gate | MMSTR BDT20, Others BDT30 | 150 GA/mo | 3rd May |
+[/TABLE]

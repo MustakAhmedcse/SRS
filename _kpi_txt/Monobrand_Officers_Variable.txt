@@ -1,0 +1,343 @@
+Monobrand Officers Variable
+Incentive SRF
+Unique KPI Conditions – All Epochs (Jan 2025 – Jan 2026)
+Source: 11 SRFs  |  Prepared for SalesCom Automation Development
+INDEX
+[TABLE]
+| # | Section |
+| 1 | Overview & Epoch Timeline |
+| 2 | Fixed Incentive Structure (BDT 4,000 / 6,000) |
+| 3 | Dual SAF Framework – Manual & ETSAF |
+| 4 | Postpaid GA Eligibility & Security Deposit Rules |
+| 5 | Epoch 1 – Jan–Mar 2025: Ryze Migration + GA + iTOP + First Visit Resolution |
+| 6 | Epoch 2 – Apr 2025: GA + iTOP (Ryze Migration KPI Removed) |
+| 7 | RYZE Separate Slab Commission (from Apr 2025 – Standalone SRF) |
+| 8 | Epoch 3 – May 2025: GA + Recharge & Bundle + Daily Participation + App Install |
+| 9 | Epoch 4 – Jul 2025: Bundle Ratio & Security Deposit Changes |
+| 10 | Epoch 5 – Oct–Dec 2025: CSAT Added, Multi-Slab Payout, First Recharge 45-day Window |
+| 11 | Epoch 6 – Jan 2026: FWA KPI Added, 93% GA Threshold, 95%/110%/120% Payout Model |
+| 12 | Monobrand Agent Reactivation Campaign (10 Feb – 10 Mar 2025) |
+| 13 | SRF Summary Table |
+[/TABLE]
+1. Overview & Epoch Timeline
+This document extracts all unique KPI conditions from 11 SRFs in the Monobrand Officers Variable folder. The primary commission scheme (Variable Incentive) evolved through six distinct structural epochs between January 2025 and January 2026, with an additional standalone RYZE slab commission and a separate Reactivation Campaign.
+Epoch Timeline
+[TABLE]
+| Epoch | Period | Key Changes |
+| 1 | Jan–Mar 2025 | Ryze Migration (10%) + GA (10%) + iTOP (40%) + First Visit Resolution (20%). 100% SAF. |
+| 2 | Apr 2025 | Ryze Migration KPI dropped. GA weight raised to 20%. 100% SAF. |
+| 3 | May 2025 | Recharge & Bundle Upsell (20%), Daily Participation (20%), App Install (20%) added. SAF lowered to 98%. iTOP dropped. |
+| 4 | Jul 2025 | Bundle ratio reduced to 10% (from 15%). Security deposits updated. |
+| 5 | Oct–Dec 2025 | CSAT (15%) added. GA weight raised to 30%. Multi-slab payout (60%/70%/80%/90%/100%). First Recharge sub-KPI (rolling 45 days). Maturity: 45 days. |
+| 6 | Jan 2026 | FWA lead generation (10%) added. GA threshold raised to 93%. New payout tiers (95%/110%/120%). CSAT split: Platinum+Signature (15%) + Overall (15%) = 30%. |
+[/TABLE]
+2. Fixed Incentive Structure (BDT 4,000 / 6,000)
+Throughout all epochs, the fixed monthly variable incentive pool remains unchanged. KPI achievement determines what percentage of this pool each CCR receives.
+[TABLE]
+| Recipient Type | Fixed Variable Incentive (Performance-Based) |
+| All Monobrand CCR | BDT 4,000 per month |
+| Monobrand Store In-charge | BDT 6,000 per month |
+[/TABLE]
+Note: Actual payout = Fixed incentive × weighted KPI achievement score. Consistent across all 6 epochs.
+3. Dual SAF Framework – Manual & ETSAF
+Monobrand channel uniquely operates two SAF submission pathways simultaneously. Both must be tracked separately and have distinct deadlines and rules.
+Manual SAF (Alternate ID / Alternative ID)
+[TABLE]
+| Parameter | Detail |
+| Trigger | Alternate ID-based acquisitions from Monobrand Channel |
+| Data Source | BSS Commission team considers submitted & Non-Submitted SAF from system |
+| Deadline | Must be Cleared (vetted & accepted by CO Team) by T+6 (7th day from activation) |
+| MNP | Not considered for Manual SAF commission |
+[/TABLE]
+ET SAF (ETSAF) Process
+[TABLE]
+| Parameter | Detail |
+| Correction Window | ETSAF correction must be within 72 hours to be eligible |
+| SAF Threshold – Epoch 1–2 (Jan–Mar 2025) | 100% SAF submission required. If count is 90, all 90 must qualify |
+| SAF Threshold – Epoch 3–6 (May 2025+) | 98% SAF submission required. If count is 100, 98 must qualify |
+| Zero Incentive Rule | If SAF qualifies below threshold, GA KPI = zero incentive for that CCR |
+| MNP | Not considered in ETSAF commission |
+[/TABLE]
+Key SAF Change: Epoch 1–2 → Epoch 3+
+[TABLE]
+| Period | SAF Threshold | Effect |
+| Jan 2025 – Apr 2025 (Epochs 1–2) | 100% SAF required | Any single unqualified SAF zeroes GA KPI |
+| May 2025 onwards (Epochs 3–6) | 98% SAF required | Up to 2% SAF shortfall allowed before GA KPI zeroed |
+[/TABLE]
+4. Postpaid GA Eligibility & Security Deposit Rules
+Postpaid connections are counted as GA only when all of the following conditions are met: activation and bundle activated on the same day, and the required minimum security deposit is paid in full by same day (can be multiple shots but same day). Only MNP and new acquisition are eligible — not renewal. The deposit thresholds evolved across epochs.
+Propaid Packages Counted as GA
+[TABLE]
+| Type | EQUIPID | Min Security Deposit |
+| Activation | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) | Base package – no deposit specified |
+| Bundle Package | NEWPROPAID222 | BDT 250 |
+| Renewal bundle Package | RCNEWPROPAID222 | BDT 250 |
+[/TABLE]
+Postpaid Packages – High Value FTR & GA (Security Deposit Evolution)
+[TABLE]
+| EQUIPID | Type | Jan–Mar 2025 (till 27 Jan / from 28 Jan) | Apr 2025 | Jul 2025 onwards |
+| TK200NB30DPOSTOG | NON-BUNDLE | 200 / 150 | 150 | 170 |
+| RCTK794POSTGAUMIXBDNLOG | Bundle | 800 / 800 | 800 | 750 |
+| TK794POSTGAUMIXBDNLOG | Bundle | 800 / 800 | 800 | 750 |
+| RCTK394POSTGAUMIXBDNLOG | Bundle | 400 / 400 | 400 | 350 |
+| TK394POSTGAUMIXBDNLOG | Bundle | 400 / 400 | 400 | 350 |
+| RCTK494POSTGAUSSDMIXOG | Bundle | 500 / 500 | 500 | 450 |
+| TK494POSTGAUSSDMIXOG | Bundle | 500 / 500 | 500 | 450 |
+| TK214USSD30DPOSTOG | Bundle | 220 / 220 | 220 | Not Applicable |
+| TK1143CGAMXBOGPOST | Bundle | – | – | 1,150 (from Jan26) |
+| TK2343CGAMXBOGPOST | Bundle | – | – | 2,350 (from Jan26) |
+[/TABLE]
+Note: TK300BORGAPOSTOG is sourced from POSTPAID_COMMISSION_DATA_MONTHLY_DWH across all epochs.
+Security Deposit Rules (Consistent Across All Epochs)
+[TABLE]
+| Rule | Detail |
+| Same-day deposit | Full security deposit must be paid on the same day as activation |
+| Multiple shots allowed | Deposit can be paid in multiple instalments within the same day |
+| Minimum or above | Deposit must be equal to or greater than the specified amount |
+| DPOS source | 200 taka package deposit verified from DPOS by activation date |
+| Eligible only | Only MNP and new acquisition considered; renewals excluded |
+[/TABLE]
+5. Epoch 1 – Jan–Mar 2025: Ryze Migration + GA + iTOP + First Visit Resolution
+[TABLE]
+| SRFs | Variable Incentive Jan25–Feb25 | Variable Incentive Mar25 |
+| Period | 01 Jan 2025 – 31 Mar 2025 |
+| Total Weight | Ryze 10% + GA 10% + iTOP 40% + First Visit Resolution 20% = 80% accounted (remaining 20% implied from structure) |
+| SAF | 100% SAF required |
+| Maturity | 8th of the following month |
+[/TABLE]
+KPI Structure – Epoch 1
+[TABLE]
+| KPI | Target | Threshold | Weight | Remarks |
+| Ryze Migration | 80% | 80% | 10% | BL Prepaid to RYZE Migration (Prepaid only). Via SQMS. |
+| Gross Add (GA) Prepaid+Postpaid+MNP+Reactivation with FR | 80% | 80% | 10% | Jan–Feb: no RYZE in GA scope. Mar25: RYZE added to GA scope. |
+| iTOP Up (Any deno drive) | 90% | 90% | 40% | All EV considered. Teller/Staff code wise from CC Recharge data. |
+| First Visit Resolution (SQMS) | – | 95% | 20% | Unique work code >= 95% of total work code = eligible |
+[/TABLE]
+Ryze Migration – Unique Conditions
+[TABLE]
+| Condition | Detail |
+| Mechanism | Frontliners input customer MSISDN under specified service name in SQMS |
+| Unique MSISDN | Unique MSISDNs on the same date and within KPI month (30 days) considered |
+| Service Name | Ryze migration |
+| Product | BL Prepaid to Ryze migration only |
+[/TABLE]
+First Visit Resolution – Unique Conditions
+[TABLE]
+| Condition | Detail |
+| Weight | 20% of total incentive |
+| Trigger | Customer MSISDN unique service on same day |
+| Source | SQMS |
+| Gate | If unique work code < 95% of total work code → NOT eligible |
+| Eligible | If unique work code count >= 95% of actualization data → eligible for incentive |
+[/TABLE]
+GA Scope Change: Jan–Feb25 vs Mar25
+[TABLE]
+| Period | GA Scope |
+| Jan–Feb 2025 | Prepaid + Postpaid + MNP + Reactivation with FR (NO RYZE in scope) |
+| Mar 2025 | Prepaid + RYZE + Postpaid + MNP + Reactivation with FR |
+[/TABLE]
+Recharge Conditions – Epoch 1
+Prepaid GA: First recharge of BDT 48, 81, 222, or 224 must achieve 98% on GA after disconnection. Valid recharge = recharged from Customer Care Centre & EV Recharge.
+6. Epoch 2 – Apr 2025: GA + iTOP (Ryze Migration KPI Removed)
+[TABLE]
+| SRF | Monobrand Officers Variable Incentive from Apr25 |
+| Period | 01 Apr 2025 – Until further notice |
+| SAF | 100% SAF required (unchanged from Epoch 1) |
+| Key Change | Ryze Migration KPI (10%) REMOVED. GA weight raised from 10% to 20%. |
+[/TABLE]
+KPI Structure – Epoch 2
+[TABLE]
+| KPI | Target | Threshold | Weight | Remarks |
+| Gross Add (Prepaid incl. RYZE + Postpaid + MNP + Reactivation with FR) | 80% | 80% | 20% | FCD and ETSAF vetting. RYZE now included in main GA scope. |
+| iTOP Up (Any deno drive) | 90% | 90% | 40% | All EV. No change from Epoch 1. |
+[/TABLE]
+Note: The remaining 40% not shown in the SRF is not explicitly detailed — likely reflects the First Visit Resolution component (20%) or other targets shared separately by user team.
+7. RYZE Separate Slab Commission (from Apr 2025 – Standalone SRF)
+[TABLE]
+| SRF | Monobrand Officers RIZE Incentive from Apr25 |
+| Recipient | Monobrand CCR (listed only) |
+| Period | 01 Apr 2025 – Until further notice |
+| Product | RYZE Prepaid only (Product Name: 'Sim Card Ryze Package') |
+| Gate | Cumulative GA of CCRs assigned to a Monobrand must be >=70% of that Monobrand's Monthly Target |
+| GA Cap | Incentive eligible up to 100 GA for Slab 3 (even if achievement > 100) |
+| AIT | Not applicable |
+| Maturity | 1st of following month |
+[/TABLE]
+RYZE Slab Commission Structure
+[TABLE]
+| Slab | RYZE Activation Range | Commission per Activation |
+| Slab 1 | 20 – 29 | BDT 50 |
+| Slab 2 | 30 – 59 | BDT 70 |
+| Slab 3 | 60 – up to 100 | BDT 100 (capped at 100 GA) |
+[/TABLE]
+RYZE Slab – Key Unique Conditions
+[TABLE]
+| Condition | Detail |
+| Store-level gate | Cumulative GA of all CCRs in a Monobrand must reach >=70% of that store's monthly target before any individual CCR qualifies |
+| Individual cap | Slab 3 commission only paid on first 100 RYZE activations |
+| Minimum threshold | Below 20 RYZE activations: no slab commission |
+| Product restriction | RYZE Prepaid activations only — standard Prepaid/Postpaid not counted here |
+[/TABLE]
+8. Epoch 3 – May 2025: GA + Recharge & Bundle + Daily Participation + App Install
+[TABLE]
+| SRF | Monobrand Officers Variable Incentive from May25 |
+| Period | 01 May 2025 – Until further notice |
+| SAF Change | 100% → 98% SAF threshold (major change) |
+| Key Changes | iTOP KPI replaced by Recharge & Bundle Upsell. Daily Participation and App Install added. Payout model: At Actual for 80-99%, 100% payout for >=100%. |
+| Bundle Condition | 15% of Total Recharge must be either data bundle or mix bundle |
+[/TABLE]
+KPI Structure – Epoch 3 (May 2025)
+[TABLE]
+| KPI | Weight | Payout: 80%–<100% | Payout: >=100% | Remarks |
+| Gross Add (Prepaid incl. RYZE + Postpaid + MNP) | 20% | At Actual | 100% | FCD + ETSAF vetting. No Reactivation with FR from May25. |
+| Recharge & Bundle Upsell | 20% | At Actual | 100% | 15% of Total Recharge must be data/mix bundle |
+| Daily Participation in GA & Recharge | 20% | At Actual | 100% | No. of unique days with GA or Recharge achievement vs. scheduled working days/month |
+| Toffee / MY BL App Installation | 20% | At Actual | 100% | BL App + Toffee App; using referral codes |
+[/TABLE]
+Note: Below 80% achievement on any KPI = 0% payout for that KPI. The remaining 20% weight (not shown) likely represents First Visit Resolution carried from prior epochs or other targets.
+App Installation Conditions (New from Epoch 3)
+[TABLE]
+| App | Condition |
+| My BL App | Install from Play Store (Android) or App Store (Apple) using referral code of the CCR |
+| Toffee App | Install from Play Store (Android) or App Store (Apple) using Toffee referral code of the CCR |
+[/TABLE]
+9. Epoch 4 – Jul 2025: Bundle Ratio & Security Deposit Changes
+[TABLE]
+| SRF | Monobrand Officers Variable Incentive from July25 |
+| Period | 01 Jul 2025 – Until further notice |
+| KPI Structure | Unchanged from Epoch 3 (same 4 KPIs at 20% each) |
+| Bundle Change | Data/mix bundle ratio reduced from 15% to 10% of Total Recharge |
+[/TABLE]
+Bundle Ratio Change
+[TABLE]
+| Parameter | Epoch 3 (May 2025) | Epoch 4 (Jul 2025) |
+| Bundle type | Data bundle or mix bundle | Data bundle or mix bundle (same) |
+| Minimum % of recharge | 15% of Total Recharge | 10% of Total Recharge |
+[/TABLE]
+Security Deposit Changes (Jul 2025)
+[TABLE]
+| EQUIPID | Pre-Jul 2025 | Jul 2025 onwards |
+| TK200NB30DPOSTOG | BDT 150 | BDT 170 |
+| TK794POSTGAUMIXBDNLOG | BDT 800 | BDT 750 |
+| TK394POSTGAUMIXBDNLOG | BDT 400 | BDT 350 |
+| TK494POSTGAUSSDMIXOG | BDT 500 | BDT 450 |
+| TK214USSD30DPOSTOG | BDT 220 | Not Applicable |
+[/TABLE]
+10. Epoch 5 – Oct–Dec 2025: CSAT Added, Multi-Slab Payout, First Recharge 45-Day Window
+[TABLE]
+| SRFs | Variable Incentive from Oct25 | Variable Incentive Dec25_proy |
+| Period | 01 Oct 2025 – 31 Dec 2025 |
+| Maturity Change | Changed to 45 days after activation (was 8th of following month) |
+| CSAT Added | Customer Satisfaction Score (CSAT) introduced at 15% weight |
+| GA Weight | Raised from 20% to 30% (split: 15% Target Achievement + 15% First Recharge) |
+| Recharge Weight | Raised from 20% to 25% |
+| Daily Part. | Reduced from 20% to 10% |
+| App Install | Unchanged at 20%; target = 50% of GA Target |
+[/TABLE]
+KPI Structure – Epoch 5
+[TABLE]
+| KPI | Wt | Threshold | Payout Tiers |
+| Gross Add (GA Target Achievement – 15%) | 30% | 80% | < 80% = 0% 80–84.99% = 60% 85–89.99% = 70% 90–94.99% = 80% 95–<100% = 90% >=100% = 100% |
+| Gross Add (First Recharge – 15%) | – | 60% | 60–85%: Pro-rated payout >=85%: 100% payout (Rolling 45-day window from acquisition) |
+| Recharge & Bundle Upsell | 25% | 80% | < 80% = 0% 80–84.99% = 60% 85–89.99% = 70% 90–94.99% = 80% 95–<100% = 90% >=100% = 100% |
+| Daily Participation in GA & Recharge | 10% | 90% | Must participate in both GA & Recharge on >= 90% of operational days |
+| Toffee & My BL App Installation | 20% | 80% | Same 5-level slab as Recharge (60%/70%/80%/90%/100%) Target: 50% of GA Target |
+| CSAT | 15% | >97% | Score < 97% = 0% Score >97% to <=98% = 80% Score >98% to <=99% = 100% |
+[/TABLE]
+First Recharge Sub-KPI – Key Details
+[TABLE]
+| Parameter | Detail |
+| Window | Rolling 45 days from acquisition date |
+| Payout model | 60%–85% achievement: pro-rated; >=85% achievement: 100% payout |
+| Purpose | Measures how many of the CCR's new activations achieve first recharge |
+| Data source | DWH with 45-day rolling lookback |
+[/TABLE]
+11. Epoch 6 – Jan 2026: FWA KPI, 93% GA Threshold, 95%/110%/120% Payout Model
+[TABLE]
+| SRFs | Variable Incentive from Jan26 | Variable Incentive Jan26_Revision |
+| Period | 01 Jan 2026 – Until further notice |
+| Major Changes | GA threshold: 80% → 93%. Payout model: 95%/110%/120% overperformance tiers. FWA KPI (10%) added. CSAT raised to 30% (split into Platinum+Signature 15% + Overall 15%). |
+| Maturity | 45 days after activation (unchanged from Epoch 5) |
+| Min CSAT Feedback | Agent must ensure at least 20 CSAT feedbacks per month |
+| New Postpaid Packages | TK1143CGAMXBOGPOST (BDT 1,150) and TK2343CGAMXBOGPOST (BDT 2,350) added |
+[/TABLE]
+KPI Structure – Epoch 6 (Jan 2026)
+[TABLE]
+| KPI | Wt | Threshold | Payout Tiers |
+| Gross Add – Target Achievement (15%) (Prepaid + Postpaid + MNP) | 25% | 93% | <93% = 0% >=93%, <101% = 95% >=101%, <108% = 110% >=108% = 120% |
+| Gross Add – First Recharge (10%) | – | 60% | 60–85%: Pro-rated payout >=85%: 100% payout (Rolling 45 days) |
+| Recharge & Bundle Upsell | 15% | 92% | <92% = 0% >=92%, <98% = 95% >=98%, <103% = 110% >=103% = 120% |
+| Daily Participation in GA & Recharge | 10% | 95% | Must participate in both GA & Recharge on >= 95% of operational days (Threshold raised from 90% to 95%) |
+| FWA – Home Internet (Successful lead generation/conversion) | 10% | 93% | <93% = 0% >=93%, <101% = 95% >=101%, <108% = 110% >=108% = 120% |
+| Toffee & My BL App Installation | 10% | 81.5% | <81.5% = 0% 81.5–87.19% = 95% 87.2–91.59% = 110% >=91.60% = 120% Target: 50% of GA Target |
+| CSAT – Platinum & Signature (15%) | 30% | >97% | Score <98% = 0% Score 98–99% = 80% Score >99–99.8% = 100% Score >99.8% = 120% |
+| CSAT – Overall (15%) | – | >97% | Score <97% = 0% Score 97–98% = 80% Score >98–99.5% = 100% Score >99.5% = 120% |
+[/TABLE]
+Epoch 6 vs Epoch 5 – Key Changes Summary
+[TABLE]
+| Parameter | Epoch 5 (Oct–Dec 2025) | Epoch 6 (Jan 2026+) |
+| GA Threshold | 80% | 93% |
+| GA Payout Model | 60/70/80/90/100% | 0% / 95% / 110% / 120% |
+| Recharge Threshold | 80% | 92% |
+| Recharge Payout | 60/70/80/90/100% | 0% / 95% / 110% / 120% |
+| Daily Participation Threshold | 90% | 95% |
+| FWA KPI | Not present | 10% weight – lead generation |
+| App KPI Weight | 20% | 10% |
+| App Threshold | 80% | 81.5% |
+| App Payout Model | 60/70/80/90/100% | 0% / 95% / 110% / 120% |
+| CSAT Weight | 15% (single tier) | 30% (Platinum+Sig 15% + Overall 15%) |
+| CSAT – Premium Gate | N/A | >99.8% = 120% payout |
+[/TABLE]
+Jan26 Revision – CSAT Correction
+A separate revision SRF was submitted (Apr 2026) covering only the Platinum & Signature CSAT sub-component (15%) for January 2026. The payout structure for this component is: Score <98% = Zero; Score 98–99% = 80%; Score >99–99.8% = 100%; Score >99.8% = 120%. Minimum 20 CSAT feedbacks/month required. This SRF is a correction only — no other KPIs changed.
+12. Monobrand Agent Reactivation Campaign (10 Feb – 10 Mar 2025)
+[TABLE]
+| SRF Title | Monobrand officers Reactivation Commission_10th Feb25 to 10th Mar25 |
+| Recipient | Monobrand Agent (Field Force category – RSO) |
+| Period | 10 Feb 2025 – 10 Mar 2025 |
+| KPI | Monobrand Agent Reactivation – Hit Count |
+| Target | 15 reactivation hits per agent (above specified deno list) |
+| Incentive | BDT 400 per agent upon achieving target |
+| Total Agents | 142 agents in scope |
+| Mapping | Recharge must be via Monobrand user ID (mapping shared by User team) |
+| MSISDN | Individual MSISDN counted only |
+[/TABLE]
+Eligible Reactivation Denomination List
+[TABLE]
+| Denomination (BDT) | Offer Description |
+| 498 | 40GB + 500min – 30 Days |
+| 298 | 20GB + 300min – 30 Days |
+| 209 | 25GB – 30 Days |
+| 139 | 6GB + 150min – 30 Days |
+| 117 | 180min – 30 Days |
+| 99 | 8GB – 7 Days |
+| 78 | 4GB + 50min – 7 Days |
+| 57 | 80min – 15 Days |
+| 49 | 2GB – 3 Days |
+| 39 | 1P/Sec – 90 Days |
+| 27 | 40min – 7 Days |
+[/TABLE]
+Reactivation Campaign – Conditions
+[TABLE]
+| Condition | Detail |
+| Eligibility | Each reactivated connection must have recharge from above deno list via Monobrand user ID |
+| Hit definition | 1 hit = 1 individual MSISDN reactivated with eligible deno |
+| Usage gate | At least 95% of total GA must have more than BDT 5 in usage within 7th of next month |
+| ETSAF | ETSAF QC condition applied (implemented from previous period) |
+| Threshold | Hit-or-miss model: 15 hits required; BDT 400 incentive only on reaching threshold |
+[/TABLE]
+13. SRF Summary Table
+[TABLE]
+| # | SRF Title (Short) | Period | Epoch | Key KPIs | SAF |
+| 1 | Variable Incentive Jan25–Feb25 | Jan–Feb 2025 | 1 | Ryze Migr(10%)+GA(10%)+iTOP(40%)+FVR(20%) | 100% |
+| 2 | Variable Incentive Mar25 | Mar 2025 | 1 | Same + RYZE added to GA scope | 100% |
+| 3 | Variable Incentive from Apr25 | Apr 2025+ | 2 | GA(20%)+iTOP(40%); Ryze KPI removed | 100% |
+| 4 | RIZE Incentive from Apr25 | Apr 2025+ | – | Separate RYZE slab: BDT 50/70/100; 70% store gate | N/A |
+| 5 | Variable Incentive from May25 | May 2025+ | 3 | GA(20%)+Recharge(20%)+DailyPart(20%)+App(20%); 15% bundle ratio | 98% |
+| 6 | Variable Incentive from July25 | Jul 2025+ | 4 | Same as Epoch 3; bundle ratio 10%; deposits updated | 98% |
+| 7 | Variable Incentive from Oct25 | Oct 2025+ | 5 | GA(30%)+Recharge(25%)+DailyPart(10%)+App(20%)+CSAT(15%); First Recharge sub-KPI | 98% |
+| 8 | Variable Incentive Dec25_proy | Dec 2025 | 5 | Same as Oct25 (provision run) | 98% |
+| 9 | Variable Incentive from Jan26 | Jan 2026+ | 6 | GA(25%)+Recharge(15%)+DailyPart(10%)+FWA(10%)+App(10%)+CSAT(30%) | 98% |
+| 10 | Variable Incentive Jan26_Revision | Jan 2026 | 6 | CSAT Platinum+Signature (15%) correction only | 98% |
+| 11 | Reactivation Commission Feb–Mar25 | 10Feb–10Mar25 | – | Reactivation: 15 hits per agent; BDT 400 | ETSAF QC |
+[/TABLE]

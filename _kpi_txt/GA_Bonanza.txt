@@ -1,0 +1,335 @@
+Banglalink SalesCom — GA Bonanza
+Unique KPI Conditions Reference
+Compiled from all 68 SRFs  |  Aug 2025 – Apr 2026  |  5 Recipient Types
+Index
+1   Overview & SRF Coverage
+2   Recipient Types & Campaign Structure
+3   KPI Definition — GA (All Recipients)
+4   Gate Conditions Evolution
+4.1     48-Hour Usage Gate Threshold
+4.2     VLR Active Gate Threshold
+4.3     North Cluster Prorated VLR Rule (Apr26)
+4.4     TCG Bar & Self-Barred Exclusion
+5   RSO GA Definition Evolution
+6   RSO Supervisor GA Definition Evolution
+7   Incentive Type & Structure Evolution
+7.1     Physical Gift Phase (Aug–Jan)
+7.2     Cash Incentive Phase (Feb26+) + AIT
+7.3     Slab Structure Variants
+7.4     Region-Specific Slab (Jan26 1-7)
+7.5     Incremental Incentive Rule (Distributor/Region)
+7.6     Combined Phase Retroactive Rule (Apr26)
+8   Distributor-Level Unique Conditions
+8.1     Category-Based Gift Reward (Sep25)
+8.2     All-FF-of-Winning-DD Incentive (Dec25)
+8.3     Per-GA Cash Incentive with MMSTR Differentiation (Apr26)
+9   DD Manager Unique Conditions
+9.1     Multi-Condition Slab (Aug25)
+9.2     GA Booster Campaign (Jan26 21-31)
+10   Region Incentive Conditions
+11   General Conditions (All SRFs)
+12   Version Comparison — Key Conditions per Recipient by Period
+13   Glossary
+1. Overview & SRF Coverage
+[TABLE]
+| Programme | GA Bonanza (+ GA Booster Campaign variant) |
+| Total SRFs | 68 SRFs (Aug 2025 – Apr 2026) |
+| KPI | GA — Gross Addition (new SIM activations) |
+| Recipient Types | 5 types: RSO, RSO Supervisor, DD Manager, Distributor, Region |
+| Campaign Windows | Ad-hoc multi-day windows; some monthly (Aug–Nov25); shorter from Dec25 |
+| Report Slot | Disbursement — end of campaign window |
+| Incentive Evolution | Physical gifts (Aug25–Jan26) → Cash incentives (Feb26+) |
+[/TABLE]
+GA Bonanza is an ongoing multi-tier incentive programme rewarding field force personnel at every level (RSO, RSO Supervisor, DD Manager) as well as Distributor entities and Regions for achieving GA targets within defined campaign windows. Conditions evolved significantly across the period, with structural changes to gate thresholds, GA attribution rules, incentive types, slab structures, and cluster-specific rules.
+2. Recipient Types & Campaign Structure
+[TABLE]
+| Recipient Type | SRF Count | Coverage Period | Report Extracted By | Incentive Basis |
+| RSO | 17 (incl. 1 Revision) | Aug25–Apr26 | RSO-wise | GA achieved by RSO's market/code |
+| RSO Supervisor | 17 (incl. 2 Booster) | Aug25–Apr26 | RSO Supervisor-wise | Sum of supervised RSO GA |
+| DD Manager | 15 (incl. 1 Booster) | Aug25–Apr26 | DD Manager-wise | GA under DD Manager scope |
+| Distributor | 9 | Sep25–Apr26 | DD-wise | GA under DD (whole distributor) |
+| Region | 8 | Feb26–Apr26 | Region-wise | GA across all DDs in region |
+[/TABLE]
+i  GA Booster Campaign (Jan26 21-31) covers DD Manager and RSO Supervisor only — same gate and GA definition but incentive amount in target file (no slab stated in SRF).
+3. KPI Definition — GA (All Recipients)
+[TABLE]
+| KPI Name | GA — Gross Addition |
+| Definition | New SIM activations (FCD — First Call Date) during the campaign period |
+| Product Scope | All Prepaid & successful MNP (Mobile Number Portability) |
+| Activation Gate | FCD must exist during the promotion period |
+| Usage Gate | 48-hour usage must be achieved (threshold varies by period — see Section 4) |
+| VLR Gate | VLR (Visitor Location Register) Active status must be achieved (threshold varies) |
+| Disconnection | T-6 — Latest data up to report generation date minus 6 days |
+| Rounding | General mathematical rounding: below 0.5 rounds down; 0.5+ rounds up |
+| Max Incentive | Per RSO/supervisor/DD manager: 1 gift/incentive maximum per campaign (max consider rule) |
+[/TABLE]
+4. Gate Conditions Evolution
+Both the 48-Hour usage gate and the VLR Active gate are mandatory — both must be met. B2C shares the gate achievement data. Gate thresholds evolved over time.
+4.1  48-Hour Usage Gate Threshold
+[TABLE]
+| Period | Gate Threshold | Applies To |
+| Aug–Sep 2025 | >=91% | All clusters / all recipient types |
+| Oct–Nov 2025 | >=90% | All clusters / all recipient types |
+| Dec25, Jan26 (1-7, 16-25), Feb26 (1-22) | >=80% | All clusters |
+| Jan26 (8-15), Jan26 (booster), Feb26 (14+), Mar26, Apr26 | >=85% | All clusters — standard from mid-Jan |
+| Apr26 (11-20) | >=85% (all clusters — explicit note added) | Cluster-wide applicability confirmed in SRF text |
+[/TABLE]
+i  The gate applies as a binary pass/fail — if not met, no incentive regardless of GA achievement. B2C shares the 48hr achievement data separately.
+4.2  VLR Active Gate Threshold
+[TABLE]
+| Period | Gate Threshold | Note |
+| Aug–Sep 2025 | >=91% | Same as 48hr gate |
+| Oct–Nov 2025 | >=90% | Same as 48hr gate |
+| Dec25, Jan16-25, Feb1-22 | >=80% | Same as 48hr gate |
+| Jan8-15, Jan booster, Feb14+, Mar, Apr1-10 | >=85% | Standardized threshold |
+| Apr26 (11-20) — Standard clusters | >=85% | Binary pass/fail — see Section 4.3 for North Cluster exception |
+[/TABLE]
+4.3  North Cluster Prorated VLR Rule (Apr26 11-20)
+[TABLE]
+| Introduced | Apr 2026 (11th–20th Apr) — first appearance in the folder |
+| Applies to | North Cluster only; all other clusters use standard binary VLR gate |
+| >=85% VLR | 100% of incentive — full payment |
+| >=75% to <85% VLR | Prorated incentive as per VLR achievement percentage |
+| <75% VLR | Not eligible for any incentive |
+| Applies to | RSO, RSO Supervisor, DD Manager, Region SRFs for Apr26 (11-20) window |
+[/TABLE]
+i  This prorated VLR rule is a structural change from the simple binary gate used in all prior SRFs. It introduces partial incentive eligibility for the North Cluster based on VLR achievement level.
+4.4  TCG Bar & Self-Barred Exclusion
+[TABLE]
+| Rule | Any type of TCG Bar and self-barred connections will not be counted in the achievement |
+| First appeared | Nov 2025 (RSO Supervisor Nov25 SRF) |
+| Standardized | From Feb 2026 onwards — explicitly stated in RSO, RSO Supervisor, Distributor, DD Manager, and Region SRFs |
+| Absent in | Aug–Oct 2025 SRFs; most Dec25 and early Jan26 SRFs |
+[/TABLE]
+5. RSO GA Definition Evolution
+The formula used to count an RSO's GA changed multiple times across the campaign period. These changes affect how BP (Business Partner) GA is treated:
+[TABLE]
+| Period | RSO GA Formula | BP GA Rule | Cluster Scope |
+| Aug–Sep 25 | Market GA + BP GA | BP GA capped at 70% of target; excess above 70% ignored | Central/East/North only; West/NE = Market GA only |
+| Oct 25 | Market GA + BP GA | Same 70% cap | Central/Comilla/North; West/CtgN/CtgS/Brahmanbaria/NE = Market GA only |
+| Nov 25 | Market GA + RSO Own Code | BP GA removed from formula | All clusters unified |
+| Dec25–Jan26 (1-7, 16-25) | Market GA + RSO Own Code | RSO Own Code added | All clusters |
+| Jan26 (8-15) | Market GA + RSO Own Code | Same | All clusters |
+| Feb26 | Market GA + RSO Own Code | Same | All clusters |
+| Mar26 (1-10) original | Market GA + RSO Own Code | Same | All clusters |
+| Mar26 (1-10) Revision | Market GA EXCEPT BP GA | BP GA explicitly excluded | All clusters — revised after original filed |
+| Mar26 (11-20) | All GA except BP Code GA | BP Code GA excluded | All clusters |
+| Apr26 (1-10) | All GA except BP GA & DRC GA | Both BP GA and DRC GA excluded | All clusters — DRC added as new exclusion |
+| Apr26 (11-20) | All GA except BP GA & DRC GA | Same | All clusters |
+[/TABLE]
+i  Mar26 1-10 has both an original SRF and a Revision SRF filed later. The Revision changes the GA formula from 'Market GA + RSO Own Code' to 'Market GA EXCEPT BP GA' — and raises Slab 2 from 1,500tk to 2,000tk.
+6. RSO Supervisor GA Definition Evolution
+[TABLE]
+| Period | RSO Supervisor GA Formula | DRC Treatment |
+| Aug–Sep 2025 | RSO GA under supervision + BP GA (with cluster-specific rules same as RSO Sep25) | Not mentioned |
+| Dec25–Jan26 (booster) | RSO GA + BP GA | Not mentioned |
+| Feb26–Mar26 | RSO GA + BP GA | Not mentioned |
+| Apr26 (11-20) | RSO + BP; EXCEPT DRC | DRC explicitly excluded — new from Apr26 |
+[/TABLE]
+i  RSO Supervisor's GA pool = sum of their supervised RSOs' GA, including BP-attributed GA (within the formula). DRC (Direct Recharge Channel) GA exclusion was added in Apr26.
+7. Incentive Type & Structure Evolution
+7.1  Physical Gift Phase (Aug25–Jan26)
+From August 2025 to January 2026, incentives were physical gifts — no cash payment. AIT was not applicable.
+[TABLE]
+| Period / Recipient | Gift Type | Example Values |
+| Aug25 RSO | 3-slab physical gift | Slab1: Grocery Box 500tk; Slab2: Iron 800tk; Slab3: Melamain Set 1,200tk |
+| Aug25 DD Manager | 3-slab physical gift | Slab1: Trolley Bag ~4,000tk; Slab2: Mobile Set ~10,000tk; Slab3: TV ~15,000tk |
+| Sep25 RSO | Phase-based Grocery Box | 500tk Grocery Box per phase (P1–P4) |
+| Sep25 RSO Supervisor | Phase-based Grocery Box | 700tk Grocery Box per phase (P1–P4) |
+| Sep25 DD Manager | Phase-based Grocery Box | 1,000tk Grocery Box per phase (P1–P3) |
+| Sep25 Distributor | Category-based gift | Cat A: Fridge ~30K; Cat B: TV ~20K; Cat C: Mobile ~10K |
+| Oct–Nov 25 RSO | Phase-based Grocery Box → Voucher | 500tk worth Grocery Box / Voucher per phase |
+| Nov25 RSO Supervisor | Phase-based Voucher (TCG exclusion added) | 700tk Voucher per phase (P1–P3) |
+| Dec25 RSO/RSO Sup | Single-phase Voucher | 500tk / 1,000tk Worth Voucher |
+| Dec25 Distributor | All-FF voucher for winning DD | 500tk per FF when DD achieves target |
+| Jan26 (1-7) RSO | Region-differentiated voucher | Ctg South/North: 1,000tk@100% + 500tk@80%; Cumilla/Brahmanbaria: 1,000tk@100% + 500tk@70%; Rest: 1,000tk@100% |
+| Jan26 (8-15) RSO | 3-slab voucher | Slab1: 500tk; Slab2: 1,000tk; Slab3: 1,500tk |
+| Jan26 (16-25) RSO | 3-slab voucher | Slab1: 500tk; Slab2: 1,000tk; Slab3: 1,500tk |
+[/TABLE]
+i  All RSO/RSOSUP gifts are 'max consider' — RSO eligible for 1 gift only. Multiple phases produce multiple independent gift opportunities.
+7.2  Cash Incentive Phase (Feb26+) + AIT
+[TABLE]
+| Transition | From February 2026, incentives switched from physical gifts to BDT cash amounts |
+| AIT Applicable | All cash incentive SRFs from Feb26 onwards state 'AIT Applicable' — Advance Income Tax deducted |
+| RSO (Feb26+) | BDT fixed amounts per slab — e.g., 1,000tk/2,000tk or 500tk/1,500tk depending on campaign window |
+| RSO Supervisor (Feb26+) | BDT fixed amounts per slab — higher than RSO |
+| DD Manager (Feb26+) | BDT fixed amounts per slab — e.g., 1,500tk/3,000tk |
+| Distributor (Feb26+) | BDT per-GA rate — e.g., BDT 10/GA (Slab1), BDT 20/GA (Slab2) |
+| Region (Feb26+) | BDT per-DHFF — e.g., BDT 330/DHFF or BDT 200/DHFF |
+[/TABLE]
+7.3  Slab Structure Variants
+[TABLE]
+| Slab Type | Description | Example SRFs |
+| Single slab (P1=100%) | One threshold — >=100% achievement = one gift. Repeated per phase. | Sep25, Oct25 RSO/RSO Sup/DD Mgr |
+| 3-slab with multi-condition | Slab 1: week target + >=90% monthly; Slab 2: week target + >=95% monthly; Slab 3: week 4 target | Aug25 RSO, Aug25 DD Manager |
+| Region-differentiated slab | Different lower threshold by region (80% or 70%) for a lower gift tier; 100% for top tier | RSO Jan26 (1-7), RSO Sup Jan26 (1-7) |
+| 2-slab uniform | Slab 1 target (lower) and Slab 2 target (higher), each requiring 100% ach | Most Feb–Apr 26 SRFs for RSO/RSO Sup/DD Mgr |
+| Incremental over Slab 2 | 10% incremental incentive for every 5% over the Slab 2 target | Distributor Feb26+, Region Feb26+ |
+| Combined Phase retroactive | Phase 1+Phase 2 combined slab — allows upgrading to higher combined incentive minus already-paid Phase 1 amount | Apr26 RSO, RSO Sup, DD Mgr, Distributor, Region (11-20 Apr) |
+| Slab 1 = no incentive | Slab 1 pays 0; only Slab 2 pays (BDT 330/DHFF) | Region Feb26 (1-13 Feb) |
+[/TABLE]
+7.4  Region-Specific Slab (Jan26 1-7)
+[TABLE]
+| Applies to | RSO GA Bonanza 1st to 7th Jan26 and RSO Supervisor GA Bonanza 1st to 7th Jan26 |
+| Chittagong South & Chittagong North | >=100% = BDT 1,000tk Voucher; >=80% = BDT 500tk Voucher (RSO); 1,500tk / 1,000tk (RSO Sup) |
+| Cumilla & Brahmanbaria | >=100% = BDT 1,000tk Voucher; >=70% = BDT 500tk Voucher (RSO); 1,500tk / 1,000tk (RSO Sup) |
+| Rest Regions | >=100% = BDT 1,000tk Voucher only (no lower slab) (RSO); 1,500tk (RSO Sup) |
+| Unique feature | Only SRF in the folder with region-differentiated eligibility thresholds |
+| AIT | Not applicable — this was still in the physical gift phase |
+[/TABLE]
+7.5  Incremental Incentive Rule (Distributor & Region)
+[TABLE]
+| Rule | 10% incremental incentive for every 5% over achievement above the Slab 2 target |
+| Applies to | Distributor SRFs from Feb26 onwards; Region SRFs from Feb26 onwards |
+| Example | Slab 2 = BDT 20/GA; if achievement is 110% of Slab 2 target → 10% extra = 22/GA; 115% → 20% extra = 24/GA |
+| Does NOT apply to | RSO, RSO Supervisor, DD Manager SRFs — they use fixed slab amounts only |
+[/TABLE]
+7.6  Combined Phase Retroactive Rule (Apr26 11-20)
+The April 2026 (11-20) SRFs introduce a combined Phase 1+Phase 2 incentive option that allows recipients who missed or underperformed in Phase 1 (Apr 1-10) to earn a combined incentive:
+[TABLE]
+| Phase 1 | Apr 1-10 Apr26 (separate SRF) |
+| Phase 2 | Apr 11-20 Apr26 (this SRF) |
+| Combined slab | Evaluated on total Phase1+Phase2 GA against combined targets — higher incentive amounts |
+| Deduction rule | Combined incentive minus any incentive already received in Phase 1 |
+| Eligibility | Only for those who: (a) missed Phase 1 target entirely, OR (b) achieved Slab 1 in Phase 1 but want to try for Slab 2 via combined |
+| Exclusion | Who already achieved Slab 1 in Phase 1 cannot claim Slab 1 of combined; who achieved Slab 2 in Phase 1 cannot claim Slab 1 of combined |
+| Applies to | RSO, RSO Supervisor, DD Manager, Distributor, Region — all Apr26 (11-20) SRFs |
+[/TABLE]
+8. Distributor-Level Unique Conditions
+8.1  Category-Based Gift Reward (Sep25)
+[TABLE]
+| SRF | Distributor GA Bonanza_Sep25 |
+| Incentive type | Category-based physical gift — DD category determined by B2C |
+| Category A | Refrigerator (BDT ~30,000) |
+| Category B | Television (BDT ~20,000) |
+| Category C | Mobile Handset (BDT ~10,000) |
+| Target | DD-wise category and target shared by B2C |
+| Gate | 48hr >=85% AND VLR >=85%; SAF checked (ticked) |
+| Achievement | >=100% of target — single threshold |
+[/TABLE]
+8.2  All-FF-of-Winning-DD Incentive (Dec25)
+[TABLE]
+| SRF | Distributor GA Bonanza_Dec25 |
+| Unique feature | Incentive distributed to ALL Field Force of a winning Distributor — not to the DD entity itself |
+| Period | 8–25 Dec 2025 (Phase 2: 8-15 Dec; Phase 3: 16-25 Dec) — no Phase 1 |
+| Incentive | 500tk Worth Voucher per FF of the winning DD |
+| Gate | 48hr >=80% ONLY — VLR gate NOT ticked in this SRF |
+| FF count | DD-wise FF count shared by B2C |
+[/TABLE]
+i  This is the only Distributor SRF where the incentive flows through to individual FF members rather than the DD entity.
+8.3  Per-GA Cash Incentive with MMSTR Differentiation (Apr26)
+[TABLE]
+| SRF | Distributor GA Bonanza_11th to 20th Apr26 |
+| Incentive type | BDT per GA — rate varies by SIM type |
+| Regular SIM — Slab 1 | BDT 8 per GA |
+| Regular SIM — Slab 2 | BDT 12 per GA |
+| MMSTR SIM — Slab 1 | BDT 6 per GA (lower rate) |
+| MMSTR SIM — Slab 2 | BDT 8 per GA (lower rate) |
+| Incremental rule | 10% incremental over Slab 2 for every 5% above Slab 2 target |
+| Combined Phase rule | Applies — see Section 7.6 |
+| Unique feature | MMSTR SIM type receives a differentiated (lower) per-GA rate — only instance in the folder |
+[/TABLE]
+9. DD Manager Unique Conditions
+9.1  Multi-Condition Slab Structure (Aug25)
+[TABLE]
+| SRF | DD Manager GA Bonanza_1st to 31st Aug25 |
+| Slab 1 criteria | 100% of 2nd week target AND >=90% monthly target — BOTH must be achieved |
+| Slab 2 criteria | 100% of 3rd week target AND >=95% monthly target — BOTH must be achieved |
+| Slab 3 criteria | 100% of Week 4 target only |
+| Reward | Slab 1: Trolley Bag (~4,000tk); Slab 2: Mobile Set (~10,000tk); Slab 3: TV (~15,000tk) |
+| Gate | 48hr >=91% + VLR >=91%; ETSAF 98% explicitly stated in detail conditions |
+| Unique feature | Only SRF with dual-condition slabs (weekly + monthly combination) AND ETSAF explicit in the KPI conditions block |
+[/TABLE]
+i  RSO Aug25 follows the same 3-slab and dual-condition structure but with lower reward amounts.
+9.2  GA Booster Campaign (Jan26 21-31)
+[TABLE]
+| SRF | DD Manager GA Booster Campaign_21st to 31st Jan26 |
+| Campaign type | GA Booster — different from regular Bonanza |
+| Slab structure | No fixed slab in SRF — incentive amount stated in separate target file |
+| Gate | 48hr >=80% + VLR >=80% |
+| GA Definition | No cluster-based split; no explicit formula |
+| General conditions | Expanded recharge definition explicitly stated — EV (R2RT+D2RT), DTR, OTF; Data/Voice/Mix bundle defined |
+| SAF condition | 98% ETSAF vetted and accepted within 7th of following month — explicitly stated |
+| Unique feature | Only SRF in the folder with an expanded recharge definition in general conditions |
+[/TABLE]
+i  The RSO Supervisor Booster Campaign SRF (filed as two versions: '...Jan26' and '...Jan26_') has identical conditions — the underscore version is a duplicate with a corrected report title.
+10. Region Incentive Conditions
+Region SRFs appear from February 2026 onwards (no Region SRFs in the Aug–Jan period). Incentive is distributed to all FF of the Region upon the Region achieving target.
+[TABLE]
+| First appearance | Feb26 (1-13 Feb) |
+| Incentive unit | BDT per DHFF — Direct Hire Field Force within the region |
+| Feb26 (1-13) structure | Slab 1: No incentive; Slab 2: BDT 330/DHFF + incremental |
+| Feb26 (14+) onwards | Slab 1: BDT 200-300/DHFF; Slab 2: BDT 300-500/DHFF + incremental |
+| Incremental rule | 10% over Slab 2 for every 5% above Slab 2 target |
+| Combined Phase (Apr26) | Phase 1+Phase 2 retroactive option applies — same as other recipient types |
+| AIT | Applicable from first appearance |
+| Gate | 48hr + VLR (same thresholds as other recipients for same period) |
+[/TABLE]
+11. General Conditions (All SRFs)
+[TABLE]
+| Condition | Value | Applies To |
+| Activation gate | FCD (First Call Date) — must exist during promotion period | All SRFs |
+| 48-Hour usage | Valid Usage: 48 Hours usages (gate threshold varies — see Section 4) | All SRFs |
+| VLR Status | VLR Active — must be active (threshold varies — see Section 4) | All SRFs |
+| Product scope | All Prepaid & successful MNP | All SRFs |
+| Disconnection | T-6 — latest data up to report generation date minus 6 days | All SRFs |
+| SAF / ETSAF | Above ETSAF QC condition considered as implemented (passive reference) | Most SRFs; explicit in Aug25, Sep25 Distributor, Booster |
+| Rounding | Below 0.5 rounds down; 0.5+ rounds up | All SRFs |
+| Agent list date | Last day of the campaign period | All SRFs |
+| Recharge (not active KPI) | All Valid C2S Recharges / I-TOP up (not a scored KPI — listed in general conditions) | All SRFs |
+| Maturity | Varies by window; early SRFs: 3rd of following month; later: specific dates | All SRFs |
+[/TABLE]
+12. Version Comparison — Key Conditions per Recipient by Period
+RSO Key Conditions by Period
+[TABLE]
+| Period | 48hr/VLR Gate | RSO GA Formula | Incentive Type | Slab Structure | AIT |
+| Aug25 | >=91% | Market GA+BP GA (Central/E/N ≤70% cap); Market GA only (W/NE) | 3-slab gift | Multi-condition (weekly+monthly) | No |
+| Sep25 | >=91% | Market GA+BP GA / Market GA (cluster split) | 4-phase gift (500tk/phase) | Single 100% per phase | No |
+| Oct25 | >=90% | Market GA+BP GA / Market GA (expanded cluster list) | 2-phase gift | Single 100% per phase | No |
+| Nov25 | >=90% | Market GA + RSO Own Code | 3-phase gift (500tk) | Single 100% per phase | No |
+| Dec25 | >=80% | Market GA + RSO Own Code | 1-phase gift (500tk) | Single 100% | No |
+| Jan26 (1-7) | >=85% | Market GA + RSO Own Code | Region-diff voucher (500–1,000tk) | Region-specific thresholds | No |
+| Jan26 (8-15) | >=85% | Market GA + RSO Own Code | 3-slab voucher (500/1K/1.5K) | 2-slab | No |
+| Jan26 (16-25) | >=80% | Market GA + RSO Own Code | 3-slab voucher | 2-slab | No |
+| Feb26 (1-13) | >=80% | Market GA + RSO Own Code | Cash 1,000/2,000tk | 2-slab | Yes |
+| Feb26 (14-28) | >=85% | Market GA + RSO Own Code | Cash 500/1,500tk | 2-slab | Yes |
+| Mar26 (1-10) | >=85% | Market GA + Own Code → Revised: excl. BP GA | Cash 1,000/1,500tk → 1,000/2,000tk (revision) | 2-slab | Yes |
+| Mar26 (11-20) | >=85% | All GA except BP Code GA | Cash 800/1,600tk | 2-slab | Yes |
+| Mar26 (23-31) | >=85% | All GA except BP Code GA | Cash 500/1,000tk | 2-slab | Yes |
+| Apr26 (1-10) | >=85% | All GA except BP GA & DRC GA | Cash 500/1,000tk | 2-slab | Yes |
+| Apr26 (11-20) | >=85% / N.Cluster prorated | All GA except BP GA & DRC GA | Cash 800/1,600tk + combined option | 2-slab + combined retroactive | Yes |
+[/TABLE]
+Distributor Key Conditions by Period
+[TABLE]
+| Period | Gate | Incentive Type | Structure | Special |
+| Sep25 | >=85% 48hr+VLR | Category gift (A/B/C) | >=100% single slab | SAF ticked; Cat defined by B2C |
+| Dec25 | >=80% 48hr ONLY (no VLR) | 500tk voucher per FF | Phase 2&3 only | Incentive to ALL FF of winning DD |
+| Feb26 (1-13) | >=80%+TCG excl. | BDT 10/GA Slab1, 20/GA Slab2 | 2-slab + incremental | Incremental rule introduced |
+| Feb26 (14-28) | >=85%+TCG excl. | B2C defined | 2-slab | — |
+| Mar–Apr26 | >=85% | Per-GA rates | 2-slab + incremental + combined (Apr26) | MMSTR SIM lower rate (Apr26 11-20) |
+[/TABLE]
+13. Glossary
+[TABLE]
+| Term | Meaning |
+| GA | Gross Addition — new SIM activation |
+| FCD | First Call Date — activation gate; SIM must make first call during campaign period |
+| VLR | Visitor Location Register — network registry confirming SIM is active on the network |
+| 48-Hour usage | Subscriber must have valid usage within 48 hours of activation |
+| BP | Business Partner — an external sales agent whose GA can be attributed to an RSO (with limits) |
+| RSO Own Code | RSO's personal SIM code — GAs registered under this code counted separately from market GA |
+| DRC | Direct Recharge Channel — category of GA excluded from Apr26 formulas |
+| MMSTR SIM | A specific SIM type with a lower per-GA incentive rate (appears Apr26 Distributor SRF) |
+| DHFF | Direct Hire Field Force — staff directly employed (used as incentive unit for Region SRFs) |
+| TCG Bar | Type of account bar placed by carrier; barred connections excluded from GA count from Nov25 |
+| Self-barred | Customer-initiated service suspension; excluded from GA count from Feb26 |
+| Slab | Achievement tier — different GA targets unlock different incentive levels |
+| Max consider | Only 1 incentive per RSO/recipient per campaign (highest applicable slab) |
+| AIT | Advance Income Tax — applicable on all cash incentives from Feb26 onwards |
+| Combined Phase | Apr26 mechanic: Phase1+Phase2 GA evaluated together for retroactive incentive upgrade |
+| Incremental incentive | 10% additional incentive per 5% achievement above Slab 2 target (Distributor/Region) |
+| B2C | Business-to-Consumer team at Banglalink — defines targets, shares achievement data for gates |
+| T-6 | Report generation date minus 6 days — disconnection cutoff |
+| ETSAF | 98% of activations vetted by 7th of following month — settlement condition |
+| MNP | Mobile Number Portability — porting from another carrier; counted as valid GA |
+| North Cluster | Geographic cluster with prorated VLR rule introduced from Apr26 (11-20) |
+[/TABLE]

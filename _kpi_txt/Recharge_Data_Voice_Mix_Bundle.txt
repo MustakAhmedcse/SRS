@@ -1,0 +1,431 @@
+Banglalink Recharge, Data, Voice & Mix Bundle Campaign
+Unique KPI Conditions — Master Reference Document
+Compiled from 32 SRFs | Apr25 – Oct25 | Commission Automation Team
+INDEX
+[TABLE]
+| Section | Title | Campaign Scope |
+| 1 | Overview & Folder Summary | All 32 SRFs |
+| 2 | Key Definitions — Recharge, Bundle & Terms | All SRFs |
+| 3 | Eligibility Thresholds (Month-by-Month) | DD Mgr / RSO / RSO Sup |
+| 4 | DD Manager KPI Conditions | 10 DD Manager SRFs |
+| 5 | RSO KPI Conditions | 10 RSO SRFs + 1 Extra Khatir |
+| 6 | RSO 4-Category Ranking System (Sep–Oct25) | RSO Sep25 & Oct25 |
+| 7 | RSO Supervisor KPI Conditions | 10 RSO Sup SRFs |
+| 8 | Bundle Campaign Conditions (Common) | All SRFs with Bundle KPI |
+| 9 | Extra Khatir Distributor Campaign (Apr25) | Distributor Extra Khatir Apr25 |
+| 10 | Extra Khatir RSO Campaign (Apr25) | RSO Extra Khatir Apr25 |
+| 11 | Revision SRF Conditions | Aug25, Sep25, Oct25 Revisions |
+| 12 | Universal General Conditions | All 32 SRFs |
+| App A | Month-by-Month Threshold Evolution Matrix | All periods |
+| App B | Campaign Quick Reference Matrix (All 32 SRFs) | All 32 SRFs |
+[/TABLE]
+Section 1: Overview & Folder Summary
+This document consolidates all unique KPI conditions from 32 SRFs in the Recharge_Data_Voice_Mix Bundle folder. Campaigns run April 2025 – October 2025 across three recipient channels: DD Manager, RSO (Retail Sales Officer), and RSO Supervisor. Two special 'Extra Khatir' campaigns (Apr25) cover Distributors and RSOs under a distinct multi-KPI structure. All campaigns are monthly and Ad-hoc frequency.
+1.1  SRF Inventory
+[TABLE]
+| Channel | Count | SRF Months / Campaigns |
+| DD Manager | 10 | Apr25, May25, Jun25, Jul25, Aug25, Aug25_Rev, Sep25, Sep25_Rev, Oct25, Oct25_Rev |
+| RSO | 10 | Apr25, May25, Jun25, Jul25, Aug25, Aug25_Rev, Sep25, Sep25_Rev, Oct25, Oct25_Rev |
+| RSO Supervisor | 10 | Apr25, May25, Jun25, Jul25, Aug25, Aug25_Rev, Sep25, Sep25_Rev, Oct25, Oct25_Rev |
+| Distributor (Extra Khatir) | 1 | Apr25 only |
+| RSO (Extra Khatir) | 1 | Apr25 only |
+| TOTAL | 32 | Apr25 – Oct25 |
+[/TABLE]
+1.2  Campaign Structure Overview
+[TABLE]
+| Campaign Title | Recharge, Data, Voice & Mix Bundle Campaign (monthly) |
+| Requesting Dept. | Channel Planning |
+| Recipients | DD Manager, RSO, RSO Supervisor, Distributor (Extra Khatir) |
+| Period Range | April 2025 – October 2025 (one SRF per channel per month) |
+| Report Frequency | Ad-hoc; End of campaign |
+| Report Type | Disbursement |
+| Product Type | Prepaid — EV+SC, Data Bundle, Voice Bundle & Mix Bundle |
+| Maturity Date | 2nd–3rd of following month (varies by SRF) |
+| Target File Source | B2C (Channel Planning) shares target file for each period |
+| Mapping Used | Month-end RDB mapping for Retail-RSO-Supervisor-CM/BP/DRC tagging |
+| Rounding Rule | General mathematical rounding: below 0.5 rounded down; ≥ 0.5 rounded up |
+[/TABLE]
+Section 2: Key Definitions — Recharge, Bundle & Terms
+[TABLE]
+| NOTE: These definitions are referenced across all 32 SRFs. The EV definition expanded from Jul25 onwards to include SUD12AGENT. |
+[/TABLE]
+2.1  Recharge (EV+SC) Definition
+[TABLE]
+| EV (Electronic Voucher) — Apr–Jun25 | EV means SR to Retailer (R2RT) + Distributor to Retailer (D2RT) + DTR (Manual & Daily Commission from Salescom) + OTF (EV OTF + IRIS OTF). Withdrawal deducted as usual. |
+| EV (Electronic Voucher) — Jul25 onwards | EV means SR to Retailer (R2RT) + Distributor to Retailer (D2RT) + SUD12AGENT + DTR (Manual & Daily Commission from Salescom) + OTF (EV OTF + IRIS OTF). Withdrawal deducted as usual. |
+| SC (Scratch Card) | S.C means Retail lifting as per DMS entry (SC Primary — lifting from BL warehouse to DD). |
+| Recharge (combined) | Recharge = EV + SC (EV Secondary + SC Primary). Less withdrawal taken as usual process. |
+| DTR | Manual + Daily Commission from Salescom system. |
+| OTF | EV OTF + IRIS OTF combined. |
+| R2RT | SR to Retailer transfer (EV C2C component). |
+| D2RT | Distributor to Retailer transfer (EV C2C component). |
+| SUD12AGENT | Agent transfer type — added from Jul25 in EV definition. |
+| Withdrawal | Deducted from EV recharge as per usual process in all periods. |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION: SUD12AGENT was NOT in the EV definition for Apr25, May25, Jun25. From July 2025 onwards, SUD12AGENT is explicitly included in EV calculation. This is a material change in achievement basis. |
+[/TABLE]
+2.2  Bundle Definitions
+[TABLE]
+| Total Bundle | Data Bundle + Voice Bundle + MXB (Mix Bundle) combined. |
+| Data Bundle | Valid recharge of data pack upsell via I-TOP up (i-top up transaction). |
+| Voice Bundle | Valid recharge of voice pack upsell via I-TOP up. |
+| Mix Bundle (MXB) | Valid recharge of mix bundle upsell via I-TOP up. |
+| Valid Recharge | For bundles: only I-TOP up transactions are considered valid recharge. |
+| Deno (Denominator) | Deno timeline = specific denominator window used for Bundle KPI calculation. |
+| Deno Timeline | Applied ONLY for Bundle KPI. DSO/LSO/recharge KPI uses full calendar month. |
+| Bundle List | Specific bundle product list shared by B2C per campaign period. |
+| BSO Gate Target | Minimum gate/threshold for Bundle KPI (BSO level) — shared by B2C. |
+| C2S for Bundles | Data + Voice + MXB C2S (excluding SC) for Distributor Extra Khatir. |
+[/TABLE]
+2.3  Field Officer Definitions
+[TABLE]
+| BSO (Business Support Officer) | RSO category tracked against bundle gate targets; BSO gate target shared by B2C. |
+| LSO (Local Sales Officer) | RSO category — from Aug25, DD Manager campaign title changed to include 'LSO target'. LSO KPI uses full month (not Deno timeline). |
+| DSO | Referenced in Apr25 and May25 as the RSO category using full-month timeline. Replaced by LSO from Jun25 onwards. |
+| SSO | Appears in May25 and Jun25 SRFs. A supervisory sub-category. |
+| DH (Distribution Hub) | The DD/Distributor Hub — manager's performance is cumulative performance of the DH. |
+| CHICOX09 / CHICOX11 | Special RSO MSISDNs shared separately in target file. Non-GA category (Oct25 Supervisor onwards explicitly called 'Non-GA means CHICOX09 & CHICOX11 DH'). |
+[/TABLE]
+Section 3: Eligibility Thresholds — Month-by-Month Evolution
+All RSOs must meet a DUAL GATE: minimum EV% AND minimum Recharge (EV+SC)% vs. target. Both gates must be cleared simultaneously to qualify for any incentive. The incentive slab is then determined by the EV achievement range alone. Thresholds changed significantly month-to-month.
+3.1  Standard Dual-Gate Thresholds by Month
+[TABLE]
+| Month | Min EV% | Min Recharge% | Special Cluster/DH Variant | Notes |
+| Apr25 | 65% | 70% | None | Applied to DD Mgr, RSO, RSO Sup, RSO Extra Khatir Apr25 has HIGHER threshold (90%/95%) |
+| May25 | 85% | 90% | None | Standard across all DHs |
+| Jun25 | 90% | 95% | Central cluster: 85% EV / 90% Recharge | Two modalities: Except Central (higher) vs. Central cluster (lower) |
+| Jul25 | 80% | 85% | Special DHs: 65% EV / 70% Recharge | Lower threshold for: DHKGOP09, DHKGOP10, DHKGOP11, DHKGOP08, DHKFAR04, DHKFAR08, DHKFAR09 |
+| Aug25 | 75% | 85% | None | Single modality for all; Revision has same thresholds |
+| Sep25 | 85% | 95% | None | 4-category RSO system introduced; Supervisor incentive fixed at 8,889/7,778 |
+| Oct25 | 70% | 80% | None | BL employee pool exclusion added; 4-category system continues; Manager 11,111/8,889 confirmed |
+[/TABLE]
+3.2  Cluster & DH Variant Rules
+[TABLE]
+| Jun25 — Central Cluster Exception | DD Manager & RSO Jun25: Two campaign modalities defined. 'Except Central cluster': min 90% EV + 95% Recharge. 'Central cluster': min 85% EV + 90% Recharge. Central cluster RSOs/Managers apply lower thresholds. |
+| Jul25 — Special DH Exception | DD Manager & RSO Jul25: Two modalities. Standard DH: min 80% EV + 85% Recharge. Special DHs (DHKGOP09, DHKGOP10, DHKGOP11, DHKGOP08, DHKFAR04, DHKFAR08, DHKFAR09): min 65% EV + 70% Recharge (same relaxed thresholds as Apr25). |
+| Apr25 — Extra Khatir RSO Exception | RSO Campaign Extra Khatir Apr25 uses HIGHER threshold of min 90% EV + 95% Recharge, even though the standard RSO Apr25 uses 65% EV + 70% Recharge. Extra Khatir is a premium campaign with stricter entry. |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Dual Gate Logic: Missing EITHER gate (EV% OR Recharge%) disqualifies the RSO/Manager entirely — zero payout regardless of how well they performed on the other KPI. Once both gates are cleared, the slab payout is determined solely by EV achievement %. |
+[/TABLE]
+Section 4: DD Manager KPI Conditions
+DD Manager campaigns run monthly Apr25–Oct25 (10 SRFs including revisions). The DD Manager's performance is the cumulative performance of the entire Distribution Hub (DH). B2C shares the DD-wise manager tagging file.
+4.1  Manager Payout Structure
+[TABLE]
+| Manager incentive explicitly stated from Sep25 onwards. Prior months (Apr25–Aug25) had campaign modality slabs referenced but payout amounts were in the slab table (shared separately). Sep25 onward: Manager BDT 11,111 (100%+ recharge) / BDT 8,889 (below 100%). |
+[/TABLE]
+[TABLE]
+| Apr25 – Aug25 Payout | Incentive slab determined by EV achievement range — exact BDT amounts in campaign modality table (shared separately with supporting files by B2C). No explicit flat amount stated in SRF text. |
+| Sep25 Payout (explicit) | Manager: BDT 11,111 upon 100% recharge target achievement. Manager: BDT 8,889 for below 100% achievement. |
+| Oct25 Payout (explicit) | Same as Sep25: BDT 11,111 (100%+) / BDT 8,889 (below 100%). |
+| Slab Determination | All months: incentive slab determined by EV achievement range (not Recharge %). |
+| Performance Basis | Manager's performance = cumulative performance of the DH (all RSOs under that hub). |
+[/TABLE]
+4.2  DD Manager Month-by-Month Unique Conditions
+[TABLE]
+| Month | EV Gate | Recharge Gate | Special Variant | Unique Condition |
+| Apr25 | 65% | 70% | None | DSO term used (later replaced by LSO). Deno for Bundle KPI; DSO full month. |
+| May25 | 85% | 90% | None | SSO definition referenced. Deno for Bundle KPI; DSO full month. |
+| Jun25 | 90%/85% | 95%/90% | Central vs. Except Central | Two distinct modalities by cluster. Maturity date moved to 2nd (from 3rd in Apr25). Deno for Bundle; LSO full month (first time LSO term used). |
+| Jul25 | 80%/65% | 85%/70% | Special DHs (7 DH codes) | SUD12AGENT added to EV definition for first time. Two thresholds by DH group. |
+| Aug25 | 75% | 85% | None | Report description changed: 'LSO target' instead of 'Strike rate target'. SUD12AGENT retained in EV definition. Deno for Bundle; LSO full month. |
+| Aug25_Rev | 75% | 85% | None | Same conditions as Aug25 original — Revision SRF with same thresholds/rules. |
+| Sep25 | Not stated | Not stated | None | Specific DD Manager report generation. Payout explicitly stated: 11,111/8,889. Recharge section absent (Revision has full detail). Bundle gate by B2C. |
+| Sep25_Rev | Not stated | Not stated | None | Specific DD Manager list from B2C. Same payout 11,111/8,889. Recharge section included again in Revision. |
+| Oct25 | 70% | 80% | None | BL employee pool exclusion added (first time in DD Mgr SRF). Bundle BSO/LSO achievement deducted from B2C file. Payout 11,111/8,889. |
+| Oct25_Rev | 70% | 80% | None | Specific DD Manager report for specific list from B2C. Same exclusion and payout as Oct25. |
+[/TABLE]
+4.3  DD Manager — Bundle KPI Conditions
+[TABLE]
+| Bundle Definition | Total Bundle = Data Bundle + Voice Bundle + MXB Bundle |
+| Bundle Timeline | Deno timeline used for Bundle KPI — shorter denominator window than calendar month |
+| BSO Gate | BSO gate target must be met for Bundle incentive; target shared by B2C |
+| LSO/DSO KPI Timeline | LSO (or DSO in Apr–May25) KPI uses FULL MONTH (not Deno) |
+| Bundle List | Specific bundle product list shared by B2C each month |
+| Oct25 Deduction | Bundle BSO and LSO achievements deducted based on B2C-shared file (first time explicit deduction rule mentioned) |
+[/TABLE]
+Section 5: RSO KPI Conditions
+RSO campaigns follow the same dual-gate eligibility as DD Manager campaigns. RSO Apr25–Aug25 use an EV-slab based payout. From Sep25, a 4-category ranking system (Platinum/Gold/Silver/Bronze) replaces the simple slab with fixed BDT amounts.
+5.1  RSO Month-by-Month Unique Conditions
+[TABLE]
+| Month | EV Gate | Recharge Gate | Payout System | Unique Condition |
+| Apr25 | 65% | 70% | EV-slab (amounts in modality table) | DSO definition. No minimum RSO target stated in SRF text. CHICOX09 & CHICOX11 MSISDNs in separate target file. |
+| May25 | 85% | 90% | EV-slab | SSO definition. Minimum target for RSO referenced but amounts in target file. Same separate MSISDN handling. |
+| Jun25 | 90%/85% | 95%/90% | EV-slab | Two-cluster modality (Central vs. Except Central). Minimum RSO target referenced. |
+| Jul25 | 80%/65% | 85%/70% | EV-slab | Special DH lower threshold. SUD12AGENT added to EV definition. Minimum RSO target. |
+| Aug25 | 75% | 85% | EV-slab | Report description: 'Recharge, Total Bundle and LSO target'. SUD12AGENT retained. C2C from Digital Distribution Retailers NOT yet mentioned. |
+| Aug25_Rev | 75% | 85% | EV-slab | Same as Aug25. Revision applies same conditions. |
+| Sep25 | 85% | 95% | 4-Category (8,000/7,000/6,000/5,000) | 4-category Platinum/Gold/Silver/Bronze introduced. C2C from Digital Distribution Retailers considered (retailer list from B2C). 50/50 Platinum-Gold split rule when DH 100%+. Specific RSOs listed in Revision. |
+| Sep25_Rev | 85% | 95% | 4-Category (8,000/7,000/6,000/5,000) | Specific RSO list from B2C. Same 4-category system. Same C2C from Digital Dist. |
+| Oct25 | 70% | 80% | 4-Category (8,000/7,000/6,000/5,000) | BL employee pool recharge exclusion added. 4-category system continues. Specific RSO list in Revision only. |
+| Oct25_Rev | 70% | 80% | 4-Category (8,000/7,000/6,000/5,000) | Specific RSO list. Same exclusion as Oct25. |
+[/TABLE]
+5.2  RSO Minimum Target Rule
+[TABLE]
+| Minimum Target | A minimum RSO target is defined (amounts in B2C target file). Referenced in RSO SRFs Apr25 onward under 'Minimum target for RSO' section. |
+| Gate vs. Minimum | The dual gate (EV% + Recharge%) is the eligibility gate. The minimum RSO target is an additional RSO-level floor — even if % gates are cleared, minimum absolute volume must be met. |
+| CHICOX09/CHICOX11 | These RSO MSISDNs are handled separately in the target file. Referenced Apr25–Jul25 in RSO SRFs. Treated as non-GA DHs from Oct25. |
+[/TABLE]
+5.3  Digital Distribution C2C Inclusion Rule (Sep25+)
+[TABLE]
+| Applies From | September 2025 onwards (Sep25, Sep25_Rev, Oct25, Oct25_Rev) |
+| Rule | C2C from Digital Distribution Retailers is INCLUDED in RSO C2C achievement. |
+| Retailer List | B2C shares the Digital Distribution Retailer list per campaign period. |
+| Prior Months | Apr25–Aug25: No mention of Digital Distribution C2C inclusion — implied standard C2C only (R2RT, D2RT, SUD12AGENT from Jul25). |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION: Digital Distribution Retailer C2C inclusion is a Sep25 change. This expands the C2C achievement base for RSOs compared to previous months. The retailer list is dynamic and shared by B2C. |
+[/TABLE]
+Section 6: RSO 4-Category Ranking System (Sep25 & Oct25)
+From September 2025, RSO incentives shifted from a simple EV-achievement slab to a within-DH ranking system. RSOs are scored and ranked within their DH, then assigned to one of four categories.
+6.1  Category Assignment Rules
+[TABLE]
+| Ranking Basis | RSO scores calculated based on multiple KPIs; RSOs ranked within each DH. |
+| Category Split | Top 25% of RSOs in each DH → Platinum; Next 25% → Gold; Next 25% → Silver; Remaining 25% → Bronze. |
+| 50/50 Exception | If the DH achieves 100%+ on ALL KPIs, RSOs who individually reach 100% are split 50/50 into Platinum and Gold (not ranked quartile-based). |
+| Platinum Prerequisite | Minimum 95% EV C2C Achievement required to qualify for Platinum. |
+| Gold Prerequisite | Minimum 90% EV C2C Achievement required to qualify for Gold. |
+| Silver Prerequisite | Minimum 80% EV C2C Achievement required to qualify for Silver. |
+| Bronze | RSOs below Silver prerequisite or in the bottom 25% — no minimum EV threshold. |
+[/TABLE]
+6.2  Category Payouts
+[TABLE]
+| Category | Prerequisite (Min EV C2C) | Assignment Method | Payout (BDT) |
+| Platinum | Min 95% EV C2C | Top 25% of DH (or 50% of 100%+ achievers if DH 100%+) | 8,000 |
+| Gold | Min 90% EV C2C | Next 25% of DH (or 50% of 100%+ achievers if DH 100%+) | 7,000 |
+| Silver | Min 80% EV C2C | Next 25% of DH | 6,000 |
+| Bronze | No minimum | Remaining 25% of DH | 5,000 |
+[/TABLE]
+6.3  4-Category System vs. Prior EV-Slab System
+[TABLE]
+| Apr25–Aug25 System | Simple EV-achievement % slab: RSO earns based on how high their EV achievement % is. Slab bands and amounts defined in campaign modality table (shared by B2C). All RSOs clearing the dual gate can potentially earn the top slab independently. |
+| Sep25–Oct25 System | Within-DH relative ranking: RSO's payout depends on their RANK within DH, not just absolute achievement. Even a 100% EV achiever can land in Gold (not Platinum) if the top 25% of the DH performs better. Absolute prerequisites (95%/90%/80%) still apply. |
+| Key Difference | Old system: Absolute achievement → slab. New system: Relative rank within DH + absolute floor. Four fixed tiers (8,000/7,000/6,000/5,000) instead of variable slab amounts. |
+| Bronze Tier (new in Sep25) | Bronze BDT 5,000 ensures all RSOs clearing the dual gate receive some incentive. Prior Apr25–Aug25 system: lowest slab RSOs may have earned less than BDT 5,000 (slab-dependent). |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Relative Ranking: The 25/25/25/25 split means exactly 25% of RSOs in each DH land in each category (approximately). In a DH of 8 RSOs: top 2 = Platinum, next 2 = Gold, next 2 = Silver, bottom 2 = Bronze. The DH-100%-exception (50/50 split) rewards DHs where the whole team achieves 100%+ across all KPIs. |
+[/TABLE]
+Section 7: RSO Supervisor KPI Conditions
+RSO Supervisor campaigns mirror RSO campaigns in eligibility thresholds but measure cumulative performance of all RSOs under the supervisor. Data is sourced directly from the corresponding RSO report for the same period.
+7.1  Supervisor Performance Basis
+[TABLE]
+| Performance Calculation | Supervisor's performance = cumulative performance of ALL RSOs under the supervisor. |
+| Data Source | Teams (RSO) performance (Recharge) brought from the corresponding RSO SRF report (e.g., Sup Apr25 uses RSO_Recharge_Data_Voice_Mix Bundl_Apr25 data). |
+| Tagging Source | IT collects RSO Supervisor Tagging from DMS (month-end). If not feasible, B2C shares it. |
+| Same Eligibility Gates | Supervisor campaigns apply the same EV% and Recharge% eligibility thresholds as RSO campaigns for the same month (e.g., Jun25 Sup uses 90%/85% Central split same as RSO Jun25). |
+| Apr25–Aug25 Payout | EV-slab based (same structure as RSO); amounts in campaign modality table. |
+| Sep25–Oct25 Payout (explicit) | Supervisor: BDT 8,889 upon 100% recharge target achievement; BDT 7,778 for below 100% achievement. |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Supervisor vs. RSO Payout (Sep25+): RSO earns BDT 8,000/7,000/6,000/5,000 (4-category). Supervisor earns BDT 8,889/7,778 (2-tier only — 100% vs. below 100%). Supervisor payout is higher than Platinum RSO payout (8,889 > 8,000). |
+[/TABLE]
+7.2  RSO Supervisor Month-by-Month Unique Conditions
+[TABLE]
+| Month | Eligibility Gate | Payout System | Unique Condition |
+| Apr25 | 65% EV + 70% Recharge | EV-slab | CHICOX09/CHICOX11 shared separately. Deno for Bundle; DSO full month. Data from RSO_Apr25 report. |
+| May25 | 85% EV + 90% Recharge | EV-slab | SSO definition. Data from RSO_May25 report. |
+| Jun25 | 90%/85% EV + 95%/90% Recharge | EV-slab | Central vs. Except Central split. Data from RSO_Jun25 report. |
+| Jul25 | 80%/65% EV + 85%/70% Recharge | EV-slab | Special DH exception. Data from RSO_Jul25 report. SUD12AGENT in EV definition. |
+| Aug25 | 75% EV + 85% Recharge | EV-slab | Same as RSO Aug25. Revision has same conditions. Data from RSO_Aug25. |
+| Aug25_Rev | 75% EV + 85% Recharge | EV-slab | Same as Aug25. |
+| Sep25 | Not explicitly stated in text | 8,889 / 7,778 BDT | Fixed two-tier payout introduced. Data from RSO_Sep25. Bundle target from B2C. |
+| Sep25_Rev | Not explicitly stated | 8,889 / 7,778 BDT | Same as Sep25. Revision SRF. |
+| Oct25 | 70% EV + 80% Recharge | 8,889 / 7,778 BDT | BL employee pool exclusion. Non-GA = CHICOX09 & CHICOX11 DH. Bundle BSO/LSO deduction from B2C file. |
+| Oct25_Rev | 70% EV + 80% Recharge | 8,889 / 7,778 BDT | Specific RSO Supervisor list from B2C. Same as Oct25. |
+[/TABLE]
+Section 8: Bundle Campaign Conditions (Common Across All SRFs)
+8.1  Bundle KPI Framework
+[TABLE]
+| Bundle Components | Data Bundle (data pack upsell) + Voice Bundle (voice pack upsell) + MXB (mix bundle upsell) |
+| Valid Transaction Type | I-TOP up only for all three bundle types — non-I-TOP up transactions excluded |
+| Deno Timeline | Bundle KPI uses Deno (denominator) timeline — shorter than calendar month. Specific Deno dates shared by B2C each month. |
+| BSO Gate Target | Bundle KPI has a BSO-level gate target. RSO must meet BSO gate to earn bundle incentive. Gate target provided by B2C. |
+| Bundle List | Exact list of qualifying bundle product codes shared by B2C each month. |
+| Recharge KPI Timeline | EV/Recharge (DSO/LSO) KPI uses FULL calendar month — not Deno. |
+| Deno Counting Rule | If a Deno (denominator bundle) is sold on any day of the month, it may be counted as full-month hit to ease reporting & payout calculation (explicitly stated for Distributor Extra Khatir Apr25). |
+| Oct25 Deduction | BSO and LSO Bundle achievements deducted based on B2C-shared file (new condition from Oct25 — not in prior months). |
+[/TABLE]
+8.2  Bundle KPI — DSO vs. LSO Timeline Naming Convention
+[TABLE]
+| Apr25 | Deno for Bundle KPI; DSO full month — 'DSO' term used |
+| May25 | Deno for Bundle KPI; DSO full month — 'DSO' term used |
+| Jun25 | Deno for Bundle KPI; LSO full month — 'LSO' term first used (replacing DSO) |
+| Jul25 | Deno for Bundle KPI; LSO full month |
+| Aug25+ | Deno for Bundle KPI; LSO full month (consistent from Jun25 onwards) |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — DSO→LSO Naming Shift: The term 'DSO' in Apr25–May25 SRFs was replaced by 'LSO' from Jun25 onwards. Both refer to the field officer category whose performance uses full-month timeline (not Deno). This is a naming change, not a structural change. |
+[/TABLE]
+Section 9: Extra Khatir Distributor Campaign (Apr25)
+The Distributor Campaign Extra Khatir Apr25 is a unique multi-KPI campaign with DH-wise budget allocation and KPI weightage. It is structurally different from all other SRFs in this folder — it targets Distributors (not RSOs) and uses multiple weighted KPIs including GA, SCR, and RSO Productivity.
+9.1  Campaign Overview
+[TABLE]
+| SRF Reference | Distributor Campaign Extra Khatir Apr25 |
+| Recipient | Distributors |
+| Period | 1–30 April 2025 |
+| KPI Structure | Multi-KPI with variable weightage per DD — KPI and weightage vary from DD to DD |
+| Budget | DH-wise budget allocated by B2C |
+| Target Source | B2C shares targets in separate Excel files per DD |
+| Periodicity | Regular (not Ad-hoc — unlike RSO/Manager campaigns) |
+[/TABLE]
+9.2  KPI Components — Distributor Extra Khatir
+[TABLE]
+| KPI | Definition / Measurement | Unique Conditions |
+| EV Secondary | RSO to Retail (R2RT) + Distributor to Retail (D2RT) + DTR + OTF | DRC EV Secondary EXCLUDED — B2C shares DRC list |
+| SC Primary | SC lifting from BL warehouse to DD (as per DMS entry) | Primary SC = DD lifting only |
+| Recharge (EV+SC) | EV Secondary + SC Primary combined | Standard recharge basis |
+| All Bundle Sales | Data + Voice + MXB C2S (excluding SC bundles). Deno sold on any day = full-month counted. | Deno rule applied for bundles |
+| GA (Gross Addition) | New subscriber activation — FCD-based. MNP counted for any connection. | DRC GA EXCLUDED; Disconnected numbers excluded; MNP included |
+| Retail SCR | Retail Subscriber Churn Rate — shared by B2C | Reported as is from B2C data |
+| RSO Productivity | RSO-level productivity metric | Definition and measurement per B2C |
+[/TABLE]
+9.3  Unique Conditions — Distributor Extra Khatir
+[TABLE]
+| Variable KPI Weightage | KPI and weightage differ from one DD to another — not uniform across all distributors. B2C determines and shares individual DD weightage in target files. |
+| DRC Exclusions (dual) | 1) DRC EV Secondary excluded from recharge achievement. 2) DRC GA excluded from GA achievement. B2C shares DRC list. |
+| GA — FCD Based | GA uses First Call Date (FCD) for attribution — not FAD or TABS. |
+| GA — MNP Rule | MNP (Mobile Number Portability) connections counted for any GA — no restriction. |
+| GA — Disconnection | Disconnected numbers excluded from GA. Disconnection measured between FCD and T-6 (latest data date = report generation date minus 6 days). |
+| GA — Minimum Usage | Valid Usage required. Min 93% of GA must have at least one outgoing call or internet usage in the calendar month. |
+| SAF Condition | 98% of ETSAF (total activations against disconnections before month end) must be vetted and accepted by Banglalink within the 7th of the following month. |
+| Deno Bundle Rule | If a Deno bundle is sold on any day of the month, it counts as full-month hit to ease reporting and payout calculation. |
+| SC Primary Lifting | SC Primary = DD lifting (BL Warehouse → DD). Not retailer lifting. |
+| Retail SCR Input | Retail SCR provided by B2C — not calculated by IT independently. |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Extra Khatir Distributor is structurally the most complex SRF in the folder. It is the ONLY SRF with: (1) variable DD-level KPI weightage, (2) GA as a KPI with FCD+usage+SAF conditions, (3) Retail SCR as a KPI, (4) RSO Productivity as a KPI, (5) DRC exclusion for BOTH EV AND GA, (6) SAF 98% condition within 7th of following month. |
+[/TABLE]
+Section 10: Extra Khatir RSO Campaign (Apr25)
+RSO Campaign Extra Khatir Apr25 is a premium RSO campaign running concurrently with the standard RSO Apr25 SRF. It uses significantly higher eligibility thresholds and a simplified bundle structure.
+10.1  Extra Khatir RSO vs. Standard RSO Apr25
+[TABLE]
+| Condition | Standard RSO Apr25 | Extra Khatir RSO Apr25 |
+| Min EV Gate | 65% | 90% |
+| Min Recharge Gate | 70% | 95% |
+| Bundle Note | Deno for Bundle KPI; DSO full month | Deno for Bundle KPI only |
+| Active LSO section | Present | Absent |
+| DSO Definition | Present | Absent |
+| BSO Definition | Present | Absent |
+| Min RSO Target | Referenced | Absent |
+| CHICOX09/CHICOX11 | Separate MSISDN file | Not mentioned |
+| Recharge Basis | EV (R2RT+D2RT)+DTR+OTF+SC | Same |
+| Bundle Basis | Data+Voice+MXB via I-TOP up | Same |
+| Maturity Date | 3rd of following month | 3rd of following month |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Extra Khatir Premium Threshold: Extra Khatir RSO requires 90% EV + 95% Recharge vs. standard Apr25 RSO of 65% EV + 70% Recharge. This is a 25-point higher EV gate and 25-point higher Recharge gate — the strictest thresholds in the entire folder. Designed for top-performing RSOs only. |
+[/TABLE]
+[TABLE]
+| Campaign Name | RSO Campaign Extra Khatir Apr25 |
+| Period | 1–30 April 2025 |
+| Eligibility | Min 90% EV AND min 95% Recharge (EV+SC) — both gates mandatory |
+| Recharge Basis | EV (R2RT + D2RT) + DTR + OTF + SC (DMS lifting). Less withdrawal. |
+| Bundle | Data + Voice + MXB via I-TOP up; Deno timeline for Bundle KPI only |
+| No LSO/DSO Def | No LSO, DSO, BSO, or Active LSO section — simplified structure |
+| Payout | EV-slab based (amounts in campaign modality table shared by B2C) |
+| Target File | B2C shares target file |
+| Rounding | Standard mathematical rounding (< 0.5 down, ≥ 0.5 up) |
+[/TABLE]
+Section 11: Revision SRF Conditions
+Six revision SRFs exist in the folder (Aug25, Sep25, Oct25 — each with a _Revision version for DD Manager, RSO, and RSO Supervisor). Revisions may change payout conditions, scope of RSOs/Managers covered, or add new conditions.
+[TABLE]
+| SRF | Revision Trigger / Key Change vs. Original |
+| DD Mgr Aug25_Rev | Same conditions as original Aug25. Likely issued for minor correction. |
+| RSO Aug25_Rev | Same conditions as original Aug25. Minor correction revision. |
+| RSO Sup Aug25_Rev | Same conditions as original Aug25. |
+| DD Mgr Sep25_Rev | Specific DD Manager list added ('This report will be generated for specific DD Manager. List will Share by B2C'). Recharge section fully detailed in revision. |
+| RSO Sep25_Rev | Specific RSO list added ('This report will be generated for specific RSOs. List will Share by B2C'). Same 4-category system. |
+| RSO Sup Sep25_Rev | Same incentive structure. Sep_Rev Sup SRF carries same dates (1-Sep-25 to 30-Sep-25). |
+| DD Mgr Oct25_Rev | Specific DD Manager list added. Same conditions as Oct25 otherwise. |
+| RSO Oct25_Rev | Specific RSO list. Same BL pool exclusion. Same 4-category system. |
+| RSO Sup Oct25_Rev | Specific RSO Supervisor list added. Same 8,889/7,778 payout. BL pool exclusion. |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Revision Scope Restriction: Sep25 and Oct25 Revisions restrict the report to a specific subset of Managers/RSOs/Supervisors (list from B2C), while the original SRF covers all qualifying recipients. This means two payouts may coexist for the same month: original (all eligible) + revision (specific list only). |
+[/TABLE]
+Section 12: Universal General Conditions (All 32 SRFs)
+12.1  Conditions Applicable to All SRFs
+[TABLE]
+| Condition | Rule | Appears From |
+| Dual Gate Eligibility | Both EV% AND Recharge% gates must be met. Slab determined by EV%. | All months |
+| Rounding Rule | Mathematical rounding: < 0.5 → round down; ≥ 0.5 → round up. | All months |
+| Mapping (RDB) | Month-end RDB mapping used for Retail-RSO-Supervisor-CM/BP/DRC tagging. B2C fallback if RDB not feasible. | All months |
+| Target File | B2C (Channel Planning) provides the target file for all channels. | All months |
+| Bundle Timeline | Deno timeline for Bundle KPI; full month for EV/Recharge/LSO KPI. | All months |
+| BSO Gate Target | Bundle incentive has a gate target at BSO level — provided by B2C. | All months |
+| Bundle List | Specific bundle product list shared by B2C each month. | All months |
+| Withdrawal Deduction | Less withdrawal deducted from EV recharge as usual process. | All months |
+| All Prepaid Product | Prepaid product — all prepaid; for MNP all connections. | All months |
+| ETSAF QC | ETSAF QC condition implemented from Oct 2019 applies. | All months |
+| Lifting Period | SIM needs to be activated within 180 days of lifting (for activation-related KPIs). | All months |
+| Data Sources | IT SC, IT BI, DWH, POS. Channel Operation provides Target file. | All months |
+| CHICOX09 & CHICOX11 | These RSO MSISDNs shared separately in target file; treated as special non-GA DHs. | Apr25–Jul25 (RSO); Oct25 Sup explicitly 'Non-GA means CHICOX09 & CHICOX11 DH' |
+| BL Employee Pool Exclusion | Any recharge at BL employee pool phone numbers NOT considered for achievement. | Oct25 onwards (explicit) |
+| SUD12AGENT in EV | Included in EV definition from Jul25 onwards for all channels. | Jul25–Oct25 |
+| Digital Dist. C2C Inclusion | C2C from Digital Distribution Retailers included in RSO C2C (retailer list from B2C). | RSO Sep25–Oct25 |
+| Specific Recipient List | Revision SRFs (Sep25, Oct25) restrict to specific Manager/RSO/Supervisor list from B2C. | Sep25_Rev, Oct25_Rev |
+| Oct25 Bundle Deduction | Bundle BSO and LSO achievements deducted based on B2C-shared file. | Oct25 only |
+[/TABLE]
+Appendix A: Month-by-Month Threshold Evolution Matrix
+[TABLE]
+| Month | DD Mgr EV Gate | DD Mgr Recharge Gate | RSO EV Gate | RSO Recharge Gate | Sup EV Gate | Sup Recharge Gate | RSO Payout System |
+| Apr25 | 65% | 70% | 65% | 70% | 65% | 70% | EV-Slab |
+| May25 | 85% | 90% | 85% | 90% | 85% | 90% | EV-Slab |
+| Jun25 (Except Central) | 90% | 95% | 90% | 95% | 90% | 95% | EV-Slab |
+| Jun25 (Central) | 85% | 90% | 85% | 90% | 85% | 90% | EV-Slab |
+| Jul25 (Standard) | 80% | 85% | 80% | 85% | 80% | 85% | EV-Slab |
+| Jul25 (Special DHs) | 65% | 70% | 65% | 70% | 65% | 70% | EV-Slab |
+| Aug25 | 75% | 85% | 75% | 85% | 75% | 85% | EV-Slab |
+| Sep25 | N/S | N/S | 85% | 95% | N/S | N/S | 4-Cat 8K/7K/6K/5K |
+| Oct25 | 70% | 80% | 70% | 80% | 70% | 80% | 4-Cat 8K/7K/6K/5K |
+[/TABLE]
+N/S = Not explicitly stated in SRF text (slab in campaign modality table).
+Appendix A.2: Payout Amount Evolution
+[TABLE]
+| Month | DD Manager Payout | RSO Payout | RSO Supervisor Payout |
+| Apr25 | EV-Slab (table) | EV-Slab (table) | EV-Slab (table) |
+| May25 | EV-Slab (table) | EV-Slab (table) | EV-Slab (table) |
+| Jun25 | EV-Slab (table) | EV-Slab (table) | EV-Slab (table) |
+| Jul25 | EV-Slab (table) | EV-Slab (table) | EV-Slab (table) |
+| Aug25 | EV-Slab (table) | EV-Slab (table) | EV-Slab (table) |
+| Sep25 | 11,111 / 8,889 BDT | Plat:8K/Gold:7K/Sil:6K/Brnz:5K | 8,889 / 7,778 BDT |
+| Oct25 | 11,111 / 8,889 BDT | Plat:8K/Gold:7K/Sil:6K/Brnz:5K | 8,889 / 7,778 BDT |
+[/TABLE]
+Appendix B: Campaign Quick Reference Matrix (All 32 SRFs)
+[TABLE]
+| SRF Title (Abbreviated) | Channel | Period | EV Gate | Recharge Gate | Payout System | Key Unique Condition |
+| DD Mgr Apr25 | DD Mgr | Apr25 | 65% | 70% | EV-Slab | DSO term; 65/70 thresholds; R2RT+D2RT only |
+| DD Mgr May25 | DD Mgr | May25 | 85% | 90% | EV-Slab | SSO definition; 85/90 thresholds |
+| DD Mgr Jun25 | DD Mgr | Jun25 | 90%/85% | 95%/90% | EV-Slab | Central vs. Except Central split; LSO term first used |
+| DD Mgr Jul25 | DD Mgr | Jul25 | 80%/65% | 85%/70% | EV-Slab | Special 7 DH codes; SUD12AGENT added |
+| DD Mgr Aug25 | DD Mgr | Aug25 | 75% | 85% | EV-Slab | LSO target in title; SUD12AGENT retained |
+| DD Mgr Aug25_Rev | DD Mgr | Aug25 | 75% | 85% | EV-Slab | Same as original; revision for correction |
+| DD Mgr Sep25 | DD Mgr | Sep25 | N/S | N/S | 11,111/8,889 BDT | Explicit payout stated; specific DD Mgr list in Rev |
+| DD Mgr Sep25_Rev | DD Mgr | Sep25 | N/S | N/S | 11,111/8,889 BDT | Specific DD Mgr list from B2C |
+| DD Mgr Oct25 | DD Mgr | Oct25 | 70% | 80% | 11,111/8,889 BDT | BL pool exclusion; Bundle deduction from B2C |
+| DD Mgr Oct25_Rev | DD Mgr | Oct25 | 70% | 80% | 11,111/8,889 BDT | Specific DD Mgr list; same as Oct25 |
+| RSO Apr25 | RSO | Apr25 | 65% | 70% | EV-Slab | DSO term; minimum RSO target; CHICOX09/11 |
+| RSO May25 | RSO | May25 | 85% | 90% | EV-Slab | SSO def; min RSO target |
+| RSO Jun25 | RSO | Jun25 | 90%/85% | 95%/90% | EV-Slab | Central split; min RSO target |
+| RSO Jul25 | RSO | Jul25 | 80%/65% | 85%/70% | EV-Slab | Special DH; SUD12AGENT; min RSO target |
+| RSO Aug25 | RSO | Aug25 | 75% | 85% | EV-Slab | LSO in title; SUD12AGENT |
+| RSO Aug25_Rev | RSO | Aug25 | 75% | 85% | EV-Slab | Same as Aug25 |
+| RSO Sep25 | RSO | Sep25 | 85% | 95% | 8K/7K/6K/5K | 4-Category; 25/25/25/25 DH split; Digital Dist. C2C |
+| RSO Sep25_Rev | RSO | Sep25 | 85% | 95% | 8K/7K/6K/5K | Specific RSO list; same 4-cat |
+| RSO Oct25 | RSO | Oct25 | 70% | 80% | 8K/7K/6K/5K | BL pool exclusion; 4-cat continues |
+| RSO Oct25_Rev | RSO | Oct25 | 70% | 80% | 8K/7K/6K/5K | Specific RSO list |
+| RSO Sup Apr25 | RSO Sup | Apr25 | 65% | 70% | EV-Slab | Cumulative DH; data from RSO Apr25; DSO |
+| RSO Sup May25 | RSO Sup | May25 | 85% | 90% | EV-Slab | SSO def; data from RSO May25 |
+| RSO Sup Jun25 | RSO Sup | Jun25 | 90%/85% | 95%/90% | EV-Slab | Central split; data from RSO Jun25 |
+| RSO Sup Jul25 | RSO Sup | Jul25 | 80%/65% | 85%/70% | EV-Slab | Special DH; SUD12AGENT; data from RSO Jul25 |
+| RSO Sup Aug25 | RSO Sup | Aug25 | 75% | 85% | EV-Slab | Data from RSO Aug25; LSO |
+| RSO Sup Aug25_Rev | RSO Sup | Aug25 | 75% | 85% | EV-Slab | Same as Aug25 |
+| RSO Sup Sep25 | RSO Sup | Sep25 | N/S | N/S | 8,889/7,778 BDT | Fixed 2-tier; data from RSO Sep25 |
+| RSO Sup Sep25_Rev | RSO Sup | Sep25 | N/S | N/S | 8,889/7,778 BDT | Same as Sep25 |
+| RSO Sup Oct25 | RSO Sup | Oct25 | 70% | 80% | 8,889/7,778 BDT | BL pool exclusion; CHICOX09/11 Non-GA; Bundle deduction |
+| RSO Sup Oct25_Rev | RSO Sup | Oct25 | 70% | 80% | 8,889/7,778 BDT | Specific Sup list from B2C |
+| Distributor Extra Khatir Apr25 | Distributor | Apr25 | N/A | N/A | Multi-KPI weighted | DH-wise budget; 7 KPIs; GA+SAF+Usage+SCR+RSO Productivity+DRC exclusion |
+| RSO Extra Khatir Apr25 | RSO | Apr25 | 90% | 95% | EV-Slab | Premium thresholds; no BSO/LSO/DSO/min-target sections; Deno Bundle only |
+[/TABLE]

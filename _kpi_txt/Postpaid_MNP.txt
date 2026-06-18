@@ -1,0 +1,486 @@
+Postpaid MNP & New Customer Acquisition
+Unique KPI Conditions — All SRFs
+Banglalink Sales Commission | Aug 2024 – Dec 2025 onwards
+Source: 16 SRFs (8 BDO + 8 Monobrand CCR)
+INDEX
+[TABLE]
+| Section 1 | Overview — Campaign Types & Channel Summary |
+| Section 2 | B2C Postpaid BDO — Per-GA Upfront Commission (Standard) |
+| 2.1 | Eligibility & General Criteria |
+| 2.2 | GA Criteria (New Activation) |
+| 2.3 | MNP Criteria |
+| 2.4 | Commission Rate Evolution (All Periods) |
+| 2.5 | Security Deposit Evolution (All Periods) |
+| 2.6 | Additional Deposit / Overpayment Bonus (from Oct 2025) |
+| 2.7 | ETSAF, Disconnection & Data Cutoff |
+| 2.8 | AIT, Maturity & Reporting |
+| Section 3 | B2C Postpaid BDO — Ad-hoc GA Count-Based Slab Incentive (Mar 2025) |
+| 3.1 | Campaign Details & GA Count Slabs |
+| 3.2 | Commission Table & Conditions |
+| Section 4 | Monobrand CCR — Per-GA Flat Rate Commission (Standard) |
+| 4.1 | Eligibility & General Criteria |
+| 4.2 | Commission & Security Deposit Evolution |
+| 4.3 | Additional Deposit Bonus (from Nov 2025) |
+| 4.4 | Capping Mechanism |
+| 4.5 | AIT, Maturity & Reporting |
+| Section 5 | Monobrand CCR — Target-Based Slab Commission (Aug 2024 & Mar 2025 GA Campaign) |
+| 5.1 | Aug 2024 GA Campaign |
+| 5.2 | Mar 2025 GA Campaign (with Daily Participation) |
+| Section 6 | Monobrand CCR — Backpay for Missing Commission (Dec 2024 – Feb 2025) |
+| Section 7 | Product ID Reference |
+| 7.1 | Base Activation Products |
+| 7.2 | Bundle & Non-Bundle Products — Evolution |
+| Section 8 | General Conditions Applicable to All SRFs |
+| Appendix A | BDO Commission & Deposit Quick Reference (All Periods) |
+| Appendix B | Monobrand CCR Commission & Deposit Quick Reference (All Periods) |
+| Appendix C | Eligible Monobrand CCR List (Mar 2025 onwards) |
+[/TABLE]
+Section 1 — Overview: Campaign Types & Channel Summary
+The Postpaid MNP folder contains 16 SRFs covering MNP (Mobile Number Portability) and New Customer Acquisition commissions for Postpaid subscribers. All SRFs are from the Alternate Channel and Digital Recharge department and share the same core mechanic: a BDT commission is paid per qualified GA (Gross Acquisition) subject to bundle activation and same-day security deposit.
+[TABLE]
+| Channel | # SRFs | Period Covered | Commission Type |
+| B2C Postpaid BDO | 8 | Feb 2025 – Dec 2025 onwards | Per-GA upfront + optional ad-hoc slab |
+| Monobrand CCR | 8 | Aug 2024 – Dec 2025 onwards | Per-GA flat rate OR target-based slab |
+[/TABLE]
+[TABLE]
+| SRF Title (short) | Channel | Effective Period | Key Feature |
+| BDOs Feb25–Mar25 | BDO | 01-Feb-2025 – 31-Mar-2025 | Commission split at 28-Jan; 214 pack introduced |
+| BDOs Mar25 (Ad-hoc) | BDO | 01-Mar-2025 – 31-Mar-2025 | GA count-based slab bonus on top of per-GA |
+| BDOs May25 | BDO | 01-May-2025 – till further notice | Commission change at 13-May; 214 discontinued |
+| BDOs Jul25 | BDO | 01-Jul-2025 – 31-Jul-2025 | Fixed 4-pack rates (no 214) |
+| BDOs Sep25 | BDO | 01-Sep-2025 – 30-Sep-2025 | Same as Jul25 |
+| BDOs Oct25 | BDO | 01-Oct-2025 – till further notice | Rate change at 19-Oct; additional deposit bonus |
+| BDOs Nov25 | BDO | 01-Nov-2025 – till further notice | Post-19-Oct rates; additional deposit bonus; E-SIM |
+| BDOs Dec25 | BDO | 01-Dec-2025 – till further notice | New packs 1143 & 2343 added |
+| Monobrand Aug24 | Monobrand | 01-Aug-2024 – 31-Aug-2024 | Target-based 2-slab (90%/100% of target) |
+| Monobrand Dec24–Feb25 | Monobrand | 01-Dec-2024 – 28-Feb-2025 | Backpay for 4 specific CCRs; mid-month rate split |
+| Monobrand Mar25 GA Campaign | Monobrand | 01-Mar-2025 – 31-Mar-2025 | Target slab + daily participation bonus |
+| Monobrand March25 | Monobrand | 01-Mar-2025 – 31-Mar-2025 | Per-GA flat rate with GA cap |
+| Monobrand Apr25 Revision | Monobrand | 01-Apr-2025 – 30-Apr-2025 | Per-GA flat rate |
+| Monobrand May25 | Monobrand | 01-May-2025 – till further notice | Rate change at 13-May; 214 discontinued; GA cap |
+| Monobrand Nov25 | Monobrand | 04-Nov-2025 – till further notice | Rate change 4-Nov; additional deposit bonus |
+| Monobrand Dec25 | Monobrand | 01-Dec-2025 – till further notice | New packs 1143 & 2343; additional deposit bonus |
+[/TABLE]
+Section 2 — B2C Postpaid BDO: Per-GA Upfront Commission (Standard)
+2.1  Eligibility & General Criteria
+[TABLE]
+| Field | Value |
+| Recipient Type | Field Force — B2C Postpaid BDO |
+| Retailer Type in DMS | B2C_postpaid |
+| Commission Basis | Monthly — per qualified GA (MNP or New Activation) |
+| AIT | Applicable |
+| Report Sharing | Disbursement slot, monthly |
+| Data Table | POSTPAID_COMMISSION_DATA_MONTHLY_DWH (SALCOMDB) |
+| Maturity Date | 1st of the following month |
+| Data Cutoff | Latest data up to report generation date (T-5) |
+[/TABLE]
+2.2  GA Criteria (New Activation)
+[TABLE]
+| New Activation: SIM must be activated under subscription type Retail2Postpaid / Banglalink Select Postpaid (M2MADV) & (blkSelPostpaid) with the specific bundle or non-bundle. |
+| Security deposit must be equal to or greater than the pack-specific amount, deposited on the same day as activation. |
+| Security deposit for New Activation: one-shot deposit (single transaction on activation day). |
+| For 200 BDT pack: security deposit amount sourced from DWH (DPOS). |
+| Only the specified EQUIPID list (see Section 7) is eligible for GA counting. |
+| E-SIM is also counted for achievement with the same conditions as physical SIM (from Oct 2025 onwards). |
+| Activation Retailer type must be 'B2C_postpaid' in DMS. |
+[/TABLE]
+2.3  MNP Criteria
+[TABLE]
+| MNP: A Prepaid or Postpaid number ported into Banglalink, with final subscription type Retail2Postpaid / Banglalink Select Postpaid (M2MADV) & (blkSelPostpaid), plus the specified bundle or non-bundle. |
+| Security deposit for MNP: one-shot or multiple shots, but ALL deposits must be made on the same day as activation. |
+| Security deposit must be equal to or greater than the pack-specific amount. |
+| For 200 BDT pack: security deposit amount sourced from DWH. |
+| From Oct 2025 onwards: deposit can also be done via Banglalink Power App (any registered BL Power App number). DWH source: bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+| E-SIM is also counted for achievement with the same conditions as physical SIM (from Oct 2025 onwards). |
+| One-shot recharge will be considered from any source (earlier SRFs); Cumulative recharge or one-shot accepted (Monobrand SRFs). |
+[/TABLE]
+2.4  Commission Rate Evolution (BDO — All Periods)
+The table below shows the commission per GA by bundle value across all rate periods. Multiple rates within the same row indicate a mid-period rate change.
+[TABLE]
+| Bundle (BDT incl Tax) | Feb25–27Jan | 28Jan–12May25 | 13May–18Oct25 | 19Oct25 onwards | Note |
+| 214 (TK214USSD30D) | 0 | 12 | 12 | Discontinued | Introduced 28-Jan; dropped 13-May |
+| 200 (TK200NB30D) | 30 | 10 | 10 | 10 | Non-bundle |
+| 394 (TK394POSTGAU) | 85 | 90 | 90 | 50 | — |
+| 494 (TK494POSTGAU) | 150 | 170 | 150 | 100 | — |
+| 794 (TK794POSTGAU) | 345 | 350 | 250 | 150 | — |
+| 1143 (TK1143CGAMX) | — | — | — | 100 | Added Dec 2025 |
+| 2343 (TK2343CGAMX) | — | — | — | 200 | Added Dec 2025 |
+[/TABLE]
+Note: Jul25 and Sep25 SRFs show fixed rates equivalent to the 'pre-19Oct' column. The Oct25 SRF documents the change at 19 October. Nov25 and Dec25 use post-19Oct rates.
+2.5  Security Deposit Evolution (BDO — All Periods)
+[TABLE]
+| Bundle (BDT) | Up to 27-Jan-25 | From 28-Jan-25 | From 13-May-25 onwards | Note |
+| 214 | 0 BDT | 220 BDT | Discontinued | Pack removed 13-May |
+| 200 | 200 BDT | 150 BDT | 170 BDT | Deposit via DWH/DPOS |
+| 394 | 400 BDT | 400 BDT | 350 BDT | — |
+| 494 | 500 BDT | 500 BDT | 450 BDT | — |
+| 794 | 800 BDT | 800 BDT | 750 BDT | — |
+| 1143 | — | — | 1150 BDT | From Dec 2025 |
+| 2343 | — | — | 2350 BDT | From Dec 2025 |
+[/TABLE]
+Note: Security deposit must be ≥ the listed amount. For 200-pack the exact deposit amount is pulled from DWH/DPOS.
+2.6  Additional Deposit / Overpayment Bonus (BDO — from 19 Oct 2025)
+From 19 October 2025 onwards, BDOs earn an extra commission if the customer deposits MORE than the required base security deposit on the same day of activation. This is in addition to the standard per-pack commission.
+[TABLE]
+| Additional Deposit / Overpayment / I-top / BL Power App | Deposit Date Condition | Extra Commission (BDT) |
+| BDT 100 or more above base | Same day as activation | 25 |
+| BDT 200 or more above base | Same day as activation | 50 |
+| BDT 300 or more above base | Same day as activation | 75 |
+| BDT 400 or more above base | Same day as activation | 100 |
+[/TABLE]
+[TABLE]
+| Applies to all packs: 200, 394 (listed as 294 in some SRFs), 494, 794 (and from Dec25: 1143, 2343). |
+| Deposit can be done in one shot or multiple transactions on activation day. |
+| Deposit sources: direct i-top, Banglalink Power App (any BL Power App registered number). |
+| BL Power App DWH source: bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+| E-SIM activations are also eligible under the same deposit conditions. |
+[/TABLE]
+2.7  ETSAF, Disconnection & Data Cutoff
+[TABLE]
+| Factor | Rule |
+| Activation Type | FCD (First Call Date) used for activation tracking |
+| ETSAF | ETSAF QC conditions apply; status tracked as Y/N per customer |
+| Disconnection | Disconnection before commission reporting disqualifies the GA |
+| Data Cutoff | Latest data up to report generation date (T-5, i.e., 5 days before report date) |
+| Recharge | Any valid recharge counts; one-shot from any source |
+| Lifting | Not applicable; N/A stated in all BDO SRFs |
+| SAF | ETSAF QC condition applies |
+[/TABLE]
+2.8  AIT, Maturity & Reporting
+[TABLE]
+| AIT (Advance Income Tax) IS applicable for all B2C Postpaid BDO commissions. |
+| Maturity Date: 1st of the following month (data must be complete before this date). |
+| Report Published Date: As per tracker. |
+| Input data sources: ED, IT BI, DWH, TABS, DMS, POS, IN House. |
+| Target file, channel mapping, and failure settlement provided by Channel Operation & Excellence team. |
+| Salescom to POS Auto Upload: No. Salescom to IN HOUSE Auto Upload: No. |
+[/TABLE]
+Section 3 — B2C Postpaid BDO: Ad-hoc GA Count-Based Slab Incentive (Mar 2025)
+This was a one-time ad-hoc campaign for March 2025 (01-Mar-2025 to 31-Mar-2025). BDOs received BOTH the standard per-GA upfront commission (Section 2 rates) AND an additional GA count-based slab bonus.
+3.1  Campaign Details & GA Count Slabs
+[TABLE]
+| Field | Value |
+| Effective Period | 01-March-2025 to 31-March-2025 |
+| Type | Ad-hoc, one-month only |
+| Recipient | B2C Postpaid BDO (retailer list shared before running commission) |
+| Commission Basis | GA count for the full calendar month |
+| Data Table | POSTPAID_COMMISSION_DATA_MONTHLY_DWH |
+| AIT | Applicable |
+[/TABLE]
+3.2  GA Count Slab Bonus
+[TABLE]
+| GA Achievements (Monthly Count) | Additional Slab Commission (BDT) |
+| 50 – 60 GAs | 1,000 |
+| 61 – 80 or above GAs | 2,000 |
+[/TABLE]
+[TABLE]
+| This slab bonus is IN ADDITION TO the standard per-GA upfront commission payable at Mar25 rates (214: BDT 12, 200: BDT 10, 394: BDT 90, 494: BDT 170, 794: BDT 350). |
+| Security deposit and bundle requirements are identical to the standard BDO conditions (Section 2). |
+| Products eligible: same as standard BDO — includes TK214USSD30DPOSTOG (214 pack) which was active in Mar25. |
+| Payout: commission payout is for one month only. |
+| BDO retailer list shared before running commission calculation. |
+[/TABLE]
+Section 4 — Monobrand CCR: Per-GA Flat Rate Commission (Standard)
+4.1  Eligibility & General Criteria
+[TABLE]
+| Field | Value |
+| Recipient Type | Monobrand CCR (Customer Centre) |
+| Commission Basis | Monthly — per qualified GA (MNP or New Activation) |
+| Calculation | Calendar month basis |
+| Payout | Monthly, on the following month |
+| AIT | NOT applicable (applicable only for Sales Team/BDO) |
+| Data Table | POSTPAID_COMMISSION_DATA_MONTHLY_DWH (SALCOMDB) |
+| Maturity Date | 1st of the following month (standard from Mar25 onwards); 7th of following month for Aug24 and Dec24–Feb25 |
+| Eligible CCRs | Only listed Monobrand CCRs are eligible; list may be expanded over time |
+| Disconnection | Disconnection disqualifies the GA (applies from Mar25 revision; checked in Apr25, Nov25, Dec25) |
+[/TABLE]
+4.2  Commission & Security Deposit Evolution (Monobrand Standard)
+[TABLE]
+| Bundle (BDT) | Up to 27-Jan-25 | From 28-Jan-25 / Mar25 | From 13-May-25 onwards | From 4-Nov-25 / Dec25 |
+| 214 (TK214USSD30D) | — | 12 | Discontinued | — |
+| 200 (TK200NB30D) | 30 | 10 | 10 | 10 |
+| 394 (TK394POSTGAU) | 85 | 90 | 90 | 50 |
+| 494 (TK494POSTGAU) | 150 | 170 | 150 | 100 |
+| 794 (TK794POSTGAU) | 345 | 350 | 250 | 150 |
+| 1143 (TK1143CGAMX) | — | — | — | 100 (from Dec25) |
+| 2343 (TK2343CGAMX) | — | — | — | 200 (from Dec25) |
+[/TABLE]
+Security Deposit (Monobrand — same evolution as BDO):
+[TABLE]
+| Bundle (BDT) | Up to 27-Jan-25 | From 28-Jan-25 | From 13-May-25 onwards |
+| 214 | 0 BDT | 220 BDT | Discontinued |
+| 200 | 200 BDT | 150 BDT | 170 BDT |
+| 394 | 400 BDT | 400 BDT | 350 BDT |
+| 494 | 500 BDT | 500 BDT | 450 BDT |
+| 794 | 800 BDT | 800 BDT | 750 BDT |
+| 1143 | — | — | 1150 BDT (from Dec25) |
+| 2343 | — | — | 2350 BDT (from Dec25) |
+[/TABLE]
+Note: Aug24 SRF had different deposit amounts: 300-pack=350, 394=400, 494=500, 794=800. These are from the older product set (Aug24 included TK300BORGAPOSTOG non-bundle and renewal bundles RCTK...
+4.3  Additional Deposit / Overpayment Bonus (Monobrand — from Nov 2025)
+From 4 November 2025, Monobrand CCRs also earn an additional commission for overpayment on the same day of activation (same structure as BDO from 19-Oct-25).
+[TABLE]
+| Additional Deposit / Overpayment / I-top / BL Power App | Deposit Date Condition | Extra Commission (BDT) |
+| BDT 100 or more above base | Same day as activation | 25 |
+| BDT 200 or more above base | Same day as activation | 50 |
+| BDT 300 or more above base | Same day as activation | 75 |
+| BDT 400 or more above base | Same day as activation | 100 |
+[/TABLE]
+[TABLE]
+| Applies to all packs: 200, 394, 494, 794 (and from Dec25: 1143, 2343). |
+| Deposit can be in one shot or multiple transactions on activation day. |
+| Deposit via i-top, BL Power App, or local deposit payment. |
+| BL Power App DWH: bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+[/TABLE]
+4.4  Capping Mechanism (Monobrand — applicable from Mar 2025, May 2025)
+A per-CCR GA count cap is applied in some months (specifically documented in Monobrand March25 and May25 SRFs):
+[TABLE]
+| A capping limit (maximum GA count per CCR per month) will be shared with the commission team by end of the commission month. |
+| If a CCR achieves more than the capped GA count, the lowest-commission denomination (pack) is deducted from eligibility to align with the cap. |
+| CCRs NOT in the target file are exempt from the capping condition — no cap applies to them. |
+| The cap is communicated after month-end; it is not a pre-declared fixed number. |
+| This capping mechanism was NOT mentioned in Apr25, Aug24, Nov25, or Dec25 SRFs. |
+[/TABLE]
+4.5  AIT, Maturity & Reporting (Monobrand)
+[TABLE]
+| AIT (Advance Income Tax) is NOT applicable for Monobrand CCR commissions. This distinguishes Monobrand from BDO. |
+| Maturity Date: 7th of following month (Aug24, Dec24–Feb25 backpay); 1st of following month (Mar25 onwards). |
+| Report Published Date: As per tracker (Mar25 onwards); blank in earlier SRFs. |
+| Input sources: ED, IT BI, DWH, TABS, DMS, POS, IN House. |
+| Salescom to POS Auto Upload: No. Salescom to EV Auto Upload: No. |
+| Cumulative recharge or one-shot recharge accepted from any source. |
+[/TABLE]
+Section 5 — Monobrand CCR: Target-Based Slab Commission (Aug 2024 & Mar 2025 GA Campaign)
+5.1  Aug 2024 GA Campaign (Target-Based 2-Slab)
+[TABLE]
+| Field | Value |
+| Effective Period | 01-Aug-2024 to 31-Aug-2024 |
+| Type | Ad-hoc, one-month only |
+| Recipient | Only 8 specific Monobrand CCRs (see list in SRF) |
+| Commission Structure | 2 slabs based on monthly GA target achievement |
+| AIT | NOT applicable |
+| Maturity Date | 7th of following month |
+[/TABLE]
+[TABLE]
+| Slab | Target Achievement | Commission (BDT) | Condition |
+| Slab 1 | ≥ 90% of monthly target | 1,000 | MNP/New Activation + Bundle + Security Deposit |
+| Slab 2 | ≥ 100% of monthly target | 2,000 | MNP/New Activation + Bundle + Security Deposit |
+[/TABLE]
+[TABLE]
+| Slab 2 replaces Slab 1 (not additive): hitting 100% target earns BDT 2,000 total. |
+| Monthly target for each CCR is shared with the commission team before the end of the month. |
+| Only 8 eligible CCRs (CC009, CC001, CC079, CC013, CC081, CC003, CC005, CC032). |
+| Products eligible (Aug24 product set): TK300BORGAPOSTOG (non-bundle, 300 BDT, deposit 350), plus renewal and non-renewal bundles for 794, 394, 494 packs. Note: this is an OLDER product set than later SRFs. |
+| Security deposit for 300-pack: sourced from DPOS/DWH. |
+| Cumulative or one-shot recharge accepted from any source. |
+[/TABLE]
+5.2  Mar 2025 GA Campaign (Target-Based 2-Slab + Daily Participation)
+[TABLE]
+| Field | Value |
+| Effective Period | 01-Mar-2025 to 31-Mar-2025 |
+| Type | Ad-hoc GA campaign, one-month |
+| Recipient | All eligible Monobrand CCRs (full list) |
+| Commission Structure | 3 components: Slab 1 (90% target), Slab 2 (100% target), Daily Participation |
+| AIT | NOT applicable |
+| Maturity Date | 7th of following month |
+[/TABLE]
+[TABLE]
+| Component | Achievement Requirement | Commission (BDT) |
+| Slab 1 | ≥ 90% of monthly GA target | 1,000 |
+| Slab 2 | ≥ 100% of monthly GA target | 2,000 |
+| Daily Participation | Achieve daily participation target (min. 1 GA per day) | 1,000 |
+[/TABLE]
+[TABLE]
+| Daily participation target and monthly target are shared with the commission team before calculation. |
+| The BDT 2,000 for Slab 2 replaces Slab 1 (not additive: total max from slabs is BDT 2,000). |
+| Daily participation BDT 1,000 is separate and additive to the slab commission. |
+| Maximum potential: BDT 2,000 (Slab 2) + BDT 1,000 (daily participation) = BDT 3,000. |
+| Bundle/security deposit conditions: same as standard Monobrand (Mar25 rates: 214=220, 200=150, 394=400, 494=500, 794=800). |
+| Products eligible: full Mar25 set including TK214USSD30DPOSTOG (214 pack) which was active. |
+| SRF also shows BDT 214 pack introduced in this period (commission BDT 0 for slab calculation; 12 BDT per GA in the matching Monobrand March25 SRF). |
+[/TABLE]
+Section 6 — Monobrand CCR: Backpay for Missing Commission (Dec 2024 – Feb 2025)
+One SRF covers retroactive ('missing') commission for 4 Monobrand CCRs who were not paid under the standard system for Dec24, Jan25, and/or Feb25.
+[TABLE]
+| Field | Value |
+| Effective Period | 01-Dec-2024 to 28-Feb-2025 (retroactive) |
+| Eligible CCRs Only | CC079 (MB-946, fo.islam) — Dec24, Jan25, Feb25 |
+|  | CC009 (MB-917, risul.islam) — Dec24, Jan25 |
+|  | CC004 (MB-910, t.milon) — Dec24, Jan25 |
+|  | CC004 (MB-937, maru.khan) — Dec24, Jan25, Feb25 |
+| AIT | NOT applicable |
+| Maturity Date | 7th of following month |
+[/TABLE]
+Commission rates and deposits for this backpay SRF (per-GA flat rate, same structure as standard Monobrand):
+[TABLE]
+| Month | Pack (BDT) | Commission (BDT) | Security Deposit (BDT) |
+| Dec'24 | 200 | 30 | 200 |
+| Dec'24 | 394 | 85 | 400 |
+| Dec'24 | 494 | 150 | 500 |
+| Dec'24 | 794 | 345 | 800 |
+| Jan'25 (1–27 Jan) | 214 | 0 | 0 |
+| Jan'25 (1–27 Jan) | 200 | 30 | 200 |
+| Jan'25 (1–27 Jan) | 394 | 85 | 400 |
+| Jan'25 (1–27 Jan) | 494 | 150 | 500 |
+| Jan'25 (1–27 Jan) | 794 | 345 | 800 |
+| Jan'25 (28–31 Jan) | 214 | 12 | 220 |
+| Jan'25 (28–31 Jan) | 200 | 10 | 150 |
+| Jan'25 (28–31 Jan) | 394 | 90 | 400 |
+| Jan'25 (28–31 Jan) | 494 | 170 | 500 |
+| Jan'25 (28–31 Jan) | 794 | 350 | 800 |
+| Feb'25 | 214 | 12 | 220 |
+| Feb'25 | 200 | 10 | 150 |
+| Feb'25 | 394 | 90 | 400 |
+| Feb'25 | 494 | 170 | 500 |
+| Feb'25 | 794 | 350 | 800 |
+[/TABLE]
+Note: January 2025 has a mid-month rate change at 28-Jan: older (lower) rates apply 1-27 Jan, new rates from 28-31 Jan. The 214 pack existed from 28-Jan-25 onwards (commission 0 for 1–27 Jan because it didn't exist yet).
+Section 7 — Product ID Reference
+7.1  Base Activation Products (All Periods)
+[TABLE]
+| Type | EQUIPID | Segment | Service Type |
+| Activation | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) & (blkSelPostpaid) | B2C | Base package |
+[/TABLE]
+Note: Activation must use these base subscription IDs. Bundle/non-bundle EQUIPID is added on top as an option group.
+7.2  Bundle & Non-Bundle Products — Evolution by Period
+[TABLE]
+| EQUIPID | Type | Pack Value (BDT) | Segment | Active Period |
+| TK300BORGAPOSTOG | Non-Bundle / Non-Renewal | 300 | B2C | Aug24 only |
+| TK200NB30DPOSTOG | Non-Bundle / Non-Renewal | 200 | B2C | All periods (from Feb25 onwards for BDO; Aug24 for Mono) |
+| TK214USSD30DPOSTOG | Bundle / Non-Renewal | 214 | B2C | 28-Jan-25 to 12-May-25 |
+| TK394POSTGAUMIXBDNLOG | Bundle / Non-Renewal | 394 | B2C | All periods |
+| TK494POSTGAUSSDMIXOG | Bundle / Non-Renewal | 494 | B2C | All periods |
+| TK794POSTGAUMIXBDNLOG | Bundle / Non-Renewal | 794 | B2C | All periods |
+| TK1143CGAMXBOGPOST | Bundle / Non-Renewal | 1143 | B2C | From Dec25 onwards |
+| TK2343CGAMXBOGPOST | Bundle / Non-Renewal | 2343 | B2C | From Dec25 onwards |
+| RCTK394POSTGAUMIXBDNLOG | Bundle / Renewal | 394 | B2C | Aug24 – Apr25 (Monobrand only) |
+| RCTK494POSTGAUSSDMIXOG | Bundle / Renewal | 494 | B2C | Aug24 – Apr25 (Monobrand only) |
+| RCTK794POSTGAUMIXBDNLOG | Bundle / Renewal | 794 | B2C | Aug24 – Apr25 (Monobrand only) |
+[/TABLE]
+Note: Renewal bundles (RCTK...) appeared in Monobrand SRFs from Aug24 through Apr25. From May25 onwards, only non-renewal packs are listed. BDO SRFs never included renewal bundles.
+Section 8 — General Conditions Applicable to All SRFs
+[TABLE]
+| Condition | Rule |
+| Activation Trigger | FCD (First Call Date) — activation is counted on the First Call Date within the calendar month |
+| Subscription Type | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) & (blkSelPostpaid) |
+| Bundle Activation | Bundle/non-bundle must be activated on the same day as base subscription activation |
+| Security Deposit | Must be equal to or greater than the specified amount, deposited on the same day as activation |
+| Recharge Rule | BDO: one-shot from any source. Monobrand: cumulative or one-shot from any source |
+| GA Eligibility | Only MNP and new activations count; reconnections/reactivations excluded |
+| Disconnection | GA is disqualified if the customer disconnects before the data cutoff |
+| Product Eligibility | Only EQUIPIDs listed in the SRF's product table are eligible |
+| MNP Source | Both Prepaid and Postpaid ported-in numbers qualify for MNP |
+| Data Source | POSTPAID_COMMISSION_DATA_MONTHLY_DWH in SALCOMDB |
+| 200-pack Deposit | Deposit amount for the 200-pack must be sourced from DWH (not from activation system directly) |
+| Lifting | N/A — not applicable for this campaign type |
+| SAF | ETSAF QC conditions apply (BDO); Vetting Date applicable for Monobrand CCR |
+[/TABLE]
+Appendix A — BDO Commission & Deposit Quick Reference (All Periods)
+Consolidated BDO rates. All commissions are upfront per GA.
+[TABLE]
+| Period | Pack (BDT) | Commission (BDT) | Sec. Deposit (BDT) | Notes |
+| Feb25–27Jan25 | 200 | 30 | 200 |  |
+| Feb25–27Jan25 | 394 | 85 | 400 |  |
+| Feb25–27Jan25 | 494 | 150 | 500 |  |
+| Feb25–27Jan25 | 794 | 345 | 800 |  |
+| 28Jan25–12May25 | 214 | 12 | 220 | 214 pack introduced |
+| 28Jan25–12May25 | 200 | 10 | 150 |  |
+| 28Jan25–12May25 | 394 | 90 | 400 |  |
+| 28Jan25–12May25 | 494 | 170 | 500 |  |
+| 28Jan25–12May25 | 794 | 350 | 800 |  |
+| 13May25–18Oct25 | 214 | — | — | 214 discontinued |
+| 13May25–18Oct25 | 200 | 15 (Jul/Sep), 10 | 170 | Jul25/Sep25=15; May25 pre-13th=10 |
+| 13May25–18Oct25 | 394 | 90–100 | 350 |  |
+| 13May25–18Oct25 | 494 | 150–170 | 450 |  |
+| 13May25–18Oct25 | 794 | 250–350 | 750 |  |
+| 19Oct25 onwards | 200 | 10 | 170 | + additional dep. bonus |
+| 19Oct25 onwards | 394 | 50 | 350 | + additional dep. bonus |
+| 19Oct25 onwards | 494 | 100 | 450 | + additional dep. bonus |
+| 19Oct25 onwards | 794 | 150 | 750 | + additional dep. bonus |
+| Dec25 onwards | 1143 | 100 | 1150 | New pack |
+| Dec25 onwards | 2343 | 200 | 2350 | New pack |
+[/TABLE]
+Note: For the 200-pack, exact security deposit sourced from DWH/DPOS in all periods.
+Appendix B — Monobrand CCR Commission & Deposit Quick Reference (All Periods)
+Per-GA flat rates for standard Monobrand monthly commission. AIT NOT applicable.
+[TABLE]
+| Period | Pack (BDT) | Commission (BDT) | Sec. Deposit (BDT) | Notes |
+| Aug24 | 300 (non-bundle) | Slab-based (1000/2000) | 350 | Different product set; target-based |
+| Aug24 | 394 | Slab-based | 400 | Renewal + non-renewal bundles |
+| Aug24 | 494 | Slab-based | 500 |  |
+| Aug24 | 794 | Slab-based | 800 |  |
+| Dec24–27Jan25 | 200 | 30 | 200 | Backpay SRF; specific CCRs only |
+| Dec24–27Jan25 | 394 | 85 | 400 |  |
+| Dec24–27Jan25 | 494 | 150 | 500 |  |
+| Dec24–27Jan25 | 794 | 345 | 800 |  |
+| 28Jan25–12May25 | 214 | 12 | 220 | 214 introduced |
+| 28Jan25–12May25 | 200 | 10 | 150 |  |
+| 28Jan25–12May25 | 394 | 90 | 400 | Renewal bundles also eligible through Apr25 |
+| 28Jan25–12May25 | 494 | 170 | 500 |  |
+| 28Jan25–12May25 | 794 | 350 | 800 |  |
+| 13May25–3Nov25 | 214 | — | — | 214 discontinued |
+| 13May25–3Nov25 | 200 | 10 | 170 |  |
+| 13May25–3Nov25 | 394 | 90 | 350 | No renewal bundles from May25 |
+| 13May25–3Nov25 | 494 | 150 | 450 |  |
+| 13May25–3Nov25 | 794 | 250 | 750 |  |
+| 4Nov25 onwards | 200 | 10 | 170 | + additional dep. bonus |
+| 4Nov25 onwards | 394 | 50 | 350 |  |
+| 4Nov25 onwards | 494 | 100 | 450 |  |
+| 4Nov25 onwards | 794 | 150 | 750 |  |
+| Dec25 onwards | 1143 | 100 | 1150 | New pack |
+| Dec25 onwards | 2343 | 200 | 2350 | New pack |
+[/TABLE]
+Appendix C — Eligible Monobrand CCR List (Mar 2025 onwards, full list)
+The following Monobrand Customer Centres (CCs) are listed as eligible in the Mar25, Apr25, May25, Nov25, and Dec25 SRFs. The list may be expanded over time.
+[TABLE]
+| CC Code | Region | CC Name |
+| CC001 | Dhaka East | CC Gulshan |
+| CC002 | Chittagong | CC Chittagong |
+| CC003 | Comilla & Sylhet | CC Sylhet |
+| CC004 | Dhaka South | CC Motijheel |
+| CC005 | Dhaka East | CC Tigers' Den |
+| CC006 | Rajshahi | CC Rajshahi |
+| CC007 | Khulna | CC Khulna |
+| CC009 | Bogra | CC Bogra |
+| CC013 | Dhaka East | CC Dhanmondi |
+| CC015 | Comilla & Sylhet | CC Brahmanbaria |
+| CC016 | Dhaka South | CC Jatrabari |
+| CC017 | Dhaka West | CC Kotowali |
+| CC021 | Dhaka South | CC Narayangonj |
+| CC023 | Dhaka West | CC Shamoly |
+| CC025 | Mymensingh | CC Kishoregonj |
+| CC030 | Dhaka East | CC Tongi |
+| CC031 | Barisal & Dhaka Outer | CC Faridpur |
+| CC032 | Barisal & Dhaka Outer | CC Shariatpur |
+| CC033 | Barisal & Dhaka Outer | CC Madaripur |
+| CC034 | Barisal & Dhaka Outer | CC Rajbari |
+| CC035 | Dhaka West | CC Pallabi |
+| CC041 | Mymensingh | CC Tangail |
+| CC042 | Mymensingh | CC Mymensingh |
+| CC046 | Comilla & Sylhet | CC Noakhali |
+| CC050 | Chittagong | CC Cox's Bazar |
+| CC054 | Khulna | CC Jessore |
+| CC055 | Khulna | CC Bagerhat |
+| CC057 | Khulna | CC Kushtia |
+| CC059 | Khulna | CC Magura |
+| CC060 | Khulna | CC Satkhira |
+| CC061 | Khulna | CC Jhenaidah |
+| CC065 | Barisal & Dhaka Outer | CC Barisal (Line Road) |
+| CC072 | Bogra | CC Dinajpur |
+| CC073 | Bogra | CC Sayedpur |
+| CC079 | Bogra | CC Rangpur-2 |
+| CC081 | Rajshahi | CC Sirajgonj |
+| CC086 | Comilla & Sylhet | CC Habigonj |
+| CC094 | Rajshahi | CC Pabna |
+| CC098 | Comilla & Sylhet | CC Narsingdi |
+| CC103 | Comilla & Sylhet | CC Chawk Bazar |
+| CC104 | Dhaka West | CC Lalbagh |
+| CC105 | Mymensingh | CC Jamalpur |
+| CC106 | Comilla & Sylhet | CC Comilla |
+| CC126 | Chittagong | CC Agrabad |
+| CC127 | Comilla & Sylhet | CC Feni |
+| CC131 | Comilla & Sylhet | CC Chandpur |
+| CC135 | Dhaka West | CC Savar |
+| CC136 | Dhaka East | CC Gazipur |
+[/TABLE]
+Note: Total: 48 Monobrand CCRs. Aug24 campaign used only 8 CCRs; full list applies from Mar25 onwards.

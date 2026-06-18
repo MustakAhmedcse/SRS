@@ -1,0 +1,274 @@
+Shera Partner Campaign
+Unique KPI Conditions
+Banglalink – Distributor Shera Partner | 7 SRFs | Mar 2025 – Aug 2025
+[TABLE]
+| Attribute | Detail |
+| Coverage Period | March 2025 – August 2025 |
+| Total SRFs Covered | 7 Service Request Forms |
+| Channel | Distributors (DH/DD) |
+| Requester Dept. | Channel Planning |
+| KPIs Covered | EV Secondary (C2C), SC Primary, Recharge, All Bundles, GA Excl. DRC, Retail SCR, RSO Productivity |
+| Document Purpose | Catalogue all unique KPI conditions across all Shera Partner SRFs |
+[/TABLE]
+TABLE OF CONTENTS
+Section 1:  Overview & Campaign Taxonomy
+Section 2:  KPI Structure & Weightages
+Section 3:  Dual Assessment Mechanism (EV vs SC)
+Section 4:  Individual KPI Evaluation – Recharge Failure Fallback
+Section 5:  GA (Gross Add) Conditions
+Section 6:  EV Secondary (C2C) Recharge Definition
+Section 7:  SC Primary (Lifting) Definition
+Section 8:  Bundle (C2S) Conditions
+Section 9:  Retail SCR Condition
+Section 10:  RSO Productivity Condition
+Section 11:  FF GA Participation Rules (Jul25)
+Section 12:  Cluster-Specific Campaign Modalities
+Section 13:  Universal General Conditions
+Section 14:  Maturity Date & Data Source Variations
+Section A:  Appendix A – Month-by-Month Variation Matrix
+Section 1: Overview & Campaign Taxonomy
+The Shera Partner Campaign is a monthly distributor incentive program run by Banglalink's Channel Planning department. It rewards Distributor Houses (DHs/DDs) for multi-dimensional performance across seven KPI dimensions. Targets, weightages, and budget are shared by the B2C team per DH via separate Excel files.
+1.1 SRF Summary
+[TABLE]
+| # | SRF Title | Period | Cluster Split | Recharge Fail% | Maturity |
+| 1 | Shera Partner Mar25 | Mar 2025 | 2 clusters (non-Central vs Central+Gazipur) | 95% | 8th following month |
+| 2 | Shera Partner Apr25 | Apr 2025 | Single modality | 70% | 8th following month |
+| 3 | Shera Partner May25 | May 2025 | Single modality | 70% | 3rd following month |
+| 4 | Shera Partner GA May25 | May 2025 | GA+RSO Productivity only (no EV/SC/Bundle) | N/A | 8th following month |
+| 5 | Shera Partner Jun25 | Jun 2025 | 3 clusters (Except Cent+West / Central / West) | 95% | 8th following month |
+| 6 | Shera Partner Jul25 | Jul 2025 | Single + 7 special DHs | 85% | 8th following month |
+| 7 | Shera Partner Aug25 | Aug 2025 | 2 clusters (NE+N+E vs Central+West) | 85% | 8th following month |
+[/TABLE]
+1.2 KPI Dimensions (Standard Campaign)
+EV Secondary (C2C) – RSO to Retailer EV recharge (R2RT + D2RT + OTF + DTR)
+SC Primary – SIM Card primary sales = DD lifting from BL
+Recharge (EV + SC combined) – Cumulative EV and SC
+All Bundle Sales – Data + Voice + MXB C2S (excluding SC)
+GA Excluding DRC – Gross Add, excluding Direct Retailer Connect (DRC)
+Retail SCR – Scratch Card Ratio (shared by B2C)
+RSO Productivity – RSO-level performance metric
+May25 GA-only SRF covers only GA Excl. DRC and RSO Productivity — the remaining 5 KPIs are not part of that SRF.
+Section 2: KPI Structure & Weightages
+The Shera Partner campaign evaluates performance using a weighted multi-KPI structure. Exact weightages per KPI per DH are set by the B2C team and shared via Excel. However, two weightages are explicitly stated in the SRFs for the individual KPI fallback mechanism:
+2.1 Explicitly Stated Weightages (Individual KPI Assessment)
+[TABLE]
+| KPI | Mar25 | Apr25 | May25–Aug25 | Notes |
+| C2C (EV Secondary) | 35% | 35% | 30% | Reduced from 35% to 30% from May25 |
+| SC Primary | 10% | 10% | 10% | Consistent across all months |
+[/TABLE]
+All other KPI weightages (Bundle, GA, Retail SCR, RSO Productivity, Recharge) vary by DH and are shared by B2C team in target files.
+2.2 General Campaign Rules
+KPI weightage may vary from DD to DD (individualised targets)
+Month-end RDB (of the respective month) is the agent reference database
+DH-wise budget shared by B2C team
+Retail SCR shared separately by B2C team
+Rounding: General mathematical rounding (below 0.5 rounds down; ≥0.5 rounds up)
+Section 3: Dual Assessment Mechanism (EV vs SC)
+A key and unique feature of the Shera Partner campaign: EV Secondary and SC Primary are evaluated both separately and cumulatively for every DH. The DH receives the higher payout from the two methods.
+3.1 How Dual Assessment Works
+[TABLE]
+| Step | Assessment Method | Outcome |
+| 1 | Cumulative Assessment: EV + SC combined performance against combined target | Earn incentive based on combined achievement (e.g., BDT 10K) |
+| 2 | Separate Assessment: EV and SC individually against their respective targets | Earn incentive based on separate achievement (e.g., BDT 15K) |
+| 3 | Final Award: Compare both amounts | DH is paid the higher amount (BDT 15K in the example) |
+[/TABLE]
+EXAMPLE from SRFs: If a DH earns BDT 10K for cumulative assessment and BDT 15K for separate assessment, the DH is paid BDT 15K (the higher amount). This mechanism ensures DHs are never penalised for strong single-KPI performance.
+This dual assessment applies consistently across ALL months (Mar25–Aug25) for the full Shera Partner campaign
+The May25 GA-only SRF does not have EV/SC, so dual assessment is not applicable there
+Section 4: Individual KPI Evaluation – Recharge Failure Fallback
+When a DH fails to achieve the minimum Recharge target threshold, the normal combined assessment is bypassed and EV (C2C) and SC are individually evaluated using fixed weightages. This is the most varied condition across SRFs.
+4.1 Trigger Thresholds by Month
+[TABLE]
+| Month | Recharge Fail Trigger | C2C Weightage | SC Weightage |
+| Mar25 | < 95% of Recharge target | 35% | 10% |
+| Apr25 | < 70% of Recharge target | 35% | 10% |
+| May25 | < 70% of Recharge target | 30% (changed from 35%) | 10% |
+| Jun25 | < 95% of Recharge target | 30% | 10% |
+| Jul25 | < 85% of Recharge target | 30% | 10% |
+| Aug25 | < 85% of Recharge target | 30% | 10% |
+[/TABLE]
+KEY EVOLUTION: The recharge fail trigger changed across months: 95% (Mar) → 70% (Apr/May) → 95% (Jun) → 85% (Jul/Aug). The C2C weightage dropped from 35% to 30% from May25. SC weightage stayed at 10% throughout.
+4.2 Individual KPI Assessment Rules
+When individual KPI assessment is triggered, BOTH of the following must be true to earn individual KPI payout:
+The DH must achieve 100% of the specific KPI's target (C2C OR SC – whichever is being claimed)
+The DH must also achieve a minimum cross-achievement percentage of the OTHER KPI
+4.3 Minimum Cross-Achievement Requirement by Month
+[TABLE]
+| Month | For C2C KPI (need SC%) | For SC KPI (need C2C%) | Notes |
+| Mar25 | SC ≥ 90% | C2C ≥ 90% | Symmetric: same % for both |
+| Apr25 | SC ≥ 70% | C2C ≥ 70% | Symmetric: same % for both |
+| May25 | SC ≥ 85% | C2C ≥ 85% | Raised from Apr25 70% to 85% |
+| Jun25 | SC ≥ 85% | C2C ≥ 85% | Same as May25 |
+| Jul25 | SC ≥ 80% | C2C ≥ 80% | Slightly relaxed from Jun25 85% |
+| Aug25 | SC ≥ 75% | C2C ≥ 75% | Further relaxed from Jul25 80% |
+[/TABLE]
+4.4 Illustrated Examples (from SRFs)
+Mar25 Example (95% recharge threshold; 90% cross-achievement needed):
+[TABLE]
+| DH | C2C Tgt | C2C Ach% | SC Tgt | SC Ach% | Eligible Slab | Reason |
+| B | 200 | 100% | 100 | 90% | 100% C2C KPI (35%) | C2C 100% & SC ≥ 90% → eligible |
+| B | 200 | 100% | 100 | 50% | Not eligible | C2C 100% but SC < 90% |
+| B | 200 | 90% | 100 | 100% | 100% SC KPI (10%) | SC 100% & C2C ≥ 90% → eligible |
+| B | 200 | 85% | 100 | 100% | Not eligible | SC 100% but C2C < 90% |
+[/TABLE]
+Aug25 Example (85% recharge threshold; 75% cross-achievement needed):
+[TABLE]
+| DH | C2C Tgt | C2C Ach% | SC Tgt | SC Ach% | Eligible Slab | Reason |
+| B | 200 | 100% | 100 | 75% | 100% C2C KPI (30%) | C2C 100% & SC ≥ 75% → eligible |
+| B | 200 | 100% | 100 | 50% | Not eligible | C2C 100% but SC < 75% |
+| B | 200 | 90% | 100 | 100% | 100% SC KPI (10%) | SC 100% & C2C ≥ 75% → eligible |
+| B | 200 | 73% | 100 | 100% | Not eligible | SC 100% but C2C < 75% |
+[/TABLE]
+Individual KPI assessment only applies when the Recharge KPI falls below its trigger threshold. If Recharge is above threshold, normal combined/dual assessment applies and individual KPI rules are irrelevant.
+Section 5: GA (Gross Add) Conditions
+GA (Gross Add) is one of the seven Shera Partner KPIs. It uses the standard Banglalink GA definition with specific exclusions.
+5.1 GA Eligibility Rules
+Activation basis: FCD (First Call Date) — activation must occur within the campaign promotion period
+MNP Port-IN: Counted as a GA based on FCD
+ETSAF: 98% of all ETSAF (total against activations before disconnection) must be vetted and accepted by Banglalink within the 7th of the following month
+Disconnected numbers: Excluded from GA count (T-6 data cutoff between FCD and report generation date)
+DRC (Direct Retailer Connect) GA: Excluded from Shera Partner GA achievement; B2C team shares the DRC list separately
+Valid usage check: Outgoing call or internet usage in the calendar month for minimum 93% of counted GAs
+5.2 What GA Counts Toward
+Product: Prepaid – itop'up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle upsell
+Only non-DRC GAs counted in achievement (DRC list from B2C is the exclusion reference)
+Section 6: EV Secondary (C2C) Recharge Definition
+EV Secondary is also referred to as C2C (Customer to Customer EV flow). Its definition expanded slightly from Jul25 onwards.
+6.1 Mar25–Jun25 EV Secondary Definition
+[TABLE]
+| Component | Description |
+| R2RT | EV from SR (Sales Representative) to Retailer |
+| D2RT | EV from Distributor to Retailer |
+| DTR | Manual and Daily Commission from Salescom |
+| OTF | EV OTF (Over-The-Floor) + IRIS OTF |
+| Scratch Card | SC lifted from Warehouse to DD |
+| Less Withdrawal | Withdrawal deducted as per usual process |
+| DRC EV Excluded | DRC EV Secondary excluded from achievement; DRC list shared by B2C |
+[/TABLE]
+6.2 Jul25–Aug25 Additional Components
+From July 2025, two new elements were added to the EV Secondary definition:
+SUD12AGENT: Added as an additional EV recharge channel (EV includes R2RT + D2RT + SUD12AGENT + DTR + OTF)
+Digital Distribution Retailers: C2C from Digital Distribution Retailers is included; retailer list shared by B2C
+SUD12AGENT and Digital Distribution Retailer C2C are Jul25+ additions. Prior SRFs (Mar25–Jun25) do not include these channels.
+Section 7: SC Primary (Lifting) Definition
+SC Primary is defined consistently across all Shera Partner SRFs.
+SC Primary = DD (Distributor House) lifting from Banglalink (BL)
+Definition from General Conditions: 'Primary S.C means DD lifting'
+In Jul25–Aug25 SRFs: 'S.C means Retail lifting as per DMS entry' (slightly expanded to include DMS-recorded retail lifting)
+Recharge definition (combined): Recharge = EV + SC (combined for the Recharge KPI assessment)
+Lifting/Issue condition: Activated in General Conditions across all SRFs
+Section 8: Bundle (C2S) Conditions
+Bundle KPI covers All Bundle Sales under the Shera Partner campaign. The definition is consistent across all SRFs.
+8.1 Bundle Eligibility
+Bundle type: Data + Voice + MXB C2S (Customer to Subscriber direction)
+SIM Card (SC) bundles are EXCLUDED from the Bundle KPI count
+Denomination list (Deno list): Shared by B2C team; specific eligible bundle pack codes listed separately
+Full-month hit rule: If any denomination is sold on any day of the month, the full month's hits for that denomination are counted
+Rationale: Full-month rule eases reporting and payout calculation consistency
+The 'full month hit' rule means that a deno introduced mid-month retroactively earns commission for the entire month, not just from the day of introduction. This is a campaign-specific rule unique to the bundle KPI.
+Section 9: Retail SCR Condition
+Retail SCR = Retailer Scratch Card Ratio. This KPI measures scratch card sales penetration at the retailer level.
+Retail SCR targets and achievement data are shared by the B2C team (not computed from standard IT data)
+Exact SCR calculation formula and threshold not specified in SRF text (provided in B2C target files)
+SCR is one of the 7 weighted KPIs; its weightage varies by DH
+Aug25 adds a note: '85% Ach for Recharge & bundle KPI slab DD list will be shared' — indicating that in Aug25, distributors achieving 85% on Recharge and Bundle are on a separate shared list
+Section 10: RSO Productivity Condition
+RSO = Retail Sales Officer. RSO Productivity measures RSO-level sales efficiency.
+RSO Productivity is one of the 7 KPIs in the full Shera Partner campaign AND is included in the May25 GA-only SRF
+Specific RSO productivity calculation and threshold shared via B2C target files
+RSO Productivity weightage varies by DH
+10.1 Jul25 RSO GA Participation Rules
+From Jul25, specific FF GA Participation rules were introduced (see also Section 11):
+DD FF Consideration: RSO + July'25 Allocated BP (Business Partner)
+RSO GA = RSO Specific Code GA + RSO Market GA
+BP GA = GA from BP Code
+Daily GA minimum: 1 GA/day considered for each RSO/BP
+Best 25 out of 31 days in July are considered for monthly performance (not all 31 days)
+Section 11: FF GA Participation Rules (Jul25)
+Unique to July 2025. Field Force GA Participation rules were introduced to ensure consistent daily contribution from RSOs and Business Partners.
+11.1 Jul25 FF GA Rules
+[TABLE]
+| Rule | Condition |
+| DD FF Definition | RSO + July'25 Allocated BP (Business Partner) |
+| Minimum Daily GA | 1 GA per day per RSO/BP |
+| RSO GA Composition | RSO Specific Code GA + RSO Market GA (combined count) |
+| BP GA Composition | GA from BP Code only |
+| Monthly Performance Basis | Best 25 out of 31 days (not full 31 days of July) |
+[/TABLE]
+The 'Best 25 of 31 days' rule gives RSOs/BPs flexibility to miss up to 6 days without penalty. Only introduced in Jul25 — not present in other months.
+11.2 Special DHs in Jul25
+The following 7 DHs received special considerations in Jul25 (separate campaign modality or target structure):
+DHKGOP09, DHKGOP10, DHKGOP11, DHKGOP08
+DHKFAR04, DHKFAR08, DHKFAR09
+The exact special terms are shared via B2C target files and not detailed in the SRF text body.
+Section 12: Cluster-Specific Campaign Modalities
+Several months have differentiated campaign structures for different geographic clusters. The actual target slabs and incentive amounts are embedded as images in the PDFs (shared via B2C Excel files), but the cluster groupings are defined in the SRFs.
+12.1 Cluster Split by Month
+[TABLE]
+| Month | Cluster Groups | Notes |
+| Mar25 | Group 1: All Clusters except Central Cluster & Gazipur Region Group 2: Central Cluster & Gazipur Region | Two distinct modalities |
+| Apr25 | Single modality for all clusters | Unified campaign |
+| May25 | Single modality for all clusters | Unified campaign |
+| Jun25 | Group 1: Except Central Cluster & West Cluster Group 2: Central Cluster Group 3: West Cluster | Three distinct modalities |
+| Jul25 | Single modality + 7 special DHs (separate consideration) | DHKGOP/DHKFAR codes get special terms |
+| Aug25 | Group 1: North-East, North & East Cluster Group 2: Central & West Cluster | Two distinct modalities |
+[/TABLE]
+Cluster-specific incentive tables (slab structures, target amounts) are provided by B2C in target Excel files. The SRF text only defines which clusters fall under which modality — the actual BDT amounts are in B2C-shared files.
+Section 13: Universal General Conditions
+The following conditions appear consistently across all Shera Partner SRFs.
+[TABLE]
+| Condition | Value / Requirement | Notes / Exceptions |
+| Activation Basis | FCD (First Call Date) | Within campaign promotion period |
+| ETSAF Compliance | ≥ 98% by 7th of following month | Vetted and accepted by Banglalink |
+| Disconnection Cutoff | T-6 (between FCD and report date) | Disconnected numbers excluded from GA |
+| MNP Port-IN | Counted as GA based on FCD | Universal across all SRFs |
+| DRC Exclusion | DRC GA excluded from achievement | DRC list shared by B2C |
+| DRC EV Secondary | DRC EV Secondary excluded | DRC list shared by B2C |
+| Valid Usage | Outgoing call or internet in month; min 93% of GA | Calendar month basis |
+| Rounding | Standard (< 0.5 rounds down; ≥ 0.5 rounds up) | Universal |
+| Product Type | Prepaid: itop'up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle upsell | All products standard prepaid |
+| RDB Reference | Month-end RDB of the campaign month | e.g., Mar'25 RDB for Mar25 campaign |
+| Budget Sharing | DH-wise budget shared by B2C team | Not computable from SRF text alone |
+| Retail SCR | Shared by B2C team | Not in IT data directly |
+| Dual Assessment | EV + SC evaluated separately AND cumulatively; higher paid | See Section 3 |
+| Data Source | IT SC + IT BI + DWH + POS | Combined data sources |
+| Report Type | Disbursement slot (not provision) | End of campaign reporting |
+[/TABLE]
+Section 14: Maturity Date & Data Source Variations
+14.1 Maturity Date by SRF
+[TABLE]
+| SRF | Maturity Date | Notes |
+| Mar25 | 8th of following month (Apr 8) | Standard |
+| Apr25 | 8th of following month (May 8) | Standard |
+| May25 (main) | 3rd of following month (Jun 3) | CHANGED – earlier than standard |
+| May25 GA | 8th of following month (Jun 8) | Standard |
+| Jun25 | 8th of following month (Jul 8) | Standard |
+| Jul25 | 8th of following month (Aug 8) | Standard |
+| Aug25 | 8th of following month (Sep 8) | Standard |
+[/TABLE]
+May25 (main multi-KPI SRF) has an earlier maturity of the 3rd of the following month — the only deviation from the standard 8th. The May25 GA-only SRF retains the standard 8th.
+14.2 Input Data Sources
+IT SC (IT Sales Commissioning) – commission processing
+IT BI (Business Intelligence) – analytics data
+DWH (Data Warehouse) – core data warehouse
+POS (Point of Sale) – transaction data
+Report Published: As per tracker
+Report Sharing Slot: Disbursement (not provision)
+Appendix A: Month-by-Month Variation Matrix
+All 7 Shera Partner SRFs compared on key varying parameters.
+[TABLE]
+| Parameter | Mar25 | Apr25 | May25 Main | May25 GA | Jun25 | Jul25 | Aug25 |
+| Recharge fail trigger | 95% | 70% | 70% | N/A | 95% | 85% | 85% |
+| C2C weightage (ind.) | 35% | 35% | 30% | N/A | 30% | 30% | 30% |
+| SC weightage (ind.) | 10% | 10% | 10% | N/A | 10% | 10% | 10% |
+| Cross-achieve needed | ≥90% | ≥70% | ≥85% | N/A | ≥85% | ≥80% | ≥75% |
+| Cluster groups | 2 | 1 | 1 | 1 | 3 | 1+7sp | 2 |
+| SUD12AGENT incl. | No | No | No | No | No | Yes | Yes |
+| Digital dist. C2C incl. | No | No | No | No | No | Yes | Yes |
+| FF GA Best 25/31 rule | No | No | No | No | No | Yes | No |
+| Maturity date | 8th | 8th | 3rd | 8th | 8th | 8th | 8th |
+| EV/SC/Bundle/Recharge/SCR | Yes | Yes | Yes | No | Yes | Yes | Yes |
+| GA KPI included | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
+| RSO Productivity incl. | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
+[/TABLE]
+This document covers all 7 Shera Partner SRFs (Mar25–Aug25). Actual incentive slab amounts, DH-specific targets, and budget figures are in the B2C-shared Excel target files and are not reproduced here. For up-to-date targets and weightages, consult the Channel Planning team.

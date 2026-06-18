@@ -1,0 +1,496 @@
+BL Power Platform
+Unique KPI Conditions Reference
+Extracted from 34 Service Request Forms (SRF)
+Banglalink Digital Distribution / Digital Recharge
+## Table of Contents
+Universal / Common Conditions (All 34 SRFs)
+Category A — Denomination (Deno) Recharge Drive
+Category B — Hourly Drive
+Category C — Weekend Drive
+Category D — Flat Recharge Target Drive
+Category E — Add Balance / Lifting Drive (Flat Commission)
+Category F — Percentage-Based Add Balance Commission
+Category G — Internal Employee Campaign
+Category H — Highest Recharger Competition
+Category I — Pre-Eid Target Campaign
+Category J — Monthly Recharge Slab (DBPs)
+Category K — Monthly Recharge Slab (B2C BDOs)
+Category L — New Customer Acquisition Slab (BDOs)
+Category M — New Customer Acquisition Slab (DBPs)
+Denomination Master Reference Table
+Commission Rate Summary by Campaign Type
+## 1. Universal / Common Conditions (All 34 SRFs)
+The following conditions apply to virtually all BL Power SRFs unless explicitly overridden:
+## 1.1 Platform & Data Source
+[TABLE]
+| Platform | Banglalink Power Platform (BL Power) |
+| Primary Data Source | EV Platform (Electronic Voucher) — replaces DWH used in other campaign types |
+| Supporting Data | IT SC + DMS + POS + EV Platform combined |
+| Recharge Type | i-top up (checked under 'Other' in General Conditions) |
+| Valid Transaction | EV/i-TOP successful recharge only |
+[/TABLE]
+## 1.2 Tax (AIT) Treatment
+[TABLE]
+| AIT Statement | Commission stated both including AIT and excluding AIT |
+| Disbursement Rule | Disburse commission AFTER excluding AIT (i.e., use the 'excluding AIT' figure) |
+| AIT Rate | ~30% (Advance Income Tax on commission income) |
+[/TABLE]
+📌 Note: The 'CB (+AIT)' value is the gross figure. The 'CB (-AIT)' value is what gets disbursed.
+## 1.3 Requester / Owner
+[TABLE]
+| Requester Name | Tasnuva Tabassum |
+| Department | Digital Distribution / Digital Recharge, Banglalink |
+| SRF Count in Folder | 34 SRFs covering Nov 2025 – Apr 2026 |
+[/TABLE]
+## 1.4 Transaction Types Used
+[TABLE]
+| RECHARGE | Standard top-up / denomination recharge by retailer |
+| ADD_BALANCE | bKash balance lift (mobile financial service) — also called 'Lifting' |
+| NEW CUSTOMER ACQUISITION | New BL Power account registration + first recharge |
+[/TABLE]
+## 2. Category A — Denomination (Deno) Recharge Drive
+6 SRFs | Nov 2025 – Apr 2026 | Transaction Type: RECHARGE
+Commission paid per successful denomination (deno) hit. Each deno has a specific BDT commission rate, date range, and optional time window.
+## 2.1 Core KPI Conditions
+[TABLE]
+| KPI Name | Denomination Recharge Hit Commission |
+| Transaction Type | RECHARGE |
+| Eligibility | All existing retailers on BL Power platform |
+| Qualifying Criterion | Retailer must successfully recharge the exact deno amount within the specified date AND time window |
+| Time Window | Most denos have specific hours (e.g., 4:00 PM – 6:00 PM); some have full-day windows |
+| Peak Window Rate | Some denos have a higher commission rate during a 2-hour 'peak' window vs. standard hours |
+| Counting Method | Per-hit (each valid recharge of the deno counts independently) |
+| Data Source | EV Platform |
+| AIT Rule | Disburse after excluding AIT |
+[/TABLE]
+## 2.2 Unique Commission Structures
+## 2.2.1 Standard: Single Rate for Deno (Full Day or Named Window)
+A single BDT commission applies for each successful hit of a given deno within the time window.
+[TABLE]
+| Condition | Example |
+| Date range | e.g., 1 Nov 2025 – 30 Nov 2025 |
+| Time window | e.g., 4:00 PM – 6:00 PM daily |
+| Deno amount | e.g., BDT 65 |
+| Commission (before AIT) | e.g., BDT 5.56 per hit |
+| Commission (after AIT) | e.g., BDT 3.89 per hit |
+[/TABLE]
+## 2.2.2 Tiered: Different Rates for Peak vs. Standard Window
+For certain high-value denos, two rates apply depending on the time of the transaction:
+[TABLE]
+| Window Type | Hours | Commission (before AIT) | Commission (after AIT) |
+| Peak window | e.g., 4:00 PM – 6:00 PM | Higher rate (e.g., BDT 8.33) | e.g., BDT 5.83 |
+| Standard window | Rest of day window | Lower rate (e.g., BDT 5.56) | e.g., BDT 3.89 |
+[/TABLE]
+## 2.3 Denomination Catalogue (All Unique Denos Seen)
+The following denominations appeared across Deno Recharge Drive SRFs:
+[TABLE]
+| Deno 1 | Deno 2 | Deno 3 | Deno 4 | Deno 5 |
+| 39 | 48 | 55 | 57 | 65 |
+| 99 | 101 | 119 | 125 | 140 |
+| 157 | 188 | 199 | 207 | 219 |
+| 227 | 257 | 297 | 319 | 330 |
+| 340 | 357 | 405 | 415 | 429 |
+| 497 | 498 | 499 | 505 | 598 |
+| 599 | 605 | 610 | 619 | 998 |
+| 1000 | 1199 | 1497 | 2097 |  |
+[/TABLE]
+## 2.4 SRF Timeline for Deno Drive
+[TABLE]
+| SRF Period | Notable Features |
+| Nov 2025 | Multi-deno, 4-6 PM window; CB+AIT and CB-AIT both listed |
+| Jan 2026 (v1) | Extended deno list; some denos have peak-hour tier |
+| Jan 2026 (v2) | Revised rates or deno subset for same period |
+| Feb 2026 | Continuing monthly cycle; similar structure |
+| Mar 2026 | Similar; potential additions to deno list |
+| Apr 2026 | Similar; overlaps with Hourly Drive and Weekend Drive in same month |
+[/TABLE]
+📌 Note: Multiple SRFs for the same month indicate revised campaign parameters or separate sub-campaigns running concurrently.
+## 3. Category B — Hourly Drive
+1 SRF | Apr 2026 | Transaction Type: RECHARGE | Single Deno
+## 3.1 KPI Conditions
+[TABLE]
+| KPI Name | Hourly Deno Recharge Drive |
+| Campaign Period | 1 – 15 April 2026 |
+| Time Window | 4:00 PM – 6:00 PM daily (2-hour window) |
+| Target Denomination | BDT 65 only |
+| Transaction Type | RECHARGE |
+| Eligibility | All existing BL Power retailers |
+| Commission (before AIT) | BDT 5.56 per hit |
+| Commission (after AIT) | BDT 3.89 per hit (disburse this amount) |
+| Counting | Per hit within the 4–6 PM window each qualifying day |
+| Data Source | EV Platform |
+[/TABLE]
+📌 Note: This is structurally identical to a single-deno Deno Recharge Drive but classified separately as 'Hourly Drive' in SRF naming. The defining feature is the strict 2-hour daily window for the entire campaign period.
+## 4. Category C — Weekend Drive
+1 SRF | Apr 2026 | Transaction Type: RECHARGE | Weekend-only time window
+## 4.1 KPI Conditions
+[TABLE]
+| KPI Name | Weekend Deno Recharge Drive |
+| Campaign Dates | 10 – 11 April 2026 (Saturday–Sunday, i.e., a weekend) |
+| Time Window | 7:00 PM – 8:00 PM on both days |
+| Target Denomination | BDT 140 only |
+| Transaction Type | RECHARGE |
+| Eligibility | All existing BL Power retailers |
+| Commission (before AIT) | BDT 13.33 per hit |
+| Commission (after AIT) | Disburse after excluding AIT |
+| Counting | Per hit within the 7–8 PM window on the qualifying weekend days only |
+| Data Source | EV Platform |
+[/TABLE]
+📌 Note: Distinguishing feature: Runs on weekend days only (Fri-Sat in BD context, or Sat-Sun), within a 1-hour evening window — tighter than standard hourly drives.
+## 5. Category D — Flat Recharge Target Drive
+4 SRFs | Sep 2025 – Apr 2026 | Variable structures: minimum recharge amount, fixed commission
+## 5.1 Common KPI Structure
+[TABLE]
+| KPI Name | Flat Recharge Target Commission |
+| Transaction Type | RECHARGE |
+| Commission Type | Fixed flat BDT commission per qualifying transaction |
+| Qualifying Criterion | Retailer makes ≥ minimum BDT recharge within campaign window |
+| Counting | Per qualifying transaction (once per retailer in some; unlimited in others) |
+| Eligibility | Varies: 'all existing retailers' OR 'specific named retailers only' |
+[/TABLE]
+## 5.2 Unique Variants
+## 5.2.1 Sep 2025 — Broad Market Drive
+[TABLE]
+| Period | 26 – 29 September 2025 |
+| Min Recharge | BDT 50 |
+| Commission (gross) | BDT 1 per qualifying transaction |
+| Eligibility | All existing BL Power retailers |
+| Special Conditions | None — straightforward per-transaction flat commission |
+[/TABLE]
+## 5.2.2 Oct 2025 — Single Day Drive
+[TABLE]
+| Period | 20 October 2025 (single day) |
+| Min Recharge | BDT 110 |
+| Commission (gross) | BDT 10 per qualifying transaction |
+| Eligibility | All existing BL Power retailers |
+| Special Conditions | Higher minimum and higher commission than Sep drive |
+[/TABLE]
+## 5.2.3 Nov 2025 — SR Drive (Segmented, Specific Deno)
+[TABLE]
+| Period | 9 November 2025, 4:30 PM – 11:59 PM |
+| Target | Deno BDT 207 ONLY (specific denomination required, not any recharge ≥ 207) |
+| Commission (gross) | BDT 57 per hit |
+| Eligibility | Specific named retailers only (segmented base list) |
+| Special Conditions | Retailer must be on the pre-approved list; only deno 207 counts |
+[/TABLE]
+📌 Note: This variant combines deno-specificity (like Category A) with segmented retailer base — a hybrid condition type.
+## 5.2.4 Dec 2025 — Half-Day Drive (Segmented)
+[TABLE]
+| Period | 9 December 2025, 12:35 PM – 11:59 PM |
+| Min Recharge | BDT 55 minimum — OR — single BDT 55 total (only once per retailer) |
+| Commission (gross) | BDT 3 |
+| Eligibility | Specific retailers only (segmented base) |
+| Special Conditions | Commission may be capped at once-per-retailer for the campaign window |
+[/TABLE]
+📌 Note: The 'only once' clause limits commission regardless of how many qualifying transactions a retailer makes.
+## 6. Category E — Add Balance / Lifting Drive (Flat Commission)
+4 SRFs (flat-rate subset) | Sep 2025 – Feb 2026 | Transaction Type: ADD_BALANCE
+## 6.1 KPI Conditions
+[TABLE]
+| KPI Name | Add Balance / bKash Lifting Flat Commission |
+| Transaction Type | ADD_BALANCE |
+| Platform for Lifting | bKash mobile financial service (digital distribution channel) |
+| Distributor Type | bKash Digital Distributor |
+| Eligibility | Varies: all retailers OR segmented base |
+[/TABLE]
+## 6.2 Variants
+## 6.2.1 Sep 2025 — Broad Lifting Target
+[TABLE]
+| Period | 25 – 29 September 2025 |
+| Min Add Balance | BDT 50 per transaction |
+| Commission (gross) | BDT 1 per qualifying transaction |
+| Eligibility | All existing BL Power retailers |
+| Distributor | bKash Digital Distributor |
+[/TABLE]
+## 6.2.2 Feb 2026 — Segmented Base Add Money Drives (Multiple)
+Multiple sub-campaigns ran within Feb 2026 targeting specific retailer segments:
+[TABLE]
+| Sub-Campaign | Period | Min Add Balance | Commission (gross) | Eligibility |
+| Segmented Base Add Money 1 | Single day in Feb 2026 | BDT 100 | BDT 6 | Specific retailers only |
+| Segmented Base Add Money 2 | 3 – 5 Feb 2026 | BDT 100 | BDT 6 | Specific retailers only |
+| Segmented Base Add Money 3 | 9 – 15 Feb 2026 | BDT 100 | BDT 6 | Specific retailers only |
+| Segmented Base Add Money 4 | 20 – 26 Feb 2026 | BDT 100 | BDT 6 | Specific retailers only |
+[/TABLE]
+📌 Note: These segmented campaigns used rotating retailer lists and staggered timing throughout February, likely targeting different micro-segments of the BL Power retailer base.
+## 7. Category F — Percentage-Based Add Balance Commission
+3 SRFs | Jan 2026 – Mar 2026 | Transaction Type: ADD_BALANCE | Fixed percentage rate
+## 7.1 KPI Conditions
+[TABLE]
+| KPI Name | Percentage Commission on Add Balance Amount |
+| Transaction Type | ADD_BALANCE |
+| Commission Rate | 1.470664% of total add balance amount (including AIT) |
+| AIT Rule | Stated including AIT; disburse AFTER excluding AIT |
+| Eligibility | All existing BL Power retailers |
+| Counting Method | Applied to cumulative add balance within the campaign period |
+| Data Source | EV Platform |
+[/TABLE]
+## 7.2 Monthly Campaign Instances
+[TABLE]
+| Month | Period | Commission Rate (incl. AIT) | Disbursement |
+| January 2026 | 12 – 31 Jan 2026 | 1.470664% | After excluding AIT |
+| February 2026 | 1 – 28 Feb 2026 | 1.470664% | After excluding AIT |
+| March 2026 | 1 – 31 Mar 2026 | 1.470664% | After excluding AIT |
+[/TABLE]
+📌 Note: The identical rate across all three months indicates a standardized monthly recurring commission structure. The Jan campaign started mid-month (12 Jan), while Feb and Mar were full-month campaigns.
+## 7.3 Example Calculation
+[TABLE]
+| Retailer adds BDT 1,000 balance | Commission (incl. AIT) = 1,000 × 1.470664% = BDT 14.71 |
+| After AIT deduction (~30%) | Disbursed amount ≈ BDT 14.71 × 0.70 = BDT 10.30 |
+| Note | Exact AIT rate varies; always use the CB (-AIT) figure from the SRF for disbursement |
+[/TABLE]
+## 8. Category G — Internal Employee Campaign
+1 SRF | Feb 2026 | Recipient: BL Full-Time Employees (not retailers)
+## 8.1 KPI Conditions
+[TABLE]
+| KPI Name | Employee Recharge Competition — Daraz Voucher Reward |
+| Campaign Period | 15 – 28 February 2026 |
+| Recipient Type | Top 20 Banglalink full-time employees |
+| Reward Type | Daraz e-commerce vouchers (GIFT — not cash commission) |
+| Platform Requirement | All recharges must be through the BL Power app only |
+| Min Total Recharge | BDT 2,000 total recharge to qualify |
+| Self-Recharge Cap | Max BDT 1,000 may be to own pool number |
+| Other Recharges | Remainder (up to BDT 1,000) must be to other employees' pool numbers |
+| Winner Determination | Winner list shared by Digital Team — top 20 by cumulative recharge |
+| Transaction Type | RECHARGE |
+| Eligibility | BL full-time employees with BL Power app account |
+[/TABLE]
+📌 Note: This is the only campaign in the folder targeting internal Banglalink employees rather than external retailers. The cap on self-recharges (BDT 1,000) prevents employees from simply recharging their own number to win.
+## 9. Category H — Highest Recharger Competition
+1 SRF | Mar 2026 | Recipient: Self-Retailers | Reward: GIFT
+## 9.1 KPI Conditions
+[TABLE]
+| KPI Name | Highest Recharger Self-Retailer Competition |
+| Campaign Period | 18 – 31 March 2026 |
+| Recipient Type | Self-retailers (BL Power account holders who recharge for themselves) |
+| Prize Structure | Top 3 self-retailers by cumulative recharge receive GIFT awards |
+| Min Qualification | Cumulative recharge ≥ BDT 10,000 over the campaign period |
+| Registration Requirement | Must have a registered BL Power account linked to mobile number |
+| Winner Determination | Ranked by total recharge amount; top 3 win; winner list by B2C team |
+| Transaction Type | RECHARGE |
+| Award Type | GIFT (non-cash reward) |
+| Data Source | EV Platform + BL Power platform data |
+[/TABLE]
+📌 Note: The BDT 10,000 minimum acts as a qualification threshold — only retailers reaching this total are eligible for ranking. Prize type is GIFT (not monetary commission), making disbursement logic different from cash campaigns.
+## 10. Category I — Pre-Eid Target Campaign
+1 SRF | Apr 2026 | Selective Retailer Base | Flat Commission
+## 10.1 KPI Conditions
+[TABLE]
+| KPI Name | Pre-Eid Recharge Target Commission |
+| Campaign Period | 17 – 20 April 2026 |
+| Retailer Base | Specific / selective retailers only (segmented list) |
+| Min Recharge | BDT 30 (any recharge ≥ BDT 30 qualifies) |
+| Cap | Commission paid only ONCE per retailer (regardless of how many qualifying transactions) |
+| Commission (gross) | BDT 3 |
+| Transaction Type | RECHARGE |
+| Eligibility | Must be on the pre-approved selective base list |
+| Timing Context | Pre-Eid period — typically high recharge volume window |
+[/TABLE]
+📌 Note: The once-per-retailer cap is the key distinguishing condition: even if a retailer makes 10 transactions of BDT 30+, they receive only BDT 3 total for the campaign.
+## 11. Category J — Monthly Recharge Slab (DBPs)
+2 SRFs | Nov 2025 & Jan 2026 | Recipient: DBPs (Digital Business Partners) | Tiered Monthly Target
+## 11.1 Common KPI Structure
+[TABLE]
+| KPI Name | Monthly Recharge Slab Commission — DBP |
+| Recipient Type | DBPs (Digital Business Partners / Distributors) |
+| Transaction Type | RECHARGE |
+| Period Type | Monthly (accumulated recharge over calendar month) |
+| Mechanism | Retailer accumulates total monthly recharge; falls into highest qualifying slab |
+| DMS Treatment | DBP treated as 'BL Franchise Store' in DMS for reporting |
+[/TABLE]
+## 11.2 Nov 2025 — 3-Tier Slab (from 15 Nov)
+[TABLE]
+| Slab | Monthly Recharge (BDT) | Commission (BDT) |
+| Tier 1 | ≥ 5,000 | 300 |
+| Tier 2 | ≥ 8,000 | 500 |
+| Tier 3 | ≥ 12,000 | 1,000 |
+[/TABLE]
+[TABLE]
+| Start Date | 15 November 2025 (partial month) |
+| Min to Qualify | BDT 5,000 |
+| Note | Retailer earns the commission for the highest slab reached |
+[/TABLE]
+## 11.3 Jan 2026 — Expanded 7-Tier Slab (ETSAF Condition)
+[TABLE]
+| Slab | Monthly Recharge (BDT) | Commission (BDT) |
+| Tier 1 | ≥ 300 | 6 |
+| Tier 2 | ≥ 500 | 20 |
+| Tier 3 | ≥ 1,000 | 60 |
+| Tier 4 | ≥ 3,000 | 210 |
+| Tier 5 | ≥ 5,000 | 400 |
+| Tier 6 | ≥ 8,000 | 800 |
+| Tier 7 | ≥ 12,000 | 1,200 |
+[/TABLE]
+[TABLE]
+| Start Date | 1 January 2026 (full month) |
+| Min to Qualify | BDT 300 (dramatically lowered from Nov's BDT 5,000) |
+| ETSAF Condition | ETSAF compliance required — retailer must meet ETSAF criteria to qualify |
+| Additional Change | DBP treated as BL Franchise Store in DMS |
+[/TABLE]
+📌 Note: The Jan 2026 revision dramatically expanded the slab ladder (7 tiers vs. 3) and lowered the entry threshold to BDT 300, making many more DBPs eligible. The ETSAF condition was added as a compliance gate.
+## 12. Category K — Monthly Recharge Slab (B2C BDOs)
+2 SRFs | Nov 2025 & Jan 2026 | Recipient: B2C BDOs
+## 12.1 Nov 2025 — 3-Tier Slab (from 1 Nov)
+[TABLE]
+| Slab | Monthly Recharge (BDT) | Commission (BDT) |
+| Tier 1 | ≥ 5,000 | 300 |
+| Tier 2 | ≥ 8,000 | 500 |
+| Tier 3 | ≥ 12,000 | 1,000 |
+[/TABLE]
+[TABLE]
+| Start Date | 1 November 2025 (full month) |
+| Min to Qualify | BDT 5,000 |
+| Note | Same slab structure as DBP Nov 2025 but starts from 1 Nov (not 15 Nov) |
+[/TABLE]
+## 12.2 Jan 2026 — Single-Tier Target
+[TABLE]
+| Structure Change | Simplified from tiered slab to single monthly target |
+| Monthly Target | BDT 30,000 total recharge |
+| Commission on Achievement | BDT 2,000 (paid only if BDT 30,000 target is fully met) |
+| Start Date | 1 January 2026 |
+| Note | All-or-nothing: no partial commission for falling short of target |
+[/TABLE]
+📌 Note: The Jan 2026 B2C BDO structure represents a fundamentally different incentive model — a single high-value target with binary payout, vs. the multi-tier slab approach used in Nov 2025.
+## 13. Category L — New Customer Acquisition Slab (BDOs)
+2 SRFs | Nov 2025 & Jan 2026 | Transaction Type: NEW CUSTOMER ACQUISITION | Recipient: BDOs
+## 13.1 Common KPI Structure
+[TABLE]
+| KPI Name | New Customer Acquisition Commission — BDO |
+| Transaction Type | NEW CUSTOMER ACQUISITION |
+| Qualifying New Account | New BL Power account registration + successful recharge (min BDT 50 recharge per account) |
+| Commission Type | Per-acquisition, tiered by monthly volume (higher volume = higher per-account rate) |
+| Dual-Rate Structure | Different per-account rate based on FIRST recharge amount (BDT 50 vs. BDT 300) |
+[/TABLE]
+## 13.2 Nov 2025 — Slab Structure
+[TABLE]
+| Min to Qualify | 50 new accounts with BDT 50 recharge each |
+| Cap | Max 250 qualifying accounts per month |
+[/TABLE]
+[TABLE]
+| Slab (Monthly Count) | Rate if First Recharge = BDT 50 (BDT) | Rate if First Recharge = BDT 300 (BDT) |
+| 50 – 99 | 8 | 30 |
+| 100 – 199 | 10 | 35 |
+| 200 – 249 | 15 | 45 |
+| 250 (cap) | 20 | 50 |
+[/TABLE]
+## 13.3 Jan 2026 — Revised Slab Structure
+[TABLE]
+| Min to Qualify | 15 new accounts with BDT 50 recharge each (threshold reduced from 50) |
+| Cap | Up to 250+ qualifying accounts |
+[/TABLE]
+[TABLE]
+| Slab (Monthly Count) | Rate if First Recharge = BDT 50 (BDT) | Rate if First Recharge = BDT 300 (BDT) |
+| 15 – 49 | 3 | 15 |
+| 50 – 99 | 5 | 20 |
+| 100 – 199 | 8 | 30 |
+| 200 – 249 | 12 | 40 |
+| 250+ | 15 | 45 |
+[/TABLE]
+📌 Note: Jan 2026 added a new entry slab (15-49) with lower rates, making the structure more accessible to lower-volume BDOs. The min qualification threshold also dropped from 50 to 15 accounts.
+## 14. Category M — New Customer Acquisition Slab (DBPs)
+2 SRFs | Nov 2025 & Jan 2026 | Transaction Type: NEW CUSTOMER ACQUISITION | Recipient: DBPs
+## 14.1 Structure Overview
+[TABLE]
+| KPI Name | New Customer Acquisition Commission — DBP |
+| Similarity to BDO | Very similar slab structure to Category L (BDO NCA) but for DBP recipients |
+| Transaction Type | NEW CUSTOMER ACQUISITION |
+| Qualifying Account | New BL Power registration + BDT 50 minimum recharge |
+| Commission Dual-Rate | BDT 50 vs BDT 300 first recharge determines per-account commission rate |
+[/TABLE]
+## 14.2 Nov 2025 — Slab
+[TABLE]
+| Min to Qualify | 50 new accounts (same as BDO Nov 2025) |
+| Cap | 250 accounts |
+[/TABLE]
+[TABLE]
+| Slab (Monthly Count) | Rate if First Recharge = BDT 50 (BDT) | Rate if First Recharge = BDT 300 (BDT) |
+| 50 – 99 | 8 | 30 |
+| 100 – 199 | 10 | 35 |
+| 200 – 249 | 15 | 45 |
+| 250 (cap) | 20 | 50 |
+[/TABLE]
+## 14.3 Jan 2026 — Revised Slab
+[TABLE]
+| Min to Qualify | 15 new accounts (reduced from 50) |
+[/TABLE]
+[TABLE]
+| Slab (Monthly Count) | Rate if First Recharge = BDT 50 (BDT) | Rate if First Recharge = BDT 300 (BDT) |
+| 15 – 49 | 3 | 15 |
+| 50 – 99 | 5 | 20 |
+| 100 – 199 | 8 | 30 |
+| 200 – 249 | 12 | 40 |
+| 250+ | 15 | 45 |
+[/TABLE]
+📌 Note: DBP and BDO NCA slabs are structurally identical in both Nov 2025 and Jan 2026, suggesting a unified acquisition incentive policy applied to both channel types.
+## 15. Denomination Master Reference Table
+All unique denominations observed across BL Power SRF campaigns, sorted ascending:
+[TABLE]
+| Deno (BDT) | Campaign(s) Using This Deno |
+| 39 | Deno Recharge Drive |
+| 48 | Deno Recharge Drive |
+| 55 | Deno Recharge Drive; also used as min in Flat Drive (Dec 2025) |
+| 57 | Deno Recharge Drive |
+| 65 | Deno Recharge Drive; Hourly Drive (Apr 2026) |
+| 99 | Deno Recharge Drive |
+| 101 | Deno Recharge Drive |
+| 110 | Flat Recharge Target Drive (Oct 2025 — min amount) |
+| 119 | Deno Recharge Drive |
+| 125 | Deno Recharge Drive |
+| 140 | Deno Recharge Drive; Weekend Drive (Apr 2026) |
+| 157 | Deno Recharge Drive |
+| 188 | Deno Recharge Drive |
+| 199 | Deno Recharge Drive |
+| 207 | Deno Recharge Drive; SR Drive Nov 2025 (only deno) |
+| 219 | Deno Recharge Drive |
+| 227 | Deno Recharge Drive |
+| 257 | Deno Recharge Drive |
+| 297 | Deno Recharge Drive |
+| 319 | Deno Recharge Drive |
+| 330 | Deno Recharge Drive |
+| 340 | Deno Recharge Drive |
+| 357 | Deno Recharge Drive |
+| 405 | Deno Recharge Drive |
+| 415 | Deno Recharge Drive |
+| 429 | Deno Recharge Drive |
+| 497 | Deno Recharge Drive |
+| 498 | Deno Recharge Drive |
+| 499 | Deno Recharge Drive |
+| 505 | Deno Recharge Drive |
+| 598 | Deno Recharge Drive |
+| 599 | Deno Recharge Drive |
+| 605 | Deno Recharge Drive |
+| 610 | Deno Recharge Drive |
+| 619 | Deno Recharge Drive |
+| 998 | Deno Recharge Drive |
+| 1,000 | Deno Recharge Drive |
+| 1,199 | Deno Recharge Drive |
+| 1,497 | Deno Recharge Drive |
+| 2,097 | Deno Recharge Drive |
+[/TABLE]
+## 16. Commission Rate Summary by Campaign Type
+Quick reference for all commission mechanisms across BL Power SRFs:
+[TABLE]
+| Category | Campaign Type | Commission Mechanism | Rate Range / Amount |
+| A | Deno Recharge Drive | Per-hit, per denomination | Varies by deno (e.g., BDT 3.89 – 13.33 after AIT) |
+| B | Hourly Drive | Per-hit, fixed deno within 2hr window | BDT 3.89/hit (after AIT) |
+| C | Weekend Drive | Per-hit, fixed deno on weekend 1hr window | BDT ~9.33/hit (after AIT, estimated) |
+| D1 | Flat Recharge (Sep 25) | Per qualifying transaction ≥ BDT 50 | BDT 1 gross |
+| D2 | Flat Recharge (Oct 25) | Per qualifying transaction ≥ BDT 110 | BDT 10 gross |
+| D3 | SR Drive (Nov 25) | Per deno 207 hit, segmented base | BDT 57 gross |
+| D4 | Flat Recharge (Dec 25) | Once per retailer ≥ BDT 55, segmented | BDT 3 gross |
+| E1 | Add Balance (Sep 25) | Per ADD_BALANCE transaction ≥ BDT 50 | BDT 1 gross |
+| E2-5 | Segmented Add Money (Feb 26) | Per ADD_BALANCE ≥ BDT 100, segmented | BDT 6 gross |
+| F | % Add Balance (Jan–Mar 26) | % of add balance amount | 1.470664% (incl. AIT) |
+| G | Employee Campaign (Feb 26) | Top 20 employees by cumulative recharge | Daraz voucher GIFT |
+| H | Highest Recharger (Mar 26) | Top 3 self-retailers ≥ BDT 10,000 | GIFT award |
+| I | Pre-Eid Campaign (Apr 26) | Once per retailer ≥ BDT 30, segmented | BDT 3 gross |
+| J1 | DBP Slab (Nov 25) | Monthly recharge tier: 5k/8k/12k BDT | BDT 300/500/1,000 |
+| J2 | DBP Slab (Jan 26) | Monthly recharge 7-tier: 300 – 12k BDT | BDT 6 – 1,200 |
+| K1 | BDO Slab (Nov 25) | Monthly recharge tier: 5k/8k/12k BDT | BDT 300/500/1,000 |
+| K2 | BDO Slab (Jan 26) | Single target: BDT 30,000/month | BDT 2,000 if achieved |
+| L1 | NCA BDO (Nov 25) | Per new account slab (50+ accounts) | BDT 8–20 (BDT50 recharge) |
+| L2 | NCA BDO (Jan 26) | Per new account slab (15+ accounts) | BDT 3–15 (BDT50 recharge) |
+| M1 | NCA DBP (Nov 25) | Per new account slab (50+ accounts) | BDT 8–20 (BDT50 recharge) |
+| M2 | NCA DBP (Jan 26) | Per new account slab (15+ accounts) | BDT 3–15 (BDT50 recharge) |
+[/TABLE]
+Document generated from 34 BL Power SRFs (Nov 2025 – Apr 2026).
+Requester: Tasnuva Tabassum, Digital Distribution / Digital Recharge, Banglalink.

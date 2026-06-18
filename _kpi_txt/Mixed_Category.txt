@@ -1,0 +1,449 @@
+Mixed Category SRF
+Unique KPI Conditions – All Unique Campaign Types
+Source: 21 SRFs  |  Prepared for SalesCom Automation Development
+INDEX
+[TABLE]
+| # | Section |
+| 1 | Overview & Campaign Catalogue |
+| 2 | Device BP GA Campaign (BL Prepaid – Jul 2025) |
+| 3 | BDSMARTPAY Recharge Commission (Apr–May 2025) |
+| 4 | DD Weekly EV Secondary Campaign (Feb 2026) |
+| 5 | DD Weekly EV Tertiary Campaign (Feb 2026) |
+| 6 | Distributor Multi-KPI Sprint Accelerate (Apr 2025) |
+| 7 | Daily FR Commission to DH via Promoter (from Jan 2026) |
+| 8 | SME ESO GA Scale-Up Campaign (from Sep 2025) |
+| 9 | RBSP Monthly Commission – KPI Gate Model (Apr & Jun 2025) |
+| 10 | RSO GA Booster Campaign (21–31 Jan 2026) |
+| 11 | Region GA Booster Campaign (21–31 Jan 2026) |
+| 12 | RSO Post-Eid Productivity Booster (10–14 Jun 2025) |
+| 13 | RSO Recharge Accelerate Campaign (8–11 Oct 2025) |
+| 14 | RSO Tiger Retailer Campaign (22–23 Jun 2025) |
+| 15 | Retailer Banglalink Utsob Campaign (11–30 Nov 2025) |
+| 16 | FWA Router Installation – Retailer & Monobrand (Sep 2025 / Jan 2026) |
+| 17 | Monobrand CCR TOS Reward Campaign (Sep–Oct 2025) |
+| 18 | SRF Summary Table |
+[/TABLE]
+1. Overview & Campaign Catalogue
+This document consolidates all unique KPI conditions extracted from 21 SRFs in the Mixed Category folder. Unlike single-product folders, Mixed Category covers a wide range of campaign types, recipients, and commission mechanisms – from Device BP GA slabs to Monobrand TOS drives and SME ESO scale-up programmes.
+Campaign Types at a Glance
+[TABLE]
+| # | Campaign Name / Type | Recipient | Period |
+| 1 | Device BP GA Campaign | Device BP SSE | Jul 2025 |
+| 2 | BDSMARTPAY Recharge Commission | Digital Distributor | Apr–May 2025 |
+| 3 | DD Weekly EV Secondary Campaign | Distributor | Feb 2026 |
+| 4 | DD Weekly EV Tertiary Campaign | Distributor | Feb 2026 |
+| 5 | Distributor Sprint Accelerate | Distributor | Apr 2025 |
+| 6 | Daily FR Commission (Promoter GA) | Retailer/Promoter→DH | From Jan 2026 |
+| 7 | SME ESO GA Scale-Up | SME Direct BDO (ESO) | From Sep 2025 |
+| 8 | RBSP Monthly Commission | RBSP Retailer | Apr & Jun 2025 |
+| 9 | RSO GA Booster Campaign | RSO | 21–31 Jan 2026 |
+| 10 | Region GA Booster Campaign | DD Manager (Region) | 21–31 Jan 2026 |
+| 11 | RSO Post-Eid Productivity Booster | RSO | 10–14 Jun 2025 |
+| 12 | RSO Recharge Accelerate | RSO | 8–11 Oct 2025 |
+| 13 | RSO Tiger Retailer Campaign | RSO | 22–23 Jun 2025 |
+| 14 | Retailer Banglalink Utsob | Retailer | 11–30 Nov 2025 |
+| 15 | FWA Router Installation (Retailer) | FWA Retailer | From Sep 2025 |
+| 16 | FWA Router Installation (Monobrand) | Monobrand Agent | From Jan 2026 |
+| 17 | Monobrand CCR TOS Reward | Monobrand CCR | Sep–Oct 2025 |
+[/TABLE]
+2. Device BP GA Campaign (BL Prepaid – Jul 2025)
+[TABLE]
+| SRF Title | BL Prepaid_Campaign_Device_BP_July25 |
+| Recipient | Device BP SSE |
+| Period | 01 Jul 2025 – 31 Jul 2025 |
+| Product | BL Prepaid (new activation) |
+| Commission Type | Slab-based GA + conditional VLR attachment |
+| AIT | Not applicable (Sales Team exemption) |
+| ETSAF | 98% by 8th of following month |
+| Max Eligible GA | 100 GA cap per slab (even if achievement >100 GA) |
+[/TABLE]
+Slab & Commission Structure
+[TABLE]
+| Slab | GA Achievement vs Target | VLR Attachment Gate | Commission |
+| Slab 1 | >=90% | >=90% | BDT 20/Activation |
+| Slab 2 | >90% to <=95% | >=90% | BDT 30/Activation |
+| Slab 3 | >95% | >=95% | BDT 40/Activation |
+[/TABLE]
+Key Conditions
+[TABLE]
+| Condition | Detail |
+| GA Definition | Successful BL Prepaid Activation (FCD) from listed Device BPs |
+| VLR Data Source | Activation detail + VLR Attachment data shared by user team |
+| Agent Scope | Only listed Device BPs with respective Retailer Code eligible |
+| Rounding | General mathematical rounding: <0.5 round down, >=0.5 round up |
+[/TABLE]
+3. BDSMARTPAY Recharge Commission (Apr–May 2025)
+[TABLE]
+| SRF Title | Commission for BDSMayTPAY on total recharge 17 Apr–31 May25 |
+| Recipient | Digital Distributor – BDSMARTPAY LIMITED |
+| Period | 17 Apr 2025 – 31 May 2025 (Ad-hoc) |
+| Product | Prepaid + Postpaid recharge (I-TOP/EV) |
+| Commission Rate | 1% of total recharge amount during campaign period |
+| Recharge Target | BDT 3,420,000 |
+| Maximum Cap | BDT 35,000 total commission ceiling |
+| Eligible MSISDN | Retailer EV MSISDN: 1409919129 (BDSMARTPAY) |
+| Recharge Type | Valid recharge = EV / I-TOP (retailer to subscriber, not lifting) |
+[/TABLE]
+Key Conditions
+[TABLE]
+| Condition | Detail |
+| I-Top Sales | Means sales to end customer; NOT lifting |
+| Max Cap | Total commission capped at BDT 35,000 regardless of achievement |
+| Source | EV Platform data (IT SC) |
+| Maturity Date | 1 June 2025 |
+[/TABLE]
+4. DD Weekly EV Secondary Campaign (Feb 2026)
+[TABLE]
+| SRFs | DD Weekly Secondary Campaign – 17–21 Feb26 (5 days) | 22–28 Feb26 (7 days) |
+| Recipient | Distributor (DD, DM, RSO Supervisor, RSO of winning DD) |
+| Product | EV Secondary – C2C recharge (SR→Retailer R2RT, D2RT, SUD12AGENT) |
+| Mechanism | Hit or Miss – only >=100% achievement considered |
+| Target Source | B2C will share DD-wise recharge target and incentive amount |
+| Agent List Date | Last day of campaign (21 Feb / 28 Feb) |
+| DRC | DRC Achievement excluded |
+[/TABLE]
+Recharge Scope (EV Secondary C2C)
+[TABLE]
+| Component | Included |
+| R2RT (SR to Retailer) | Yes |
+| D2RT (Distributor to Retailer) | Yes |
+| SUD12AGENT | Yes |
+| DTR (Manual + Daily Commission) | Yes (as usual Salescom process) |
+| EV OTF | Yes |
+| IRIS OTF | Yes |
+| DRC Achievement | EXCLUDED |
+[/TABLE]
+Eligibility Cascade on Winning
+When a DD achieves >=100% of the 5-day (or 7-day) C2C target, the following recipients become eligible for incentive: DD, DM (DD Manager), RSO Supervisor, and RSO of that winning DD.
+Note: Both SRFs (17–21 Feb and 22–28 Feb) share identical conditions apart from campaign duration (5 vs 7 days) and agent list date.
+5. DD Weekly EV Tertiary Campaign (Feb 2026)
+[TABLE]
+| SRFs | DD Weekly Tertiary Campaign – 17–21 Feb26 (5 days) | 22–28 Feb26 (7 days) |
+| Recipient | Distributor (DD, DM, RSO Supervisor, RSO of winning DD) |
+| Product | EV Tertiary – C2S recharge (Recharge to Customer) |
+| Mechanism | Hit or Miss – only >=100% achievement considered |
+| Target Source | B2C will share DD-wise recharge target and incentive amount |
+| Agent List Date | Last day of campaign (21 Feb / 28 Feb) |
+[/TABLE]
+Key Distinction vs Secondary Campaign
+[TABLE]
+| Dimension | EV Secondary (Sec 4) | EV Tertiary (Sec 5) |
+| Flow | C2C – SR/DD to Retailer | C2S – Retailer to Customer |
+| SUD12AGENT | Included | Not explicitly mentioned |
+| DRC | Excluded | Not mentioned |
+[/TABLE]
+Note: Both Tertiary SRFs (17–21 and 22–28 Feb) are structurally identical; only campaign duration differs.
+6. Distributor Multi-KPI Sprint Accelerate (Apr 2025)
+[TABLE]
+| SRF Title | Distributor Sprint Accelerate_Central Cluster_GAZ Region_13–30 Apr25 |
+| Recipient | Distributor |
+| Period | 13 Apr 2025 – 30 Apr 2025 |
+| Scope | Central Cluster + Gazipur (GAZ) Region |
+| RDB | Month-end RDB (Apr25) considered |
+| KPI Variation | KPI and weightage may vary from DD to DD (B2C shares targets in separate Excel) |
+[/TABLE]
+KPI Set Included
+[TABLE]
+| KPI | Description |
+| EV Secondary | C2C recharge (DRC excluded) |
+| SC Primary | SIM Card primary lifting |
+| Recharge (EV+SC) | Combined EV and SC recharge |
+| All Bundle Sales | All bundle types |
+| GA Excl. DRC | Gross Add excluding DRC |
+| Retail SCR | Retail Scratch Card |
+| RSO Productivity | RSO performance metric |
+[/TABLE]
+Exclusion Rule – Shera Partner
+DDs receiving All Bundle KPI commission under the Shera Partner incentive scheme are EXCLUDED from the Sprint Accelerate campaign, and vice versa. This mutual exclusion applies specifically to the Central Cluster and Gazipur Region markets.
+General Conditions
+[TABLE]
+| Condition | Detail |
+| Usage Gate | Min 93% GA with valid usage (No Play definition) |
+| T-6 | Disconnection: between FCD and T-6 date |
+| Products | itop'up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle Upsell |
+| Rounding | Standard mathematical rounding (<0.5 down, >=0.5 up) |
+| Maturity | 4th of following month |
+[/TABLE]
+7. Daily FR Commission to DH via Promoter (from Jan 2026)
+[TABLE]
+| SRF Title | Daily FR Commission to DH based on Promoter GA from 18th Jan26 |
+| Recipient | Retailer (Promoter type) → Disbursed to Distributor Master SIM/Itop (after AIT) |
+| Period | 18 Jan 2026 – Till further notice |
+| Frequency | Daily |
+| Product | All Prepaid – Cheris SIM activation via FR793 and FR1993 |
+| AIT | Not applicable for commission (Sales Team exemption); but AIT deducted before disbursement |
+[/TABLE]
+Commission Rate by FR Code
+[TABLE]
+| FR Code | SIM Type | Before AIT (BDT) | After AIT (BDT) |
+| FR793 | Cheris SIM | 77.778 | 70 |
+| FR1993 | Cheris SIM | 200 | 180 |
+[/TABLE]
+Eligibility Conditions
+[TABLE]
+| # | Condition |
+| 1 | GA = Cheris dial with respective FR (793 & 1993) SIM – Successful activation/FCD |
+| 2 | FR must be completed within the same date as activation |
+| 3 | Commission disbursed to Distributor Master SIM/Itop number after AIT deduction |
+| 4 | MSISDNs that did NOT receive OTF commission after recharge FR793/1993 are also eligible |
+| 5 | Retailer type PROMOTER considered regardless of Enable/Disable status in agent list |
+| 6 | Daily agent list considered for commission calculation |
+[/TABLE]
+Note: The FR commission disbursement to DD is a prerequisite condition for eligibility (condition 5 in SRF).
+8. SME ESO GA Scale-Up Campaign (from Sep 2025)
+[TABLE]
+| SRF Title | GA Scale up for developing ESOs from 1st Sep25 |
+| Recipient | SME Direct BDO (ESO – Enterprise Sales Officers) |
+| Period | 01 Sep 2025 – Until further notice |
+| Frequency | Daily (Salescom to EV automation: Yes) |
+| Product | Call & Control and Postpaid – eligible Product ID & Service Class specified |
+| GA Definition | New connection onboarded with first recharge >=BDT 351, OR insurance bundle (FRC 163/193/267) |
+| MNP | MNP port-in: same condition – first recharge >=BDT 351 or insurance bundle |
+| No Cap | No capping for additional GA above target |
+| Maturity | T+1 days |
+[/TABLE]
+Slab-Based Target & Commission
+[TABLE]
+| Range | Slab Base | Eligibility Target | Additional Sales Threshold | Commission/GA | Final Payout |
+| 0–35 | 35 | 50 | 15 | BDT 80 | BDT 1,200 |
+| 36–40 | 36 | 55 | 19 | BDT 80 | BDT 1,520 |
+| 41–45 | 41 | 60 | 19 | BDT 80 | BDT 1,520 |
+| 46–50 | 46 | 65 | 19 | BDT 80 | BDT 1,520 |
+| 50–60 | 50 | 70 | 20 | BDT 80 | BDT 1,600 |
+| 60–70 | 60 | 80 | 20 | BDT 80 | BDT 1,600 |
+| 70+ | 70 | 85 | 15 | BDT 80 | BDT 1,200 |
+[/TABLE]
+Note: Final Payout = Additional Sales Threshold × Commission/GA. ESO earns BDT 80 per GA upon achieving target.
+Eligible Product IDs & Service Classes
+[TABLE]
+| EQUIPID | SERVICE_CLASS |
+| EQPCOCCP | 178 |
+| EQCCSMEBL3 | 346 |
+| B2BPost91p10s | 1050 |
+| B2BPost91pFnF66p10s | 1052 |
+| EQCCSMEBL2 | 27 |
+| EQCCSMEBL4 | 25 |
+| EQCCSMEPR | 18 |
+[/TABLE]
+9. RBSP Monthly Commission – KPI Gate Model (Apr & Jun 2025)
+[TABLE]
+| SRFs | RBSP Commission from Apr25 | RBSP Commission from Jun25 |
+| Recipient | RBSP Retailers (Retail Business Service Points) |
+| Period | Apr 2025 onwards (monthly, until further notice) |
+| Total Commission | BDT 2,000 per RBSP retailer per month |
+| KPI Count | 3 KPIs with respective targets, thresholds and weightages |
+| Payout Rule | >=100% → 100% payout | 80–99% → 80% payout | <80% → 0% |
+| Achievement Cap | At actual, max 100% |
+| AIT | Not applicable (Sales Team exemption) |
+| ETSAF | 98% vetted and accepted by 7th of following month via Reseller App |
+| Maturity | 1st of following month |
+[/TABLE]
+KPI Structure
+[TABLE]
+| KPI | Target | Threshold | Weight | Apr25 Product Scope | Jun25 Product Scope |
+| SIM Replacement | 25 | 80% | 70% | SIMSWAP, ESIMSWAP | SIMSWAP, ESIMSWAP (same) |
+| Gross Add (GA) | 15 | 80% | 20% | RYZE Prepaid only (RYZ1001, RYZ1001-ESIM) | All Prepaid (MMST, MMSTS, ESIMP, ESIMUP, RYZ1001, RYZ1001-ESIM) |
+| Digital Asset Installation | 12 | 80% | 10% | BL App + Toffee App | BL App + Toffee App (same) |
+[/TABLE]
+Key Change: Apr25 → Jun25
+[TABLE]
+| Parameter | Apr 2025 | Jun 2025 |
+| GA Product Scope | RYZE Prepaid only | All Prepaid SIM types |
+| DMS Codes (GA) | RYZ1001, RYZ1001-ESIM | MMST, MMSTS, ESIMP, ESIMUP, RYZ1001, RYZ1001-ESIM |
+| Payout Bracket Label | 80–99% = 80% | Below 100%–80% = 80% (same effect) |
+[/TABLE]
+Digital Asset Installation Conditions
+[TABLE]
+| App | Condition |
+| My BL App | Install from Play Store (Android) or App Store (Apple) using RBSP Toffee referral code |
+| Toffee App | Install from Play Store (Android) or App Store (Apple) using RBSP Toffee referral code |
+[/TABLE]
+10. RSO GA Booster Campaign (21–31 Jan 2026)
+[TABLE]
+| SRF Title | RSO GA Booster Campaign_21st to 31st Jan26 |
+| Recipient | RSO (Field Force) |
+| Period | 21 Jan 2026 – 31 Jan 2026 |
+| KPI | GA – Gross Add (RSO Market GA + RSO Own Code) |
+| Gates | 48-hour usage >=80% AND VLR Active Usages >=80% (B2C shares data) |
+| Incentive | RSO-wise amount specified in target file (B2C-provided) |
+| Agent List | 31 Jan 2026 agent list considered |
+| Rounding | Standard: <0.5 down, >=0.5 up |
+[/TABLE]
+GA Definition
+RSO GA = RSO Market GA + RSO Own Code activations. Both MNP and All Prepaid activations are counted. Products accepted: All Prepaid and successful MNP connections.
+Gate Conditions (Both Must Be Met)
+[TABLE]
+| Gate | Threshold | Data Source |
+| 48-Hour Usage | >=80% of GA | B2C will share achievement data |
+| VLR Active Usages | >=80% of GA | B2C will share achievement data |
+[/TABLE]
+11. Region GA Booster Campaign (21–31 Jan 2026)
+[TABLE]
+| SRF Title | Region GA Booster Campaign_21st to 31st Jan26 |
+| Recipient | DD Manager (Region level – Field Force) |
+| Period | 21 Jan 2026 – 31 Jan 2026 |
+| Deliverable | FF Celebration Budget (not individual RSO cash commission) |
+| KPI | GA at Region level |
+| Gates | 48-hour usage >=80% AND VLR Active Usages >=80% (same as RSO Booster) |
+| Exclusion | Any TCG Bar and self-barred connections NOT counted in achievement |
+| Agent List | 31 Jan 2026 agent list considered |
+[/TABLE]
+Note: Key unique condition vs RSO GA Booster (Sec 10): TCG Bar and self-barred connections are explicitly excluded from achievement count. The output is FF Celebration Budget (regional), not individual RSO commission.
+12. RSO Post-Eid Productivity Booster (10–14 Jun 2025)
+[TABLE]
+| SRF Title | RSO Post Eid Productivity Booster Campaign_10th to 14th Jun25 |
+| Recipient | RSO (Field Force) |
+| Period | 10 Jun 2025 – 14 Jun 2025 (EXCLUDING Friday 13 Jun 2025) |
+| KPI | Biometric login & check-in (before 9:00 AM) + Onsite Retail Visit + Min Transaction |
+| Incentive | BDT 200/RSO per day upon meeting ALL criteria |
+[/TABLE]
+Eligibility Criteria (ALL 3 Must Be Met per Day)
+[TABLE]
+| Criterion | Detail |
+| Login & Check-in | Before 9:00 AM (biometric) – B2C will share data |
+| Onsite Retail Visit Target | Must meet daily target – B2C will share |
+| Minimum Transaction per Retail | BDT 100 (Non-Core) | BDT 200 (Core) – B2C will share |
+[/TABLE]
+Note: This is a behavioural/productivity KPI campaign – not a GA or Recharge target campaign. All 3 criteria must be fulfilled daily to earn BDT 200.
+13. RSO Recharge Accelerate Campaign (8–11 Oct 2025)
+[TABLE]
+| SRF Title | RSO Recharge Accelerate Campaign_8th to 11th Oct25 |
+| Recipient | RSO (Field Force) |
+| Period | 8 Oct 2025 – 11 Oct 2025 |
+| KPI | C2C Recharge – EV (R2RT + D2RT + SUD12AGENT) |
+| Incentive | BDT 100 to BDT 300 (RSO-wise – B2C provides target and incentive amount) |
+| Exclusion | C2C to selected numbers excluded (list shared by B2C) |
+| Agent List | 11 Oct 2025 agent list considered |
+[/TABLE]
+C2C Recharge Components
+[TABLE]
+| Component | Included |
+| SR to Retailer (R2RT) | Yes |
+| Distributor to Retailer (D2RT) | Yes |
+| SUD12AGENT | Yes |
+| Selected number list (B2C) | EXCLUDED |
+[/TABLE]
+14. RSO Tiger Retailer Campaign (22–23 Jun 2025)
+[TABLE]
+| SRF Title | RSO Tiger Retailer Campaign_22nd to 23rd Jun25 |
+| Recipient | RSO (Field Force) |
+| Period | 22 Jun 2025 – 23 Jun 2025 |
+| KPI | C2C Retail Count – count of selected retailers with Deno recharge |
+| Incentive | BDT 20 per retail (RSO-wise target from B2C) |
+| Retailer Base | Selected retailer list from B2C (linked SRF: Tiger Retailer EV Lifting Campaign) |
+| Agent List | 23 Jun 2025 agent list considered |
+[/TABLE]
+Unique KPI Condition – Usage Gate
+At least 95% of total GA must have more than BDT 5 in usage within 7th of the next month. This usage gate is unique and distinct from the standard 93% No-Play gate used in other campaigns.
+Deno (Denomination) Recharge
+The KPI measures C2C Deno Recharge activity at selected 'Tiger Retailer' outlets. The specific denominations and retailer list are both shared by B2C. This is a retail count target (number of retailers hit), not a total recharge amount target.
+15. Retailer Banglalink Utsob Campaign (11–30 Nov 2025)
+[TABLE]
+| SRF Title | Retailer Campaign_Banglalink Utsob_11th to 30th Nov25 |
+| Recipient | Retailer |
+| Period | 11 Nov 2025 – 30 Nov 2025 |
+| KPI | GA + C2S Recharge (BOTH must be achieved – dual gate model) |
+| Incentive | Fixed reward amount per retailer (retailer-wise, from B2C) |
+| GA Scope | Only Prepaid SIM; MNP counted; Assisted channel (RSO, BP) excluded |
+| Disbursement | Salescom to EV Automation: Yes (via SMS notification) |
+| Agent List | 30 Nov 2025 calendar considered |
+| Maturity | 8th of following month |
+[/TABLE]
+Dual Gate Eligibility Model
+[TABLE]
+| Retailer | GA Target | Vetted GA | GA Ach% | C2S Target | C2S Ach | C2S Ach% | Status |
+| A | 50 | 40 | 80% | 2,000 | 2,100 | 105% | NOT ELIGIBLE |
+| B | 50 | 50 | 100% | 5,000 | 5,000 | 100% | ELIGIBLE |
+[/TABLE]
+Note: BOTH GA AND C2S targets must be achieved. Achieving one alone does NOT qualify the retailer for incentive.
+GA Definition – Assisted Channel Exclusion
+[TABLE]
+| GA Count | Included? |
+| Retailer self-sold Prepaid SIM activation | Yes |
+| MNP port-in | Yes |
+| RSO-assisted GA | EXCLUDED |
+| BP (Business Partner)-assisted GA | EXCLUDED |
+[/TABLE]
+16. FWA Router Installation – Retailer & Monobrand (Sep 2025 / Jan 2026)
+16A. Retailer FWA Router Installation (from Sep 2025)
+[TABLE]
+| SRF Title | Retailer FWA Router Installation from Sep25 |
+| Recipient | FWA Retailers |
+| Period | 01 Sep 2025 – Until further notice |
+| Commission | BDT 100 per activation (at actual – no cap) |
+| GA | Successful all Prepaid Activation (FAD-based) |
+| DMS Codes | Product Code 'MMST', 'MMSTS' in DMS |
+| Target | 1 (100% threshold, 100% KPI weight) – Achievement >=100%: at actual payout |
+| AIT | Not applicable |
+| Maturity | 1st of following month |
+[/TABLE]
+16B. Monobrand FWA Router Installation (from Jan 2026)
+[TABLE]
+| SRF Title | Monobrand FWA Router Installation from Jan26 |
+| Recipient | Monobrand Agents (MB Agents) |
+| Period | 01 Jan 2026 – Until further notice |
+| Commission | BDT 50 per successful lead generation |
+| Achievement | MB Agent achievement data shared by Business team |
+| AIT | Not applicable |
+| Maturity | 1st of following month |
+[/TABLE]
+Comparison: Retailer vs Monobrand FWA
+[TABLE]
+| Parameter | FWA Retailer (Sep25) | Monobrand Agent (Jan26) |
+| Commission | BDT 100/activation | BDT 50/lead generation |
+| Trigger | Successful FAD-based activation | Successful lead generation |
+| DMS Code | MMST, MMSTS | N/A (business team data) |
+| KPI Model | Target=1, 100% threshold | Achievement data from business team |
+| AIT | Not applicable | Not applicable |
+[/TABLE]
+17. Monobrand CCR TOS Reward Campaign (Sep–Oct 2025)
+[TABLE]
+| SRFs | Reward Campaign for TOS drive for Monobrand CCR_Sep25 to Oct25 + Revision |
+| Recipient | Monobrand CCR (listed agents only) |
+| Period | 28 Sep 2025 – 31 Oct 2025 |
+| KPI | TOS – Transfer of Ownership (Individual to Individual, NID-verified) |
+| Mechanism | Slab-based per-unit commission (no upper cap on Slab 2) |
+| AIT | Not applicable |
+| Eligible | Only listed Monobrand CCRs (list may be expanded during campaign) |
+| Maturity | 1st of the following month |
+[/TABLE]
+Slab Structure
+[TABLE]
+| Slab | TOS Count | Incentive per Unit |
+| Slab 1 | 50 – 100 | BDT 50 |
+| Slab 2 | 100+ | BDT 100 (No Capping) |
+[/TABLE]
+TOS Eligibility Rules
+[TABLE]
+| Condition | Detail |
+| Type | Individual to Individual NID customer TOS only (not corporate) |
+| Agent Scope | Only listed Monobrand CCRs – list may expand |
+| AIT | Not applicable (Sales Team exemption) |
+| Data Source | User team provides TOS data and eligible Monobrand CCR list |
+[/TABLE]
+Note: Original SRF and Revision SRF share identical conditions – the revision was a resubmission on 29 Dec 2025 with no structural changes to KPI logic.
+18. SRF Summary Table
+[TABLE]
+| # | SRF Title (Short) | Date | Recipient | KPI Type | Commission Mechanism |
+| 1 | BL Prepaid_Campaign_Device_BP_July25 | Aug 2025 | Device BP SSE | GA+VLR | Slab BDT 20/30/40, cap 100 GA |
+| 2 | BDSMayTPAY Recharge Commission | May 2025 | Digital Distributor | C2S Recharge | 1% of total, max BDT 35,000 |
+| 3 | DD Weekly Secondary Campaign 17–21 Feb26 | Feb 2026 | Distributor | EV Secondary C2C | Hit/Miss >=100% |
+| 4 | DD Weekly Secondary Campaign 22–28 Feb26 | Feb 2026 | Distributor | EV Secondary C2C | Hit/Miss >=100% |
+| 5 | DD Weekly Tertiary Campaign 17–21 Feb26 | Feb 2026 | Distributor | EV Tertiary C2S | Hit/Miss >=100% |
+| 6 | DD Weekly Tertiary Campaign 22–28 Feb26 | Feb 2026 | Distributor | EV Tertiary C2S | Hit/Miss >=100% |
+| 7 | Daily FR Commission to DH – Promoter GA | Jan 2026 | Promoter→DH | FR793/1993 activation | BDT 70/180 after AIT |
+| 8 | Distributor Sprint Accelerate – Apr25 | Apr 2025 | Distributor | Multi-KPI | Cash incentive, Shera exclusion |
+| 9 | GA Scale up for developing ESOs – Sep25 | Sep 2025 | SME ESO | GA | Slab BDT 80/GA, 7 slabs |
+| 10 | Monobrand FWA Router Installation – Jan26 | Jan 2026 | Monobrand Agent | Lead Gen | BDT 50/lead |
+| 11 | RBSP Commission from Apr25 | Apr 2025 | RBSP Retailer | 3-KPI Gate | BDT 2,000/month at 80/100% payout |
+| 12 | RBSP Commission from Jun25 | Jun 2025 | RBSP Retailer | 3-KPI Gate | BDT 2,000/month, all Prepaid GA |
+| 13 | RSO GA Booster Campaign – Jan26 | Feb 2026 | RSO | GA | 48h+VLR gate, B2C amount |
+| 14 | RSO Post Eid Productivity Booster – Jun25 | Jun 2025 | RSO | Productivity | BDT 200/RSO/day, all 3 criteria |
+| 15 | RSO Recharge Accelerate – Oct25 | Oct 2025 | RSO | C2C Recharge | BDT 100–300, RSO-wise |
+| 16 | RSO Tiger Retailer Campaign – Jun25 | Jun 2025 | RSO | C2C Retail Count | BDT 20/retail, 95% 5TK usage gate |
+| 17 | Region GA Booster Campaign – Jan26 | Feb 2026 | DD Manager | GA | FF Celebration Budget, TCG excl. |
+| 18 | Retailer Campaign_Banglalink Utsob – Nov25 | Dec 2025 | Retailer | GA+C2S Dual Gate | Fixed reward, both KPIs required |
+| 19 | Retailer FWA Router Installation – Sep25 | Oct 2025 | FWA Retailer | GA | BDT 100/activation, at actual |
+| 20 | Reward Monobrand CCR TOS – Sep–Oct25 | Dec 2025 | Monobrand CCR | TOS | Slab BDT 50/100 per unit |
+| 21 | Reward Monobrand CCR TOS_Revision | Dec 2025 | Monobrand CCR | TOS | Same as above (revision only) |
+[/TABLE]

@@ -1,0 +1,272 @@
+TOFFEE APP CAMPAIGNS
+Unique KPI Conditions Reference
+Compiled from all 10 Service Request Forms
+Channel Planning & Alternate Channel/Digital Recharge | Banglalink | Jun 2025 – Aug 2025
+Section 1: Overview & Taxonomy
+This document consolidates all unique KPI conditions from 10 Service Request Forms (SRFs) covering Toffee App installation and referral commission campaigns. The SRFs span June 2025 through August 2025 and cover four distinct programme families across five recipient types: RSO, Retailer, BSP CCR, Device BP, and Monobrand CCR.
+1.1 SRF Inventory
+[TABLE]
+| # | SRF Title | Dept. | Period | Recipient |
+| 1 | RSO Toffee Campaign (15th–30th Jun25) | Channel Planning | Jun 2025 | RSO |
+| 2 | RSO Toffee Campaign (1st–31st Aug25) | Channel Planning | Aug 2025 | RSO |
+| 3 | Retailer Toffee Campaign (15th–30th Jun25) | Channel Planning | Jun 2025 | Retailer |
+| 4 | Retailer Toffee Campaign (1st–31st Aug25) | Channel Planning | Aug 2025 | Retailer |
+| 5 | TOFFEE Campaign_BSP_Jun25 | Alt. Channel & Digital Rch. | Jun 2025 | BSP CCR |
+| 6 | TOFFEE Campaign_Device BP_Jun25 | Alt. Channel & Digital Rch. | Jun 2025 | Device BP |
+| 7 | TOFFEE Campaign_Monobrand_Jun25 | Alt. Channel & Digital Rch. | Jun 2025 | Monobrand CCR |
+| 8 | Toffee Referral Campaign for BSP_Aug25 | Alt. Channel & Digital Rch. | Aug 2025 | BSP CCR |
+| 9 | Toffee Referral Campaign for Device BP_Aug25 | Alt. Channel & Digital Rch. | Aug 2025 | Device BP |
+| 10 | Toffee Referral Campaign for Monobrand_Aug25 | Alt. Channel & Digital Rch. | Aug 2025 | Monobrand CCR |
+[/TABLE]
+1.2 Programme Families
+[TABLE]
+| Family | SRFs | Incentive Model | Period |
+| RSO Toffee Campaign | #1, #2 | BDT 20 per retail participation (≥2 installs per retailer) | Jun & Aug 2025 |
+| Retailer Toffee Campaign | #3, #4 | BDT 15 per successful installation + registration | Jun & Aug 2025 |
+| TOFFEE Campaign (BSP/Device BP/Monobrand) – Jun25 | #5, #6, #7 | Slab-based: BDT 10–20 Upfront + BDT 10–20 Conditional (20 min usage/7 days) | Jun 2025 only |
+| Toffee Referral Campaign (BSP/Device BP/Monobrand) – Aug25 | #8, #9, #10 | Flat BDT 20 per successful installation + registration | Aug 2025 only |
+[/TABLE]
+1.3 Recipient Types
+[TABLE]
+| RSO | Retail Sales Officer – field force supervised by Channel Planning. Gets commission based on how many of their retailers achieve the Toffee participation threshold. |
+| Retailer | Retail Outlet – earns per-installation commission directly for Toffee sign-ups done using their own unique referral code on BL customer MSISDNs. |
+| BSP CCR | Business Sales Partner – Customer Care Representative. Earns Toffee installation commission via referral code from the BSP outlet. |
+| Device BP | Device Business Partner. Earns Toffee installation commission via referral code from the device sales outlet. |
+| Monobrand CCR | Customer Care Representative operating from a Monobrand (dedicated Banglalink) outlet. Earns Toffee installation commission via referral code. |
+[/TABLE]
+Section 2: Core Definitions
+[TABLE]
+| Toffee App | Banglalink's OTT video streaming application. Commission is earned for driving new installations and registrations on customer handsets. |
+| Successful Installation | Toffee app installed from Play Store (Android) or App Store (Apple) on a customer's mobile handset AND the customer registers using the agent's/retailer's unique Toffee referral code. |
+| Unique Referral Code | A personalised code assigned to each Retailer, RSO, BSP CCR, Device BP, or Monobrand CCR. Only installations using this code are credited to that recipient. Referral codes and eligible lists provided by B2C/user team. |
+| Eligible MSISDN | Only Banglalink Customer MSISDNs count. Installations on non-BL numbers are excluded. |
+| New GA Installation | Toffee installation on a newly activated BL SIM. Allowed across all programme families. |
+| Existing Customer Installation | Toffee installation on an already-active BL subscriber's number. Also allowed across all families. |
+| Reactivated Toffee Base | A customer who previously had Toffee but uninstalled/lapsed. For Jun25 BSP/Device BP/Monobrand campaign only: users who have been inactive on Toffee for ≥30 days are eligible to be counted as new installations. |
+| Retail Participation (RSO metric) | A retailer is 'participating' when they achieve at least 2 successful Toffee installations and registrations in BL customer MSISDNs using their unique referral code within the campaign period. |
+| Conditional Commission | Jun25 BSP/Device BP/Monobrand only. A second commission component paid per installation IF the customer uses Toffee for ≥20 minutes within the first 7 days of installation. Paid on top of the Upfront Commission. |
+| Upfront Commission | Jun25 BSP/Device BP/Monobrand only. Commission paid per installation regardless of whether the customer subsequently uses Toffee (no usage condition attached). |
+| 20-Minute Usage Gate | Jun25 BSP/Device BP/Monobrand only. Customer must accumulate ≥20 minutes of Toffee usage within 7 days of installation for the Conditional Commission to be earned. |
+| AIT Applicability | AIT (Advance Income Tax) is NOT applicable to Toffee commissions across all SRFs in this channel. Stated as: 'This is applicable for Sales Team' – meaning the AIT-exempt rule applies to the field force/CCR recipients, not to end customers. |
+| TOS | Transfer of Ownership (Individual to individual) – referenced in the General Conditions of Aug25 Referral campaigns (BSP/Device BP/Monobrand). Not a KPI condition itself but a tracked dimension. |
+| Single IMEI Rule | Monobrand Jun25 only: only one unique IMEI number per MSISDN is allowed for counting a Toffee installation. Prevents multiple installs on the same device from inflating counts. |
+| Month-end RDB / Retailer DB | Month-end Retailer Database used for tagging and eligibility mapping. Applied to RSO and Retailer campaigns. |
+| ETSAF QC | Electronic/Total SAF quality check condition. Referenced in RSO and Retailer SRFs. |
+[/TABLE]
+Section 3: RSO Toffee Campaign
+RSOs earn commission based on how many retailers under them achieve the Toffee participation threshold in a given month. Ran in two phases: Jun25 and Aug25.
+3.1 Commission Structure
+[TABLE]
+| BDT 20 per Retail Participation achieved by the RSO's retailers |
+[/TABLE]
+[TABLE]
+| Requester / Dept. | Md. Saiful Islam Tareq / Channel Planning |
+| Recipient | RSO (Field Force) |
+| Commission Rate | BDT 20 per retail participation. |
+| Retail Participation Def. | A retailer counts as 'participating' when they achieve at least 2 successful Toffee installations and registrations in BL customer MSISDNs using their own unique referral code. |
+| Data Basis | Month-end Retailer Database considered for mapping. |
+| Referral Code Source | Retailers list with unique referral codes provided by B2C. |
+| MSISDN Restriction | Only sign-ups/installations done on Banglalink Customer MSISDNs are counted. |
+| Data Provider | Toffee installation and registration data provided by B2C. |
+| Salescom to EV | Yes (automated). |
+[/TABLE]
+3.2 Jun25 vs Aug25 – Differences
+[TABLE]
+| Parameter | Jun 2025 (15th–30th Jun) | Aug 2025 (1st–31st Aug) |
+| Effective Period | 15 Jun – 30 Jun 2025 (half-month) | 1 Aug – 31 Aug 2025 (full month) |
+| Data Maturity | 10th January 2022 (appears to be a typo in SRF; likely 10th Jul 2025) | 1st August 2025 |
+| SRF Date | 4-Jan-2022 (legacy SRF date; content is Jun25) | 29-Aug-2025 |
+| Commission Rate | BDT 20 / retail participation | BDT 20 / retail participation (unchanged) |
+| Participation Threshold | ≥2 Toffee installs per retailer | ≥2 Toffee installs per retailer (unchanged) |
+[/TABLE]
+📌 The Jun25 RSO SRF carries an SRF date of 4-Jan-2022 and maturity of '10th Jan 2022' – these appear to be legacy/placeholder dates on a reused form. The effective campaign dates (15–30 Jun 2025) are correct.
+3.3 General Conditions – RSO Toffee Campaign
+[TABLE]
+| Activation | FCD (First Call Date) during the promotion period. |
+| SAF | ETSAF QC condition will be considered. |
+| Recharge | All Valid Recharges. Valid recharge = I-TOP UP for data upsell. |
+| Usage | At least 95% of total GA must have >BDT 5 usage within 15 days of activation. |
+| Disconnection | N/A; latest data up to report generation date (T-6). |
+| Product | Prepaid. |
+| Lifting/Issue | N/A; activation within 180 days of lifting. |
+| Data Sources | IT SC, IT BI, DWH, POS. |
+[/TABLE]
+Section 4: Retailer Toffee Campaign
+Retailers earn a direct per-installation commission for each successful Toffee sign-up they facilitate using their unique referral code on BL customer numbers.
+4.1 Commission Structure
+[TABLE]
+| BDT 15 per Successful Toffee Installation and Registration |
+[/TABLE]
+[TABLE]
+| Requester / Dept. | Md. Saiful Islam Tareq / Channel Planning |
+| Recipient | Retailer (Retail Outlet) |
+| Commission Rate | BDT 15 per successful installation and registration using the retailer's unique referral code. |
+| MSISDN Restriction | Only installations on Banglalink Customer MSISDNs count. |
+| Referral Code | Each retailer has a unique referral code. Only their own code-attributed installs are counted. |
+| Referral Code Source | Retailers list with unique referral codes provided by B2C. |
+| Data Provider | Toffee installation and registration data provided by B2C. |
+| Month-end DB | Month-end Retailer Database considered for mapping. |
+| SMS Content | Automated SMS sent upon commission disbursement: 'Priyo Bikreta, Apni [Month] masher TOFFEE Sign UP Campaign er commission hishabe BDT #### (AIT katar por) peyechen. Dhonnobad.' |
+| Salescom to EV | Yes (automated). |
+[/TABLE]
+4.2 Jun25 vs Aug25 – Differences
+[TABLE]
+| Parameter | Jun 2025 (15th–30th Jun) | Aug 2025 (1st–31st Aug) |
+| Effective Period | 15 Jun – 30 Jun 2025 (half-month) | 1 Aug – 31 Aug 2025 (full month) |
+| Data Maturity | 1st July 2025 | 1st August 2025 |
+| SMS Month Reference | 'Jun25 masher' | 'Aug25 masher' |
+| Commission Rate | BDT 15 / install (unchanged across both months) | BDT 15 / install |
+[/TABLE]
+📌 Retailer Toffee Campaign pays BDT 15/install (less than the Aug25 Referral campaign's BDT 20/install for BSP/Device BP/Monobrand), reflecting the channel difference.
+4.3 General Conditions – Retailer Toffee Campaign
+[TABLE]
+| Activation | FCD (First Call Date) during the promotion period. |
+| SAF | ETSAF QC condition will be considered. |
+| Recharge | All Valid Recharges. Valid recharge = I-TOP UP for data upsell. |
+| Usage | At least 95% of total GA must have >BDT 5 usage within 15 days of activation. |
+| Disconnection | N/A; latest data up to report generation date (T-6). |
+| Product | Prepaid. |
+| Data Sources | IT SC, IT BI, DWH, POS. |
+[/TABLE]
+Section 5: TOFFEE Campaign – BSP CCR / Device BP / Monobrand CCR (Jun 2025)
+Jun 2025 campaign for Alternate Channel recipients. Uses a tiered slab structure with two commission components: an Upfront Commission (paid per install) and a Conditional Commission (paid only if the customer uses Toffee for ≥20 minutes within 7 days).
+5.1 Dual-Component Slab Payout Structure
+[TABLE]
+| Slab | # of Installations | Upfront Commission (per install) | Conditional Commission (per install, if ≥20 min usage/7 days) | Max Total (per install) |
+| Slab 1 | 5 – 10 | BDT 10 | BDT 10 | BDT 20 |
+| Slab 2 | 11 – 20 | BDT 15 | BDT 15 | BDT 30 |
+| Slab 3 | 21 and above | BDT 20 | BDT 20 | BDT 40 |
+[/TABLE]
+📌 Both commission components are per-install amounts. Total monthly earning = (Upfront per slab × installs) + (Conditional per slab × qualifying installs with ≥20 min usage in 7 days).
+📌 Minimum threshold is 5 installations to enter Slab 1. Fewer than 5 installs = no commission.
+5.2 Key Eligibility Conditions
+[TABLE]
+| Requester / Dept. | Chowdhury Taifur Sadat / Alternate Channel and Digital Recharge |
+| Recipients | BSP CCR (SRF #5), Device BP (SRF #6), Monobrand CCR (SRF #7) |
+| Product | RYZE Prepaid (Toffee Mobile App installations) |
+| Eligible Customers | New GA customers AND existing BL customers – both allowed. |
+| Reactivated Toffee Base | Toffee users who have been inactive for ≥30 days are eligible to be counted as new installations. |
+| Eligibility Gate | Only listed/eligible CCRs/BPs receive commission. List including targets shared by user team before calculation. |
+| Installation Method | Play Store (Android) or App Store (Apple). CCR/BP must install on customer's handset and use their Toffee referral code. |
+| AIT | NOT applicable for this commission (applicable for Sales Team only). |
+| Rounding | Standard rounding: <0.5 rounds down, ≥0.5 rounds up. |
+| Achievement Reporting | CCR/BP-wise installation achievement shared manually. |
+| Data Maturity | 8th day of the following month. |
+| Data Sources | ED, IT BI, DWH, TABS, DMS, POS. |
+| Failure Settlement | Other input: Failure settlement (referenced in Channel Operation input). |
+[/TABLE]
+5.3 Monobrand-Specific Condition (Jun25 Only)
+[TABLE]
+| Single IMEI Rule | Only one unique IMEI number per MSISDN is allowed. This prevents the same device being counted multiple times for Toffee installs across different MSISDN combinations. This rule applies ONLY to the Monobrand Jun25 SRF; it is absent from BSP and Device BP Jun25 SRFs. |
+[/TABLE]
+📌 The Single IMEI per MSISDN rule is a Monobrand-specific condition unique within the Jun25 campaign family. It was not carried over to any Aug25 campaign.
+5.4 Differences Across Recipient Types – Jun25
+[TABLE]
+| Condition | BSP CCR (Jun25) | Device BP (Jun25) | Monobrand CCR (Jun25) |
+| Slab Structure | 5-10/11-20/21+ | 5-10/11-20/21+ | 5-10/11-20/21+ |
+| Upfront Rate | BDT 10/15/20 | BDT 10/15/20 | BDT 10/15/20 |
+| Conditional Rate | BDT 10/15/20 | BDT 10/15/20 | BDT 10/15/20 |
+| Single IMEI/MSISDN | Not mentioned | Not mentioned | Required |
+| Reactivated Base | ≥30 days allowed | ≥30 days allowed | ≥30 days allowed |
+| AIT | Not applicable | Not applicable | Not applicable |
+| Maturity | 8th of following month | 8th of following month | 8th of following month |
+[/TABLE]
+Section 6: Toffee Referral Campaign – BSP CCR / Device BP / Monobrand CCR (Aug 2025)
+August 2025 revision of the Alternate Channel Toffee campaign. The slab structure and conditional commission are removed; replaced with a simple flat BDT 20 per install.
+6.1 Flat Payout Structure
+[TABLE]
+| BDT 20 per Successful Toffee App Installation + Customer Registration (using referral code) |
+[/TABLE]
+[TABLE]
+| Requester / Dept. | Chowdhury Taifur Sadat / Alternate Channel and Digital Recharge |
+| Recipients | BSP CCR (SRF #8), Device BP (SRF #9), Monobrand CCR (SRF #10) |
+| Commission Rate | BDT 20 per successful Toffee App installation and subsequent customer registration using unique referral code. |
+| No Minimum Threshold | No minimum number of installations required (unlike Jun25's minimum of 5). Every install from the first one is commissionable. |
+| No Conditional Component | No 20-minute usage gate. The BDT 20 is paid purely on installation + registration (no additional usage condition). |
+| Eligible Customers | New GA customers AND existing BL customers – both allowed. |
+| Reactivated Base | Not mentioned in Aug25 SRFs (unlike Jun25 which allowed ≥30-day inactive users). |
+| Eligibility Gate | Only listed/eligible CCRs/BPs receive commission. List including targets shared before calculation. |
+| Installation Method | Play Store (Android) or App Store (Apple). Using unique Toffee referral code. |
+| AIT | NOT applicable for this commission. |
+| Rounding | Standard rounding: <0.5 rounds down, ≥0.5 rounds up. |
+| Achievement Reporting | CCR/BP-wise installation achievement shared manually. |
+| Periodicity | Regular (changed from Ad-hoc in Jun25). |
+| Data Maturity | 1st of the following month (earlier than Jun25's 8th). |
+| Data Sources | ED, IT BI, DWH, TABS, DMS, POS. |
+| TOS | Transfer of Ownership (Individual to individual) referenced in General Conditions – tracked but not a KPI gate. |
+[/TABLE]
+6.2 Differences Across Recipient Types – Aug25
+All three Aug25 SRFs (BSP, Device BP, Monobrand) are structurally identical with no recipient-specific conditions.
+[TABLE]
+| Condition | BSP CCR (Aug25) | Device BP (Aug25) | Monobrand CCR (Aug25) |
+| Commission Rate | BDT 20 flat | BDT 20 flat | BDT 20 flat |
+| Slab Structure | None | None | None |
+| Usage Condition | None | None | None |
+| Single IMEI Rule | Not mentioned | Not mentioned | Not mentioned |
+| Maturity | 1st of following month | 1st of following month | 1st of following month |
+| Periodicity | Regular | Regular | Regular |
+| TOS Field | Listed (not a gate) | Listed (not a gate) | Listed (not a gate) |
+[/TABLE]
+Section 7: Jun25 vs Aug25 – Alternate Channel Campaign Comparison
+Key structural evolution from the June 2025 (slab-based) to August 2025 (flat-rate) Toffee campaign for BSP CCR, Device BP, and Monobrand CCR.
+[TABLE]
+| Parameter | Jun 2025 Campaign | Aug 2025 Referral Campaign |
+| Commission Structure | Slab-based (3 slabs: 5-10, 11-20, 21+) | Flat rate (no slabs) |
+| Minimum Installs | 5 (Slab 1 entry threshold) | None – every install from #1 counts |
+| Commission Components | 2 components: Upfront + Conditional | 1 component: flat BDT 20 |
+| Upfront Rate (per install) | BDT 10 / 15 / 20 (slab-dependent) | BDT 20 (flat) |
+| Conditional Rate | BDT 10 / 15 / 20 (requires ≥20 min usage in 7 days) | N/A – no conditional component |
+| Max per Install | BDT 40 (Slab 3: BDT 20 upfront + BDT 20 conditional) | BDT 20 |
+| Reactivated Toffee Base | Allowed (≥30 days inactive) | Not mentioned |
+| Single IMEI/MSISDN | Monobrand only | Not applicable |
+| Data Maturity | 8th of following month | 1st of following month |
+| Periodicity | Ad-hoc | Regular |
+| TOS Field | Not in General Conditions | Listed in General Conditions |
+| Product Type | RYZE Prepaid | Toffee Mobile App (generic) |
+[/TABLE]
+📌 The shift from Jun25 to Aug25 simplifies the model significantly: the 20-minute usage gate is removed, slab complexity is eliminated, and every installation earns a flat BDT 20. The minimum threshold is also removed, lowering the barrier for entry.
+Section 8: All-Channel Commission Comparison
+Side-by-side view of commission rates and conditions across all 4 programme families.
+[TABLE]
+| Programme | Recipient | Rate per Install | Min Threshold | Usage Condition | Data Maturity |
+| RSO Toffee (Jun & Aug25) | RSO | BDT 20 per retail participation (not per install; per retailer with ≥2 installs) | ≥2 installs per retailer | 95% GA with >BDT 5 usage in 15 days | Aug25: 1st of month Jun25: 10th (SRF error) |
+| Retailer Toffee (Jun & Aug25) | Retailer | BDT 15 per install | None stated | 95% GA with >BDT 5 usage in 15 days | 1st of following month |
+| TOFFEE Campaign Jun25 (BSP/Device BP/Monobrand) | BSP CCR Device BP Monobrand CCR | BDT 10–20 Upfront + BDT 10–20 Conditional (slab-based) | 5 installs (Slab 1 entry) | ≥20 min usage in first 7 days (for Conditional component only) | 8th of following month |
+| Toffee Referral Aug25 (BSP/Device BP/Monobrand) | BSP CCR Device BP Monobrand CCR | BDT 20 flat | None | None | 1st of following month |
+[/TABLE]
+Section 9: Universal General Conditions
+The following conditions appear across all 10 SRFs. Some conditions apply universally; others differ by programme family (noted where applicable).
+[TABLE]
+| Product | Toffee Mobile App (primary product). Channel Planning SRFs also reference Prepaid GA conditions. Alt. Channel Jun25 SRFs specify RYZE Prepaid. |
+| Installation Source | Play Store (Android) or App Store (Apple). No sideloading or manual APK installs referenced. |
+| Referral Code Requirement | Every Toffee installation must use the specific unique referral code assigned to that recipient. Installations without the code or with the wrong code are not counted. |
+| MSISDN Restriction | Only Banglalink Customer MSISDNs count. Non-BL numbers excluded. |
+| AIT | NOT applicable to Toffee commissions for all 10 SRFs (all field force/CCR/BP recipients). AIT is noted as applicable for 'Sales Team' in a different context. |
+| Rounding | Standard mathematical rounding: <0.5 rounds down, ≥0.5 rounds up for all achievement calculations. |
+| Data Provider | Toffee installation and registration data provided by B2C / user team in all cases. |
+| Eligibility Lists | Only listed/eligible recipients (Retailers, RSOs, BSP CCRs, Device BPs, Monobrand CCRs) receive commission. Lists and targets shared before calculation. |
+| Achievement Reporting | CCR/RSO/Retailer-wise achievement data shared manually (not auto-generated by IT). |
+| SAF Condition | ETSAF QC condition considered for RSO and Retailer campaigns. SAF Vetting Date referenced in BSP/Device BP/Monobrand campaigns. |
+| Activation Reference | FCD (First Call Date) referenced in all SRFs. |
+| Recharge | All Valid Recharges (I-TOP UP for bundle upsell). |
+| Disconnection Cutoff | T-6 (referenced in RSO and Retailer SRFs). |
+| Data Sources | RSO/Retailer: IT SC, IT BI, DWH, POS. BSP/Device BP/Monobrand: ED, IT BI, DWH, TABS, DMS, POS. |
+| Failure Settlement | Channel Operation input includes Failure Settlement for Alt. Channel campaigns (BSP/Device BP/Monobrand). |
+| Salescom to EV | Yes for RSO and Retailer campaigns (automated). No for BSP/Device BP/Monobrand campaigns. |
+[/TABLE]
+Appendix A: Campaign Quick Reference Matrix
+All 10 SRFs with key parameters at a glance.
+[TABLE]
+| # | SRF Title | Recipient | Rate | Min. | Usage Gate | Maturity |
+| 1 | RSO Toffee Jun25 | RSO | BDT 20/participation | ≥2 installs/retailer | 95% GA >BDT 5 in 15 days | ~10th Jul (SRF error) |
+| 2 | RSO Toffee Aug25 | RSO | BDT 20/participation | ≥2 installs/retailer | 95% GA >BDT 5 in 15 days | 1st Aug 2025 |
+| 3 | Retailer Toffee Jun25 | Retailer | BDT 15/install | None stated | 95% GA >BDT 5 in 15 days | 1st Jul 2025 |
+| 4 | Retailer Toffee Aug25 | Retailer | BDT 15/install | None stated | 95% GA >BDT 5 in 15 days | 1st Aug 2025 |
+| 5 | TOFFEE Campaign BSP Jun25 | BSP CCR | BDT 10-20 Up+Cond/slab | ≥5 installs | Upfront: none Cond: ≥20 min/7 days | 8th Jul 2025 |
+| 6 | TOFFEE Campaign Device BP Jun25 | Device BP | BDT 10-20 Up+Cond/slab | ≥5 installs | Upfront: none Cond: ≥20 min/7 days | 8th Jul 2025 |
+| 7 | TOFFEE Campaign Monobrand Jun25 | Monobrand CCR | BDT 10-20 Up+Cond/slab | ≥5 installs | Upfront: none Cond: ≥20 min/7 days +Single IMEI/MSISDN | 8th Jul 2025 |
+| 8 | Toffee Referral BSP Aug25 | BSP CCR | BDT 20 flat/install | None | None | 1st Sep 2025 |
+| 9 | Toffee Referral Device BP Aug25 | Device BP | BDT 20 flat/install | None | None | 1st Sep 2025 |
+| 10 | Toffee Referral Monobrand Aug25 | Monobrand CCR | BDT 20 flat/install | None | None | 1st Sep 2025 |
+[/TABLE]
+📌 All 10 SRFs cover Toffee App installation campaigns. AIT is NOT applicable across all programmes. Only BL Customer MSISDNs qualify. Unique referral code is mandatory for all programmes.

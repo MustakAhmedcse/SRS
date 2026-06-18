@@ -1,0 +1,727 @@
+Banglalink
+_______________________________________
+Sales Commission Automation 2026
+Low-Level Design (LLD) Document
+DOCUMENT HISTORY
+[TABLE]
+| Name | Date | Reason For Changes | Version |
+| MD. Muntakimur Rahman | 01-Jun-2026 | Newly Created | 1.0 |
+|  |  |  |  |
+[/TABLE]
+Table of Contents
+
+### [Heading 1] 1. Introduction
+
+### [Heading 2] 1.1 Purpose
+This Low-Level Design (LLD) explains, in detail, how the Sales Commission Automation Platform (SalesCom) is built. For every feature it describes the screens, the database tables, how the feature works step by step, the APIs it uses, and the rules it must follow. Developers use this document as the guide for building the system.
+
+### [Heading 2] 1.2 Scope
+SalesCom lets business users build their own commission reports through a step-by-step wizard, replacing the old manual SQL process. This document covers seven features - Login, Data Sources, Reports, Approval, Dashboard, Notification and Disbursement - plus shared concerns and the overall code structure.
+
+### [Heading 2] 1.3 Definitions and Acronyms
+[TABLE]
+| Term | Meaning |
+| LLD | Low-Level Design - implementation-detail design document |
+| SRS / HLD | Software Requirements Specification / High-Level Design |
+| IR | Intermediate Representation - the JSON form of a Report definition |
+| Maker / Checker | Business User who submits a run / Approver who reviews it |
+| EV / POS | Electronic Value / Point-of-Sale disbursement channels |
+| KPI | Key Performance Indicator |
+| JSONB | PostgreSQL binary JSON type |
+| OTP | One-Time Password (second factor) |
+[/TABLE]
+
+### [Heading 1] 2. System Architecture
+
+### [Heading 2] 2.1 Architecture Overview
+SalesCom is built in layers. A web app (React/Next.js) talks to a C#/.NET backend over a secure HTTPS connection. The backend keeps all report settings and run history in a PostgreSQL database, keeps uploaded files and result files in file storage (SeaweedFS), and runs background jobs with Hangfire. The services talk to each other through a message queue (RabbitMQ). A small Python service turns each report's saved settings into SQL, which then runs on the database.
+Web app (Next.js) <— HTTPS —> .NET backend <— Dapper/EF Core —> PostgreSQL database. The backend also uses file storage (SeaweedFS) and a message queue (RabbitMQ); background jobs (Hangfire) handle runs, the SQL service and notifications (SMS/Email).
+
+### [Heading 2] 2.2 Technology Stack
+[TABLE]
+| Layer | Technology | Notes |
+| Frontend | TypeScript, React, Next.js | App Router; server + client components |
+| Backend API | C#, .NET (ASP.NET Core) | REST over HTTPS, versioned under /api/v1 |
+| Data access | Dapper + Entity Framework Core | Dapper for read queries; EF Core for ORM and migrations |
+| Background jobs | Hangfire | Run orchestration, scheduled runs, retries (PostgreSQL-backed) |
+| Calc engine | Python (SQLGlot, SQLAlchemy) | Compiles the JSON IR into SQL and validates it is read-only |
+| Event bus | RabbitMQ | Inter-service events: run, approval, disbursement |
+| Database | PostgreSQL | Primary store; JSONB for Report definitions |
+| Object storage | S3-compatible (SeaweedFS) | Raw uploads, per-stage CSV outputs, disbursement files |
+| Authentication | Central IdP + JWT, OTP (2-factor) | Role-based access control |
+| Deployment | Linux server |  |
+[/TABLE]
+
+### [Heading 2] 2.3 Common Conventions
+Every API address starts with /api/v1 and returns data in JSON format.
+Unless stated otherwise, every record uses a UUID as its unique id.
+All dates and times are stored in UTC and written in the standard ISO 8601 format.
+All money amounts are stored as numbers; the currency is always BDT.
+Every request includes the login token (JWT); the backend works out who the user is and what they can do.
+Nothing is permanently deleted - records are marked inactive instead, so history is never lost.
+
+### [Heading 1] 3. Database Schema Overview
+The platform stores all its data in 22 PostgreSQL tables, grouped as shown below. These match the project's database diagram (ERD) exactly. Each table's full column list appears in the relevant feature's Data Model section.
+[TABLE]
+| Group | Tables |
+| Identity & Access | user, user_right, login |
+| Data Catalog | data_source, channel, recurrent_type |
+| Report | report_setup, report_supporting_upload, stages |
+| Run & Output | report_run, run_stage, final_commission |
+| Approval | approval_type, approval_flow, approval_flow_level, approval_flow_level_user, approval_request, approval_decision |
+| Disbursement | ev_disburse, pos_disbursement |
+| Cross-cutting | audit_log, notification_log |
+[/TABLE]
+
+### [Heading 1] 4. Authentication and Session
+
+### [Heading 2] 4.1 Overview
+SalesCom is internal-only, so everyone signs in through the company's Central Login using a one-time password (OTP). The web app collects the username and password and sends them to the backend; the backend (which holds the secret application name and key) talks to Central Login and, once the OTP is verified, issues its own SalesCom login token (JWT) for the web app to use on every request. The full step-by-step flow is in 4.4.
+
+### [Heading 2] 4.2 User Interface
+Login screen (web app): Username, Password (with a show/hide option) and a Remember-me box. The form is sent to the SalesCom backend, never straight to Central Login.
+The OTP step belongs to Central Login: the user's browser is sent to the Central Login page, which shows the OTP box, the countdown and the resend option. SalesCom has no OTP screen of its own.
+After signing in, the user lands on the Dashboard, which shows when they last signed in successfully and when a sign-in was last refused.
+
+### [Heading 2] 4.3 Data Model
+User identity and access rights come from Central Login and are kept up to date in the local user and user_right tables by the hourly sync service (see 4.4.4). At sign-in the looks the user up here. Tables:
+Table: user
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | user_name | TEXT | Unique, Not null |
+| 3 | email | TEXT | Not null |
+| 4 | full_name | TEXT | Not null |
+| 5 | created_on | TIMESTAMPTZ | Not null |
+| 6 | updated_on | TIMESTAMPTZ |  |
+| 7 | created_by | TEXT | Not null |
+| 8 | updated_by | TEXT |  |
+[/TABLE]
+Table: user_right
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | user_id | UUID | Foreign key → user.id, Not null |
+| 2 | user_right | INT | Not null |
+[/TABLE]
+
+### [Heading 2] 4.4 Process Logic
+
+### [Heading 3] 4.4.1 Login and SSO Redirect
+The web app sends the username, password and remember-me choice to the backend at POST /api/v1/auth/login.
+The backend adds the secret application name and key and calls Central Login at POST /account/v1/login.
+Since all users are internal, Central Login responds with a redirect link (no token yet). The backend passes this link to the web app, which sends the user's browser to the Central Login OTP page.
+
+### [Heading 3] 4.4.2 OTP Verification and Callback
+Central Login handles the OTP on its own page (entering the code, the countdown and resend). Some non-secret details may be added to the return link.
+After a correct OTP, Central Login sends the browser back to SalesCom at GET /api/v1/auth/callback with a one-time authToken.
+The backend calls Central Login at POST /account/v1/verify-auth-token with that token to confirm the login and get the user's profile.
+Any login tokens Central Login returns here are ignored - SalesCom only needs the user's profile.
+
+### [Heading 3] 4.4.3 SalesCom JWT Issuance
+Once the token is confirmed, the backend looks up the user and their access rights (kept current by the hourly sync) and creates its own SalesCom login token (JWT) expire time of one day(24 hour) holding the user id, username and an expiry time, signed with a backend secret.
+The backend gives this token to the web app as the result of login; no Central Login token is ever shown to the browser.
+The web app saves the SalesCom token and sends it with every request. The backend checks the token on each request and loads the user and their rights.
+For inactivity in frontend for 4 hours, user will be logout means backend token delete from frontend.
+When the token expires/logout, the user simply signs in again from the start.
+Every sign-in attempt - successful or refused - is written to the login table (user, time, status, remarks) for the Dashboard's Login Attempts card.
+
+### [Heading 3] 4.4.4 User Provisioning
+A background service runs every hour to keep each user's details and access rights up to date with Central Login.
+
+### [Heading 2] 4.5 API Endpoints
+There are two sets of endpoints: Central Login's own service (called only by the backend) and SalesCom's backend endpoints that the web app uses.
+[TABLE]
+| Method | Path | Purpose |
+| POST | /account/v1/login | Central Login: authenticate; for internal users returns the SSO redirect |
+| POST | /account/v1/verify-auth-token | Central Login: validate the SSO authToken and return userInfo |
+| POST | /api/v1/auth/login | Backend: start login (adds app name/key); returns the SSO redirectUrl |
+| GET | /api/v1/auth/callback | Backend: receive + verify the authToken, then issue the SalesCom JWT |
+| POST | /api/v1/auth/logout | Backend: clear the SalesCom session / JWT |
+| GET | /api/v1/auth/me | Backend: return the current user and resolved role |
+[/TABLE]
+
+### [Heading 2] 4.6 Validation and Business Rules
+Failed-attempt lock-out and OTP expiry are handled by Central Login.
+
+### [Heading 1] 5. Data Source Management
+
+### [Heading 2] 5.1 Overview
+A user with access right enter this area for setting up the data sources that reports can use. Business users can only pick from data sources that are active.
+
+### [Heading 2] 5.2 User Interface
+List view: serial number, table name, description, status and an Edit action. It shows 10 rows per page with a 'Showing N of M' count, and you can search by name.
+An 'Add a New Data Source' button sits at the top right.
+Add/Edit form: pick a source table (only tables not already added are shown, with their columns listed), enter a description, and set the status (off by default).
+
+### [Heading 2] 5.3 Data Model
+A registered data source is saved in:
+Table: data_source
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | source_table_name | TEXT | Not null |
+| 3 | table_description | TEXT |  |
+| 4 | is_active | BOOLEAN | Not null |
+| 5 | created_on | TIMESTAMPTZ | Not null |
+| 6 | updated_on | TIMESTAMPTZ |  |
+| 7 | created_by | TEXT | Not null |
+| 8 | updated_by | TEXT |  |
+[/TABLE]
+
+### [Heading 2] 5.4 Process Logic
+When a source table is chosen from dropdown, the system lists its columns below; the admin then fills in the description and status.
+A data source that any report still uses cannot be deactive.
+A data source is never deleted - it is only deactive.
+
+### [Heading 2] 5.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/data-sources | List with search and pagination |
+| POST | /api/v1/data-sources | Register a new data source |
+| GET | /api/v1/data-sources/{id} | Read one |
+| PUT | /api/v1/data-sources/{id} | Update |
+| PATCH | /api/v1/data-sources/{id}/status | Activate / deactivate |
+[/TABLE]
+
+### [Heading 2] 5.6 Validation and Business Rules
+Only admins can add, edit or turn off data sources; business users can only view them.
+
+### [Heading 1] 6. Report Management
+
+### [Heading 2] 6.1 Overview
+This is the main feature. Business users set up a commission report in a five-step wizard, run it now or on a schedule, view results in a tabbed details page, and copy (clone) reports. Running a report produces the final commission figures that go on to approval and payout.
+
+### [Heading 2] 6.2 User Interface
+Report list: serial number, report name, channel, start/end date, recurrence, EV, POS, status and an Action menu. You can filter by date, status and channel, search by name, and there is a 'Create a New Report' button at the top right.
+Row actions: View, Edit (hidden once the report is fully approved), Clone, Demo Run, Approval History, Report Stop (only for an approved, scheduled report) and Run Now (only once approved).
+Five-step wizard: Basic details → Supporting Uploads → Achievements → Incentives → Review/Run/Schedule.
+The report details page shows read-only tabs and the files from each past run.
+
+### [Heading 2] 6.3 Data Model
+The Report feature uses the lookup tables plus the setup, stage, run and result tables:
+Table: channel
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | channel_name | TEXT | Unique, Not null |
+| 3 | channel_type | TEXT | Not null |
+[/TABLE]
+Table: recurrent_type
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | recurrent_type(Onetime/Monthyly/weekly/daily) | TEXT | Not null |
+[/TABLE]
+Table: report_setup
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_name | TEXT | Unique, Not null |
+| 3 | report_type | TEXT | Not null |
+| 4 | channel_type_id | UUID | Foreign key → channel.id, Not null |
+| 5 | commission_cycle | TEXT | Not null |
+| 6 | start_date | DATE | Not null |
+| 7 | end_date | DATE | Not null |
+| 8 | is_recurrent | BOOL | Not null |
+| 9 | recurrent_type | TEXT | Not null |
+| 10 | is_ev_dibursement | BOOL | Not null |
+| 11 | ev_disbursment_time | TIME |  |
+| 12 | definition | JSONB | Not null |
+| 13 | run_start_date | TIMESTAMPTZ |  |
+| 14 | run_end_date | TIMESTAMPTZ |  |
+| 15 | status(stop/on) | TEXT | Not null |
+| 16 | sms_content | TEXT |  |
+| 17 | setup_approval_status | TEXT | Not null |
+| 18 | created_on | TIMESTAMPTZ | Not null |
+| 19 | updated_on | TIMESTAMPTZ |  |
+| 20 | created_by | TEXT | Not null |
+| 21 | updated_by | TEXT |  |
+[/TABLE]
+Table: report_supporting_upload
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_setup_id | UUID | Foreign key → report_setup.id, Not null |
+| 3 | db_table_name | TEXT | Not null |
+| 4 | db_schema | TEXT | Not null |
+| 5 | object_bucket | TEXT | Not null |
+| 6 | object_key | TEXT | Not null |
+| 7 | file_name | TEXT | Not null |
+| 8 | row_count | INTEGER |  |
+| 9 | uploaded_at | TIMESTAMPTZ | Not null |
+| 10 | uploaded_by | TEXT | Not null |
+[/TABLE]
+Table: stages
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_setup_id | UUID | Foreign key → report_setup.id, Not null |
+| 3 | stage_order | INTEGER | Not null |
+| 4 | sql_text | TEXT |  |
+[/TABLE]
+Table: report_run
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_setup_id | UUID | Foreign key → report_setup.id, Not null |
+| 3 | run_date | TIMESTAMPTZ | Not null |
+| 4 | type(Demo/Final) | TEXT | Not null |
+| 5 | triggered_by(UN/System) | TEXT | Not null |
+| 6 | run_status | TEXT | Not null |
+| 7 | disburse_status | TEXT | Not null |
+| 8 | started_at | TIMESTAMPTZ |  |
+| 9 | ended_at | TIMESTAMPTZ |  |
+[/TABLE]
+Table: run_stage
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | run_id | UUID | Foreign key → report_run.id, Not null |
+| 3 | sql_text | TEXT | Not null |
+| 4 | order | INTERGER | Not null |
+| 5 | run_status | TEXT | Not null |
+| 6 | started_at | TIMESTAMPTZ |  |
+| 7 | ended_at | TIMESTAMPTZ |  |
+| 8 | document_type | TEXT |  |
+| 9 | bucket | TEXT |  |
+| 10 | object_url | TEXT |  |
+| 11 | file_name | TEXT |  |
+| 12 | file_generated_at | TEXT |  |
+| 13 | output_table_name | TEXT |  |
+| 14 | cleanup_status | TEXT |  |
+[/TABLE]
+Table: final_commission
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_run_id | UUID | Foreign key → report_run.id, Not null |
+| 3 | channel_id | UUID | Foreign key → channel.id, Not null |
+| 4 | channel_code | TEXT | Not null |
+| 5 | commission_amount | NUMERIC | Not null |
+[/TABLE]
+
+### [Heading 2] 6.4 Process Logic
+
+### [Heading 3] 6.4.1 Step 1 - Basic Input
+Enter the report name (must be unique), commission cycle, channel, and start and end dates (start must not be after end).
+Recurrent switch: when on, choose how often it repeats (daily/weekly/monthly). EV Disbursement switch: when on, choose a disbursement time. Also input SMS content when EV disbursement is on.
+User can only active one disbursement EV/POS at a time.
+'Save as Draft' saves the report as a draft and gives back the report id used through the rest of the wizard.
+
+### [Heading 3] 6.4.2 Step 2 - Supporting Upload
+Drag and drop or browse for a CSV file; the first row must be the column names. You can upload several files (shown with serial number, original and source file names, and a Remove option before saving).
+Limits: up to 30 columns and 500 MB per file.
+A preview shows the first rows, with each column's type detected automatically (text/number/date). The user can change a column's type, and any value that does not match its type is flagged as a warning.
+When confirmed, the original file is kept in file storage and a database table is created from its rows, so it can be used as a data source in later steps.
+
+### [Heading 3] 6.4.3 Step 3 - Achievement Calculation
+Build one or more Achievement blocks (ACH#1, ACH#2, …); for each, pick a data source (a registered source or a CSV from step 2).
+Each block has pipeline steps shown as expandable cards: Filter, Combine Data, Summarize, Calculate, Modify.
+Filter: Column, Condition/operator (Is one of, Equals, Not equals, Greater than, Less than, ≥, ≤, Between), and the Compare-to value(s).
+Combine Data: Get Data From (another registered source, an uploaded CSV, or an existing Achievement); the join condition as Current column = other column. How to Combine — Keep only matched rows (inner join) or Keep all rows (left join).
+Summarize: Get Data From; a Result Column name for the output; a Calculation (Count Rows, Sum, Avg, Min, Max); an optional Group/Form Column to group by.
+Calculate: All calculation can be done here Math Formula, IF / CASE, rounding etc.
+Modify : modify column value.
+Each block outputs panel shows the columns the block will produce (name, type). An existing Achievement can be used as input to another.
+Blocks can only be removed from the end.
+Before moving on, the system checks every pipeline to make sure the columns and fields it refers to actually exist.
+
+### [Heading 3] 6.4.4 Step 4 - Incentive Calculation
+Build one or more Incentive blocks using the same steps: Filter, Combine Data, Summarize, Calculate, Modify as before.
+Incentive blocks read one or more Achievement blocks (or a system source or supporting upload); an existing Incentive can feed another.
+The Final block maps any produced column onto the final commission table (channel code and commission amount), grouped per channel.
+
+### [Heading 3] 6.4.5 Step 5 – Preview and Schedule
+After Submit, a confirmation screen offers Back to Reports, Schedule for Later.
+
+### [Heading 3] 6.4.6 Run Config
+Run Now is only available once the report is fully approved. Only one run happens at a time; extra runs wait in a priority queue. A Demo Run is just a test - it does not disburse.
+The Schedule window takes a date and time. Recurrent reports run repeatedly between a start and end date on the chosen frequency; non-recurrent reports run once on schedule single date.
+Only with access right user can edit a schedule or stop report; every change is recorded, along with who started each run.
+
+### [Heading 3] 6.4.6 Run Execution Lifecycle
+This is the full path a report run takes, from start to payout. It connects the setup, stage, run, result and disburse tables.
+Step 1 - Trigger: Run Now (after full approval) or scheduler; type = Final or Demo; triggered_by = UN or System.
+Step 2 - Queue: one run at a time; others wait in a priority queue.
+Step 3 - Create run: insert report_run (run_status = pending → running).
+Step 4 - Snapshot stages: copy every stages row into run_stage (run_status = not run), freezing the SQL.
+Step 5 - Execute in order: run each run_stage SQL sequentially; each stage materialises a temp table (output_table_name); status not run → running → succeeded/failed.
+Step 6 - Export outputs: each succeeded stage is written as a CSV to object storage (bucket, object_url, file_name, file_generated_at).
+Step 7 - Final commission: the final stage writes one row per channel into final_commission (channel_code, commission_amount).
+Step 8 - Cleanup: drop temp tables (cleanup_status); set report_run = completed (or failed with error).
+Step 9 - Disbursement (Final + approved): EV writes ev_disburse rows and SMSes recipients; POS builds a CSV from final_commission and records pos_disbursement.
+
+### [Heading 3] 6.4.7 Report Detail View and Cloning
+Details page tabs: Basic, Supporting Uploads, Achievements, Incentives, Run Log, and a single Disbursement tab (EV or POS) shown only when one is turned on.
+The Run Log lists each run (Final or Demo), newest first, with download options per file and a Download All.
+Clone copies the whole setup (blocks, field and data-source references, approval levels) into a new draft with a new unique name. Uploaded files, past runs, approvals and payouts are not copied.
+
+### [Heading 2] 6.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/reports | List with status / period / channel filter |
+| POST | /api/v1/reports | Create draft (Step 1) |
+| GET | /api/v1/reports/{id} | Read full Report + IR |
+| PUT | /api/v1/reports/{id}/basics | Save Step 1 |
+| POST | /api/v1/reports/{id}/uploads | Issue upload URL / register CSV |
+| PUT | /api/v1/reports/{id}/achievements | Save Step 3 |
+| PUT | /api/v1/reports/{id}/incentives | Save Step 4 |
+| POST | /api/v1/reports/{id}/clone | Clone to a new draft |
+| POST | /api/v1/reports/{id}/runs | Run Now (Demo / Final) |
+| POST | /api/v1/reports/{id}/schedules | Create / edit / cancel a schedule |
+| GET | /api/v1/runs/{id} | Read a run with all stages |
+| GET | /api/v1/runs/{id}/stages/{stageId}/output | Download a stage output (CSV/XLSX) |
+[/TABLE]
+
+### [Heading 2] 6.6 Validation and Business Rules
+Report name must be unique, the start date must be on or before the end date, and editing is locked once a report is fully approved.
+
+### [Heading 1] 7. Approval (Maker-Checker)
+
+### [Heading 2] 7.1 Overview
+An approval process that admins set up. They create reusable Approval Flows, the ordered Levels inside each flow, and the Users who can act at each level. A initiated approvals go through the levels one by one.
+
+### [Heading 2] 7.2 User Interface
+Approval Flow list: serial number, name, type and actions. 'Add a New Flow' asks for a unique flow name and a flow type.
+Approval Level list: serial number, flow, level, order and actions. 'Add Level' asks for the flow, level name and order (a unique whole number within the flow).
+Approval Level User list: serial number, flow, level and the user (name, username, email), with actions. Users are looked up in the company directory.
+Approver queue: the runs waiting for the current user, with Approve and Reject buttons; a comment is required to Reject.
+
+### [Heading 2] 7.3 Data Model
+The approval setup and decisions are saved in:
+Table: approval_type
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | type_name | TEXT | Unique, Not null |
+| 3 | description | TEXT |  |
+| 4 | sort_order | INTEGER | Not null |
+[/TABLE]
+Table: approval_flow
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | approval_type_id | UUID | Foreign key → approval_type.id, Not null |
+| 3 | flow_name | TEXT | Unique, Not null |
+| 4 | description | TEXT |  |
+| 5 | created_on | TIMESTAMPTZ | Not null |
+| 6 | updated_on | TIMESTAMPTZ |  |
+| 7 | created_by | TEXT | Not null |
+| 8 | updated_by | TEXT |  |
+[/TABLE]
+Table: approval_flow_level
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | approval_flow_id | UUID | Foreign key → approval_flow.id, Not null |
+| 3 | level_order | INTEGER | Not null |
+| 4 | level_name | TEXT | Not null |
+| 5 | created_on | TIMESTAMPTZ | Not null |
+| 6 | updated_on | TIMESTAMPTZ |  |
+| 7 | created_by | TEXT |  |
+| 8 | updated_by | TEXT | Not null |
+[/TABLE]
+Table: approval_flow_level_user
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | approval_flow_level_id | UUID | Foreign key → approval_flow_level.id, Not null |
+| 3 | user_id | TEXT | Foreign key → user.id, Not null |
+[/TABLE]
+Table: approval_request
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_setup_id | UUID | Foreign key → report_setup.id, Not null |
+| 3 | approval_type_id | UUID | Foreign key → approval_type.id, Not null |
+| 4 | approval_flow_id | UUID | Foreign key → approval_flow.id, Not null |
+| 5 | current_level_order | INTEGER | Not null |
+| 6 | overall_status | TEXT | Not null |
+| 7 | initiated_by(user_name) | TEXT | Not null |
+| 8 | initiated_at | TIMESTAMPTZ | Not null |
+[/TABLE]
+Table: approval_decision
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | approval_request_id | UUID | Foreign key → approval_request.id, Not null |
+| 3 | level_order | INTEGER | Not null |
+| 4 | decided_by(user_name) | TEXT | Foreign key, Not null |
+| 5 | decision | TEXT | Not null |
+| 6 | comment | TEXT |  |
+| 7 | decided_at | TIMESTAMPTZ | Not null |
+[/TABLE]
+
+### [Heading 2] 7.4 Process Logic
+Setup and start:
+A report is given an Approval Flow when it is created. When the report is send for Approval, the system opens one approval request for that report, linked to its flow, sets the current level to the flow's first level (lowest order), records who submitted it and when, and sets the overall status to "in progress" (waiting for the first level).
+Each level has an approval type, and every type has a phase: PRE_RUN (approve the setup before the report can run) or POST_RUN (approve the results after a run, before payout). The current level's type decides which phase the request is in. There is only one request per report; it walks all the levels in order.
+Who can see and act:
+A request is shown only to the users assigned to its current open level (Approval Level User); no one else sees it.
+Approval is sequential: it starts at the first level and moves up one level at a time. A higher level cannot act until every lower level has approved.
+Approve:
+When an assigned approver approves, the system records the decision (level, who, comment if any, time) and moves the current level to the next one — so the request now appears for that next level's users.
+When the final level of the whole flow approves, the request's overall status becomes approved and an "approval completed" event is published.
+Reject / Request changes:
+An approver must enter a comment to reject.
+On reject, the request goes back to the previous level (or back to the draft if it is rejected at the first level), the decision and comment are recorded, the overall status becomes Rejected / Changes Requested, and the Maker is notified by email.
+The Maker fixes the issue and resubmits, which restarts approval from the first level.
+Report Logic:
+PRE_RUN levels are approved once, before the report runs; after they all approve, the report can run on demand or on schedule.
+For a non-recurrent report whose flow also has POST_RUN levels: after a Final run produces results, the same request continues into the POST_RUN levels; only after they all approve does disbursement run.
+A recurrent report must use a flow with PRE_RUN levels only. Its setup is approved once; after that, every scheduled run executes and pays out automatically, with no result approval.
+A Demo run never needs approval and never Disburse.
+Every decision is stored (approver, comment, time) so the full approval history can be shown.
+Email is sent when approval is requested, when it is rejected, and when it is completed.
+
+### [Heading 2] 7.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/approval-flows | List flows (filter by type) |
+| POST | /api/v1/approval-flows | Create flow |
+| POST | /api/v1/approval-levels | Create level (order unique per flow) |
+| POST | /api/v1/approval-levels/{id}/users | Assign users to a level |
+| GET | /api/v1/approvals/queue | Current user’s pending approvals |
+| POST | /api/v1/runs/{id}/decisions | Approve / Reject / Request Changes |
+| GET | /api/v1/runs/{id}/decisions | Decision audit trail |
+[/TABLE]
+
+### [Heading 2] 7.6 Validation and Business Rules
+Flow names and level orders are unique within a flow.
+
+### [Heading 1] 8. Dashboard
+
+### [Heading 2] 8.1 Overview
+The first page after signing in. It shows this month's commission figures, recent sign-in activity and trend charts, all limited to what the user is allowed to see.
+
+### [Heading 2] 8.2 User Interface
+Cards: this month's total commission amount and total report count, each showing the change from last month.
+Sign-in card: the user's last successful and last refused sign-in times.
+Charts: weekly commission amount and monthly report count, comparing this month with last.
+
+### [Heading 2] 8.3 Data Model
+The dashboard reads the login table for its Login Attempts card, and adds up figures from report_run, final_commission and audit_log (each limited to what the user may see). Table:
+Table: login
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | user_name | TEXT | Not null |
+| 3 | full_name | TEXT | Not null |
+| 4 | login_time | TEXT | Not null |
+| 5 | status(success/faild) | TEXT | Not null |
+| 6 | remarks | TEXT | Not null |
+[/TABLE]
+
+### [Heading 2] 8.4 Process Logic
+Figures are added up for this month and last month to show the change.
+
+### [Heading 2] 8.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/dashboard/summary | KPI cards + login-attempt audit |
+| GET | /api/v1/dashboard/trends | Weekly/monthly trend series |
+[/TABLE]
+
+### [Heading 2] 8.6 Validation and Business Rules
+Open to all signed-in users, but each only sees data they are allowed to.
+
+### [Heading 1] 9. Notification
+
+### [Heading 2] 9.1 Overview
+Sends SMS and email for system events, and records every message sent in one notification log.
+
+### [Heading 2] 9.2 User Interface
+No screen of its own; messages are triggered by system events and can be seen in the notification log.
+
+### [Heading 2] 9.3 Data Model
+Every SMS and email is recorded in:
+Table: notification_log
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | template_code | TEXT | Not null |
+| 3 | channel(EMAIL/SMS) | TEXT | Not null |
+| 4 | number | TEXT | Not null |
+| 5 | to_address | TEXT | Not null |
+| 6 | cc | TEXT |  |
+| 7 | bcc | TEXT |  |
+| 8 | subject | TEXT |  |
+| 9 | body | TEXT | Not null |
+| 10 | from_address | TEXT |  |
+| 11 | status(PENDING/SENT/FAILED) | TEXT | Not null |
+| 12 | attempt_count | INTEGER | Not null |
+| 13 | error_message | TEXT |  |
+| 14 | scheduled_at | TIMESTAMPTZ |  |
+| 15 | sent_at | TIMESTAMPTZ |  |
+| 16 | created_on | TIMESTAMPTZ | Not null |
+[/TABLE]
+
+### [Heading 2] 9.4 Process Logic
+An SMS is sent to each commission earner after a successful EV payout (only after full approval).
+An email is sent when an approval is requested, an approval is rejected, a payout finishes, or a run fails - to one or more recipients (To and CC).
+Each attempt records the channel, status (pending/sent/failed), number of tries, scheduled time, sent time and any error.
+
+### [Heading 2] 9.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/notifications | List notification log (filter by channel/status/entity) |
+[/TABLE]
+
+### [Heading 2] 9.6 Validation and Business Rules
+The channel is either email or SMS, and the status moves from pending to sent or failed.
+The message body is always required; the subject is for email only.
+
+### [Heading 1] 10. Disbursement
+
+### [Heading 2] 10.1 Overview
+Once a run is fully approved, commission is paid out by EV or POS. EV records a payout per channel and sends an SMS; POS produces a CSV file from the final commission.
+
+### [Heading 2] 10.2 User Interface
+The details page shows one payout tab: 'EV Disbursement' if EV is on, 'POS Disbursement' if POS is on, or none if neither is.
+Each batch row shows serial number, payout time, number of records and a Download CSV option.
+EV CSV columns: channel type, channel code, amount, payout time, status and message. POS CSV columns: channel code and amount.
+
+### [Heading 2] 10.3 Data Model
+Payout batches are recorded in:
+Table: ev_disburse
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_run_id | UUID | Foreign key → report_run.id, Not null |
+| 3 | channel_id | TEXT | Foreign key → channel.id, Not null |
+| 4 | channel_code | TEXT | Not null |
+| 5 | amount | NUMERIC | Not null |
+| 6 | status | TEXT | Not null |
+| 7 | message | TEXT |  |
+| 8 | disburse_at | TIMESTAMPTZ |  |
+[/TABLE]
+Table: pos_disbursement
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | report_run_id | UUID | Foreign key → report_run.id, Not null |
+| 3 | object_url | TEXT | Not null |
+| 4 | dump_status | TEXT | Not null |
+| 5 | disburse_at | TIMESTAMPTZ |  |
+[/TABLE]
+
+### [Heading 2] 10.4 Process Logic
+Payout happens only after every approval level has approved the run.
+EV and POS payouts are carried out by background services that read the run's final commission and record each payout (see Sections 11.5-11.6).
+
+### [Heading 2] 10.5 API Endpoints
+[TABLE]
+| Method | Path | Purpose |
+| GET | /api/v1/disbursements | List disbursement batches |
+| GET | /api/v1/disbursements/{id} | Batch detail (per-row records) |
+[/TABLE]
+
+### [Heading 2] 10.6 Validation and Business Rules
+Payout runs only after full approval, and the EV or POS tab shown depends on the report's payout setting.
+
+### [Heading 1] 11. Asynchronous Services and Events
+
+### [Heading 2] 11.1 Overview
+Heavy or time-based work is kept out of the main request path by using a message queue (RabbitMQ) and timed jobs (Hangfire). The API just sends a message and saves status; separate services do the actual work. This keeps the app fast and lets runs be handled by priority.
+
+### [Heading 2] 11.2 Event and Queue Topology
+[TABLE]
+| Event | Publisher | Queue (priority) | Consumer |
+| report.saved | Reports API (on save) | q.sql-generate | SQL Generator |
+| run.requested | Runs API (Run Now) | q.run.high | SQL Executor |
+| run.requested | Runs API (Demo Run) | q.run.mid | SQL Executor |
+| run.requested | Scheduler (Hangfire) | q.run.low | SQL Executor |
+| ev.disburse | EV timer (Hangfire) | q.ev-disburse | EV Disburse Service |
+[/TABLE]
+
+### [Heading 2] 11.3 SQL Generator Service (Python)
+When a report is saved, the API sends a 'report saved' message with the report id onto the queue.
+The SQL Generator picks up that message, turns the report's settings into SQL, and saves it step by step into the stages table.
+
+### [Heading 2] 11.4 SQL Executor Service
+When a Demo Run, Run Now or scheduled run starts, the API sends a 'run requested' message to a priority queue (Run Now = high, Demo = medium, schedule = low).
+The Executor handles these in priority order, running the report through the Run Execution Lifecycle (Section 6.4.6).
+
+### [Heading 2] 11.5 EV Disburse Service
+A timed job checks whether any approved Final run has EV payout turned on and its payout time has arrived; if so, it sends an 'EV payout' message.
+The EV Disburse service picks this up and pays out from the run's final commission, recording each payout and sending the SMS (Section 10).
+
+### [Heading 2] 11.6 POS Disburse Job
+A timed job checks whether any approved Final run has POS payout turned on; if so, it reads the run's final commission, builds a CSV and saves it to the set location.
+The job records the result (file location, status and time).
+
+### [Heading 2] 11.7 User Sync Service
+A job runs every hour to copy user details and access rights from Central Login into the local tables, so changes take effect within an hour.
+
+### [Heading 1] 12. Cross-cutting Concerns
+
+### [Heading 2] 12.1 Audit Trail
+Every add, change or delete - and every approval, schedule and payout action - is recorded in the audit log.
+Table: audit_log
+[TABLE]
+| SL | Column | Type | Remarks |
+| 1 | id | UUID | Primary key |
+| 2 | user_name | TEXT | Foreign key → user.user_name, Not null |
+| 3 | action | TEXT | Not null |
+| 4 | entity_type | TEXT | Not null |
+| 5 | entity_id | TEXT | Not null |
+| 6 | diff | JSONB |  |
+| 7 | ip | TEXT |  |
+| 8 | user_agent | TEXT |  |
+| 9 | created_on_utc | TIMESTAMPTZ | Not null |
+[/TABLE]
+
+### [Heading 2] 12.2 Error Handling and HTTP Codes
+[TABLE]
+| Code | When |
+| 200 OK | Successful GET or PUT |
+| 201 Created | Resource created |
+| 400 Bad Request | Malformed payload |
+| 401 Unauthorized | Missing/invalid token or OTP |
+| 403 Forbidden | Authenticated but not permitted by role |
+| 404 Not Found | Resource missing |
+| 409 Conflict | Duplicate unique key (e.g. report/flow name) |
+| 422 Unprocessable | Field-level validation failed |
+| 500 Server Error | Unexpected; logged with correlation id |
+[/TABLE]
+
+### [Heading 2] 12.3 Pagination, Filter and Search
+Search and paging use simple settings: page number, page size, sort, search text and filters.
+Responses return the items plus the page, size and total count. The default page size is 10.
+Every list can be searched by name and filtered by at least one field.
+
+### [Heading 1] 13. Module and Service Architecture
+
+### [Heading 2] 13.1 Backend Layering
+The .NET backend is built in four layers, where each layer only depends on the one below it.
+[TABLE]
+| Layer | Responsibility | Examples |
+| SalesCom.Api | Presentation / HTTP | ASP.NET Core controllers and endpoints, request/response models, JWT auth middleware, dependency-injection setup, Hangfire registration. One controller per feature (Auth, DataSources, Reports, Runs, Approvals, Dashboard, Notifications, Disbursements). |
+| SalesCom.Application | Use-case / business logic | Command and query handlers, DTOs, validators, and the interfaces (ports) for data access, messaging, storage and Central Login. Orchestrates a feature's steps; publishes events. |
+| SalesCom.Domain | Core model | Entities (Report, Stage, Run, ApprovalFlow, ApprovalRequest, …), value objects, and enums (approval type & phase, run type, statuses). Pure business rules, no external dependencies. |
+| SalesCom.Infrastructure | Adapters / integrations | Concrete implementations of the Application ports: PostgreSQL access (Dapper + EF Core), object storage (SeaweedFS), RabbitMQ publisher/consumers, the Central Login client, Hangfire jobs, and SMS/Email gateways. |
+[/TABLE]
+
+### [Heading 2] 13.2 Background Workers (Hangfire)
+[TABLE]
+| Worker | Triggered by | Owns |
+| DisbursementWorker | approval.completed + disbursement time | Publish ev_disburse / pos_disbursement event |
+[/TABLE]
+
+### [Heading 2] 13.3 Frontend Module Map (Next.js)
+[TABLE]
+| Folder | What lives there |
+| app/(auth)/ | Login screen and the Central Login SSO callback page. |
+| app/(app)/ | The signed-in application routes (Dashboard, Reports and wizard, Approvals, Data Sources). |
+| app/api/ | Next.js route handlers (server-side calls / proxy to the backend). |
+| src/features/ | Feature modules (report wizard, approvals, data sources, run config, dashboard widgets). |
+| src/lib/ | API client, helpers and configuration. |
+[/TABLE]
+
+### [Heading 1] 14. Appendix
+
+### [Heading 2] 14.1 Glossary
+Achievement block: a set of steps that works out a performance figure.
+Incentive block: a set of steps that works out a payout from achievements, usually using slab/case rules.
+Final commission: the per-channel amount produced by the last step of a run.
+EV / POS disbursement: the two payout channels (Electronic Value / Point-of-Sale).

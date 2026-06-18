@@ -1,0 +1,315 @@
+Device Retail Chain SSE
+Unique KPI Conditions — All SRFs
+SalesCom Automation Reference | Compiled May 2026
+INDEX
+[TABLE]
+| Section | Title |
+| 1 | Programme Overview & Field Force Profile |
+| 2 | SRF Version Timeline & Structural Changes |
+| 3 | KPI Framework — May 2025 (Baseline) |
+| 4 | KPI Framework — July 2025 (Minor Revision) |
+| 5 | KPI Framework — October 2025 (Major Overhaul) |
+| 6 | KPI Framework — January 2026 (FWA Introduced) |
+| 7 | KPI-by-KPI Comparative Conditions (All Versions) |
+| 7.1 | GA (Gross Add) KPI |
+| 7.2 | Recharge & Bundle KPI |
+| 7.3 | Daily Participation KPI |
+| 7.4 | App Install KPI |
+| 7.5 | Attendance KPI |
+| 7.6 | FWA — Home Internet KPI (Jan 2026 only) |
+| 8 | Payout Structure Evolution |
+| 9 | Maturity & Payment Conditions |
+| 10 | Key Definitions & Glossary |
+[/TABLE]
+1. Programme Overview & Field Force Profile
+[TABLE]
+| Programme Name | Device Retail Chain — SSE Variable KPI |
+| Field Force Role | SSE (Sales Support Executive / Field Force) |
+| Business Vertical | Device Retail Chain (Handset & Accessory Distribution) |
+| Variable Pay Base | BDT 4,000 per month (variable portion) |
+| Measurement Cycle | Monthly (calendar month) |
+| SRFs Covered | 4 versions: May 2025, July 2025, October 2025, January 2026 |
+| Issuing Function | SalesCom / Sales Compensation |
+[/TABLE]
+Note: All SRFs apply to the same SSE field force role under Device Retail Chain vertical. Conditions evolved significantly across versions.
+2. SRF Version Timeline & Structural Changes
+[TABLE]
+| Version | Effective From | Key Change vs Previous |
+| May 2025 | May 2025 | Baseline version. 5 KPIs, simple pro-rata payout. GA includes RYZE + MNP. |
+| July 2025 | July 2025 | Minor revision only: GA scope changed — RYZE excluded. All other conditions same as May 2025. |
+| October 2025 | October 2025 | Major overhaul. Tiered slab payouts replace pro-rata. GA splits into Target Ach + First Recharge sub-KPIs. App weight doubles (10%→20%). Maturity changes to 45 days after activation. |
+| January 2026 | January 2026 | FWA Home Internet KPI introduced (10% weight). GA threshold raised to 93%. Higher slab thresholds across all KPIs. Daily Participation threshold raised to 95%. |
+[/TABLE]
+3. KPI Framework — May 2025 (Baseline)
+5-KPI structure with simple pro-rata payout. Maturity: 8th of following month.
+[TABLE]
+| KPI | Weight | Threshold | Payout Rule | Product Scope |
+| GA (Gross Add) | 40% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Prepaid incl. RYZE + MNP |
+| Recharge & Bundle | 20% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Overall recharge; ≥40% must be data/mix bundle |
+| Daily Participation | 20% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Unique days with GA / scheduled working days |
+| App Install | 10% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | App installations attributed to SSE |
+| Attendance | 10% | 100% | 100% attendance = full payout; any absence = 0% | Manual data from business team; binary gate |
+[/TABLE]
+Note: Total weight = 100%. Below threshold for any KPI = 0% for that KPI component. Payout = sum of individual KPI payouts × BDT 4,000.
+4. KPI Framework — July 2025 (Minor Revision)
+Identical to May 2025 in all conditions. Only change: GA product scope excludes RYZE.
+[TABLE]
+| KPI | Weight | Threshold | Payout Rule | Product Scope |
+| GA (Gross Add) | 40% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Prepaid + MNP (RYZE EXCLUDED from Jul 2025) |
+| Recharge & Bundle | 20% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Overall recharge; ≥40% must be data/mix bundle |
+| Daily Participation | 20% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | Unique days with GA / scheduled working days |
+| App Install | 10% | 80% | ≥80% to <100%: payout at actual %; ≥100%: 100% payout | App installations attributed to SSE |
+| Attendance | 10% | 100% | 100% attendance = full payout; any absence = 0% | Manual data from business team; binary gate |
+[/TABLE]
+Note: RYZE exclusion is the sole difference from May 2025. All weights, thresholds, payout formula, and maturity (8th of next month) remain identical.
+5. KPI Framework — October 2025 (Major Overhaul)
+Complete restructure: tiered slabs, GA split, App weight doubled, maturity changed to 45 days after activation.
+5.1 KPI Weight Summary
+[TABLE]
+| KPI Component | Weight | Threshold | Payout Type |
+| GA — Target Achievement | 20% | 80% | Tiered slab |
+| GA — First Recharge | 15% | 60% | Pro-rata above floor; ≥85%=100% |
+| Recharge & Bundle | 25% | 80% | Tiered slab |
+| Daily Participation | 10% | 90% | Tiered slab |
+| App Install | 20% | 80% | Tiered slab |
+| Attendance | 10% | 100% | Binary (0% or 100%) |
+| TOTAL | 100% | — | — |
+[/TABLE]
+5.2 GA — Target Achievement Slab (20% weight)
+[TABLE]
+| Achievement Range | Payout % |
+| <80% | 0% |
+| 80% – 84.99% | 60% |
+| 85% – 89.99% | 70% |
+| 90% – 94.99% | 80% |
+| 95% – <100% | 90% |
+| ≥100% | 100% |
+[/TABLE]
+5.3 GA — First Recharge Sub-KPI (15% weight)
+Measures % of activated SIMs with first recharge within 45 days of activation.
+[TABLE]
+| Achievement Range | Payout % |
+| <60% | 0% |
+| 60% – 84.99% | Pro-rated (actual %) |
+| ≥85% | 100% |
+[/TABLE]
+Note: Rolling 45-day window from activation date. Maturity of this sub-KPI extends to 45 days after last activation in month.
+5.4 Recharge & Bundle Slab (25% weight)
+Same slab structure as GA Target Achievement.
+[TABLE]
+| Achievement Range | Payout % |
+| <80% | 0% |
+| 80% – 84.99% | 60% |
+| 85% – 89.99% | 70% |
+| 90% – 94.99% | 80% |
+| 95% – <100% | 90% |
+| ≥100% | 100% |
+[/TABLE]
+Note: Bundle condition: ≥40% of total recharge must be data/mix bundle (carried forward from May/Jul 2025).
+5.5 Daily Participation Slab (10% weight, 90% threshold)
+[TABLE]
+| Achievement Range | Payout % |
+| <90% | 0% |
+| 90% – 94.99% | 60% |
+| 95% – 99.99% | 70% |
+| ≥100% | 100% |
+[/TABLE]
+Note: Threshold raised to 90% (from 80% in May/Jul). Participation measured on both GA and Recharge activity days.
+5.6 App Install Slab (20% weight, 80% threshold)
+Weight doubled from 10% (May/Jul) to 20%. Target = 50% of GA target.
+[TABLE]
+| Achievement Range | Payout % |
+| <80% | 0% |
+| 80% – 84.99% | 60% |
+| 85% – 89.99% | 70% |
+| 90% – 94.99% | 80% |
+| 95% – <100% | 90% |
+| ≥100% | 100% |
+[/TABLE]
+5.7 Attendance (10% weight)
+Binary gate — must be registered in the system. Any unauthorized absence = 0% for this KPI.
+Note: Data source: official attendance system (not manual from business team, as in May/Jul).
+6. KPI Framework — January 2026 (FWA Introduced)
+FWA Home Internet KPI added (10%). GA threshold raised to 93%. Higher slab thresholds across all KPIs.
+6.1 KPI Weight Summary
+[TABLE]
+| KPI Component | Weight | Threshold | Payout Type |
+| GA — Target Achievement | 20% | 93% | Tiered slab (higher thresholds) |
+| GA — First Recharge | 10% | — | Pro-rata above floor |
+| Recharge & Bundle | 20% | 92% | Tiered slab |
+| FWA — Home Internet (NEW) | 10% | 93% | Tiered slab (same as GA) |
+| Daily Participation | 10% | 95% | Tiered slab |
+| App Install | 20% | 81.5% | Tiered slab |
+| Attendance | 10% | 100% | Binary (0% or 100%) |
+| TOTAL | 100% | — | — |
+[/TABLE]
+6.2 GA — Target Achievement Slab (20% weight, 93% threshold)
+[TABLE]
+| Achievement Range | Payout % |
+| <93% | 0% |
+| 93% – 100.99% | 95% |
+| 101% – 107.99% | 110% |
+| ≥108% | 120% |
+[/TABLE]
+Note: Threshold raised from 80% (Oct 2025) to 93%. Outperformance rewarded with 110% and 120% payout bands.
+6.3 GA — First Recharge Sub-KPI (10% weight)
+Weight reduced from 15% to 10% (weight moved to FWA). Rolling 45-day window retained.
+6.4 Recharge & Bundle Slab (20% weight, 92% threshold)
+[TABLE]
+| Achievement Range | Payout % |
+| <92% | 0% |
+| 92% – 97.99% | 95% |
+| 98% – 102.99% | 110% |
+| ≥103% | 120% |
+[/TABLE]
+Note: Threshold raised from 80% to 92%. Same outperformance slab structure as GA.
+6.5 FWA — Home Internet KPI (10% weight, NEW in Jan 2026)
+Brand new KPI. Measures successful installation of Fixed Wireless Access (FWA) Home Internet connections.
+[TABLE]
+| Achievement Range | Payout % |
+| <93% | 0% |
+| 93% – 100.99% | 95% |
+| 101% – 107.99% | 110% |
+| ≥108% | 120% |
+[/TABLE]
+Note: FWA = Fixed Wireless Access. Same slab structure as GA Target Achievement. Attributed to SSE responsible for the installation.
+6.6 Daily Participation Slab (10% weight, 95% threshold)
+[TABLE]
+| Achievement Range | Payout % |
+| <95% | 0% |
+| 95% – 99.99% | 95% |
+| ≥100% | 110% |
+[/TABLE]
+Note: Threshold further raised from 90% (Oct 2025) to 95%. Outperformance band at 110%.
+6.7 App Install Slab (20% weight, 81.5% threshold)
+[TABLE]
+| Achievement Range | Payout % |
+| <81.5% | 0% |
+| 81.5% – 87.19% | 95% |
+| 87.2% – 91.59% | 110% |
+| ≥91.6% | 120% |
+[/TABLE]
+Note: Threshold raised to 81.5% with decimal precision slab breakpoints. Target still = 50% of GA target.
+6.8 Attendance (10% weight)
+Unchanged from Oct 2025. Binary gate — registered in system. Any unauthorized absence = 0%.
+7. KPI-by-KPI Comparative Conditions (All Versions)
+7.1 GA (Gross Add) KPI
+[TABLE]
+| Condition | May 2025 | Jul 2025 | Oct 2025 | Jan 2026 |
+| Weight | 40% | 40% | 35% total (20%+15%) | 30% total (20%+10%) |
+| Threshold | 80% | 80% | 80% (Target); 60% (1st Recharge) | 93% (Target); N/A (1st Recharge) |
+| Payout Type | Pro-rata | Pro-rata | Tiered slab + pro-rata | Tiered slab + pro-rata |
+| Product Scope | Prepaid incl. RYZE + MNP | Prepaid + MNP (no RYZE) | Prepaid + MNP (no RYZE) | Prepaid + MNP (no RYZE) |
+| Sub-KPIs | None | None | Target Ach (20%) + First Recharge (15%) | Target Ach (20%) + First Recharge (10%) |
+| Recharge Window | N/A | N/A | 45 days from activation | 45 days from activation |
+[/TABLE]
+7.2 Recharge & Bundle KPI
+[TABLE]
+| Condition | May 2025 | Jul 2025 | Oct 2025 | Jan 2026 |
+| Weight | 20% | 20% | 25% | 20% |
+| Threshold | 80% | 80% | 80% | 92% |
+| Payout Type | Pro-rata | Pro-rata | Tiered slab | Tiered slab |
+| Bundle Condition | ≥40% data/mix bundle | ≥40% data/mix bundle | ≥40% data/mix bundle | ≥40% data/mix bundle |
+| Top Payout | 100% | 100% | 100% at ≥100% | 120% at ≥103% |
+[/TABLE]
+7.3 Daily Participation KPI
+[TABLE]
+| Condition | May 2025 | Jul 2025 | Oct 2025 | Jan 2026 |
+| Weight | 20% | 20% | 10% | 10% |
+| Threshold | 80% | 80% | 90% | 95% |
+| Payout Type | Pro-rata | Pro-rata | Tiered slab | Tiered slab |
+| Measurement | Unique days with GA / scheduled days | Same | Days with GA & Recharge activity | Same as Oct 2025 |
+| Top Payout | 100% | 100% | 100% at ≥100% | 110% at ≥100% |
+[/TABLE]
+7.4 App Install KPI
+[TABLE]
+| Condition | May 2025 | Jul 2025 | Oct 2025 | Jan 2026 |
+| Weight | 10% | 10% | 20% | 20% |
+| Threshold | 80% | 80% | 80% | 81.5% |
+| Payout Type | Pro-rata | Pro-rata | Tiered slab | Tiered slab (decimal breakpoints) |
+| Target Basis | Absolute target | Absolute target | 50% of GA target | 50% of GA target |
+| Top Payout | 100% | 100% | 100% at ≥100% | 120% at ≥91.6% |
+[/TABLE]
+7.5 Attendance KPI
+[TABLE]
+| Condition | May 2025 | Jul 2025 | Oct 2025 | Jan 2026 |
+| Weight | 10% | 10% | 10% | 10% |
+| Threshold | 100% | 100% | 100% | 100% |
+| Payout Type | Binary | Binary | Binary | Binary |
+| Data Source | Manual (business team) | Manual (business team) | System-registered | System-registered |
+| Unauthorized Absence | = 0% | = 0% | = 0% | = 0% |
+[/TABLE]
+7.6 FWA — Home Internet KPI (Jan 2026 only)
+[TABLE]
+| Condition | Value |
+| Applicable Version | January 2026 only (new KPI) |
+| Weight | 10% |
+| Threshold | 93% |
+| Payout Slab | <93%=0%; 93–101%=95%; 101–108%=110%; ≥108%=120% |
+| Definition | Successful installation of FWA (Fixed Wireless Access) Home Internet |
+| Attribution | Attributed to the SSE responsible for the installation |
+| Slab Structure | Identical to GA Target Achievement slab |
+[/TABLE]
+8. Payout Structure Evolution
+8.1 May & July 2025 — Simple Pro-Rata
+For each KPI: if achievement ≥ threshold → payout = actual achievement % × KPI weight × BDT 4,000. No outperformance bonus.
+[TABLE]
+| Achievement vs Target | Payout |
+| Below threshold (e.g., <80%) | 0% |
+| At or above threshold, below 100% | Actual achievement % (pro-rata) |
+| At or above 100% | 100% (capped) |
+[/TABLE]
+8.2 October 2025 — Tiered Slabs (No Outperformance)
+Each slab band pays a fixed % regardless of exact achievement within the band. Capped at 100%.
+[TABLE]
+| Band | Payout % | Applies To |
+| <80% | 0% | GA Target, Recharge, App Install |
+| 80–84.99% | 60% | GA Target, Recharge, App Install |
+| 85–89.99% | 70% | GA Target, Recharge, App Install |
+| 90–94.99% | 80% | GA Target, Recharge, App Install |
+| 95–99.99% | 90% | GA Target, Recharge, App Install |
+| ≥100% | 100% | All KPIs |
+| <90% | 0% | Daily Participation |
+| 90–94.99% | 60% | Daily Participation |
+| 95–99.99% | 70% | Daily Participation |
+[/TABLE]
+8.3 January 2026 — Tiered Slabs with Outperformance Bonus
+New: exceeding 100% target can yield 110% or 120% payout (overachievement bands introduced).
+[TABLE]
+| KPI | Floor Threshold | 95% Band | 110% Band | 120% Band |
+| GA Target Ach | 93% | 93–101% | 101–108% | ≥108% |
+| Recharge & Bundle | 92% | 92–98% | 98–103% | ≥103% |
+| FWA Home Internet | 93% | 93–101% | 101–108% | ≥108% |
+| Daily Participation | 95% | 95–100% | ≥100% → 110% | N/A |
+| App Install | 81.5% | 81.5–87.2% | 87.2–91.6% | ≥91.6% → 120% |
+[/TABLE]
+Note: Outperformance bands mean total payout can exceed BDT 4,000 base if multiple KPIs achieve 110–120% bands.
+9. Maturity & Payment Conditions
+[TABLE]
+| Version | Maturity Date | Condition |
+| May 2025 | 8th of following month | Fixed calendar date. All KPIs lock on month-end; pay on 8th. |
+| July 2025 | 8th of following month | Same as May 2025. |
+| October 2025 | 45 days after activation | Maturity linked to last SIM activation in the month. GA First Recharge also uses 45-day rolling window. Delays payout vs. previous versions. |
+| January 2026 | 45 days after activation | Same as Oct 2025. FWA installations follow same 45-day window. |
+[/TABLE]
+Note: The shift from 8th-of-month to 45-days-after-activation (Oct 2025 onwards) significantly changes cash flow timing for SSEs with late-month activations.
+10. Key Definitions & Glossary
+[TABLE]
+| Term | Definition |
+| SSE | Sales Support Executive — the field force role under Device Retail Chain vertical |
+| GA (Gross Add) | Successful new SIM activation. Counted per activation date. Scope varies by SRF version. |
+| MNP | Mobile Number Portability — porting from another operator counts as a GA |
+| RYZE | Banglalink's RYZE-branded product. Included in GA scope May 2025, excluded from July 2025 onwards. |
+| FWA | Fixed Wireless Access — broadband home internet delivered via mobile network. New KPI in Jan 2026. |
+| First Recharge | The first recharge transaction by a newly activated subscriber. Measured within 45 days of activation. |
+| Daily Participation | Number of unique days SSE recorded GA or recharge activity ÷ scheduled working days in month. |
+| App Install | Mobile app installation attributed to the SSE. Target set at 50% of GA target (Oct 2025 onwards). |
+| Attendance | Physical/system-registered attendance. Binary gate — 100% required. Source: manual (May/Jul) or system (Oct/Jan). |
+| Pro-Rata Payout | Payout equals actual achievement %. If GA is 85%, payout for that KPI = 85% × weight × base. |
+| Tiered Slab | Fixed payout % for a range of achievement. E.g., 80–85% range pays 60% regardless of exact value. |
+| Outperformance Band | Payout above 100% base (e.g., 110%, 120%) for exceeding 100% target. Introduced Jan 2026. |
+| Bundle Condition | ≥40% of total recharge must come from data or mixed bundles (consistent across all versions). |
+| Maturity | The date on which a KPI result is locked and payment is processed. |
+| 45-Day Window | Rolling period from SIM activation during which first recharge or FWA install must occur to count. |
+| Threshold | Minimum achievement level to earn any payout for a KPI. Below = 0% for that component. |
+[/TABLE]

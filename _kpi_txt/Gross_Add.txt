@@ -1,0 +1,446 @@
+GROSS ADD CAMPAIGNS
+Unique KPI Conditions Reference
+Compiled from 88 SRFs  |  April 2025 – March 2026
+INDEX
+[TABLE]
+| # | Section Title | Key Distinguishing Feature |
+| 1 | RSO Campaign – Gross Add (Monthly Series) | Categorization evolution Apr25–Feb26; incremental incentive Feb26 |
+| 2 | RSO Supervisor Campaign – Gross Add | Cumulative DH performance; binary two-level incentive (8,889/7,778) |
+| 3 | DD Manager Campaign – Gross Add | DH-total performance; multi-KPI Mar26 variant with VLR penalty + growth adj. |
+| 4 | RSO GA Campaign – Project Thunderstorm | BTS-tagged Thana GA; Hit/Miss; VLR prorated gate from Jan26 |
+| 5 | RSO GA Campaign Follow Up – Project Thunderstorm | Follow-up recharge on FCD GA; 80% GA gate; deno-split Dec25 |
+| 6 | Distributor GA Campaign – Project Thunderstorm | Selected-DD Thana BTS GA; KPI/weightage varies by DD |
+| 7 | Distributor GA Commission (Ongoing) | Per-GA flat: BDT 30 + BDT 5 Device Agnostic; RGA usage gate |
+| 8 | Distributor GA Acceleration Campaign (Jul25) | 6-day burst; Grocery Box incentive; 48hr >=95% gate |
+| 9 | Distributor GA Booster Campaign (Jan26) | Dual gate: 48hr + VLR >=80%; TCG Bar excluded |
+| 10 | Distributor GA Campaign – East Cluster (Mar26) | Retailer slab winning-count; two sub-periods; 48hr prorated gate |
+| 11 | BL Prepaid GA Campaign – Device BP | Three eras: count slab → target% + 1st recharge gate + window extension |
+| 12 | BL Prepaid GA Campaign – Monobrand | CCR target + Monobrand center gate (80%->90%); 1st recharge gate |
+| 13 | BL Prepaid GA Campaign – RBSP | 4-component: upfront + conditional (weekly+monthly pack) + daily participation |
+| 14 | Retailer GA Campaign (Regular) | Cluster-differentiated rates; target vs no-target; 40->50 GA cap; MMSTR excl. |
+| 15 | Retailer GA Campaign – Project Thunderstorm | Per-deno follow-up recharge commission (BDT 50/60/80 per deno) |
+| 16 | Selected Retailer GA Campaign (Dec25) | Hand-picked retailer list; custom per-retailer incentive; two Dec windows |
+| 17 | Cost Reimbursement of SIM to Retailer | BDT 522.22 per FCD; BSP selected base; Prepaid+Postpaid; any usage counts |
+[/TABLE]
+1. RSO Campaign – Gross Add (Monthly Series)
+SRFs: RSO Campaign_Gross Add_Apr25 through Feb26 (14 SRFs incl. revisions). Recipient: RSO. The primary monthly GA incentive programme — underwent the most structural evolution of all campaigns.
+1.1  Structural Evolution Overview
+[TABLE]
+| Period | Category Model | KPI Basis | Max Payout | Key Change |
+| Apr25 | None | GA only | 110% | First SRF; MNP counted; DRC/CM/BP excl. |
+| May25–Jun25 | None | GA only | 100% | MNP+RYZE counted; 100% cap |
+| Jul25 | None | GA only | 100% | Cluster-split modality; special DH code exceptions |
+| Aug25 | None | GA (RSO+Retail+BP C/E/N) | 100% | EV SIM (ITOPUPNUMBER) excluded; Participation Retailer list |
+| Sep25 | 4-tier (Pt/Au/Si/Br) | 4-KPI scoring | 100% | RSO Categorization introduced; EV C2C prerequisites |
+| Oct25 | 4-tier | 4-KPI (split 1-16/17+) | 100% | Mid-month policy split; Non-GA RSO formally defined |
+| Nov25 | 3-tier (Pt/Au/Si) | EV C2C + GA only | 110% | Bronze removed; simplified KPI; cap raised to 110% |
+| Dec25 | 3-tier | EV C2C + GA | 110% | Gold threshold >=90% (was >=95%); SSO Definition added |
+| Jan26 | 3-tier | EV C2C + GA | 120% | Cap 120%; No Play usage gate; Recharge def. expanded |
+| Feb26 | 3-tier | EV C2C + GA | 120%+ | Incremental incentive above Slab 3 target |
+[/TABLE]
+1.2  Common Baseline Conditions (All Periods)
+[TABLE]
+| Activation Basis | FCD (First Call Date) during promotion period |
+| ETSAF | 98% of total ETSAF (against activations before disconnection) vetted & accepted by Banglalink by 7th of following month |
+| Disconnection | Between FCD and latest data up to T-6 (report generation date minus 6 days) |
+| MNP | Counted as GA across all periods |
+| RYZE | Counted as GA (from May25 onward; explicitly listed in Jan26+) |
+| DRC/CM/BP | GA of RSOs under DRC SSO, CM Code, and BP Codes excluded; IT extracts from DMS; B2C provides list if not feasible |
+| Mapping | Month-end RDB mapping used for all calculations |
+| Rounding | Standard: <0.5 rounds down, >=0.5 rounds up |
+| Product | All Prepaid; for MNP all connections |
+| Target File | B2C shares target file |
+[/TABLE]
+1.3  RSO Categorization – 4-KPI Model (Sep25–Oct25)
+[TABLE]
+| KPI | Weight |
+| Recharge (EV Secondary + SC Secondary) | 40% |
+| Bundle | 25% |
+| GA (Gross Add) | 25% |
+| Active LSO | 10% |
+[/TABLE]
+[TABLE]
+| Tier | Rank | EV C2C Prerequisite | Incentive (BDT) |
+| Platinum | Top 25% | >=95% | 8,000 |
+| Gold | Next 25% | >=90% | 7,000 |
+| Silver | Next 25% | >=80% | 6,000 |
+| Bronze | Bottom 25% | None | 5,000 |
+[/TABLE]
+Note: Request types: MNP_REGISTRATION, NEW_REGISTRATION, EC_VERIFICATION. EV SIM (ITOPUPNUMBER) excluded from GA. VLR data from B2C.
+1.4  RSO Categorization – Simplified 3-Tier Model (Nov25–Feb26)
+[TABLE]
+| Tier | Recharge+GA Achievement | Non-GA Market (EV C2C Only) | Incentive (BDT) |
+| Platinum | >=100% | >=100% | 8,000 |
+| Gold | >=95% (Nov25) / >=90% (Dec25+) | >=95% / >=90% | 7,000 |
+| Silver | <95% / <90% | <95% / <90% | 6,000 |
+[/TABLE]
+Note: Non-GA market = RSOs under CHICOX09 & CHICOX11 DH. Only EV C2C KPI applies for non-GA. Slab 1 target used for categorization.
+1.5  Oct25 Mid-Month Policy Split (Unique)
+[TABLE]
+| 1st–16th Oct | Old 4-KPI scoring policy applies; separate SRF filed |
+| 17th Oct onward | New criteria apply; another separate SRF for 17th Oct+ calculation |
+| Non-GA RSO | Formally defined: RSOs under CHICOX09 & CHICOX11 DH — EV C2C KPI only |
+[/TABLE]
+1.6  Jul25 Cluster-Split and DH Code Exceptions (Unique)
+[TABLE]
+| Cluster Split | Central+East Cluster vs all other clusters have different GA modality |
+| Special DH Codes | Codes DHKGOP09/10/11/08, DHKFAR04/08/09 have exceptional treatment |
+| GA Definition Expansion | From Aug25: RSO GA = RSO own code + Retail + BP GA for Central, East, North clusters |
+| Participation Retailer | Retailer list for GA Productivity (RSO own code) KPI shared by B2C |
+[/TABLE]
+1.7  Jan26 New Conditions (Unique)
+[TABLE]
+| Max Payout Cap | 120% for GA (raised from 110%) |
+| Usage Gate Added | No Play: any outgoing call or internet usage — minimum 93% of GA must have usage within calendar month |
+| Recharge Definition | EV = R2RT + D2RT + SUD12AGENT + DTR (Manual/Daily Commission) + OTF (EV OTF + IRIS OTF); SC = Retail lifting per DMS entry. Less withdrawals. |
+| SSO Definition | SSO Definition section formally added to SRF |
+[/TABLE]
+1.8  Feb26 Incremental Incentive (Unique)
+[TABLE]
+| Base Payout at Slab 3 | 120% of allocated incentive |
+| Incremental Layer | Each 10% above Slab 3 target earns additional 20% payout |
+| Example | Slab 3 target = 100; achievement = 110 -> 120% base + 20% extra = 140% total GA incentive |
+| Eligibility | Applies to Quality GA KPI only |
+[/TABLE]
+2. RSO Supervisor Campaign – Gross Add
+SRFs: RSO Sup Campaign_Gross Add_May25 through Feb26 (12 SRFs). Recipient: RSO Supervisors. Performance = cumulative GA of all RSO+Retail+BP+CM under the supervisor (broader than RSO own-code).
+2.1  Incentive Structure
+[TABLE]
+| Period | Incentive on >=100% Recharge+GA | Incentive on <100% | Cap | Notes |
+| May25–Aug25 | Flat GA payout (structure in target file) | N/A | 100% | DRC excluded; basic |
+| Sep25 | BDT 8,889 | BDT 7,778 | 100% | EV SIM excl.; participation retailer codes |
+| Oct25–Nov25 | BDT 8,889 | BDT 7,778 | 100%->110% | Non-GA RSO; VLR from Nov25 |
+| Jan26 | BDT 8,889 | BDT 7,778 | 120% | No Play usage gate; 120% GA cap |
+| Feb26 | BDT 8,889 | BDT 7,778 | 120%+ | Incremental incentive mirrors RSO Campaign |
+[/TABLE]
+2.2  Key Differentiators vs RSO Campaign
+[TABLE]
+| Binary Incentive | Only two levels (8,889 or 7,778) based on >=100% or <100% of Recharge+GA — not a three-tier Platinum/Gold/Silver rank |
+| Cumulative Scope | Includes ALL GA from RSOs + Retail + BP + CM under supervisor; broader than RSO own-code |
+| No Individual Rank | Supervisor not ranked into categories; simply passes/fails the 100% gate |
+| Categorization Ref | From Jan26: slab 1 target used for GA & Recharge categorization gate (mirrors RSO SRF language) |
+[/TABLE]
+3. DD Manager Campaign – Gross Add
+SRFs: DD Manager Campaign_Gross Add_May25 through Mar26 (11 SRFs incl. special multi-KPI Mar26 SRF). Recipient: DD (Distribution Hub) Manager. Performance = total DH performance.
+3.1  Standard Incentive (May25–Feb26)
+[TABLE]
+| Period | >=100% Recharge+GA | <100% | Cap | Additions |
+| May25–Aug25 | Flat payout | N/A | 100% | DRC excl.; Managers performance = DH total |
+| Sep25 | BDT 11,111 | BDT 8,889 | 100% | EV SIM excl.; RSO GA participation retailer codes |
+| Oct25–Dec25 | BDT 11,111 | BDT 8,889 | 100%->110% | Non-GA market; VLR from Nov25 |
+| Jan26–Feb26 | BDT 11,111 | BDT 8,889 | 120% | No Play usage; slab 1 for categorization |
+[/TABLE]
+3.2  Mar26 Special: GA + Recharge + LSO Multi-KPI (Unique)
+Report Title: DD Manager Campaign_GA_Recharge_LSO_Mar26. Covers GA, Recharge, LSO, and Strike Rate in one SRF:
+[TABLE]
+| KPIs | GA + Recharge (EV+SC Secondary) + LSO (Live SIM Ownership) + Strike Rate |
+| Incentive | BDT 11,111 on >=100% Recharge+GA; BDT 8,889 for <100% |
+| Non-GA Definition | CHICOX09 & CHICOX11 DH |
+| Employee Excl. | Recharge at BL employee pool phone numbers excluded |
+| Maturity Date | 3rd of following month (vs standard 8th for all other GA SRFs) |
+[/TABLE]
+VLR Penalty Gate:
+[TABLE]
+| VLR % | Payout |
+| <65% | 0% total incentive |
+| >=65% to <85% | Prorated on total incentive |
+| >=85% | 100% earned incentive |
+[/TABLE]
+Day-Count-Adjusted Growth Calculation (unique condition):
+Growth between months is adjusted for day-count difference. Example: LM had 28 days, CM has 31 days. If LM recharge=100 and CM=102, adjusted growth = (102/31x28)/100 - 1 = -8% (NOT +2%). This prevents apparent growth from simply having more days.
+4. RSO GA Campaign – Project Thunderstorm
+SRFs: 9 SRFs Jul25–Mar26. Requester: Distribution Planning & Operation (Junaid Aslam — different from main GA series). Recipient: RSOs of Selected Thanas only.
+4.1  BTS-Tagged Thana GA — Core Concept (Unique)
+[TABLE]
+| Scope | RSOs of selected Thanas only — not all RSOs eligible |
+| BTS Tag Priority | GA tagged to BTS via Biometric; if Biometric BTS unknown/null -> use FCD BTS; if both unknown/null -> GA not counted in this campaign |
+| Dual-Tier Target | RSO must achieve BOTH: (1) overall GA target AND (2) Thana BTS-tagged GA sub-target |
+| Single GA Conflict | If one GA maps to 2 different sites -> use Biometric site tag (unique GA) |
+| Hit/Miss | Binary: achieve both targets = receive offer; miss either target = nothing |
+| BP GA Alignment | BP GA counted depending on alignment with 'Amar Shopoth' programme per cluster |
+| Offer Amount | RSO-wise offer amount specified by B2C; BTS list shared separately |
+[/TABLE]
+4.2  VLR Gate Addition (Jan26 onward)
+[TABLE]
+| VLR % | Incentive | Period |
+| >=85% | Full KPI incentive | Jan26 onward |
+| >=65% to <85% | Prorated incentive | Jan26 onward |
+| <65% | No GA KPI incentive | Jan26 onward |
+| Not applicable | Pure Hit/Miss only | Jul25–Dec25 |
+[/TABLE]
+4.3  Example (Jan26 VLR+BTS Combined)
+[TABLE]
+| RSO | GA Ach% | BTS-tagged GA Ach% | VLR% | Result |
+| RSO-01 | 103% | 106% | 86% | Yes — all 3 conditions met |
+| RSO-02 | 95% | 100% | 87% | No — overall GA missed (<100%) |
+| RSO-03 | 110% | 94% | 87% | No — Thana BTS GA missed |
+| RSO-04 | 105% | 101% | 50% | No — VLR <65% |
+| RSO-05 | 105% | 101% | 75% | Prorated — VLR 65-85% |
+[/TABLE]
+5. RSO GA Campaign Follow Up – Project Thunderstorm
+SRFs: 5 SRFs (Aug25–Dec25). A follow-up recharge incentive layer — RSO earns based on activated customers making specific denomination recharges post-activation.
+5.1  Core Mechanics
+[TABLE]
+| Eligibility Gate | RSO must first achieve >=80% of monthly GA target |
+| Incentive Basis | NOT based on GA count directly — based on % of FCD customers who make specific denomination recharges within 45 days of activation |
+| Eligible Recharges | Only specified BDT denominations through any retail count |
+| Unique FCD GA | Only unique FCD GA customers considered |
+| Achievement | Expressed as % (e.g., achieved 35% follow-up recharge target) |
+| Modality | Hit/Miss per follow-up recharge target |
+| DRC/BP Excl. | DRC GA excluded; from Dec25 also BP GA excluded |
+[/TABLE]
+5.2  Denomination Evolution
+[TABLE]
+| Period | Regular SIM Denominations | Emerging Market SIM | Notes |
+| Aug25 (18–31) | 298, 348, 448 | N/A | First follow-up SRF |
+| Sep25–Nov25 | 298, 348, 448 | N/A | Same maintained |
+| Dec25 (1–8) | 298, 348, 448 | 97, 207, 359 | Emerging Market SIM category added |
+| Dec25 (9–31) | 298, 399, 499 | 97, 207, 359 | Regular SIM denos CHANGED mid-month |
+[/TABLE]
+Note: Dec25 has two denomination sets for regular SIM within same month (split at 8th/9th Dec) — unique across all Follow Up SRFs.
+6. Distributor GA Campaign – Project Thunderstorm
+SRFs: 3 SRFs (Jul25, Aug25, Sep25). Requester: Distribution Planning & Operation. Recipient: Selected Distributors.
+6.1  Core Conditions
+[TABLE]
+| Scope | Selected Distributors of Project Thunderstorm only |
+| BTS Tagging | Same Biometric/FCD BTS logic as RSO Thunderstorm (Section 4.1) |
+| Dual Target | DD must achieve BOTH overall target AND Thana BTS-tagged target |
+| Hit/Miss | Binary incentive |
+| Variable KPI | KPI and weightage may vary from DD to DD — targets are individualized |
+| Target File | B2C shares DD-specific targets in separate excel files |
+| DD-Wise Offer | DD-wise offer amount provided by B2C |
+| Recharge Scope | EV = R2RT + D2RT + i'top-up + Manual/Daily Commission + EV OTF + IRIS OTF; SC = lifted from Warehouse to DD; DRC achievement excluded |
+[/TABLE]
+7. Distributor GA Commission (Ongoing)
+SRFs: 2 SRFs (1st–16th Oct25, and from 17th Oct25 onward). Requester: Channel Planning (Noyemul Islam). Standing commission — not a time-limited campaign. Approval: SS Approval Flow.
+7.1  Commission Structure
+[TABLE]
+| Type | Amount/GA | Condition |
+| Regular GA Commission | BDT 30 | All qualifying GA |
+| Device Agnostic App | BDT 5 | GA from devices NOT on BL-provided IMEI list; Null IMEI also eligible |
+[/TABLE]
+7.2  Unique Conditions vs Campaign SRFs
+[TABLE]
+| ETSAF Gate | 98% by 7th of following month mandatory for ALL commission buckets — without this, NONE of the commissions are eligible |
+| Usage Gate | >=4 days Revenue Generating Activity (RGA) within 7 days of activation. RGA = any incoming/outgoing call, SMS, or data usage (distinct from 48-hour or 95% gate used elsewhere) |
+| Enterprise/SME | Retailers registered as 'Enterprise' or 'SME Direct BDO' in DMS excluded from DD commission |
+| Non-Compliant Disc. | Disconnections on non-compliant issues discarded from calculation |
+| VLR Addition | From 17th Oct25 onward: VLR data shared by B2C (absent in 1–16 Oct SRF) |
+| Product Scope | Banglalink prepaid + successful MNP port-in for any connection (no MSISDN prefix restriction) |
+[/TABLE]
+8. Distributor GA Acceleration Campaign (22–27 Jul25)
+Single SRF. Short 6-day burst programme. Requester: Noyemul Islam. Recipient: Distributor (benefit flows to RSO Supervisor and DD Manager).
+8.1  Unique Conditions
+[TABLE]
+| Duration | 6 days only (22–27 Jul 2025) — shortest campaign duration in the folder |
+| Incentive Type | PHYSICAL GIFT: Grocery Box worth BDT 500 — not cash; unique among all 88 SRFs |
+| Beneficiary | RSO Supervisor AND DD Manager receive Grocery Box (not the Distributor directly) |
+| Extracted By | Performance report extracted at Distributor level |
+| Usage Gate | DD-wise 48-hour usage >=95% (stricter than other campaign gates) |
+| Maturity Date | 28th Jul'25 — one day after campaign ends (ultra-fast turnaround) |
+[/TABLE]
+9. Distributor GA Booster Campaign (21–31 Jan26)
+Single SRF. Mid-to-end-of-month booster (11 days). Requester: Noyemul Islam. Recipient: Distributor.
+9.1  Unique Conditions
+[TABLE]
+| Dual Usage Gate | BOTH must be satisfied: (1) 48-hour usage >=80% AND (2) VLR Active Usages >=80% |
+| TCG Bar Exclusion | Any type of TCG Bar and self-barred connections NOT counted in achievement — unique to this SRF |
+| Incentive Amount | DD-wise amount specified in target file (custom per distributor, not uniform) |
+| Maturity Date | 3rd Feb'26 (3 days post-campaign end) |
+| VLR Status | Listed as 'Other' condition — VLR Active required |
+| ETSAF | 98% by 7th of following month |
+[/TABLE]
+10. Distributor GA Campaign – East Cluster (March 2026)
+Two SRFs for East Cluster only: (1) 1–15 Mar26, (2) 1–31 Mar26. Requester: Noyemul Islam. Recipient: Distributor.
+10.1  48-Hour Usage Prorated Gate
+[TABLE]
+| 48-Hr Usage % | Incentive |
+| >=95% | Full |
+| 80% to <95% | Prorated — only Zero Usage SIM incentive deducted |
+| <80% | None |
+[/TABLE]
+10.2  Sub-Period Structural Difference
+[TABLE]
+| Period | Incentive Calculation Method | Agent List Date |
+| 1–15 Mar26 | Distributor earns based on count of Retailers that WIN their respective slab ('slab-wise winning Retail count' model) | 15th Mar'26 |
+| 1–31 Mar26 | Distributor earns based on Retailer GA achievement against slabs | 31st Mar'26 |
+[/TABLE]
+Note: The 1–15 Mar 'winning retailer count' model is unique — DD incentive is not GA-volume based but count-of-winning-retailers based.
+11. BL Prepaid GA Campaign – Device BP
+SRFs: 5 SRFs (May25, Aug25, Sep25, Oct25, from Feb26). Requester: Alternate Channel & Digital Recharge. Recipient: Device BP SSE. AIT NOT applicable (Sales Team).
+11.1  Three-Era Evolution
+[TABLE]
+| Era | Period | Slab Basis | 1st Recharge Gate | Window | Rates |
+| 1 | May25 | Absolute count (21-40 / 41-100) | None | 8th following month | 20/30 BDT per GA |
+| 2 | Sep25–Oct25 | % vs target (>=90%/<93% / >=93%/<95% / >=95%) | >=90% or >=95% GA with 1st recharge | 30 days post-activation | 10/30/40 BDT per GA |
+| 3 | From Feb26 | % vs target (>=93% / >93%<101% / >=101%) | >=95% GA with 1st recharge | 45 days post-activation (extended) | 10/30/40 BDT per GA |
+[/TABLE]
+11.2  Common Conditions
+[TABLE]
+| Listed BPs Only | Only Device BPs on B2C-provided list are eligible |
+| AIT | NOT applicable — Sales Team commission |
+| Cap | 100 GA per agent per month in all eras |
+| Product Era 1 | BL Prepaid EXCLUDING RYZE prepaid |
+| Product Era 2/3 | BL Prepaid (all, including RYZE) |
+| ETSAF Era 1 | 98% by 8th of following month |
+| ETSAF Era 2/3 | By vetting date |
+[/TABLE]
+12. BL Prepaid GA Campaign – Monobrand
+SRFs: 5 SRFs (May25 onward). Requester: Alternate Channel & Digital Recharge. Recipient: Monobrand CCR (Customer Care Representative). AIT NOT applicable (Sales Team).
+12.1  Monobrand Center Gate (Unique)
+[TABLE]
+| Center Gate | The cumulative GA of ALL CCRs assigned to a Monobrand MUST meet the center-level threshold for individual commissions to be paid |
+| Era 1 Gate | Cumulative GA of CCRs >= 80% of Monobrand Monthly Target (May25) |
+| Era 2 Gate | Cumulative GA of CCRs >= 90% of Monobrand Monthly Target (Aug25 onward; raised threshold) |
+| Significance | A CCR who meets their personal target still receives NO payment if the Monobrand center misses its gate |
+[/TABLE]
+12.2  Incentive Evolution
+[TABLE]
+| Era | Slab 1 Threshold | Slab 2 | Slab 3 | 1st Recharge Gate | Window |
+| 1 May25 | Absolute: 21-40 GA | 41-100 GA | N/A | None | 8th of following |
+| 2 Aug25 | >=90% vs target | >90%–<=95% | >=95% | >=90% 1st recharge | 30 days |
+| 2b Oct25+ | >=90% vs target | >90%–<=95% | >=95% | >=95% 1st recharge | 30 days |
+[/TABLE]
+[TABLE]
+| Rates Era 1 | BDT 20 (Slab 1) / BDT 30 (Slab 2) per GA |
+| Rates Era 2/3 | BDT 10 / BDT 30 / BDT 40 per GA (Slabs 1/2/3) |
+| Cap | 100 GA per CCR per month (Era 2/3) |
+[/TABLE]
+13. BL Prepaid GA Campaign – RBSP
+Single SRF: RBSP_Jun25 (1–22 Jun 2025). Requester: Alternate Channel & Digital Recharge. Recipient: RBSP Retailers. Most complex commission structure in the folder.
+13.1  Four-Component Commission Structure (Unique)
+[TABLE]
+| # | Component | Trigger | Amount |
+| 1 | Upfront Commission Slab 1 | GA achievement 90%–115% vs target | BDT 1,000/Retailer (lump sum) |
+| 2 | Upfront Commission Slab 2 | GA achievement >115% vs target | BDT 1,500/Retailer (lump sum) |
+| 3 | Conditional Commission-1 | Customer buys eligible Weekly Pack in Jul'25 | BDT 10/Activation |
+| 4 | Conditional Commission-2 | Customer buys eligible Monthly Pack in Jul'25 | BDT 20/Activation |
+| 5 | Daily Participation | >=100% unique activation days vs working days | BDT 500/Retailer |
+[/TABLE]
+13.2  Additional Unique Conditions
+[TABLE]
+| Product Scope | BL Prepaid INCLUDING RYZE Prepaid — broadest in BL Prepaid series |
+| Cap | 100 GA per retailer for upfront commission slabs |
+| RYZE App | RYZE App installation must be verified for RYZE GA (any RYZE App activity from activation date) |
+| MyBL App | MyBL App installation must be verified for BL Prepaid GA if customer is smartphone user |
+| Pack Eligibility | Eligible weekly and monthly pack list provided in SRF (~60+ denominations) |
+| Conditional Timing | Weekly/Monthly Pack purchase must occur in Jul'25 — AFTER campaign end date (deferred measurement) |
+| Max Commission | Maximum of weekly vs monthly pack commission taken (not both) |
+| Maturity Date | Last day of FOLLOWING month (to capture deferred pack purchases) |
+| ETSAF | 98% by 8th of following month |
+[/TABLE]
+14. Retailer GA Campaign (Regular)
+Multiple SRFs from Nov25 through Mar26. Requester: Channel Planning (Noyemul Islam). Recipient: Retailers. Salescom-to-EV Auto-Upload enabled. Bengali SMS notification to retailers.
+14.1  Cluster-Differentiated Per-GA Rates (Jan26 — Unique)
+[TABLE]
+| Cluster | Rate | Target Model |
+| East Cluster | BDT 35/GA | Retailer-level target; new retailer default = 2 GA |
+| North Cluster | BDT 35/GA | Retailer-level target |
+| Central Cluster | BDT 25/GA | Retailer-level target |
+| North East Cluster | BDT 25/GA | Retailer-level target |
+| West Cluster (1–15) | Slab-based | NO target — pure slab (unique for this sub-period) |
+| Sylhet (11–31) | Separate SRF | Own target and incentive structure |
+[/TABLE]
+14.2  GA Cap and 48-Hour Gate
+[TABLE]
+| Period | GA Cap | 48-Hr Gate | Notes |
+| Jan26 | 40 GA | >=95% full / 80–<95% prorated / <80% none | Target-based (some clusters) |
+| Feb26 | 50 GA | >=95% full / 80–<95% prorated / <80% none | Cap raised |
+| Mar26 | 50 GA | >=95% full / 80–<95% prorated / <80% none | Core vs Non-Core split |
+[/TABLE]
+14.3  Mar26 MMSTR SIM Differentiation (Unique)
+[TABLE]
+| Core Regions | MMSTR (BDT 300 SIM) EXCLUDED from incentive — only non-MMSTR products count |
+| Non-Core Regions | MMSTR counted at BDT 200 SIM rate; other products at BDT 300 SIM rate |
+| East Cluster | Separate SRF — not part of Core/Non-Core split |
+[/TABLE]
+14.4  Target vs No-Target Variants
+[TABLE]
+| Target-Based | East, North, Central, North East clusters (Jan26): target provided per retailer |
+| No-Target | West Cluster (Jan26), Central Cluster (Feb26), Core/Non-Core (Mar26): slab incentive without individual target requirement |
+| New Retailer | If absent from target file: default target = 2 GA (Jan26 target-based SRFs only) |
+| SMS | Bengali: 'Priyo Bikreta, Apni GA Campaign_[period] er commission hisabe [amount] peyeched (AIT katar por). Dhonnobad.' |
+[/TABLE]
+15. Retailer GA Campaign – Project Thunderstorm
+Two SRFs: 16–31 Jul25 and 1–17 Aug25. Requester: Distribution Planning & Operation (Junaid Aslam). Recipient: Selected Retailers. Per-denomination follow-up recharge commission model.
+15.1  Per-Denomination Retailer Commission (Unique)
+[TABLE]
+| Campaign Type | GA Follow-up Recharge — retailer paid for customer making specific denomination recharge |
+| Denominations | BDT 298, 348, 448 recharge by the customer within 45 days of activation through any retail |
+| Commission | BDT 298 -> Retailer gets BDT 50; BDT 348 -> BDT 60; BDT 448 -> BDT 80 |
+| Selected Retailers | Only retailers on B2C-provided list eligible |
+| Employee Excl. | Recharge at BL employee pool phone numbers excluded; mapping uses campaign end date |
+| Retailer Data | B2C shares FCD count, denomination, and HIT count per retailer |
+| Salescom Auto | EV Automation: Yes — auto-disbursement to retailer |
+| SMS | Bengali SMS confirming commission (AIT deducted) |
+[/TABLE]
+16. Selected Retailer GA Campaign (December 2025)
+Two SRFs: 1–12 Dec25 and 14–25 Dec25. Requester: Noyemul Islam. Recipient: Specifically selected retailers. Two non-overlapping windows in December.
+16.1  Unique Conditions
+[TABLE]
+| Selected List | Only retailers on B2C-provided 'selected' list are considered — not all active retailers |
+| Target-Based | Retailer-level GA target provided by B2C |
+| Custom Incentive | Both target AND incentive amount are B2C-specified and may differ per retailer |
+| Usage Gate | 48-hour usage >=95% (strict — no prorated tier unlike regular Retailer GA Campaign) |
+| No GA Cap | No explicit GA cap stated (unlike 40/50 cap in regular Retailer Campaign) |
+| Windows | 1–12 Dec and 14–25 Dec — 13th Dec gap between two campaigns |
+| Salescom Auto | EV Automation: Yes |
+[/TABLE]
+17. Cost Reimbursement of SIM to Retailer based on GA
+Single SRF covering 1 Mar25–31 May25 (3-month period). Requester: Customer Experience & Service (Rajib Paul) — different department from all other GA SRFs. Recipient: BSP Retailers.
+17.1  Unique KPI Structure
+[TABLE]
+| Incentive Type | SIM cost REIMBURSEMENT — not a performance incentive; cost-recovery of SIM lifting price |
+| Amount | BDT 522.22 per GA (before AIT); paid after successful FCD |
+| BSP List | B2C provides eligible BSP retailer list |
+| Customer Base | Selected customer base only — not all activations; B2C provides eligibility list |
+| GA Definition | Simple: successful activation / FCD (no cluster or category complexity) |
+| Product | ALL Prepaid AND Postpaid — only GA SRF that explicitly covers postpaid |
+| Requester Dept | Customer Experience & Service — only GA SRF in this folder from this department |
+| Approval Flow | SS Approval Flow; Salescom-to-EV: Yes |
+| Maturity Date | 1st Jun'25 — day after campaign ends |
+[/TABLE]
+17.2  Usage Condition (Most Permissive in Folder)
+[TABLE]
+| Any Usage Counts | MOC (outgoing call), SMSMO, MTC (incoming call), SMSMT, GPRS, MMS, Partial VAS, GRPS recharge, bundle recharge — any single event qualifies |
+| No Threshold | No 48-hour gate; no 95% usage threshold; no 'No Play' minimum — any usage at any time counts |
+| Contrast | All other GA SRFs require >=48hr usage, >=95%, or 'No Play' (>=93%) conditions |
+[/TABLE]
+Appendix: Key Condition Cross-Reference
+A.1  GA Counting Rules by Campaign Type
+[TABLE]
+| Campaign | MNP | RYZE | DRC/BP/CM | EV SIM Excl. | BTS-Tagged |
+| RSO Monthly | Yes | Yes | Excluded | From Aug25 | No |
+| RSO Supervisor | Yes | Yes | DRC excl. | From Sep25 | No |
+| DD Manager | Yes | Yes | DRC excl. | From Sep25 | No |
+| Thunderstorm RSO | Yes | Yes | DRC excl. | N/A | Yes |
+| Thunderstorm Distributor | Yes | Yes | DRC excl. | N/A | Yes |
+| DD Commission | Yes | N/A | N/A | N/A | No |
+| Device BP | Yes | Excl.->Incl. | N/A | N/A | No |
+| Monobrand | Yes | Excl.->Incl. | N/A | N/A | No |
+| Retailer GA | Yes | N/A | N/A | N/A | No |
+| Cost Reimbursement | N/A | N/A | N/A | N/A | No |
+[/TABLE]
+A.2  Usage Gate Comparison
+[TABLE]
+| Campaign | Gate Type | Threshold |
+| RSO Monthly Jan26+ | No Play (call or internet) | >=93% of GA must have usage |
+| DD Manager Mar26 | VLR penalty gate | >=85% full / 65–<85% prorated / <65% zero |
+| Thunderstorm RSO Jan26+ | VLR penalty gate | >=85% full / 65–<85% prorated / <65% zero |
+| DD Commission | RGA days | >=4 RGA days within 7 days of activation |
+| DD Acceleration | 48-hr DD-wise | >=95% |
+| DD Booster | 48-hr + VLR Active | Both >=80% |
+| DD East Cluster | 48-hr prorated | >=95% full / 80–<95% prorated / <80% none |
+| Retailer GA (Jan26+) | 48-hr prorated | >=95% full / 80–<95% prorated / <80% none |
+| Device BP / Monobrand | 1st recharge gate | >=90% or >=95% of GA with 1st recharge |
+| Cost Reimbursement | Any usage | Any call/SMS/data/bundle counts |
+[/TABLE]
+A.3  Max Payout Cap Evolution – RSO Main Campaign
+[TABLE]
+| Period | Max Cap | Change |
+| Apr25 | 110% | Initial SRF |
+| May25–Oct25 | 100% | Reduced / standardized |
+| Nov25–Dec25 | 110% | Raised back |
+| Jan26 | 120% | Further raised |
+| Feb26+ | 120%+ | 120% base + incremental for over-achievement beyond Slab 3 |
+[/TABLE]

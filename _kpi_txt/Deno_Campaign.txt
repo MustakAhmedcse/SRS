@@ -1,0 +1,218 @@
+Deno Campaign SRF
+Unique KPI Conditions Reference Guide
+Covers: Distributor · RSO · Retailer  |  Campaign Types: Daily Deno · Sniper Strike · Bundle Booster · Mega Campaign · Participation
+Introduction
+This document catalogues every distinct KPI condition structure found across the Deno Campaign Service Request Forms (SRFs). Each SRF defines how incentives are calculated for Distributors (DD), RSOs, or Retailers based on Deno HIT counts, Recharge volumes, or Participation rates. All conditions are grouped by incentive type and labelled with a unique code for easy reference.
+Conditions are divided into two major groups:  (1) Incentive Structures — the rules that determine how much is paid and when; and  (2) Exclusion & Filter Conditions — the rules that determine which transactions or agents are counted.
+PART A — HIT-Based Incentive Structures (Distributor)
+Applied when the KPI is Deno HIT — the number of successful Deno recharges made by retailers under the distributor. The HIT target is set individually per distributor (DD-wise) by B2C.
+HIT-01    Flat BDT per HIT — Single Tier
+The simplest incentive structure. The distributor receives a fixed BDT amount for every qualifying HIT, provided the target achievement is 100% or above.
+[TABLE]
+| Achievement Level | Incentive |
+| < 100% of target | No incentive |
+| >= 100% of target | Fixed BDT per HIT (e.g. BDT 50 per HIT) |
+[/TABLE]
+Incentive is capped at 200% of target (HITs above 200% do not earn additional reward).
+Typical campaigns: Sniper Strike (single-cluster, single-deno period).
+HIT-02    Flat BDT per HIT — Two Tiers (Near-Miss)
+Adds a near-miss tier below 100%. Distributors who fall short but are close to target still earn a reduced per-HIT incentive.
+[TABLE]
+| Achievement Level | Incentive |
+| < 90% of target | No incentive |
+| 90% to 99% of target | Lower BDT per HIT (e.g. BDT 40 per HIT) |
+| >= 100% of target | Full BDT per HIT (e.g. BDT 50 per HIT) |
+[/TABLE]
+Incentive capped at 200% achievement.
+The 90% threshold is the most common near-miss boundary across all SRFs.
+HIT-03    Flat BDT per HIT — Three Tiers (Extended Near-Miss)
+Extends the near-miss concept with two below-target tiers. Observed specifically in Central Cluster Sniper Strike campaigns.
+[TABLE]
+| Achievement Level | Incentive |
+| < 80% of target | No incentive |
+| 80% to 89% of target | Lowest BDT per HIT (e.g. BDT 10 per HIT) |
+| 90% to 99% of target | Mid BDT per HIT (e.g. BDT 20 per HIT) |
+| >= 100% of target | Highest BDT per HIT (e.g. BDT 30 per HIT) |
+[/TABLE]
+Capping: 300% for Central Cluster (exception); 200% for all others.
+Used when cluster requires a stronger performance gradient.
+HIT-04    Percentage-Based Slab — 3 Tiers
+Incentive is a fixed BDT value per HIT that increases as achievement % crosses defined thresholds. Three-tier version used in mid-period and single-day daily Deno campaigns.
+[TABLE]
+| Achievement % Range | BDT Incentive per HIT |
+| 90% – 99% | BDT 10 |
+| 100% – 109% | BDT 15 |
+| 110% and above | BDT 20 |
+[/TABLE]
+Below 90% = no incentive.
+Typical campaigns: Distributor Deno Campaign (daily, Aug–Nov 2025).
+HIT-05    Percentage-Based Slab — 5 Tiers
+Wider slab range starting at 70%. Five-tier version used in early-period Deno campaigns with broader incentive graduation.
+[TABLE]
+| Achievement % Range | BDT Incentive per HIT |
+| 70% – 80% | BDT 10 |
+| 81% – 90% | BDT 15 |
+| 91% – 100% | BDT 20 |
+| 101% – 110% | BDT 25 |
+| 111% and above | BDT 30 |
+[/TABLE]
+Below 70% = no incentive.
+Typical campaigns: Distributor Deno Campaign (daily, Apr–Jul 2025).
+HIT-06    Multi-Cluster — Different BDT Rate per Cluster Group
+One campaign defines different BDT-per-HIT rates for different cluster groups. Each cluster group may also have its own near-miss tier. The campaign SRF lists each cluster group explicitly with its rates.
+[TABLE]
+| Cluster Group | >=100% (Full) | 90–99% (Near-Miss) | Capping |
+| West Cluster | BDT 40 / HIT | BDT 30 / HIT | 200% |
+| North / East / North East Cluster | BDT 30 / HIT | BDT 20 / HIT | 200% |
+| Central Cluster | BDT 30 / HIT | BDT 20 / HIT | 300% |
+[/TABLE]
+[TABLE]
+| Cross-cluster threshold: Any cross-cluster HITs above 10% of total are excluded from incentive payouts. Adjacent-region exceptions defined by B2C. |
+[/TABLE]
+HIT-07    HIT or Miss — Binary Reward (Category System)
+No partial credit. The distributor must achieve 100% of the recharge target to be eligible. Distributors are pre-classified into categories A / B / C / D by B2C, and each category has its own reward tier.
+[TABLE]
+| Category | Eligibility | Reward |
+| D | 100% target achieved | BDT 25,000 cash (top winner per cluster) |
+| C | 100% target achieved | Mega Reward: Air Conditioner (top winner per cluster) |
+| B | 100% target achieved | Mega Reward: Air Conditioner (combined with A in some clusters) |
+| A | 100% target achieved | Super Mega Reward: Royal Enfield Bike (national topper) |
+[/TABLE]
+[TABLE]
+| East Cluster and North Cluster exception: Top C-category winner gets 1 Mega Reward; B and A categories share 1 combined winner. All other clusters follow standard rules. |
+[/TABLE]
+PART B — Recharge-Based Incentive Structures (Distributor)
+Applied when the KPI is Deno Recharge — the total monetary value of all selected Deno recharges made under the distributor. Target is set per-distributor by B2C.
+RCH-01    Recharge % Slab — 3 Tiers, No Cluster Bonus
+The distributor is placed into a performance slab by B2C. The incentive is a percentage of the distributor's total recharge amount achieved during the campaign period.
+[TABLE]
+| Slab | Base Incentive |
+| Slab-1 | 0.7% of total recharge amount achieved |
+| Slab-2 | 0.8% of total recharge amount achieved |
+| Slab-3 | 0.9% of total recharge amount achieved |
+[/TABLE]
+Slab assignment is per-distributor, decided by B2C before the campaign.
+Must achieve 100% of recharge target to qualify for slab incentive.
+Typical campaigns: Bundle Booster (no cluster-wide bonus variant).
+RCH-02    Recharge % Slab — 3 Tiers + Cluster 100% Bonus
+Same as RCH-01, but adds a cluster-level bonus: if the entire cluster achieves 100% of its recharge target, all distributors in that cluster who also achieved 100% individually receive an additional +0.10% on top of their slab rate.
+[TABLE]
+| Slab | Base Incentive | With Cluster 100% Bonus |
+| Slab-1 | 0.7% of recharge amount | 0.7% + 0.10% = 0.80% |
+| Slab-2 | 0.8% of recharge amount | 0.8% + 0.10% = 0.90% |
+| Slab-3 | 0.9% of recharge amount | 0.9% + 0.10% = 1.00% |
+[/TABLE]
+[TABLE]
+| Cluster bonus condition: The entire cluster must achieve 100% aggregate recharge target. Individual distributor must ALSO be at >= 100% to qualify for the bonus. |
+[/TABLE]
+RCH-03    Points Contest — Incremental Volume over 100% Target
+Used in Mega Campaigns (Boishakhi). After hitting 100% of the recharge target, every additional 1,000 BDT of recharge volume earns 1 point (fractions apply proportionally). The distributor with the highest points in their category wins the prize.
+[TABLE]
+| Step | Rule |
+| Step 1 — Eligibility | Must achieve 100% of recharge target to be eligible |
+| Step 2 — Points | Per 1,000 BDT incremental recharge over 100% target = 1 point |
+| Step 3 — Fractions | Fractional points awarded proportionally (e.g. 500 BDT = 0.5 pts) |
+| Step 4 — Winner | Highest points in each category per cluster wins the reward |
+[/TABLE]
+Rewards: BDT 25,000 cash / Air Conditioner / Royal Enfield Bike (see HIT-07 for category details).
+Typical campaign: Boishakhi Dhamaka Mega Campaign (Apr 2025, Apr 2026).
+PART C — RSO Incentive Structures
+RSO (Retail Sales Officer) incentives are issued directly to field staff. Both HIT-based and participation-based structures are used.
+RSO-01    RSO BDT Range — HIT Target
+The RSO is given an individual HIT target by B2C. Upon achieving it, the RSO receives a fixed BDT amount. The amount varies per RSO and is set in the target file shared by B2C — not a universal slab.
+[TABLE]
+| Campaign | Achievement Condition | Incentive Range |
+| RSO Deno Campaign | 100% HIT target achieved | BDT 100 – BDT 200 (per RSO) |
+| RSO Deno Drive | 100% HIT target achieved | BDT 150 – BDT 250 (per RSO) |
+| RSO Deno HIT Campaign | 100% HIT target achieved | BDT 100 – BDT 300 (per RSO) |
+| RSO Voice Deno HIT | 100% HIT target achieved | BDT 100 – BDT 250 (per RSO) |
+[/TABLE]
+Exact per-RSO amounts are shared by B2C in the target data file.
+No near-miss tiers for RSO HIT — full achievement required.
+RSO-02    RSO Participation — Slab-Based, No Target
+The RSO has no personal HIT target. Incentive is based on the number of retail outlets under the RSO that participate (defined as: at least one Deno HIT from any selected Deno during the campaign period). A participation slab table is shared by B2C.
+[TABLE]
+| Condition | Detail |
+| Target | No target set for RSO — all RSOs on the B2C list are eligible |
+| Participation | 1 HIT from any selected Deno at a retail outlet = 1 retail participation |
+| Slab | B2C shares participation slab (# of participating retailers → BDT amount) |
+| Cross-cluster | Cross-cluster retail HITs are excluded from participation count |
+[/TABLE]
+[TABLE]
+| Participation definition: At least one qualifying HIT from any selected DENO denomination by a retail outlet during the campaign window counts as that retail's participation. |
+[/TABLE]
+PART D — Retailer Incentive Structures
+RET-01    Minimum HIT Threshold — Flat BDT Incentive
+The retailer must achieve a minimum number of Deno HITs (with any of the selected Deno denominations) to earn a flat BDT incentive. No slab — either the threshold is met or it is not.
+[TABLE]
+| Condition | Detail |
+| Selected Denos | Specific denominations listed per campaign (e.g. 167, 229, 248) |
+| Threshold | Must achieve at least N qualifying HITs (e.g. 3 HITs minimum) |
+| Incentive | Flat BDT 50 per qualifying retailer |
+| Retailer list | Only selected retailers (list provided by B2C) are eligible |
+[/TABLE]
+Salescom-to-EV Automation: Yes — retailer receives SMS notification upon disbursement.
+SMS format: "Priyo Bikreta, Apni [date] Deno Drive er commission hishabe BDT #### (AIT katar por) peyechen. Dhonnobad."
+PART E — Exclusion & Filter Conditions  (Applied Across All Campaign Types)
+The following conditions govern which transactions and agents are included or excluded from achievement calculations. These apply universally unless a specific SRF states otherwise.
+EXC-01    Ryze Recharge Exclusion
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| Service Class 141 | All Ryze Recharge transactions (Service Class 141) are excluded from performance calculation across every campaign type and recipient group. |
+[/TABLE]
+EXC-02    Postpaid Exclusion
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| SERVICE_CLASS_ID >= 1000 | Transactions made on Postpaid numbers (SERVICE_CLASS_ID equal to or above 1000) are not counted in achievement. Introduced in mid-2025 campaigns and applied consistently in all newer SRFs. |
+[/TABLE]
+EXC-03    BL Employee Pool Exclusion
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| Employee pool phone numbers | Any Deno recharge at a BanglaLink employee pool phone number is excluded from both Distributor and Retail achievement. The employee mapping date is specified per campaign (e.g. 30th Jun'25). |
+[/TABLE]
+EXC-04    Cross-Cluster Exclusion with Threshold
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| 10% cross-cluster threshold | DD-wise cross-cluster HITs above 10% of total are excluded from incentive payouts. Adjacent-region exceptions apply where Region-A is adjacent to Region-B/C of another cluster — those specific cross-cluster interactions may be excluded per B2C definition. |
+[/TABLE]
+EXC-05    Incentive Capping
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| Default: 200% | Exception: 300% | Incentive is capped at 200% of target achievement for all clusters. Exception: East Cluster (and sometimes Central Cluster) may have a 300% capping limit, as stated in the specific campaign SRF. |
+[/TABLE]
+EXC-06    Agent List Date Lock
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| Fixed snapshot date per campaign | Only agents (retailers/RSOs) who are active as of the specified agent list date are eligible. The list is frozen at that date — no new additions are accepted after it. Each campaign specifies its own date (e.g. Agent list of 7th Aug'25). |
+[/TABLE]
+EXC-07    Standard Mathematical Rounding
+[TABLE]
+| Trigger / Scope | Rule Detail |
+| Universal rounding rule | General mathematical rounding applies to all achievement % calculations: values below 0.5 are rounded down; values >= 0.5 are rounded up. Explicitly stated in every SRF. |
+[/TABLE]
+Quick Reference Summary
+All unique KPI condition codes at a glance:
+[TABLE]
+| Code | Recipient | KPI Type | Summary |
+| HIT-01 | Distributor | Deno HIT | Flat BDT/HIT, single tier, >=100% |
+| HIT-02 | Distributor | Deno HIT | Flat BDT/HIT + near-miss (90-99%), 2 tiers |
+| HIT-03 | Distributor | Deno HIT | Flat BDT/HIT + 2 near-miss tiers (80-89%, 90-99%) |
+| HIT-04 | Distributor | Deno HIT | % slab 3-tier: 90-99%, 100-109%, 110%+ |
+| HIT-05 | Distributor | Deno HIT | % slab 5-tier: 70-80% through 111%+ |
+| HIT-06 | Distributor | Deno HIT | Multi-cluster, different BDT per cluster group |
+| HIT-07 | Distributor | Bundle Recharge | HIT or Miss binary + A/B/C/D category prizes |
+| RCH-01 | Distributor | Deno Recharge | % of recharge: Slab 0.7/0.8/0.9%, no bonus |
+| RCH-02 | Distributor | Deno Recharge | % of recharge: Slab 0.7/0.8/0.9% + cluster +0.10% bonus |
+| RCH-03 | Distributor | Bundle Recharge | Points contest: 1K incremental = 1 pt, prizes |
+| RSO-01 | RSO | Deno HIT | BDT range per RSO (100-300), full target required |
+| RSO-02 | RSO | Participation | Slab by # participating retailers, no target |
+| RET-01 | Retailer | Deno HIT | Min N HITs from selected Denos = BDT 50 flat |
+| EXC-01 | Universal | All | Service Class 141 (Ryze) excluded |
+| EXC-02 | Universal | All | Postpaid (SERVICE_CLASS_ID >= 1000) excluded |
+| EXC-03 | Universal | All | BL employee pool phone numbers excluded |
+| EXC-04 | Sniper / Participation | HIT | Cross-cluster HITs > 10% threshold excluded |
+| EXC-05 | Sniper Strike | HIT | Incentive capped at 200% (300% exception) |
+| EXC-06 | Universal | All | Agent list locked to specified snapshot date |
+| EXC-07 | Universal | All | Rounding: <0.5 down, >=0.5 up |
+[/TABLE]
+Source: Banglalink Deno Campaign SRF documents — Channel Planning, Salescom Commissioning. All targets, amounts, and agent lists are set per-campaign by B2C team.

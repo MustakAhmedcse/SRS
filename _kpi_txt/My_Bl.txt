@@ -1,0 +1,635 @@
+BANGLALINK
+MY BL FOLDER
+Unique KPI Conditions
+All Unique Commissioning Conditions Across All Campaign Types
+Total SRFs Analysed: 166
+Department: Digital Distribution / Channel Planning, B2C Sales / Alternate Channel and Digital Recharge
+Prepared: May 2026
+INDEX — My Bl Folder Campaign Types
+[TABLE]
+| # | Campaign Type | Brief Description |
+| 1 | MyBL Standard (Regular – Prepaid) — BL Self-Channel | BL Self-channels cashback to subscribers via MyBL App, bi-monthly, service class <1000 |
+| 2 | MyBL Portonics Standard (Regular – Prepaid) | Portonics partner cashback, bi-monthly, service class <1000, MSISDN: 1953348398 |
+| 3 | MyBL SSL Postpaid — BL Self-Channel | BL Self-channel postpaid monthly cashback, service class ≥1000, MSISDN: 1967021235 |
+| 4 | MyBL SSL Postpaid (Revision) | Revised cashback slabs for SSL Postpaid — same structure, higher cashback amounts |
+| 5 | MyBL Portonics Postpaid | Portonics postpaid monthly cashback, service class ≥1000, MSISDN: 1953348398, no 'BLAPP' check |
+| 6 | MyBL Hourly Campaign (Prepaid) | Time-window specific cashback, 2nd highest priority, specific denos only |
+| 7 | MyBL Segmented Campaign | Highest priority, segment/base specific, one-time or multiple cashback per customer |
+| 8 | MyBL SME Segmented — SSL (BL Self-Channel) | SME-specific denos, MSISDN: 1967021235, 'BLAPP' Ref ID required |
+| 9 | MyBL SME Segmented — Portonics | SME-specific denos, MSISDN: 1953348398, no 'BLAPP' Ref ID check |
+| 10 | MyBL Special Day Campaign — BL Self-Channel | 3rd priority, date+deno specific, customers can get cashback multiple times |
+| 11 | MyBL Portonics Special Day Campaign | Same as Special Day but for Portonics channel, MSISDN: 1953348398 |
+| 12 | Distributor BL Power Operation Commission | Entirely different platform: BL Power, per-deno hit fixed BDT commission, AIT-excl. and AIT-incl. |
+| 13 | RSO MyBL App Referral Campaign | RSOs get slab-based commission per successful MyBL App sign-up via referral code |
+| 14 | Retailer MyBL App Referral Campaign | Retailers get BDT 10 flat per successful MyBL App sign-up via retailer referral code |
+| 15 | Monobrand CCR MyBL App Installation Campaign | Monobrand CCR gets BDT 10 per sign-up; customer must use 100MB within 10 days |
+[/TABLE]
+Section 1: MyBL Standard (Regular – Prepaid) — BL Self-Channel
+BL Self-channels (MyBL App) provide cashback to prepaid subscribers based on denomination and date. Commission is reported per retailer MSISDN 1967021235. Covers bi-monthly periods (1st–15th and 16th–end of month).
+1.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Standard Regular — Prepaid |
+| Recipient Type | BL Self-channels (MyBL App) |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Recharge App | Only MyBL App recharge considered |
+| Periodicity | Bi-monthly: Period A = 1st–15th, Period B = 16th–end of month |
+| Priority | Lowest (Regular/Standard) |
+| Report Frequency | Regular — monthly (2 reports per month for two periods) |
+| Salescom to EV | YES |
+| Report Shared | Disbursement & Provision |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+[/TABLE]
+1.2 Cashback Structure
+Cashback is determined by denomination (deno) and date. Each unique deno+date combination yields a specific cashback BDT amount. The cashback slab table is provided per period. Example denominations used across periods: 109, 117, 148, 149, 198, 219, 248, 278, 298, 349, 397, 399, 448, 498, 548, 598, 649, 698, 748, 797, 848, 897, 948, 997, 1097, 1197, 1297, 1497, 1697, 1997, 2297, 2497, 2997 (range expanded over time).
+[TABLE]
+| Start Date | End Date | Deno (BDT) | Cashback (BDT) |
+| Period Start | Period End | [e.g. 149] | [e.g. 5.57] |
+| Period Start | Period End | [e.g. 249] | [e.g. 9.30] |
+| (Each deno+date has specific cashback) |  |  |  |
+[/TABLE]
+[TABLE]
+| NOTE: Deno list and cashback BDT amounts vary per period. As of Mar 2026, denominations expanded from ~117–698 range to ~109–2997. Each period's SRF specifies exact deno-cashback mappings. |
+[/TABLE]
+1.3 Specific Conditions
+Specific Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered (not other recharge channels). |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission report for each retailer MSISDN. |
+| 5 | Ref ID of the transaction must start with 'BLAPP' to be eligible. |
+| 6 | Recharge (retailer to subscriber) must be done from retailer EV MSISDN: 1967021235. |
+| 7 | Valid recharge means EV/I-TOP transactions only. |
+| 8 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 9 | Data source: EV Platform (IT SC). |
+| 10 | Maturity date: Start of the next period (e.g., 16th Apr for 1st–15th Apr period). |
+| 11 | Report detail format: RET_MSISDN | RECHARGE_AMOUNT | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT. |
+[/TABLE]
+1.4 General Conditions
+[TABLE]
+| Factor | Consideration | Condition Detail |
+| Lifting/Issue | N/A | Needs to be activated within 180 days of lifting |
+| Recharge | All Valid | Valid recharge: EV/I-TOP |
+| Product | N/A | Any connections except Data SIM (MMSTDATA) and EV SIM |
+| Disconnection | N/A | Latest data up to report maturity date |
+| Other | i-top up | I-top up transactions considered |
+[/TABLE]
+Section 2: MyBL Portonics Standard (Regular – Prepaid)
+Identical structure to Section 1 (Standard Regular), but uses Portonics as the partner with a different retailer MSISDN. No 'BLAPP' Ref ID requirement.
+2.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Portonics Standard Regular — Prepaid |
+| Recipient Type | Portonics (partner channel) |
+| Partner MSISDN | 1953348398 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Recharge App | Only MyBL App recharge considered |
+| Periodicity | Bi-monthly: Period A = 1st–15th, Period B = 16th–end of month |
+| Priority | Lowest (Regular/Standard) |
+| Ref ID Requirement | No 'BLAPP' Ref ID requirement for Portonics |
+| Salescom to EV | YES |
+[/TABLE]
+2.2 Key Differentiator from Section 1
+[TABLE]
+| DIFFERENCE: Portonics uses MSISDN 1953348398 instead of 1967021235, and does NOT require Ref ID to start with 'BLAPP'. All other conditions (deno-cashback structure, priority, periodicity, product exclusions) are identical to Section 1. |
+[/TABLE]
+2.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission report for each retailer MSISDN. |
+| 5 | No 'BLAPP' Ref ID requirement — any valid Portonics transaction qualifies. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1953348398 (Portonics). |
+| 7 | Valid recharge: EV/I-TOP only. |
+| 8 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 9 | Data source: EV Platform (IT SC). |
+| 10 | Maturity date: Start of the next period. |
+[/TABLE]
+Section 3: MyBL SSL Postpaid — BL Self-Channel
+Postpaid subscribers with service class ≥1000 are covered under SSL Postpaid campaigns. Commission is monthly. Partner MSISDN is 1967021235 (BL Self-channels). 'BLAPP' Ref ID required.
+3.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL SSL Postpaid |
+| Recipient Type | BL Self-channels (MyBL App) — Postpaid segment |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class ≥ 1000 (Postpaid) |
+| Recharge App | Only MyBL App recharge considered |
+| Periodicity | Monthly (1st–end of month) |
+| Priority | Standard (Regular priority) |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Salescom to EV | YES |
+| Report Shared | Disbursement & Provision |
+[/TABLE]
+3.2 Cashback Structure
+Monthly deno+date specific cashback. Example denominations for Postpaid: typically same or overlapping with prepaid denos but applied to postpaid service class ≥1000 subscribers.
+3.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | Ref ID of the transaction must start with 'BLAPP' to be eligible. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1967021235. |
+| 7 | Valid recharge: EV/I-TOP only. |
+| 8 | Service class must be ≥ 1000 (Postpaid customers only). |
+| 9 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 10 | Data source: EV Platform (IT SC). |
+| 11 | Maturity date: Start of the following month. |
+[/TABLE]
+3.4 General Conditions
+[TABLE]
+| Factor | Consideration | Condition Detail |
+| Recharge | All Valid | Valid recharge: EV/I-TOP |
+| Product | N/A | Any connections except Data SIM (MMSTDATA) and EV SIM |
+| Disconnection | N/A | Latest data up to report maturity date |
+| Other | i-top up | I-top up transactions considered |
+[/TABLE]
+Section 4: MyBL SSL Postpaid (Revision)
+Revised version of SSL Postpaid campaign with updated/higher cashback amounts for the same denomination set. Structure and conditions are identical to Section 3.
+4.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL SSL Postpaid — Revision |
+| Purpose | Revised (higher) cashback amounts for same denos within the same or subsequent period |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class ≥ 1000 (Postpaid) |
+| Periodicity | Monthly |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Report Type | Change in Report (revised cashback slabs) |
+[/TABLE]
+[TABLE]
+| KEY POINT: Revision SRFs only change the cashback BDT amounts in the deno table. All campaign conditions, MSISDN, Ref ID requirement, service class filter, and general conditions remain identical to the original SSL Postpaid SRF (Section 3). |
+[/TABLE]
+4.2 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Revised cashback values supersede the original SRF cashback values. |
+| 2 | All other conditions are identical to MyBL SSL Postpaid (Section 3). |
+| 3 | Ref ID must start with 'BLAPP'. |
+| 4 | Service class ≥ 1000 (Postpaid only). |
+| 5 | Recharge from MSISDN 1967021235 only. |
+[/TABLE]
+Section 5: MyBL Portonics Postpaid
+Postpaid subscribers (service class ≥1000) covered under Portonics partner channel. Monthly periodicity. No 'BLAPP' Ref ID requirement.
+5.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Portonics Postpaid |
+| Recipient Type | Portonics (partner channel) — Postpaid segment |
+| Partner MSISDN | 1953348398 |
+| Service Class | All service class ≥ 1000 (Postpaid) |
+| Recharge App | Only MyBL App recharge considered |
+| Periodicity | Monthly (1st–end of month) |
+| Priority | Standard (Regular priority) |
+| Ref ID Requirement | No 'BLAPP' Ref ID requirement — any valid Portonics transaction qualifies |
+| Salescom to EV | YES |
+[/TABLE]
+5.2 Key Differentiator
+[TABLE]
+| DIFFERENCE FROM SSL POSTPAID (Section 3): Uses Portonics MSISDN 1953348398 and does NOT check for 'BLAPP' Ref ID prefix. Service class ≥1000 filter is the same. |
+[/TABLE]
+5.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | No 'BLAPP' Ref ID requirement. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1953348398 (Portonics). |
+| 7 | Service class must be ≥ 1000 (Postpaid customers only). |
+| 8 | Valid recharge: EV/I-TOP only. |
+| 9 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 10 | Data source: EV Platform (IT SC). |
+[/TABLE]
+Section 6: MyBL Hourly Campaign (Prepaid)
+Time-window specific cashback campaign. Only transactions within the specified time window on specified dates are eligible. 2nd highest priority after Segmented.
+6.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Hourly — Prepaid |
+| Recipient Type | BL Self-channels (MyBL App) |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Priority | 2nd Highest (after Segmented) |
+| Time Scope | Specific time windows only (e.g., 3:00 PM–9:00 PM, 4:00 PM–9:00 PM, 5:00 PM–10:00 PM) |
+| Eligible Denos | Specific denominations only (typically 548, 649 or as specified in SRF) |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Salescom to EV | YES |
+[/TABLE]
+6.2 Priority Hierarchy Context
+[TABLE]
+| Priority Level | Campaign Type | Notes |
+| 1 (Highest) | Segmented | Segment/base specific, one-time or multiple cashback |
+| 2 | Hourly | Time-window specific — this section |
+| 3 | Special Day | Date+deno specific, multiple cashbacks allowed |
+| 4 (Lowest) | Regular/Standard | Bi-monthly standard cashback |
+[/TABLE]
+6.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period (within valid time windows). |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | Ref ID must start with 'BLAPP'. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1967021235. |
+| 7 | Hourly campaigns get 2nd highest priority — Segmented campaign transactions are NOT included here. |
+| 8 | Transactions from Segmented and Hourly campaigns will not be considered when calculating commission for Regular campaigns. |
+| 9 | Only transactions within the specified time window qualify (e.g., 3:00 PM–9:00 PM). |
+| 10 | Only specified denominations qualify (e.g., 548, 649 BDT — as per each SRF). |
+| 11 | Valid recharge: EV/I-TOP only. |
+| 12 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 13 | Data source: EV Platform (IT SC). |
+[/TABLE]
+6.4 Detail Format
+Report detail format: RET_MSISDN | RECHARGE_AMOUNT | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT
+Section 7: MyBL Segmented Campaign
+Highest priority campaign. Targets specific customer segments ('base') with tailored cashback. Cashback can be one-time only OR multiple times depending on campaign design.
+7.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Segmented — Prepaid |
+| Recipient Type | BL Self-channels (MyBL App) |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Priority | Highest (Priority 1) |
+| Target Basis | 'Base' field — segment-specific customer list provided |
+| Cashback per Customer | One-time OR multiple — varies by campaign |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Salescom to EV | YES |
+[/TABLE]
+7.2 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Cashback eligibility is one-time per customer OR multiple times — as specified in each SRF. |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | Ref ID must start with 'BLAPP'. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1967021235. |
+| 7 | Segmented campaign transactions will NOT be counted in Hourly, Special Day, or Regular campaign calculations. |
+| 8 | Segmented campaigns get the HIGHEST priority — if a transaction qualifies for Segmented, it is not counted elsewhere. |
+| 9 | A 'base' (target segment list) is provided by B2C/marketing team for each Segmented campaign. |
+| 10 | Specific denominations and cashback amounts are defined per segment in each SRF. |
+| 11 | Valid recharge: EV/I-TOP only. |
+| 12 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 13 | Data source: EV Platform (IT SC). |
+[/TABLE]
+[TABLE]
+| IMPORTANT: Each Segmented SRF specifies whether customers get cashback one-time only or multiple times. This must be checked per SRF. The 'base' data is a customer segment list provided by the business team. |
+[/TABLE]
+Section 8: MyBL SME Segmented — SSL (BL Self-Channel)
+Segmented campaign targeting SME customers with SME-specific denominations. Uses BL Self-channel MSISDN 1967021235 with 'BLAPP' Ref ID requirement.
+8.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL SME Segmented — SSL |
+| Recipient Type | BL Self-channels (MyBL App) — SME segment |
+| Partner MSISDN | 1967021235 |
+| Service Class | SME service classes (specific to SME customers) |
+| Priority | Segmented (Highest priority) |
+| Target Basis | SME customer segment |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Salescom to EV | YES |
+[/TABLE]
+8.2 SME-Specific Denominations
+SME campaigns use distinct denominations tailored to SME customer recharge patterns:
+[TABLE]
+| SME Denominations (BDT) | Notes |
+| 393, 517, 527, 617, 727, 827, 996 | These are the typical SME denos used across SME Segmented SRFs |
+[/TABLE]
+8.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Cashback eligibility: as specified per SRF (one-time or multiple). |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | Ref ID must start with 'BLAPP' (SSL channel requirement). |
+| 6 | Recharge must be done from retailer EV MSISDN: 1967021235. |
+| 7 | SME-specific denominations apply — standard prepaid denos do not apply here. |
+| 8 | Segmented priority rules apply: transactions not counted in other campaign types. |
+| 9 | Valid recharge: EV/I-TOP only. |
+| 10 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 11 | Data source: EV Platform (IT SC). |
+[/TABLE]
+Section 9: MyBL SME Segmented — Portonics
+Same SME Segmented structure as Section 8 but uses Portonics MSISDN 1953348398. No 'BLAPP' Ref ID requirement.
+9.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL SME Segmented — Portonics |
+| Recipient Type | Portonics (partner channel) — SME segment |
+| Partner MSISDN | 1953348398 |
+| Service Class | SME service classes |
+| Priority | Segmented (Highest priority) |
+| Target Basis | SME customer segment |
+| Ref ID Requirement | No 'BLAPP' Ref ID requirement |
+| Salescom to EV | YES |
+[/TABLE]
+9.2 Key Differentiator
+[TABLE]
+| DIFFERENCE FROM SECTION 8: Uses Portonics MSISDN 1953348398 and does NOT require 'BLAPP' Ref ID. SME denos (393, 517, 527, 617, 727, 827, 996) and all other conditions are identical. |
+[/TABLE]
+9.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Cashback eligibility: as specified per SRF (one-time or multiple). |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | No 'BLAPP' Ref ID requirement — any valid Portonics transaction qualifies. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1953348398 (Portonics). |
+| 7 | SME-specific denominations apply (393, 517, 527, 617, 727, 827, 996 BDT). |
+| 8 | Valid recharge: EV/I-TOP only. |
+| 9 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 10 | Data source: EV Platform (IT SC). |
+[/TABLE]
+Section 10: MyBL Special Day Campaign — BL Self-Channel
+Date and denomination-specific cashback. 3rd highest priority. Customers can get cashback multiple times. Uses BL Self-channel MSISDN 1967021235.
+10.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Special Day — BL Self-Channel |
+| Recipient Type | BL Self-channels (MyBL App) |
+| Partner MSISDN | 1967021235 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Priority | 3rd Highest (after Segmented and Hourly) |
+| Cashback per Customer | Customers can get cashback multiple times |
+| Scope | Specific dates and specific denominations only |
+| Ref ID Requirement | Ref ID must start with 'BLAPP' |
+| Salescom to EV | YES |
+| Report Shared | Disbursement |
+[/TABLE]
+10.2 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | Ref ID must start with 'BLAPP'. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1967021235. |
+| 7 | Special Day campaigns get 3rd highest priority — Segmented and Hourly transactions are NOT considered here. |
+| 8 | Transactions qualifying for Segmented or Hourly campaigns will not be counted in Special Day calculations. |
+| 9 | Transactions qualifying for Special Day will not be counted in Regular campaign calculations. |
+| 10 | Cashback applies only on specified date(s) and specified denomination(s) as per each SRF. |
+| 11 | Valid recharge: EV/I-TOP only. |
+| 12 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 13 | Data source: EV Platform (IT SC). |
+| 14 | Maturity date: As specified in each SRF (typically start of next period). |
+[/TABLE]
+10.3 Detail Format
+Report detail format: RET_MSISDN | RECHARGE_AMOUNT | HIT | TOTAL_RECHARGE | COMMISSION_AMOUNT
+Section 11: MyBL Portonics Special Day Campaign
+Same as Special Day (Section 10) but for Portonics channel. Uses MSISDN 1953348398. No 'BLAPP' Ref ID requirement.
+11.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | MyBL Portonics Special Day |
+| Recipient Type | Portonics (partner channel) |
+| Partner MSISDN | 1953348398 |
+| Service Class | All service class below 1000 (Prepaid) |
+| Priority | 3rd Highest (after Segmented and Hourly) |
+| Cashback per Customer | Customers can get cashback multiple times |
+| Ref ID Requirement | No 'BLAPP' Ref ID requirement |
+| Salescom to EV | YES |
+[/TABLE]
+11.2 Key Differentiator
+[TABLE]
+| DIFFERENCE FROM SECTION 10: Uses Portonics MSISDN 1953348398 and does NOT require 'BLAPP' Ref ID. Priority rules, deno+date specificity, multi-cashback allowance, and all other conditions are identical to Section 10. |
+[/TABLE]
+11.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | I-top sales means sales to end customer, NOT lifting. |
+| 2 | Only MyBL App recharge will be considered. |
+| 3 | Customers can get cashback multiple times during the campaign period. |
+| 4 | Need separate cashback commission for each retailer MSISDN. |
+| 5 | No 'BLAPP' Ref ID requirement — any valid Portonics transaction qualifies. |
+| 6 | Recharge must be done from retailer EV MSISDN: 1953348398 (Portonics). |
+| 7 | 3rd highest priority — Segmented and Hourly transactions are NOT considered here. |
+| 8 | Cashback applies only on specified date(s) and denomination(s) per SRF. |
+| 9 | Valid recharge: EV/I-TOP only. |
+| 10 | Product: Any connection except Data SIM (MMSTDATA) and EV SIM. |
+| 11 | Data source: EV Platform (IT SC). |
+[/TABLE]
+Section 12: Distributor BL Power Operation Commission
+Entirely different platform and commission model. Uses BL Power platform (not EV Platform). Provides per-denomination-hit fixed BDT commission with both AIT-excluded and AIT-included amounts. Date and time-window specific slots.
+12.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | Distributor Commission — BL Power Operation |
+| Recipient Type | Digital Distributor (BL POWER) |
+| Platform | BL Power (NOT EV Platform) |
+| Product Type | Prepaid + Postpaid |
+| Periodicity | Ad-hoc (monthly campaign, e.g., December 2025) |
+| Commission Model | Per-hit fixed BDT commission per denomination per date/time slot |
+| AIT Reporting | Both AIT-Excluded and AIT-Included amounts provided per row |
+| Scope | All existing BL Power retailers included |
+| Transaction Type | RECHARGE transactions only |
+| Report Shared | Disbursement & Provision |
+[/TABLE]
+12.2 Commission Structure
+Commission is a fixed BDT amount per successful hit (transaction) for each denomination within a specific date and time slot. Multiple time slots may exist within the same date (e.g., premium rate 5 PM–7 PM and standard rate 7 PM–midnight).
+[TABLE]
+| Date | Start Time | End Time | Deno (BDT) | AIT-Excl. Commission (BDT) | AIT-Incl. Commission (BDT) |
+| [Date] | [Start] | [End] | [Deno] | [AIT-Excl. Amount] | [AIT-Incl. Amount] |
+| (Multiple rows per date for each deno+time slot combination) |  |  |  |  |  |
+[/TABLE]
+12.3 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Data source: BL Power platform (NOT EV Platform — completely different from all other MyBL campaigns). |
+| 2 | Transaction type: RECHARGE only. |
+| 3 | All existing BL Power retailers are included — no exclusions. |
+| 4 | Commission is fixed BDT per hit (per successful transaction), not percentage-based. |
+| 5 | Both AIT-excluded (gross) and AIT-included (net) commission amounts are published for each deno+date+time slot. |
+| 6 | Multiple time-window slots can exist within the same date (e.g., premium slot 5 PM–7 PM and base slot 7 PM–midnight). |
+| 7 | Both Prepaid and Postpaid transactions are included. |
+| 8 | Recipient: Digital Distributor — BL POWER (not retailers or RSOs). |
+| 9 | Report periodicity: End of campaign / Ad-hoc. |
+| 10 | Maturity date: End of campaign period. |
+[/TABLE]
+12.4 Key Differences from All Other MyBL Campaigns
+[TABLE]
+| Attribute | All Other MyBL Campaigns | BL Power Operation |
+| Platform | EV Platform (IT SC) | BL Power platform |
+| Commission Model | Cashback % per subscriber deno | Fixed BDT per retailer hit |
+| AIT | Not separately reported | Both AIT-excl. and AIT-incl. shown |
+| Recipient | BL Self-channel / Portonics | Digital Distributor — BL POWER |
+| Time Windows | Not applicable (except Hourly) | Date + Time slot specific |
+| Product Type | Prepaid or Postpaid (separate) | Both Prepaid + Postpaid combined |
+| Ref ID | 'BLAPP' or not required | Not applicable |
+[/TABLE]
+Section 13: RSO MyBL App Referral Campaign
+RSOs (Retail Sales Officers) promote MyBL App to customers via unique referral codes. Commission is slab-based (% target achievement) per successful app sign-up. Ad-hoc, monthly, end-of-campaign disbursement.
+13.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | RSO MyBL App Referral Campaign |
+| Recipient Type | RSO (All Device Brand Promoters) |
+| Product Type | Prepaid + Postpaid |
+| Periodicity | Ad-hoc — monthly campaign (Oct25, Nov25, Dec25 observed) |
+| Commission Basis | Per successful MyBL App sign-up with RSO unique referral code |
+| Commission Structure | Slab-based (% of RSO target achieved) |
+| Referral Requirement | Sign-up must use the RSO's unique referral code |
+| Report Frequency | End of campaign |
+| Report Shared | Disbursement & Provision |
+| Salescom to EV | YES |
+| Maturity Date | 8th of following month |
+| Data Source | IT SC, IT BI, EV Platform, DMS, POS |
+[/TABLE]
+13.2 Commission Slab Structure
+Commission is based on the RSO's % achievement against target (Target vs. Achievement data provided by B2C):
+[TABLE]
+| Achievement Slab | Commission per Sign-Up (BDT) |
+| 80% and Above | BDT 500 |
+| 70% to 79% | BDT 400 |
+| 60% to 69% | BDT 300 |
+| Below 60% | No commission |
+[/TABLE]
+13.3 Additional Incentive Variants
+[TABLE]
+| Month | Additional Incentive |
+| Oct 2025 | BDT 5 extra per user if customer is active within 7 days of registration (upon achieving above minimum slab) |
+| Nov 2025 | BDT 10 extra per user if RSO referred using own I-top number (achievement data shared by B2C) |
+| Dec 2025 | BDT 10 extra per user if RSO referred using own I-top number (achievement data shared by B2C) |
+[/TABLE]
+13.4 Specific Conditions
+Conditions
+[TABLE]
+| 1 | MyBL App sign-ups in customer's number with RSO's unique referral code will be incentivized ONLY. |
+| 2 | Both the sign-up and the referral must be completed within the campaign period. |
+| 3 | RSO wise Target vs. Achievement data will be provided by B2C. |
+| 4 | Commission is paid per successful installation and registration. |
+| 5 | Additional incentive conditions vary per month — refer to individual SRF for current month's incentive. |
+| 6 | Valid recharge: EV/I-TOP (general condition). |
+| 7 | Product: Any connections except Data SIM (MMSTDATA) and EV SIM. |
+| 8 | Maturity date: 8th of following month. |
+| 9 | Report published: As per Tracker. |
+[/TABLE]
+Section 14: Retailer MyBL App Referral Campaign
+Retailers promote MyBL App to customers via their unique referral code. Flat BDT 10 commission per successful app sign-up. Monthly, ad-hoc, end-of-campaign report.
+14.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | Retailer MyBL App Referral Campaign |
+| Recipient Type | Retailer (All Device Brand Promoters) |
+| Product Type | Prepaid + Postpaid |
+| Periodicity | Ad-hoc — monthly campaign (Oct25, Nov25, Dec25 observed) |
+| Commission Rate | BDT 10 flat per successful MyBL App sign-up |
+| Referral Requirement | Sign-up must use the Retailer's unique referral code |
+| Report Frequency | End of campaign |
+| Report Shared | Disbursement & Provision |
+| Salescom to EV | YES |
+| SMS Content | Sent: e.g., 'Priyo Bikreta, Apni [Month] MYBL Campaign er commission hishabe BDT #### (AIT katar por)' |
+| Maturity Date | 8th of following month (Oct25); 4th of following month (Nov25, Dec25) |
+| Data Source | IT SC, IT BI, EV Platform, DMS, POS |
+[/TABLE]
+14.2 Specific Conditions
+Conditions
+[TABLE]
+| 1 | MyBL App sign-ups in customer's number with retailer's unique referral code will be incentivized ONLY. |
+| 2 | For each successful installation and registration, retailer will get BDT 10 commission. |
+| 3 | Both the sign-up and the referral must be completed within the campaign period. |
+| 4 | Retailer wise achievement data will be provided by B2C. |
+| 5 | Flat rate — no slab structure; all eligible sign-ups earn BDT 10 each. |
+| 6 | Valid recharge: EV/I-TOP (general condition). |
+| 7 | Product: Any connections except Data SIM (MMSTDATA) and EV SIM. |
+| 8 | Report published: As per Tracker. |
+[/TABLE]
+14.3 Comparison: RSO vs. Retailer Campaign
+[TABLE]
+| Attribute | RSO Campaign (Section 13) | Retailer Campaign (Section 14) |
+| Recipient | RSO (Device Brand Promoter) | Retailer (Device Brand Promoter) |
+| Commission Rate | Slab-based: BDT 300/400/500 | Flat: BDT 10 per sign-up |
+| Additional Bonus | Yes (BDT 5 or BDT 10 extra) | None observed |
+| Commission Basis | % of target achieved | Per sign-up (no target slab) |
+| Maturity Date | 8th of following month | 8th (Oct) or 4th (Nov/Dec) of following month |
+[/TABLE]
+Section 15: Monobrand CCR MyBL App Installation Campaign
+Monobrand Customer Care Representatives (CCR) earn BDT 10 per successful MyBL App sign-up. Eligibility requires the customer to be a smartphone user AND use 100MB data within 10 days of sign-up. Only single IMEI per MSISDN.
+15.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Campaign Type | Monobrand CCR MyBL App Installation Campaign |
+| Recipient Type | Monobrand CCR (Customer Care Representatives) |
+| Product Type | Not specified (Prepaid/Postpaid — all service class) |
+| Periodicity | Regular — Monthly |
+| Commission Rate | BDT 10 per successful MyBL App sign-up |
+| Eligible Customers | Smartphone users only |
+| Activation Requirement | Customer must use 100MB data within first 10 days of sign-up |
+| IMEI Restriction | Only single IMEI number per MSISDN (no multi-device sign-ups) |
+| Customer Scope | Installation in New GA (General Activation) & Existing Customer both allowed |
+| Report Frequency | Monthly — end of month |
+| Report Shared | Disbursement only |
+| Salescom to POS | No |
+| Salescom to EV | No |
+| Maturity Date | 1st of the following month |
+| Data Source | ED (Enterprise Data), IT BI, DWH, TABS, DMS, POS |
+| Eligible CCR List | Provided by user team (Alternate Channel and Digital Recharge dept.) |
+[/TABLE]
+15.2 Specific Conditions
+Conditions
+[TABLE]
+| 1 | Customer must be a smartphone user (feature phone users are excluded). |
+| 2 | Customer must use 100MB data within the first 10 days of MyBL App sign-up. |
+| 3 | Only a single IMEI number per MSISDN — duplicate IMEI sign-ups are excluded. |
+| 4 | Installation is allowed for both new General Activation (GA) customers AND existing customers. |
+| 5 | Eligible Monobrand CCR list will be provided by the user team (not auto-determined). |
+| 6 | Achievement data will be shared by the user team for payout calculation. |
+| 7 | Commission is BDT 10 flat per qualifying sign-up — no slab structure. |
+| 8 | Report published monthly. Maturity date: 1st of following month. |
+| 9 | No Salescom to EV or POS upload — data is shared separately by user team. |
+[/TABLE]
+15.3 Eligibility Criteria Summary
+[TABLE]
+| Eligibility Criterion | Requirement | Notes |
+| Device Type | Smartphone only | Feature phone users excluded |
+| Data Usage | 100MB within 10 days of sign-up | Must be verified from data source |
+| IMEI per MSISDN | Single IMEI only | Multi-device attempts excluded |
+| Customer Type | New GA or Existing | Both allowed |
+| CCR Eligibility | Per approved list from user team | Not open to all Monobrand CCRs |
+[/TABLE]
+Appendix A: Partner MSISDN Quick Reference
+All MyBL cashback campaigns route transactions through one of two partner MSISDNs. The MSISDN determines both the channel type and whether 'BLAPP' Ref ID is required.
+[TABLE]
+| Partner MSISDN | Channel / Partner Name | Ref ID Requirement | Campaign Types |
+| 1967021235 | BL Self-channels (SSL) | 'BLAPP' prefix required | Standard Prepaid, SSL Postpaid, SSL Postpaid Revision, Hourly, Segmented, SME Segmented SSL, Special Day |
+| 1953348398 | Portonics | No 'BLAPP' requirement | Portonics Standard Prepaid, Portonics Postpaid, SME Segmented Portonics, Portonics Special Day |
+[/TABLE]
+Appendix B: Campaign Priority Hierarchy Summary
+[TABLE]
+| Priority | Campaign Type | Exclusion Rule | Multiple Cashback? |
+| 1 (Highest) | Segmented | Transactions counted here are NOT counted in Hourly, Special Day, or Regular | One-time OR multiple (per SRF) |
+| 2 | Hourly | Segmented transactions excluded; Hourly transactions not counted in Regular | Yes — multiple |
+| 3 | Special Day | Segmented and Hourly transactions excluded; Special Day not counted in Regular | Yes — multiple |
+| 4 (Lowest) | Regular/Standard | Segmented, Hourly, and Special Day transactions are all excluded | Yes — multiple |
+[/TABLE]
+Appendix C: Campaign Type Cross-Reference Matrix
+[TABLE]
+| Section | Campaign Type | Channel | MSISDN | Service Class | BLAPP Req? | Priority |
+| 1 | Standard Regular | BL Self | 1967021235 | <1000 | YES | 4-Lowest |
+| 2 | Portonics Standard | Portonics | 1953348398 | <1000 | NO | 4-Lowest |
+| 3 | SSL Postpaid | BL Self | 1967021235 | ≥1000 | YES | Standard |
+| 4 | SSL Postpaid Revision | BL Self | 1967021235 | ≥1000 | YES | Standard |
+| 5 | Portonics Postpaid | Portonics | 1953348398 | ≥1000 | NO | Standard |
+| 6 | Hourly | BL Self | 1967021235 | <1000 | YES | 2nd |
+| 7 | Segmented | BL Self | 1967021235 | <1000 | YES | 1st-Highest |
+| 8 | SME Segmented SSL | BL Self | 1967021235 | SME | YES | 1st-Highest |
+| 9 | SME Segmented Port. | Portonics | 1953348398 | SME | NO | 1st-Highest |
+| 10 | Special Day | BL Self | 1967021235 | <1000 | YES | 3rd |
+| 11 | Portonics Special Day | Portonics | 1953348398 | <1000 | NO | 3rd |
+| 12 | BL Power Distributor | BL POWER | N/A | All | N/A | Different Platform |
+| 13 | RSO Referral | RSO | N/A | All | N/A | Ad-hoc |
+| 14 | Retailer Referral | Retailer | N/A | All | N/A | Ad-hoc |
+| 15 | Monobrand CCR | Monobrand | N/A | All | N/A | Monthly |
+[/TABLE]

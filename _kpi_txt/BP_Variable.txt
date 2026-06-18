@@ -1,0 +1,393 @@
+BP Variable Incentive
+Unique KPI Conditions Reference
+Extracted from 18 Service Request Forms (SRFs)
+Campaign Types: Standard BP Variable (14 SRFs) · Freelancer BP Variable Central Cluster (3 SRFs) · TechVan BP Variable (1 SRF)
+Period: April 2025 – April 2026 | Department: Trade Marketing / Distribution Planning
+## Table of Contents
+Section 1:  Folder Overview — BP Variable SRF Catalogue
+Section 2:  Universal / Common Conditions (All Standard BP Variable SRFs)
+Section 3:  KPI 1 — GA Variable Incentive (Core KPI)
+BP Type Classification: Regular BP vs LUS BP
+Market Classification: Core Market vs Emerging Market (from Nov 2025)
+Cluster-Based GA Attribution: FCD vs FCD+SMART POS
+GA Counting Range and Cap Evolution
+VLR Condition — Three-Tier Payout Slab
+Central Cluster Special Rate (from Jan 2026)
+West Cluster Special Rate — Barisal/Khulna Outer/Jessore Region (Apr 2026)
+Section 4:  KPI 2 — MyBL App & Toffee Referral Hit Incentive
+MyBL App Referral (All Months)
+Toffee App Referral (May 2025 onward)
+Changes in MyBL Recharge Condition
+Section 5:  KPI 3 — GA Quality (48hr Usage) Incentive
+Section 6:  KPI 4 — Unique Outlet Coverage Incentive (Apr 2025 only)
+Section 7:  KPI 5 — FR (First Recharge) Incentive (Apr 2025 only)
+Section 8:  KPI 6 — Daily Productivity Incentive (Feb 2026 onward)
+Section 9:  Sub-Campaign Type 2 — Freelancer BP Variable Incentive (Central Cluster)
+Freelancer BP Structure — Key Differences
+VLR Condition — Freelancer SRFs
+Section 10:  Sub-Campaign Type 3 — TechVan BP Variable Incentive
+TechVan Campaign Structure
+TechVan — Handset+GA Slab Commission
+Section 11:  Maturity Date Evolution
+Section 12:  Campaign-by-Campaign Quick Reference Table
+## 1. Folder Overview — BP Variable SRF Catalogue
+The 'BP Variable' folder contains 18 SRFs covering monthly variable incentive programmes for Brand Promoters (BPs). Three distinct sub-campaign types are present, each targeting different BP profiles and using different incentive mechanisms.
+[TABLE]
+| Sub-Campaign Type | SRF Count | Recipient | Period | Requester |
+| Standard BP Variable Incentive | 14 (incl. 1 revision) | All BPs (Regular + LUS, by cluster) | Apr 2025 – Apr 2026 | Istyaque Hossain, Trade Marketing |
+| Freelancer BP Variable Incentive — Central Cluster | 3 | Freelancer BPs in Central Cluster only | Feb – Apr 2026 | Istyaque Hossain, Trade Marketing |
+| TechVan BP Variable Incentive | 1 | MDOs (TechVan BPs), handset-linked GA | Mar 2026 | Murshida Begum Boby, Distribution Planning & Operation |
+[/TABLE]
+[TABLE]
+| Recipient Product Code | BP511 (RETPOST) |
+| Report Manager | Md Saiful Kader (Standard/Freelancer) | Md Ziaul Haque Sumon (TechVan) |
+| Product Type | Prepaid (All BPs); TechVan: EV+SC, GA, LSO, SSO + TechVan KN3 & KM5 |
+| Salescom to POS Auto Upload | No (all SRFs) |
+| Report Sharing Slot | Disbursement (all SRFs) |
+[/TABLE]
+## 2. Universal / Common Conditions (All Standard BP Variable SRFs)
+[TABLE]
+| Activation Basis | FCD (First Call Date) — activation during the promotion period |
+| Product Scope | Banglalink Prepaid AND All MNP (Prepaid) |
+| Recharge | All Valid Recharges = EV + SC Recharge (Electronic Voucher + Salescom recharge) |
+| Disconnection | N/A — between FCD and latest data up to report generation date (T-6) |
+| SAF/ETSAF | ETSAF QC condition will be considered as implemented (Aug'19 policy reference) |
+| Lifting/Issue | N/A — needs to be activated within 180 days of lifting |
+| Usage | Valid Usage: MOC, SMSMO, MTC, SMSMT, GPRS, MMS, Partial VAS (per IN CDR), GPRS recharge, bundle recharge |
+| Reactivation | As per reactivation base |
+| Data Sources | IT SC + DWH + DMS + POS (IT BI not checked) |
+| GA Attribution Base | Performance extracted by Retailer wise |
+| Target Provider | B2C team provides BP-wise targets and achievement data |
+| Report Periodicity | Ad-hoc, Monthly frequency |
+| Maturity Date (early months) | 1st of following month (Apr–Jun 2025) |
+| Maturity Date (later months) | 8th of following month (Jul 2025 onward); 3rd for some Apr 2026 SRFs |
+[/TABLE]
+## 3. KPI 1 — GA Variable Incentive (Core KPI)
+The primary KPI across all 14 standard BP Variable SRFs. A BP earns variable incentive BDT per additional GA beyond their monthly target, up to a capped maximum.
+[TABLE]
+| KPI Name | GA Variable Incentive |
+| Trigger | After achieving monthly GA target, each additional GA earns a fixed BDT rate |
+| Assessment Window | Only first N GA of the month are assessed (both fixed + variable salary) |
+| Variable Range | Post-target GA range defines the eligible additional GA (e.g., 51–120 GA) |
+| Max Additional GA | Capped at a maximum number of extra GA for variable pay |
+| Rate Unit | BDT per additional GA (varies by BP type, market type, and month) |
+[/TABLE]
+## 3.1 BP Type Classification: Regular BP vs LUS BP
+From July 2025, BPs were split into two types with different ranges and rates:
+[TABLE]
+| Regular BP | Standard brand promoter; higher activation floor for variable range |
+| LUS BP | Low Urban / Special segment BP; slightly lower floor and cap; same rate from Aug 2025 onward |
+| Target File Flag | B2C flags each BP as 'Regular BP' or 'LUS BP' in the target file |
+| Applicable From | July 2025 (Apr–Jun 2025 had a single unified type with no LUS distinction) |
+[/TABLE]
+[TABLE]
+| Month | BP Type | Rate (BDT/GA) | Variable GA Range | Max Additional GA | Max Assessed GA |
+| Apr 2025 | Single type | 250 | 11–20 GA (FR qualified) | 10 additional | 20 |
+| May 2025 | Single type | 85 | 51–120 GA | 70 additional | 120 |
+| Jun 2025 | Single type | 85 | 51–120 GA | 70 additional | 120 |
+| Jul 2025 | Regular BP | 85 | 51–120 GA | 70 additional | 120 |
+| Jul 2025 | LUS BP | 100 | 41–100 GA | 60 additional | 100 |
+| Aug 2025 | Regular BP | 100 | 61–120 GA | 60 additional | 120 |
+| Aug 2025 | LUS BP | 100 | 51–110 GA | 60 additional | 110 |
+| Sep 2025 | Regular BP | 100 | 61–120 GA | 60 additional | 120 |
+| Sep 2025 | LUS BP | 100 | 51–110 GA | 60 additional | 110 |
+| Oct 2025 | Regular BP | 100 | 61–120 GA | 60 additional | 120 |
+| Oct 2025 | LUS BP | 100 | 51–110 GA | 60 additional | 110 |
+[/TABLE]
+Note: Apr 2025 was unique — variable incentive applied only to FR-qualified GA (specific FR codes 48/81/222/224/104), not all GA. See Section 7.
+## 3.2 Market Classification: Core Market vs Emerging Market (from Nov 2025)
+From November 2025, the Regular BP and LUS BP types were replaced by a Market-based classification (Core vs Emerging) for non-Central Cluster BPs:
+[TABLE]
+| Core Market | Lower activation floor; for BPs in well-established markets |
+| Emerging Market | Higher activation floor; for BPs in growth markets |
+| Purpose | Differentiates incentive eligibility based on market maturity — emerging market BPs need higher volume to start earning variable pay |
+| Applicable From | November 2025 (replaces Regular/LUS BP split for non-Central clusters) |
+[/TABLE]
+[TABLE]
+| Month | Cluster | BP Class | Rate (BDT/GA) | Core Variable Range | Emerging Variable Range | Max Additional GA |
+| Nov 2025 | All except Central | Regular BP | 100 | 71–140 GA | 81–150 GA | 70 |
+| Nov 2025 | All except Central | LUS BP | 100 | 61–130 GA | 71–140 GA | 70 |
+| Dec 2025 | All except Central | Regular BP | 100 | 71–130 GA | 81–140 GA | 60 |
+| Dec 2025 | All except Central | LUS BP | 100 | 61–120 GA | 71–130 GA | 60 |
+| Jan 2026 | Rest Cluster (non-Central) | Core/Emerging | 100 | 71–150 GA | 81–160 GA | 80 |
+| Feb 2026 | Rest Cluster (non-Central) | Core/Emerging | 100 | 71–150 GA | 81–160 GA | 80 |
+| Mar 2026 | Rest Cluster (non-Central) | Core/Emerging | 100 | 71–150 GA | 81–160 GA | 80 |
+| Apr 2026 | Rest Cluster (exc. Barisal/KO/Jessore) | Core/Emerging | 100 | 71–150 GA | 81–160 GA | 80 |
+[/TABLE]
+## 3.3 Cluster-Based GA Attribution: FCD vs FCD+SMART POS
+GA attribution method varies by cluster. Two methods were used, and which clusters used which method evolved over the months:
+[TABLE]
+| Method A: FCD Only | GA = First Call Date records attributed to BP's designated retailer codes. Used in clusters with mature data infrastructure. |
+| Method B: FCD + SMART POS (CODE: ARRANGED-3) | GA = Designated Retailer FCD data OR SMART POS data, whichever is higher. Used where SMART POS coverage supplements FCD data. |
+| SMART POS Code | ARRANGED-3 |
+| BP Retailer Code Source | B2C shares BP-wise retailer codes |
+[/TABLE]
+[TABLE]
+| Month | FCD Only Clusters | FCD + SMART POS Clusters |
+| Apr 2025 | All clusters (single method — higher of FCD or SMART POS used universally) | — |
+| May–Jun 2025 | All clusters (BP Wise Retailer code from B2C; no cluster split) | — |
+| Jul 2025 | North, North East, West Cluster | East, Central Cluster |
+| Aug 2025 (original) | North, North East, West Cluster | East, Central Cluster |
+| Aug 2025 (Revision) | All clusters EXCEPT North | North Cluster only (FCD+SMART POS added) |
+| Sep 2025 | North East, West Cluster | East, North, Central Cluster |
+| Oct 2025 | North East, West Cluster | East, North, Central Cluster |
+| Nov 2025 onward | Not specified per cluster — GA per BP Code GA | Unified method |
+[/TABLE]
+Note: The Aug 2025 Revision SRF is notable: it changed the North Cluster from FCD-only to FCD+SMART POS, reversing the original Aug 2025 assignment for that cluster.
+## 3.4 GA Counting Range and Cap Evolution
+The assessment window (how many total GA count for both fixed and variable pay) and the variable range evolved significantly:
+[TABLE]
+| Month | Max Assessed GA (Regular/Core) | Max Assessed GA (LUS/Emerging) | Variable Range Start (Regular) | Rate (BDT/GA) |
+| Apr 2025 | 20 GA (FR-qualified only) | N/A | 11th GA | 250 |
+| May–Jun 2025 | 120 GA | N/A | 51st GA | 85 |
+| Jul 2025 | 120 GA | 100 GA | 51st GA (Regular) / 41st GA (LUS) | 85 / 100 |
+| Aug–Oct 2025 | 120 GA | 110 GA | 61st GA / 51st GA | 100 |
+| Nov 2025 | 150 GA | 140 GA | 71st/81st (Core/Emerging) | 100 |
+| Dec 2025 | 140 GA | 130 GA | 71st/81st (Core/Emerging) | 100 |
+| Jan–Mar 2026 | 160 GA (Rest) | — | 71st/81st (Core/Emerging) | 100 |
+| Apr 2026 | 160 GA (Rest) / 180 GA (West-special) | — | 71st/81st or 91st/101st | 100 |
+[/TABLE]
+## 3.5 VLR Condition — Three-Tier Payout Slab
+From October 2025, a VLR (Visitor Location Register) active condition was added as a quality gate on GA counting. The VLR condition uses a 3-tier payout slab:
+[TABLE]
+| VLR Condition Introduced | October 2025 (partial month: 22nd–31st Oct only) |
+| VLR Condition Full Month | November 2025 onward — applies to entire campaign period |
+| VLR Data Source | B2C shares VLR achievement % per BP |
+[/TABLE]
+[TABLE]
+| VLR Act % vs All GA | Standard SRFs (Oct–Jan 2026) | Feb 2026 onward (raised threshold) |
+| Tier 1 (Full) | ≥80% → Full GA Achievement | ≥85% → Full GA Achievement |
+| Tier 2 (Partial) | 60%–<80% → VLR Active GA Only | 65%–<85% → VLR Active GA Only |
+| Tier 3 (None) | <60% → No GA will be Considered | <65% → No GA will be Considered |
+[/TABLE]
+Note: 'VLR Active GA Only' means only those specific activations where the subscriber is on VLR Active status are counted — not the full GA total. This is more selective than the full count.
+## 3.6 Central Cluster Special Rate (from Jan 2026)
+From January 2026, Central Cluster BPs were split into a separate category with a higher BDT/GA rate and different BP sub-type classification:
+[TABLE]
+| Applicable From | January 2026 |
+| Clusters | Central Cluster only |
+| BP Sub-Types | New BP vs Existing BP (replaces Core/Emerging for Central Cluster) |
+| Rate | BDT 120/GA (vs BDT 100 for Rest Clusters) |
+| New BP Variable Range | 71–155 GA (Max additional 85 GA, Max assessed 165 GA) |
+| Existing BP Variable Range | 81–165 GA (Max additional 85 GA, Max assessed 165 GA) |
+| VLR Condition (Jan 2026) | ≥80%: Full | 60%–<80%: VLR Active GA Only | <60%: None |
+| VLR Condition (Feb 2026+) | ≥85%: Full | 65%–<85%: VLR Active GA Only | <65%: None |
+[/TABLE]
+Note: The Central Cluster distinction (BDT 120 vs BDT 100 for other clusters) reflects the higher competitive intensity and activation volumes expected in urban Central Cluster territories.
+## 3.7 West Cluster Special Rate — Barisal/Khulna Outer/Jessore Region (Apr 2026 only)
+April 2026 introduced a third cluster sub-category, splitting out specific West Cluster regions:
+[TABLE]
+| Applicable Period | April 2026 only |
+| Regions | Barisal, Khulna Outer, Jessore Region (West Cluster sub-set) |
+| Rate | BDT 100/GA (same as Rest Cluster) |
+| Core Variable Range | 91–170 GA (higher floor than standard Rest Cluster 71–150) |
+| Emerging Variable Range | 101–180 GA |
+| Max Additional GA | 80 |
+| Max Assessed GA | 180 GA |
+| VLR Condition | ≥85%: Full | 65%–<85%: VLR Active GA Only | <65%: None |
+| Rest of West Cluster | Follows standard Rest Cluster terms (71/81 GA start, 160 max) |
+[/TABLE]
+## 4. KPI 2 — MyBL App & Toffee Referral Hit Incentive
+An app referral incentive component ran alongside the GA variable incentive in most months.
+## 4.1 MyBL App Referral (All Months)
+[TABLE]
+| KPI Name | MyBL App Referral Hit Incentive |
+| Commission Rate | BDT 20 per successful referral hit |
+| Maximum Eligible Hits | 25 (Apr 2025) / 50 (May 2025 onward) |
+| Maximum Incentive | BDT 500 (Apr 2025) / BDT 1,000 (May 2025 onward) |
+| Eligibility Trigger | Customer signs up on MyBL App using BP's unique referral code |
+| New User Condition | Customer must be a new MyBL App user |
+| Referral Source | Activation against referral codes considered for hit count |
+| List Source | BP list + referral codes shared by B2C |
+| Data Source | IT-DSS provides registration and successful referral data after campaign end |
+[/TABLE]
+[TABLE]
+| Month | Rate | Max Hits | Max Incentive | Recharge Condition | Toffee Included? |
+| Apr 2025 | BDT 20/hit | 25 | BDT 500 | Customer must recharge by last day of Apr 2025 | No |
+| May 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 31 May 2025 | YES |
+| Jun 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 30 Jun 2025 | YES |
+| Jul 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 31 Jul 2025 | YES |
+| Aug 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 31 Aug 2025 | YES |
+| Sep 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 30 Sep 2025 | YES |
+| Oct 2025 | BDT 20/hit | 50 | BDT 1,000 | Must recharge by 31 Oct 2025 | YES |
+| Nov 2025 | BDT 20/hit | 50 | BDT 1,000 | No explicit recharge condition stated | YES |
+| Dec 2025 | BDT 20/hit | 50 | BDT 1,000 | No explicit recharge condition stated | YES |
+| Jan 2026+ | BDT 20/hit | 50 | BDT 1,000 | No explicit recharge condition stated | YES |
+[/TABLE]
+## 4.2 Toffee App Referral (May 2025 onward)
+[TABLE]
+| KPI Name | Toffee App Referral Hit Incentive |
+| Commission Rate | BDT 20 per Toffee hit (combined with MyBL in same BDT 1,000 cap) |
+| Combined Cap | Max 50 eligible activations for MyBL + Toffee combined (max BDT 1,000) |
+| Qualified Toffee Count | Shared by B2C team |
+| Condition | Both sign-up and referral must be done within the campaign period |
+| Introduced | May 2025 (not present in Apr 2025) |
+[/TABLE]
+## 4.3 Changes in MyBL Recharge Condition
+[TABLE]
+| Apr 2025 – Oct 2025 | Customer must recharge any amount by last day of the campaign month (for MyBL Only) |
+| Nov 2025 onward | Explicit per-month recharge deadline removed from SRF conditions (Toffee never had this condition) |
+| Impact | The removal of the recharge condition from Nov 2025 makes MyBL hits easier to qualify — sign-up + referral within period is sufficient |
+[/TABLE]
+## 5. KPI 3 — GA Quality (48hr Usage) Incentive
+A 48-hour usage quality incentive was added from May 2025:
+[TABLE]
+| KPI Name | GA Quality — 48 Hour Usage Incentive |
+| Applicable Period | May 2025 – October 2025 (not present in Apr 2025; dropped Nov 2025 onward when VLR replaced it) |
+| 48hr Usage Definition | Any revenue-generating activity within 48 hours of SIM activation |
+| Minimum Threshold | Minimum 75% of total activations must be 48hr-usage-qualified |
+| Payout Basis | Prorated based on achievement % (below 75% = zero; above = proportional) |
+| Maximum Incentive | BDT 1,000 |
+| Data Source | Retailer-wise total activation and qualified 48hr count shared by B2C |
+[/TABLE]
+Note: The GA Quality incentive (48hr usage, max BDT 1,000) was effectively replaced by the VLR condition from Oct 2025. The VLR condition addresses the same quality objective (active usage post-activation) but uses VLR active status instead of 48hr revenue activity.
+## 6. KPI 4 — Unique Outlet Coverage Incentive (Apr 2025 only)
+[TABLE]
+| KPI Name | Unique Outlet Coverage Incentive |
+| Applicable Period | April 2025 only |
+| Counting | Only unique outlets counted as achievement |
+| Visit Requirement | One-time visit sufficient to count as a unique outlet |
+| Minimum Achievement | 50% of target (below 50% = zero payout) |
+| Payout Basis | Prorated — max payout at 100% achievement |
+| Maximum Incentive | BDT 2,000 |
+| Data Source | BP List + Unique outlet target and achievement shared by B2C |
+| POSM Execution | POSM Execution data considered from DMS |
+| DD Change Rule | If DD code changed during month, cumulative achievement for both old and new Merchandiser codes considered |
+[/TABLE]
+Note: The Unique Outlet Coverage KPI appeared only in the April 2025 SRF and was not carried forward to subsequent months. It is the only KPI in this series directly tied to physical outlet visit activity.
+## 7. KPI 5 — FR (First Recharge) Incentive (Apr 2025 only)
+April 2025 had a unique FR-linked variable incentive structure distinct from all other months:
+[TABLE]
+| KPI Name | FR-Qualified GA Variable Incentive |
+| Applicable Period | April 2025 only |
+| FR Codes | 48, 81, 222, 224, 104 (specific First Recharge denomination codes) |
+| Condition | Each additional GA (11th–20th) must have FR from one of the specified codes (48/81/222/224/104) AND be within 1–30 Apr 2025 |
+| Rate | BDT 250 per FR-qualified GA |
+| Variable Range | 11–20 GA (after hitting monthly GA target) |
+| Max Additional GA | 10 (only 10 additional FR-qualified GA counted) |
+| Max Assessed GA | First 20 GA only assessed for both fixed and variable |
+| GA Attribution | Higher of: BP Wise Retailer FCD OR BP Wise SMART POS (ARRANGED-3) |
+| Usage Quality | Customer must use ≥10 minutes or 500 MB within assessment window |
+[/TABLE]
+Note: April 2025 is the only month where the variable incentive was tied to specific First Recharge denominations rather than any GA. The low cap (10 extra GA) and high rate (BDT 250/GA) make this the most targeted and highest per-GA rate in the entire BP Variable series.
+## 8. KPI 6 — Daily Productivity Incentive (Feb 2026 onward)
+[TABLE]
+| KPI Name | Daily Productivity Incentive |
+| Applicable Period | February 2026, March 2026, April 2026 |
+| Eligibility Condition | Minimum 10 days in the month with ≥4 GA per day |
+| Maximum Days Counted | 20 days |
+| Rate | BDT 50 per eligible day |
+| Maximum Incentive | BDT 1,000 (20 days × BDT 50) |
+| Data Source | Productivity Report shared by B2C |
+| Consistency | Identical parameters across Feb, Mar, Apr 2026 |
+[/TABLE]
+Note: The Daily Productivity KPI incentivizes consistent daily performance (≥4 GA/day for ≥10 days) rather than just monthly total. It was introduced in Feb 2026 alongside the Central Cluster/Rest Cluster split and replaced the GA Quality (48hr) incentive that ran May–Oct 2025.
+## 9. Sub-Campaign Type 2 — Freelancer BP Variable Incentive (Central Cluster)
+3 SRFs covering Freelancer BPs in the Central Cluster only (Feb–Apr 2026). Freelancer BPs have a fundamentally different incentive structure from standard BPs.
+## 9.1 Freelancer BP Structure — Key Differences
+[TABLE]
+| Attribute | Standard BP Variable | Freelancer BP Variable (Central Cluster) |
+| Target Structure | Monthly GA target provided by B2C; variable pay after target | No monthly target — minimum absolute GA threshold instead |
+| Minimum GA | Varies (dependent on target) | 50 GA minimum to qualify for any variable pay |
+| Maximum GA Counted | 120–165 GA (varies by month) | 150 GA (fixed) |
+| Rate | BDT 85–120/GA (varies) | BDT 100/GA for ALL GA if total ≥50 |
+| GA Range | Post-target (e.g., 71–165 GA) | All GA from 1st GA if total ≥50 (no post-target threshold) |
+| BP Types | Regular/LUS or Core/Emerging or New/Existing | No sub-type classification |
+| Cluster | All clusters | Central Cluster only |
+| Daily Productivity | Present (Feb–Apr 2026) | Not included |
+| MyBL/Toffee | Included | Not included |
+| GA Quality (48hr) | Included (May–Oct 2025) | Not included |
+[/TABLE]
+Note: For Apr 2026, the Freelancer BP SRF clarified: 'Incentive will be BDT 100 PER GA for all GA if total GA ≥50. Example: If total GA = 55, then commission = 55 × BDT 100 = BDT 5,500 (VLR condition applies)'. This confirms the rate applies to ALL GA (not just post-50 GA).
+## 9.2 VLR Condition — Freelancer SRFs
+[TABLE]
+| Month | VLR Threshold (Full) | VLR Threshold (Partial) | VLR Threshold (Zero) | Payout Type |
+| Feb 2026 | ≥85% | 65%–<85% | <65% | VLR Active GA Only (partial) |
+| Mar 2026 | ≥85% | 65%–<85% | <65% | Prorated Payout (change from Feb) |
+| Apr 2026 | ≥85% | 65%–<85% | <65% | Prorated Payout |
+[/TABLE]
+Note: The Mar/Apr 2026 Freelancer SRFs changed the partial-tier label from 'VLR Active GA Only' to 'Prorated Payout' — indicating a shift from counting only VLR-active subscribers to proportional payout based on the VLR %. This is a more generous calculation method.
+## 10. Sub-Campaign Type 3 — TechVan BP Variable Incentive
+1 SRF (Mar 2026) covering TechVan BPs — entirely different KPI structure from standard BP Variable.
+## 10.1 TechVan Campaign Structure
+[TABLE]
+| SRF | TechVan BP Variable Incentive Mar26 |
+| Requester | Murshida Begum Boby, Distribution Planning & Operation |
+| Recipient Type | MDO (Mobile Device Operator / TechVan BP) |
+| Product | TechVan handsets: KN3 & KM5 models |
+| Campaign Basis | Handset sales linked to Banglalink SIM activation |
+| SIM Tagging Condition | Handset MUST be tagged with a Banglalink SIM (new or existing); incentive only for BL-tagged handsets |
+| Campaign Period | 1–31 March 2026 |
+| Data Source | IT SC + IT BI + DWH + POS |
+| Maturity Date | 5th of following month |
+| Usage Condition | No Play: any outgoing call or internet usage in calendar month in min 93% of GA |
+| ETSAF | 98% of ETSAF (Total against activation before Disconnection) vetted and accepted within 7th of following month |
+| Rounding | General mathematical rounding (same <0.5 / ≥0.5 rule) |
+| BP List | Provided by B2C |
+[/TABLE]
+## 10.2 TechVan — Handset+GA Slab Commission
+Two campaign modalities based on how the handset was sold (channel type):
+Modality 1: CHANNEL_LIFTED – OEM (Original Equipment Manufacturer channel):
+[TABLE]
+| Handset with GA Qty (Slab) | Slab 1 Incentive (BDT) | Slab 2 Incentive (BDT) |
+| 4 to 9 | 4,000 | 300 |
+| 10 to 19 | 6,000 | 500 |
+| 20 to 29 | 8,000 | 600 |
+| 30 to 39 | 10,000 | 700 |
+| ≥ 40 | 12,000 | 700 |
+[/TABLE]
+Modality 2: CHANNEL_LIFTED – MB (Mobile Bazaar / Retail channel):
+[TABLE]
+| Handset with GA Sales Qty (Slab) | Slab 1 Incentive (BDT) | Slab 2 Incentive (BDT) |
+| 0 to 4 | 4,000 | 400 |
+| 5 to 9 | 6,000 | 500 |
+| 10 to 19 | 8,000 | 600 |
+| ≥ 20 | 10,000 | 700 |
+[/TABLE]
+[TABLE]
+| Slab 1 vs Slab 2 | Slab 1 = base handset volume incentive; Slab 2 = per-unit additional incentive |
+| GA Link | Incentive tied to handsets WITH GA — handset must be sold WITH a new Banglalink activation |
+| Unique Feature | Only SRF in folder where incentive is based on physical device units sold, not pure GA count |
+[/TABLE]
+## 11. Maturity Date Evolution
+[TABLE]
+| SRF | Campaign Period | Maturity Date for Data |
+| BP Variable Apr25 | Apr 2025 | 1st of following month |
+| BP Variable May25 | May 2025 | 1st of following month |
+| BP Variable Jun25 | Jun 2025 | 1st of following month |
+| BP Variable Jul25 | Jul 2025 | 8th of following month |
+| BP Variable Aug25 | Aug 2025 | 1st of following month |
+| BP Variable Aug25_Revision | Aug 2025 (revised) | 1st of following month |
+| BP Variable Sep25 | Sep 2025 | 8th of following month |
+| BP Variable Oct25 | Oct 2025 | 8th of following month |
+| BP Variable Nov25 | Nov 2025 | 8th of following month |
+| BP Variable Dec25 | Dec 2025 | 8th of following month |
+| BP Variable Jan26 | Jan 2026 | 8th of following month |
+| BP Variable Feb26 | Feb 2026 | 8th of following month |
+| BP Variable Mar26 | Mar 2026 | 8th of following month |
+| BP Variable Apr26 | Apr 2026 | 3rd of following month |
+| Freelancer Central Feb26 | Feb 2026 | 8th of following month |
+| Freelancer Central Mar26 | Mar 2026 | 8th of following month |
+| Freelancer Central Apr26 | Apr 2026 | 3rd of following month |
+| TechVan Mar26 | Mar 2026 | 5th of following month |
+[/TABLE]
+## 12. Campaign-by-Campaign Quick Reference Table
+All unique KPI parameters per SRF at a glance (Standard BP Variable SRFs):
+[TABLE]
+| Month | Rate/GA | BP Types | GA Range (post-target) | VLR? | MyBL/Toffee | GA Quality | Daily Prod. | Other KPIs |
+| Apr 2025 | 250 (FR-qualified) | Single type | 11–20 (FR codes only) | No | MyBL only (25 max) | No | No | FR Incentive, Outlet Coverage |
+| May 2025 | 85 | Single type | 51–120 | No | MyBL+Toffee (50 max) | YES (75% min) | No | — |
+| Jun 2025 | 85 | Single type | 51–120 | No | MyBL+Toffee (50 max) | YES (75% min) | No | — |
+| Jul 2025 | 85/100 | Regular/LUS | 51–120 / 41–100 | No | MyBL+Toffee | YES (75% min) | No | Cluster split (FCD vs FCD+SMART POS) |
+| Aug 2025 | 100 | Regular/LUS | 61–120 / 51–110 | No | MyBL+Toffee | YES (75% min) | No | Cluster split; Revision SRF issued |
+| Sep 2025 | 100 | Regular/LUS | 61–120 / 51–110 | No | MyBL+Toffee | YES (75% min) | No | Cluster split |
+| Oct 2025 | 100 | Regular/LUS | 61–120 / 51–110 | YES (22–31 Oct, 80%) | MyBL+Toffee | YES (75% min) | No | Partial VLR intro |
+| Nov 2025 | 100 | Core/Emerging | 71/81–140/150 | YES (full month, 80%) | MyBL+Toffee | No | No | Market classification intro |
+| Dec 2025 | 100 | Core/Emerging | 71/81–130/140 | YES (full month, 80%) | MyBL+Toffee | No | No | — |
+| Jan 2026 | 100/120 | Core/Emg + Central New/Exist | 71/81–150/160; Central 71/81–155/165 | YES (80%) | MyBL+Toffee | No | No | Central Cluster BDT 120 rate intro |
+| Feb 2026 | 100/120 | Same as Jan | Same ranges | YES (85%) | MyBL+Toffee | No | YES (BDT 50/day) | VLR threshold raised; Daily Prod added |
+| Mar 2026 | 100/120 | Same | Same | YES (85%) | MyBL+Toffee | No | YES | — |
+| Apr 2026 | 100/120 | Same + West-special | Core: 71–150; West-special: 91–170 | YES (85%) | MyBL+Toffee | No | YES | West Cluster Barisal/KO/Jessore split |
+[/TABLE]
+Document generated from 18 BP Variable SRFs (Apr 2025 – Apr 2026).
+Requesters: Istyaque Hossain (Trade Marketing) | Murshida Begum Boby (Distribution Planning & Operation).

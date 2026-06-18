@@ -1,0 +1,259 @@
+BSP CCR KPI
+Unique KPI Conditions — All SRFs
+SalesCom Automation Reference | Banglalink
+1. Index
+[TABLE]
+| Section | Title |
+| 1 | Index |
+| 2 | Folder Overview & SRF Summary |
+| 3 | Campaign Type 1 — BSP CCR KPI Variable Incentive (Standard) |
+| 4 | KPI Gate Evolution Table (Apr 2025 → Jan 2026+) |
+| 5 | Gross Add (GA) KPI — Conditions & Payout Rules |
+| 6 | First Visit Resolution (FVR) of Core Services — KPI |
+| 7 | Stock Availability / SIM Replacement KIT + GA Stock KPI |
+| 8 | Toffee & MyBL App Installation KPI |
+| 9 | Daily Participation in GA (& Recharge) KPI |
+| 10 | Customer Satisfaction Score (CSAT) KPI |
+| 11 | Jan 2026 Revision — CSAT High-Value Standalone SRF |
+| 12 | Campaign Type 2 — Monobrand CCR Techno Handset Sales Incentive (Mar 2026) |
+| 13 | Universal / General Conditions |
+| 14 | Maturity Date & Data Source Evolution |
+| 15 | AIT & Rounding Rules |
+| 16 | Quick Reference Summary Table |
+[/TABLE]
+2. Folder Overview & SRF Summary
+[TABLE]
+| Folder | BSP CCR KPI |
+| Total SRFs | 7 |
+| Campaign Types | 2 (KPI Variable Incentive + Monobrand CCR Handset Incentive) |
+| Date Range | Apr 2025 – Mar 2026 |
+| Recipient | BSP CCR (Business Support Point Customer Care Representatives) |
+| Product Type | Prepaid (incl. RYZE), Recharge, MNP, Postpaid (Handset SRF) |
+| Report Type | Monthly Disbursement |
+| Approval Flow | SS Approval Flow |
+[/TABLE]
+2.1 SRF List
+[TABLE]
+| SRF Title | Effective From | Type | Key Change |
+| BSP CCR KPI Variable from Apr25 | Apr 2025 | New Report | GA (30%) + FVR (20%). Simple 2-KPI structure. |
+| BSP CCR KPI Variable from May25 | May 2025 | Change | Added Stock Availability (20%) + App Install (10%). 4-KPI structure. |
+| BSP CCR KPI Variable from July25 | Jul 2025 | Change | Same as May25. RYZE removed from GA description. |
+| BSP CCR KPI Variable from Oct25 | Oct 2025 | Change | Full overhaul: 6-KPI structure with CSAT (15%), Daily Participation (10%), tiered slabs. |
+| BSP CCR KPI Variable from Jan26 | Jan 2026 | Change | Revised GA slabs (93%+ base), enhanced CSAT tiers, App threshold 81.5%. |
+| BSP CCR KPI Variable_Jan26_Revision | Jan 2026 (Revision) | Change (Ad-hoc) | Standalone CSAT revision — only CSAT 15% weight re-specified. |
+| CCR Incentive Campaign for Monobrand Centers_Techno Handset Sales from 12th Mar26 | Mar 2026 (from 12th) | New Report | Separate handset sales incentive for 18 CCR centers. Techno Spark models. |
+[/TABLE]
+3. Campaign Type 1 — BSP CCR KPI Variable Incentive (Standard)
+[TABLE]
+| Recipient | BSP CCR (Field Force CCR) |
+| Base Variable Pay | BDT 4,000 / month (performance-based) |
+| Effective Period | Apr 2025 → Jan 2026 onwards (ongoing with revisions) |
+| KPI Structure | Weighted KPI gates — must meet threshold per gate to earn that portion |
+| ETSAF Requirement | 98% ETSAF vetted and accepted by 7th of following month |
+| Maturity Date | Apr–Jul 2025: 8th of following month | Oct 2025 onwards: 45 days after activation |
+[/TABLE]
+Key rule: Each KPI gate has an independent threshold. If threshold is NOT met for a gate, that gate's weightage portion pays zero. Remaining gates pay at their respective achievement rates.
+4. KPI Gate Evolution Table (Apr 2025 → Jan 2026+)
+[TABLE]
+| KPI Gate | Apr 25 | May 25 | Jul 25 | Oct 25 | Jan 26 |
+| Gross Add (GA) | 30% wt 90% thr | 30% wt 80% thr | 30% wt 80% thr | 30% wt 80% thr | 25% wt 93% thr |
+| First Visit Resolution | 20% wt 90% thr | 20% wt 90% thr | 20% wt 90% thr | 10% wt 90% thr | 10% wt 95% thr |
+| Stock Availability | N/A | 20% wt 90% thr | 20% wt 90% thr | 15% wt 90% thr | 15% wt 90% thr |
+| Toffee & MyBL App | N/A | 10% wt 80% thr | 10% wt 80% thr | 20% wt 80% thr | 10% wt 81.5% thr |
+| Daily Participation | N/A | N/A | N/A | 10% wt 90% thr | 10% wt 95% thr |
+| CSAT | N/A | N/A | N/A | 15% wt >97% thr | 30% wt >97% thr |
+| TOTAL WEIGHT | 50% (partial) | 80% (partial) | 80% (partial) | 100% | 100% |
+[/TABLE]
+Note: Apr25 & May25/Jul25 SRFs list weights for shown KPIs only — remaining 50%/20% not explicitly mapped in SRF. Oct25 onward is full 100% coverage.
+5. Gross Add (GA) KPI — Conditions & Payout Rules
+[TABLE]
+| Definition | Successful activation / FCD from stipulated BSP CCR. Eligible: Prepaid (incl. RYZE in Apr25), Reactivation (Apr25), MNP. |
+| Attribution Date | FCD (First Call Date) |
+| ETSAF Gate | 98% ETSAF must be accepted by 7th of following month (reseller app) |
+| Target Source | Shared by Business/User team monthly |
+| Weight | 30% (Apr–Oct 2025) | 25% (Jan 2026+) |
+[/TABLE]
+5.1 Payout Slabs by SRF Version
+[TABLE]
+| SRF Version | Threshold | Payout Structure |
+| Apr 2025 | 90% | >=90% ach → full incentive. No sub-slabs mentioned. 10% kept as reserve for system issues. |
+| May & Jul 25 | 80% | >=80% – <100% = At Actual Payout (pro-rated); >=100% = 100% Payout |
+| Oct 2025 | 80% | Target Ach 15%: <80%=0%; 80-84.99%=60%; 85-89.99%=70%; 90-94.99%=80%; 95-<100%=90%; >=100%=100%. First Recharge 15%: 60-85% ach = pro-rated; >=85% = 100%. Rolling 45 days of acquisition. |
+| Jan 2026 | 93% | Target Ach 15%: <93%=0%; >=93% <101%=95%; >=101% <108%=110%; >=108%=120%. First Recharge 10%: 60-85% = pro-rated; >=85%=100%. Rolling 45 days. |
+[/TABLE]
+Note: Oct 2025: GA KPI is split into two sub-components — Target Achievement (15%) and First Recharge (15%) — totalling 30% weight for GA gate.
+Note: Jan 2026: GA KPI sub-components become Target Achievement (15%) and First Recharge (10%) — total 25% weight.
+6. First Visit Resolution (FVR) of Core Services — KPI
+[TABLE]
+| Definition | Agent resolves customer issue on first visit (core service categories) |
+| Measurement | Unique work code vs. total work code for that agent on same day |
+| Threshold | 90% (Apr–Jul 2025) | 90% (Oct 2025) | 95% (Jan 2026+) |
+| Weight | 20% (Apr–Jul 2025) | 10% (Oct 2025 onwards) |
+| Uniqueness Rule | Customer MSISDN considered unique for the same service on the same day |
+| Pass condition | Unique work code count >= threshold % of total actualization work code |
+| Fail condition | Unique work code < threshold % → 0% payout for this gate |
+| System Reserve | Apr 2025: 10% of total incentive kept as reserve for system-related issues (exception notified by email) |
+| Target Source | Shared by Business/User team |
+[/TABLE]
+7. Stock Availability / SIM Replacement KIT + GA Stock KPI
+[TABLE]
+| Applied From | May 2025 onwards (not present in Apr 2025 SRF) |
+| Description | SIM Swap KIT + New SIM Kit stock availability. Also referred to as SIM Replacement KIT + GA Stock. |
+| Threshold | 90% of shared NORMS |
+| Weight | 20% (May–Jul 2025) | 15% (Oct 2025 onwards) |
+| Data Source | Manual data shared by Business team until automated. Target vs achievement shared by User team monthly. |
+| Payout | May–Jul 2025: >=90% – <100% = At Actual; >=100% = 100%. Oct+ : Maintain sound stock as per NORMS (binary gate). |
+[/TABLE]
+8. Toffee & MyBL App Installation KPI
+[TABLE]
+| Applied From | May 2025 onwards |
+| Apps Covered | MyBL App + Toffee App (both required) |
+| Target | 50% of GA Target (Oct 2025+) — earlier months: separate target shared by User team |
+| Weight | 10% (May–Jul 2025) | 20% (Oct 2025) | 10% (Jan 2026) |
+| Threshold | 80% (May–Oct 2025) | 81.5% (Jan 2026+) |
+[/TABLE]
+8.1 Payout Slabs
+[TABLE]
+| SRF Version | Threshold | Payout Structure |
+| May & Jul 2025 | 80% | >=80% – <100% = At Actual; >=100% = 100% |
+| Oct 2025 | 80% | <80%=0%; 80-84.99%=60%; 85-89.99%=70%; 90-94.99%=80%; 95-<100%=90%; >=100%=100% |
+| Jan 2026 | 81.5% | <81.5%=0%; 81.5-87.19%=95%; 87.2-91.59%=110%; >=91.6%=120% |
+[/TABLE]
+[TABLE]
+| Installation Process (MyBL) | CCR installs MyBL App from Play Store (Android) or App Store (iOS) on customer handset using CCR's referral code |
+| Installation Process (Toffee) | CCR installs Toffee App from Play Store (Android) or App Store (iOS) on customer handset using Toffee referral code |
+[/TABLE]
+9. Daily Participation in GA (& Recharge) KPI
+[TABLE]
+| Applied From | Oct 2025 onwards |
+| Weight | 10% |
+| Threshold | 90% of operational days (Oct 2025) | 95% of operational days (Jan 2026+) |
+| Oct 2025 Rule | Agent must participate in BOTH GA & Recharge activities on at least 90% of operational days in the month |
+| Jan 2026 Rule | Agent must participate in GA on at least 95% of operational days (Recharge no longer explicitly mentioned) |
+| Target Source | User/Business team |
+[/TABLE]
+10. Customer Satisfaction Score (CSAT) KPI
+[TABLE]
+| Applied From | Oct 2025 onwards |
+| Weight | 15% (Oct 2025) | 30% (Jan 2026+) |
+| Threshold | >97% |
+| Min Feedback Count | At least 20 CSAT feedbacks per month (Jan 2026+) |
+| Target Source | Shared by User team |
+[/TABLE]
+10.1 CSAT Payout Slabs by Version
+[TABLE]
+| SRF Version | Category | Score Range | Payout |
+| Oct 2025 | (All agents combined) | Score <97% | 0% Pay |
+| Oct 2025 | (All agents combined) | >97% to <=98% | 80% Pay |
+| Oct 2025 | (All agents combined) | >98% to <=99% | 100% Pay |
+| Jan 2026 | Platinum & Signature (15%) | Score <98% | 0% Pay |
+| Jan 2026 | Platinum & Signature (15%) | 98% to <=99% | 80% Pay |
+| Jan 2026 | Platinum & Signature (15%) | >99% to <=99.8% | 100% Pay |
+| Jan 2026 | Platinum & Signature (15%) | >99.8% | 120% Pay |
+| Jan 2026 | Overall (15%) | Score <97% | 0% Pay |
+| Jan 2026 | Overall (15%) | 97% to <=98% | 80% Pay |
+| Jan 2026 | Overall (15%) | >98% to <=99.5% | 100% Pay |
+| Jan 2026 | Overall (15%) | >99.5% | 120% Pay |
+[/TABLE]
+Note: Jan 2026 CSAT is split into two sub-KPIs: Platinum & Signature segment (15%) and Overall (15%), totalling 30% weight.
+11. Jan 2026 Revision — CSAT High-Value Standalone SRF
+[TABLE]
+| SRF Title | BSP CCR KPI Variable_Jan26_Revision |
+| Effective | 01-Jan-2026 to 31-Jan-2026 (one-month ad-hoc revision) |
+| Periodicity | Ad-hoc (not regular) |
+| Purpose | Revise CSAT KPI specifically for Platinum and Signature agent category for January 2026 only |
+| KPI Covered | CSAT only — 15% weight portion re-specified |
+| CSAT Structure | Platinum & Signature: <98%=0%; 98-99%=80%; >99-99.8%=100%; >99.8%=120% (Min 20 CSAT feedbacks/month required) |
+| Other KPIs | Not mentioned — all other KPI gates remain as per Jan26 main SRF |
+| Maturity Date | 45 days after activation |
+[/TABLE]
+Note: This SRF exists to retroactively correct/revise the Jan 2026 CSAT payout rule for high-value agent segments. It does not modify GA, Stock, App, FVR or Daily Participation KPIs.
+12. Campaign Type 2 — Monobrand CCR Techno Handset Sales Incentive (from 12 Mar 2026)
+[TABLE]
+| Recipient | Monobrand CCR agents at eligible centers |
+| Product | Techno handsets sold with Banglalink SIM + proper offer tagged |
+| Effective Date | 12 March 2026 (from 12th onward) |
+| Reporting Department | Alternate Channel and Digital Recharge |
+| Maturity Date | 1st day of next month |
+| Product Type | BL Prepaid + BL Postpaid |
+| Attribution Date | FCD (First Call Date) — activation during calendar month |
+| Eligible Centers | 18 initially (only centers where dedicated TechVan BP is NOT available) |
+[/TABLE]
+12.1 Handset Incentive Slabs
+[TABLE]
+| Handset Model | Incentive per Unit | Condition |
+| Techno Spark 40 | BDT 500 | Sold with Banglalink SIM + proper offer tagged |
+| Techno Spark GO3 | BDT 400 | Sold with Banglalink SIM + proper offer tagged |
+[/TABLE]
+12.2 BP Replacement & Eligibility Policy
+Applicable only for 18 specified centers where dedicated TechVan BP is NOT present.
+NO new TechVan BP will be appointed for any new center (except Experience Centers such as Tiger's Den with dedicated device display table).
+If existing TechVan BP resigns: position is NOT replaced (except Experience Centers). That center's Agent/CCR becomes eligible from the resign date.
+Experience Centers MUST continue to have TechVan BP — CCRs at Experience Centers are NOT eligible for this incentive.
+Monthly eligible CCR list shared by HQ Team.
+12.3 Eligible Center List
+[TABLE]
+| Center Name | Region |
+| CC Faridpur | Barisal |
+| CC Kushtia | Khulna |
+| CC Bogra | Bogra |
+| CC Gazipur | Dhaka |
+| CC Chittagong | Chittagong |
+| CC Pallabi | Dhaka |
+| CC Gulshan | Dhaka |
+| CC Chawk Bazar | Chittagong |
+| CC Rangpur | Bogra |
+| CC Satkhira | Khulna |
+| CC Jhenaidah | Khulna |
+| CC Cox's Bazar | Chittagong |
+| CC Dhanmondi | Dhaka |
+| CC Shamoly | Dhaka |
+| CC Jessore | Khulna |
+| CC Mymensingh | Mymensingh |
+| CC Comilla | Chittagong |
+| CC Magura | Khulna |
+[/TABLE]
+13. Universal / General Conditions
+[TABLE]
+| Condition | Value / Rule |
+| Activation Date | FCD (First Call Date) — activation during the promotion/calendar period |
+| ETSAF Submission | All accepted/submitted ETSAF by 8th of following month considered for commission |
+| ETSAF Correction | Within 72 hours of submission |
+| ETSAF Acceptance | 98% must be vetted and accepted (reseller app) by 7th of following month |
+| Valid Recharge | EV Recharge only |
+| Valid Usage | MOC, SMSMO, MTC, SMSMT, GPRS, MMS, Partial VAS usage (IN medication CDR), GPRS recharge, bundle recharge |
+| Disconnection | Latest data up to report maturity date (T-6) |
+| Product Eligibility | All Prepaid + successful MNP |
+| Rounding | General mathematical rounding: <0.5 rounds down, >=0.5 rounds up — applies to all KPI end achievement calculations |
+| Input Data Sources | IT SC, DWH, DMS, POS, ED (Handset SRF), IT BI, TABS (Handset SRF) |
+| Approval Flow | SS Approval Flow |
+[/TABLE]
+14. Maturity Date & Data Source Evolution
+[TABLE]
+| SRF Period | Maturity Date | Published Date |
+| Apr 2025 | 8th of the following month | As per tracker |
+| May 2025 | 8th of the following month | As per tracker |
+| Jul 2025 | 8th of the following month | As per tracker |
+| Oct 2025 | 45 days after activation | As per tracker |
+| Jan 2026 | 45 days after activation | As per tracker |
+| Jan 2026 Revision | 45 days after activation | As per tracker |
+| Mar 2026 (Handset) | 1st day of next month | Not specified |
+[/TABLE]
+Note: Shift from 8th-of-month to 45-days-after-activation occurred with Oct 2025 SRF — aligns with First Recharge rolling 45-day window introduced in that version.
+15. AIT & Rounding Rules
+[TABLE]
+| AIT (Advance Income Tax) | Applicable as per the provision of Income Tax Law — present in ALL SRFs from Apr 2025 onwards |
+| Mathematical Rounding | General rounding: values < 0.5 round down; >= 0.5 round up. Applied to all KPI end achievement calculations across all SRFs. |
+[/TABLE]
+16. Quick Reference Summary Table
+[TABLE]
+| Period | Base Pay | GA Wt/Thr | FVR Wt/Thr | Stock Wt/Thr | App Wt/Thr | Daily Part Wt/Thr | CSAT Wt/Thr | Maturity |
+| Apr 2025 | BDT 4,000 | 30%/90% | 20%/90% | N/A | N/A | N/A | N/A | 8th next mo |
+| May 2025 | BDT 4,000 | 30%/80% | 20%/90% | 20%/90% | 10%/80% | N/A | N/A | 8th next mo |
+| Jul 2025 | BDT 4,000 | 30%/80% | 20%/90% | 20%/90% | 10%/80% | N/A | N/A | 8th next mo |
+| Oct 2025 | BDT 4,000 | 30%/80% | 10%/90% | 15%/90% | 20%/80% | 10%/90% days | 15%/>97% | 45d after act |
+| Jan 2026 | BDT 4,000 | 25%/93% | 10%/95% | 15%/90% | 10%/81.5% | 10%/95% days | 30%/>97% | 45d after act |
+| Jan26 Rev | BDT 4,000 | Same | Same | Same | Same | Same | 30% revised | 45d after act |
+| Mar26 Handset | Per unit | N/A | N/A | N/A | N/A | N/A | N/A | 1st next mo |
+[/TABLE]
+Note: Mar 2026 Handset incentive: BDT 500 (Techno Spark 40) / BDT 400 (Techno Spark GO3) per unit sold with BL SIM + proper offer tag.

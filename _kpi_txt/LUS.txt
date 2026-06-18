@@ -1,0 +1,249 @@
+Banglalink SRF
+Unique KPI Conditions
+Campaign Folder: LUS (Low Usage Site) Campaigns
+Total SRFs Analyzed: 20  |  Period: Apr 2025 – Apr 2026  |  Prepared: May 2026
+Index
+[TABLE]
+| # | Section |
+| 1 | Campaign Overview & Types |
+| 2 | Section A — Retailer LUS GA Campaign (Jan26–Apr26) |
+| 3 | Section B — DD Manager LUS Campaign: GA + Deno + LSO + SSO (Jan26, Feb26) |
+| 4 | Section C — Distributor LUS GA Campaign (Feb26, Apr26) |
+| 5 | Section D — Distributor LSO & SSO Campaign (Mar26, Apr26) |
+| 6 | Section E — Distributor Router / FWA Campaign (Feb26–Apr26) |
+| 7 | Section F — RSO Router / FWA Campaign (Feb26–Apr26) |
+| 8 | Section G — RSO Deno HIT Campaign (Jul25) |
+| 9 | Section H — GA Support for DD: New/LUS Sites (Apr25) |
+| 10 | Fixed / Invariant General Conditions |
+| 11 | SRF Reference Summary Table (All 20 SRFs) |
+[/TABLE]
+1. Campaign Overview & Types
+LUS (Low Usage Site) campaigns incentivize field force (RSO), distributors (DD), DD Managers, and retailers to improve performance at BL network sites with low subscriber activity. Campaigns cover multiple KPI types: Gross Add (GA), Deno (denomination) HIT, LSO (Live SIM Out), SSO (Subscriber SIM Out / active subscriber), and FWA (Fixed Wireless Access — WiFi Router).
+[TABLE]
+| Campaign Type | Recipient | KPI(s) | SRFs | Period |
+| Retailer LUS GA Campaign | Retailer | GA | 4 SRFs | Jan–Apr 2026 |
+| DD Manager LUS Campaign | DD Manager (Field Force) | GA + Deno + LSO + SSO | 3 SRFs (incl. 1 revision) | Jan–Feb 2026 |
+| Distributor LUS GA Campaign | Distributor | GA | 3 SRFs (incl. 1 revision) | Feb, Apr 2026 |
+| Distributor LSO & SSO Campaign | Distributor | Active LSO + Active SSO | 2 SRFs | Mar–Apr 2026 |
+| Distributor Router/FWA Campaign | Distributor | FWA Router Activation | 3 SRFs | Feb–Apr 2026 |
+| RSO Router/FWA Campaign | RSO (Field Force) | FWA Router Activation | 3 SRFs | Feb–Apr 2026 |
+| RSO Deno HIT Campaign | RSO (Field Force) | Deno HIT (cumulative) | 1 SRF | Jul 2025 |
+| GA Support for DD — New/LUS Sites | Distributor (DD) | GA (slab-based) | 1 SRF | Apr 2025 |
+[/TABLE]
+2. Section A — Retailer LUS GA Campaign (Jan26–Apr26)
+Retailers attached to LUS sites receive monthly GA targets and earn incentives on HIT or Miss basis. Four monthly SRFs exist (Jan–Apr 2026). Conditions are nearly identical across all four, with one key change in the usage gate from Mar26 onward.
+A1. Core KPI Conditions (Consistent across Jan26–Apr26)
+[TABLE]
+| KPI | GA (Gross Add) |
+| Target Basis | Retailer-wise target along with BTS mapping shared by B2C |
+| Incentive Structure | HIT or Miss — Core market: BDT 40 per GA / Emerging market: BDT 35 per GA |
+| Incentive Cap | 200% of target |
+| GA Attribution | Biometric BTS preferred; if Biometric BTS code is unknown/null → use FCD BTS; if both null → not counted |
+| Dual-Site Tagging | If 2 different sites tagged to 1 GA → consider Biometric site tagging with unique GA |
+| Agent List | Last day of each campaign month (e.g., 31st Jan, 28th Feb, 31st Mar, 30th Apr) |
+| Target vs Achievement | Retailer-wise target vs achievement along with 48hr data shared by B2C |
+| Rounding | General mathematical rounding: below 0.5 rounds down; ≥0.5 rounds up |
+| Salescom to EV | Yes (automated) |
+| SMS Content | Priyo Bikreta, Apni LUS GA Campaign_[Month] er commission hisabe #### peyeched (AIT katar por). Dhonnobad. |
+[/TABLE]
+A2. Usage Gate Condition — Key Difference Across Months
+The 48-hour usage gate threshold changed from Jan26/Feb26 to Mar26/Apr26:
+[TABLE]
+| SRF(s) | Usage Gate | Change? |
+| Jan26, Feb26 | >=95% usages for 48 hours must be maintained | Baseline |
+| Mar26, Apr26 | >=90% usages for 48 hours must be maintained | CHANGED — threshold lowered from 95% to 90% |
+[/TABLE]
+Note: The 48-hour usage gate is a qualifying condition: retailers must maintain the specified usage rate within 48 hours of GA during the campaign period. Relaxation from 95% to 90% from Mar26 onward.
+A3. Maturity Dates
+[TABLE]
+| SRF | Maturity Date |
+| Retailer LUS Campaign Jan26 | 8th Feb 2026 |
+| Retailer LUS Campaign Feb26 | 8th Mar 2026 |
+| Retailer LUS Campaign Mar26 | 8th Apr 2026 (stated as '8th Mar'26' in SRF — likely typo) |
+| Retailer LUS Campaign Apr26 | 8th May 2026 |
+[/TABLE]
+3. Section B — DD Manager LUS Campaign: GA + Deno + LSO + SSO (Jan26, Feb26)
+DD Managers earn incentives based on the cumulative performance of all LUS sites tagged to their DH across four KPIs: GA, Deno, LSO, SSO. A revision SRF was issued for Jan26 (same conditions, dated Mar 2026). The only change from Jan26 to Feb26 is the Deno denomination list.
+B1. Core KPI Conditions
+[TABLE]
+| KPI(s) | GA (Gross Add), Deno, LSO, SSO |
+| Target Basis | DD-wise target along with BTS; DH tagged total LUS cumulative target of individual KPI = DH Manager's target |
+| Incentive Cap | 120% for all KPIs |
+| GA Attribution | Biometric BTS preferred; FCD BTS fallback; both null = not counted; dual-site → Biometric |
+| Gate — GA | 100% GA achievement required |
+| Gate — Bundle/Deno | 75% achievement required |
+| Gate — LSO | 75% achievement required |
+| Gate — SSO | 75% achievement required |
+| Rounding | General mathematical rounding: below 0.5 rounds down; ≥0.5 rounds up |
+| Agent List | Last day of campaign month (31st Jan'26 or 28th Feb'26) |
+| Target vs Achievement | Shared by B2C |
+[/TABLE]
+Note: Weightage and incentive amount tables are embedded as images in the original PDFs and could not be extracted as text. These must be referenced directly from the source SRF.
+B2. Deno Denomination List — Change Across Months
+[TABLE]
+| SRF | Deno List | Difference |
+| DD Manager LUS Jan26 & Jan26_revision | 109, 319, 357, 498, 499, 598, 599, 699 | Baseline |
+| DD Manager LUS Feb26 | 109, 319, 357, 498, 499, 598, 619, 699 | 599 replaced by 619 |
+[/TABLE]
+B3. Revision SRF Note
+The Jan26_revision SRF (dated 24-Mar-2026) covers the same campaign period (1–31 Jan 2026) with identical KPI conditions as the original Jan26 SRF. It appears to be a formal revision/reissue rather than a condition change.
+4. Section C — Distributor LUS GA Campaign (Feb26, Apr26)
+Selective distributors with LUS site scope receive GA-based incentives. A revision SRF was issued for Feb26 with identical conditions. The cap percentage changed between Feb26 and Apr26.
+C1. Core KPI Conditions
+[TABLE]
+| KPI | GA (Gross Add) |
+| Eligibility | Selective Distributors only (In-scope distributor + BTS list from B2C) |
+| Incentive Rate | BDT 30 per GA |
+| Minimum Eligibility | 80% of target (pro-rated basis) |
+| Gate | Maintain >=80% VLR active |
+| GA Attribution | Biometric BTS preferred; FCD BTS fallback; both null = not counted; dual-site → Biometric |
+| Agent List | Last day of campaign month |
+| Target vs Achievement | Distributor-wise target vs achievement + VLR active data from B2C |
+| Rounding | General mathematical rounding |
+[/TABLE]
+C2. Incentive Cap — Change Across SRFs
+[TABLE]
+| SRF | Incentive Cap | Change? |
+| Distributor LUS Feb26 (& Feb26_Revision) | 120% of target | Baseline |
+| Distributor LUS GA Apr26 | 150% of target | CHANGED — cap raised from 120% to 150% |
+[/TABLE]
+C3. Revision SRF Note (Feb26_Revision)
+The Feb26_Revision SRF (dated 24-Mar-2026) covers the same period (1–28 Feb 2026) and has identical conditions to the original Feb26 SRF.
+5. Section D — Distributor LSO & SSO Campaign (Mar26, Apr26)
+Distributors earn incentives for achieving Active LSO (Live SIM Out) and Active SSO (active subscriber) targets at their assigned LUS sites. Two SRFs exist (Mar26 and Apr26) with significant structural and definitional changes.
+D1. Common Conditions (Both Mar26 and Apr26)
+[TABLE]
+| KPI | Active LSO & Active SSO (achieved separately per LUS site) |
+| Target Basis | LUS-wise targets shared by B2C |
+| Eligibility | Minimum 80% sites success rate is mandatory (pro-rated basis) |
+| SSO Definition | Active SSO = 2 GA/Pos (LUS-tagged retailer must activate 2 GA to qualify as SSO) |
+| LSO Placement Rule | Newly configured & placed EV SIM in selective site is considered for LSO |
+| BTS Tagging | Month-end BTS tagging used for site-wise LSO & SSO achievement |
+| Incentive Slab | 1–3 sites = BDT 1,000 | 4–9 sites = BDT 2,000 | 10–15 sites = BDT 3,000 | 15+ sites = BDT 4,000 |
+| Scope | Distributors should achieve LUS-wise LSO & SSO targets separately (per site) |
+[/TABLE]
+D2. Key Differences: Mar26 vs Apr26
+[TABLE]
+| Condition | Mar26 | Apr26 | Changed? |
+| LSO Definition | Active LSO = 4 Days Tnx + 200 TK C2S (Core) / 100 TK C2S (Non-Core) | Quality LSO = 500tk C2S + 7 Days C2S | YES — definition and naming changed |
+| Target Structure | 2 slabs: minimum slab and maximum slab targets | Single target (no min/max slab structure) | YES — slab structure removed |
+| Payout by Slab | Min slab achieved = 80% of allocated amount; Max slab = 100% | Not specified (full amount upon achievement) | YES — 80%/100% split removed |
+| Gate (VLR) | Maintain >=80% VLR active | Not explicitly stated in conditions | Removed from details section |
+| Campaign Name | Distributor LUS_LSO_SSO_Campaign_LUS_Mar26 | Distributor LUS_LSO_SSO_Campaign_LUS_Apr26 | — |
+[/TABLE]
+Note: The 'Quality LSO' definition in Apr26 (500tk C2S + 7 Days C2S) represents a higher quality threshold than the Mar26 'Active LSO' (4 Days Tnx + 200/100 TK C2S). This is a meaningful eligibility tightening for LSO.
+6. Section E — Distributor Router / FWA Campaign (Feb26–Apr26)
+Selective distributors earn incentives for successfully installing Banglalink WiFi Routers (FWA — Fixed Wireless Access) within GTM LUS sites. Three consecutive monthly SRFs exist (Feb26, Mar26, Apr26) with fully identical conditions.
+E1. KPI Conditions (Identical across Feb26, Mar26, Apr26)
+[TABLE]
+| KPI | Banglalink WiFi Router Activation in GTM LUS |
+| Eligibility | Selective Distributors only (In-scope distributor + BTS from B2C) |
+| Incentive | BDT 215 per successful installation |
+| Capping | No capping |
+| Achievement | Router activation counted only in selective LUS |
+| Scope Basis | Distributor-wise scope and achievement shared by B2C |
+| Agent List | Last day of campaign month (28 Feb / 31 Mar / 30 Apr) |
+| Rounding | General mathematical rounding |
+| Usage Condition | FWA activation must be in selective GTM LUS |
+[/TABLE]
+7. Section F — RSO Router / FWA Campaign (Feb26–Apr26)
+RSOs earn incentives for successfully installing WiFi Routers in GTM LUS sites — parallel to the Distributor Router Campaign but with a higher per-installation rate. Three SRFs (Feb26, Mar26, Apr26) are identical.
+F1. KPI Conditions (Identical across Feb26, Mar26, Apr26)
+[TABLE]
+| KPI | Banglalink WiFi Router Activation in GTM LUS |
+| Eligibility | Selective RSOs only (In-scope RSO + BTS from B2C) |
+| Incentive | BDT 300 per successful installation |
+| Capping | No capping |
+| Achievement | Router activation counted only in selective LUS |
+| Scope Basis | RSO-wise scope and achievement shared by B2C |
+| Agent List | Last day of campaign month (28 Feb / 31 Mar / 30 Apr) |
+| Rounding | General mathematical rounding |
+| Usage Condition | FWA activation must be in selective GTM LUS |
+[/TABLE]
+Note: RSO rate (BDT 300) is higher than Distributor rate (BDT 215) for the same FWA activation, reflecting RSO's direct role in customer-facing installation.
+8. Section G — RSO Deno HIT Campaign (Jul25)
+RSOs earn cash incentives for achieving cumulative Deno HIT targets from selected LUS sites during a short campaign window (9–13 July 2025).
+G1. KPI Conditions
+[TABLE]
+| KPI | Deno HIT (cumulative) |
+| Recipient | RSO (Field Force) |
+| Campaign Period | 9th to 13th July 2025 |
+| Deno Denominations | 97, 149, 207, 209, 399, 448 |
+| Target Basis | RSO-wise Deno HIT target provided by B2C |
+| Site Mapping | RSO-wise retailer code and LUS site mapping shared by B2C Sales |
+| Achievement Basis | Cumulative Deno from selected LUS sites |
+| Incentive Range | BDT 150 to BDT 350 (RSO-wise HIT target and incentive amount from B2C) |
+| Agent List | Agent list of 13th July 2025 will be considered |
+| Rounding | General mathematical rounding: below 0.5 rounds down; >=0.5 rounds up |
+| Activation | FCD (First Call Date) during the promotion period |
+| Usage Condition | >=95% of total GA must have more than 5 TK usages within 7th of next month |
+| Disconnection | Latest data up to report generation date (T-6) |
+| Product | All Prepaid & successful MNP |
+| Maturity Date | 14th July 2025 |
+[/TABLE]
+Note: This is the only SRF in the LUS folder with a Deno-only RSO campaign (not combined with GA). It uses T-6 disconnection logic and a 5TK usage gate instead of the 48-hour gate used in Retailer GA campaigns.
+9. Section H — GA Support for DD: New/LUS Sites (Apr25)
+Distributors (DD) earn slab-based GA incentives for delivering gross adds at new BL network sites and LUS sites during April 2025. This is the earliest LUS-related SRF in the folder.
+H1. KPI Conditions
+[TABLE]
+| KPI | GA (Gross Add) — slab-based |
+| Recipient | Distributor (DD) |
+| Campaign Period | 1–30 April 2025 |
+| Target Type | Slab-based GA per LUS site (Single LUS type) |
+| Minimum GA | 8 per site |
+| Maximum GA | 30 to 80 (dynamic — shared by B2C via target file) |
+| Incentive Rate | BDT 200 per GA (incremental, within slab) |
+| GA Slab | 8th GA to 30th–80th GA |
+| BTS Tagging | Biometric BTS tag used for site-wise GA attribution; if no Biometric BTS tag → FCD BTS considered |
+| No Retailer-DD Link | Not required to check retailer code against DD; just BTS-wise GA count vs shared target file |
+| Qualified GA Source | BTS-wise qualified GA count shared by B2C in 'G' Column of target file |
+| Max Cap Column | F Column in target file used for maximum GA cap |
+| Cross-Territory GA | Cross-territory GA conditions apply (as per detail format) |
+| Rounding | General mathematical rounding |
+| Disconnection | Between FCD and latest data up to report generation date (T-6) |
+| Usage | At least 1 outgoing call or any amount of data usage within calendar month |
+| Product | Banglalink Prepaid + All MNP (Prepaid) |
+| Reactivation | As per reactivation base |
+| Maturity Date | 5th of following month (5th May 2025) |
+[/TABLE]
+Note: Unlike other LUS GA SRFs, this one uses a slab-based incremental model (not per-GA rate with cap) and evaluates at BTS level rather than at retailer level. It also has a distinct usage gate (1 call or any data within month) versus the 48-hour gate in Retailer LUS campaigns.
+10. Fixed / Invariant General Conditions
+The following conditions are consistent across the majority of LUS SRFs. Variations are noted where they exist.
+[TABLE]
+| Factor | Standard Condition | Exceptions / Variants |
+| Activation | FCD (First Call Date) during the Promotion Period | GA Support (Apr25): Both FAD and FCD checked |
+| SAF — DMS Post Date | 7 days within Activation (ETSAF QC condition as implemented) | Consistent across all |
+| SAF — Vetting Date | 14th date of Activation following month | Consistent across all |
+| Product | All Prepaid & successful MNP | GA Support Apr25: BL Prepaid + All MNP (Prepaid) |
+| Disconnection | Latest data up to report generation date (T-6) | GA Support Apr25: Between FCD and T-6 |
+| Recharge | Valid bundle recharge upsell; I-TOP up | GA Support Apr25: EV+SC Recharge |
+| Rounding | General mathematical rounding (below 0.5 down; >=0.5 up) | All SRFs consistent |
+| Agent List | Agent list of last day of campaign period | RSO Deno Jul25: 13th July (campaign end date) |
+| Report Slot | Disbursement | All SRFs consistent |
+| Input Sources | IT SC, IT BI, DWH, POS (+ DMS for some) | GA Support Apr25: IT SC, DWH, DMS, POS |
+[/TABLE]
+11. SRF Reference Summary Table (All 20 SRFs)
+Complete reference of all 20 SRFs in the LUS folder.
+[TABLE]
+| SRF Title | Recipient | KPI(s) | Incentive | Cap / Gate | Key Unique Condition |
+| Retailer LUS Jan26 | Retailer | GA | Core: 40 TK/GA; Emerging: 35 TK/GA | Cap 200%; Gate >=95% usage 48hr | HIT or Miss; BTS-based GA; 48hr gate 95% |
+| Retailer LUS Feb26 | Retailer | GA | Core: 40 TK/GA; Emerging: 35 TK/GA | Cap 200%; Gate >=95% usage 48hr | Same as Jan26; maturity 8th Mar |
+| Retailer LUS Mar26 | Retailer | GA | Core: 40 TK/GA; Emerging: 35 TK/GA | Cap 200%; Gate >=90% usage 48hr | Gate LOWERED to 90% |
+| Retailer LUS Apr26 | Retailer | GA | Core: 40 TK/GA; Emerging: 35 TK/GA | Cap 200%; Gate >=90% usage 48hr | Same as Mar26 |
+| DD Mgr LUS Jan26 | DD Manager | GA+Deno+LSO+SSO | Weightage-based (in PDF table) | Cap 120%; Multi-gate per KPI | Deno: 109/319/357/498/499/598/599/699; Gates: GA 100%, others 75% |
+| DD Mgr LUS Jan26 Revision | DD Manager | GA+Deno+LSO+SSO | Same as Jan26 | Same as Jan26 | Revised SRF; same conditions as Jan26 |
+| DD Mgr LUS Feb26 | DD Manager | GA+Deno+LSO+SSO | Same structure | Cap 120%; same gates | Deno: 619 replaces 599 |
+| Distributor LUS Feb26 | Distributor | GA | BDT 30/GA | Cap 120%; Min 80% target; Gate >=80% VLR | Selective distributors; VLR gate |
+| Distributor LUS Feb26 Revision | Distributor | GA | BDT 30/GA | Cap 120%; Min 80% target; Gate >=80% VLR | Same as Feb26 |
+| Distributor LUS GA Apr26 | Distributor | GA | BDT 30/GA | Cap 150%; Min 80% target; Gate >=80% VLR | Cap RAISED to 150% |
+| Distributor LSO+SSO Mar26 | Distributor | LSO + SSO | BDT 1K–4K slab (site count) | Min 80% sites; Gate >=80% VLR | Active LSO=4 Days Tnx+200/100 TK C2S; min/max slab payout 80%/100% |
+| Distributor LSO+SSO Apr26 | Distributor | LSO + SSO | BDT 1K–4K slab (site count) | Min 80% sites; no VLR gate stated | Quality LSO=500tk C2S+7 Days C2S; single target; slab payout removed |
+| Distributor Router Feb26 | Distributor | FWA Activation | BDT 215/installation | No cap | GTM LUS only; no capping; selective scope |
+| Distributor Router Mar26 | Distributor | FWA Activation | BDT 215/installation | No cap | Same as Feb26 |
+| Distributor Router Apr26 | Distributor | FWA Activation | BDT 215/installation | No cap | Same as Feb26 |
+| RSO Router Feb26 | RSO | FWA Activation | BDT 300/installation | No cap | GTM LUS only; RSO rate higher than distributor |
+| RSO Router Mar26 | RSO | FWA Activation | BDT 300/installation | No cap | Same as Feb26 |
+| RSO Router Apr26 | RSO | FWA Activation | BDT 300/installation | No cap | Same as Feb26 |
+| RSO Deno HIT Jul25 | RSO | Deno HIT (cumulative) | BDT 150–350 (RSO-wise) | Agent list 13 Jul only | Deno: 97/149/207/209/399/448; 5TK usage gate within 7th next month |
+| GA Support DD Apr25 | Distributor (DD) | GA (slab) | BDT 200/GA (incremental) | Min 8 GA; Max 30–80 (dynamic) | BTS-level, not retailer-level; F&G columns from B2C; 1 call/data usage gate |
+[/TABLE]

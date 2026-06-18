@@ -1,0 +1,333 @@
+BP GA Campaign
+Unique KPI Conditions Reference
+Extracted from 15 Service Request Forms (SRFs)
+Campaign Types: BP GA Bonanza (14 SRFs) + BP GA Booster Campaign (1 SRF)
+Period: August 2025 – April 2026 | Department: Channel Planning
+## Table of Contents
+Section 1:  Folder Overview — BP GA SRF Catalogue
+Section 2:  Universal Conditions (All 15 SRFs)
+Section 3:  KPI Core Definition — Gross Addition (GA)
+Section 4:  GA Counting Method — Two Variants
+Variant A: Cluster-Based GA (Aug 2025 SRF)
+Variant B: BP Assist Code-Wise GA (Nov 2025 – Apr 2026)
+Section 5:  Gate Conditions — 48hr Usage & VLR Active Thresholds
+Gate Threshold Evolution Across Campaigns
+Special VLR Prorated Rule (Apr 2026 Phase 2)
+Section 6:  Reward / Incentive Structures
+Structure Type 1: Weekly/Monthly Slab with Physical Gifts (Aug 2025)
+Structure Type 2: Phase-Based Gift Vouchers (Nov & Dec 2025)
+Structure Type 3: Multi-Slab Cash Incentive (Jan 2026 onward)
+Structure Type 4: Single-Target Flat Cash Incentive (Booster Campaign)
+Structure Type 5: Cumulative Phase + Phase Makeup Incentive (Apr 2026 Phase 2)
+Section 7:  ETSAF & SAF Conditions
+Section 8:  AIT (Tax) Treatment
+Section 9:  Eligibility — Agent List & Minimum GA Threshold
+Section 10:  Rounding & Calculation Rules
+Section 11:  Maturity Date & Report Publication
+Section 12:  Campaign-by-Campaign Quick Reference Table
+## 1. Folder Overview — BP GA SRF Catalogue
+The 'BP GA' folder contains 15 SRFs covering short-duration BP (Brand Promoter) Gross Addition incentive campaigns. Campaigns run in 7-to-31-day windows, with multiple drives per month from January 2026 onward. All campaigns incentivize BPs to achieve GA targets using gift vouchers or cash incentives.
+[TABLE]
+| Campaign Type | SRF Count | Period | Reward Type | GA Counting Method |
+| BP GA Bonanza | 14 | Aug 2025 – Apr 2026 | Physical gifts / Vouchers / Cash incentive | Cluster-based (Aug25) → BP Assist Code-wise (Nov25+) |
+| BP GA Booster Campaign | 1 | 21–31 Jan 2026 | Cash incentive (BDT 1,500) | BP Assist Code-wise GA |
+[/TABLE]
+[TABLE]
+| Requester(s) | Noyemul Islam (primary); Sadia Tahsin Ananna (some Jan/Feb/Mar 2026 SRFs) |
+| Manager | Md Hasibul Karim |
+| Department | Channel Planning |
+| Recipient Type | Field Force: BP (Brand Promoters) |
+| Product Type | Prepaid (GA = new Prepaid activations + successful MNP) |
+[/TABLE]
+## 2. Universal Conditions (All 15 SRFs)
+These conditions appear identically across all BP GA SRFs:
+[TABLE]
+| KPI | GA (Gross Addition) |
+| Recipient | Field Force: BP (Brand Promoters) |
+| Activation Basis | FCD (First Call Date) — activation during promotion period |
+| Product | All Prepaid & successful MNP |
+| Usage Condition | Valid Usage = 48 Hours usages (48hr usage after activation) |
+| VLR Condition | VLR Active (subscriber must be on VLR active status) |
+| Lifting/Issue | N/A — needs to be activated within 365 days of lifting |
+| Recharge | All Valid C2S Recharges (i-TOP up; bundle recharge upsell) |
+| Disconnection | N/A — latest data up to report generation date (T-6) |
+| ETSAF | Above ETSAF QC condition will be considered as implemented |
+| Data Source — IT | IT SC + IT BI + DWH |
+| Data Source — Other | POS |
+| Target Provider | B2C team (provides targets and achievement data) |
+| GA Attribution | Report extracted by BP |
+| Rounding | Standard mathematical rounding: <0.5 rounds down, ≥0.5 rounds up |
+| Max Reward per Period | BP eligible for 1 gift/incentive maximum (highest slab achieved) |
+| Report Sharing | Disbursement report (Provision report not typically checked) |
+[/TABLE]
+## 3. KPI Core Definition — Gross Addition (GA)
+[TABLE]
+| KPI Full Name | Gross Addition (GA) |
+| Definition | New Prepaid subscriber activations attributed to a BP, plus successful MNP (Mobile Number Portability) transfers |
+| Activation Basis | FCD (First Call Date) — the date of first call on the new SIM |
+| Campaign Period | Activation must occur within the campaign's Effective Date to End Date |
+| Product Scope | All Prepaid connections; successful MNP included |
+| Excluded | Data SIM (MMSTDATA), EV SIM, TCG Barred connections, Self-barred connections (from Nov 2025 onward) |
+| TCG Bar Exclusion | Any type of TCG Bar and self-barred connections will not be counted in achievement (explicit from Nov 2025) |
+| Achievement % | Calculated as: (Actual GA ÷ Target GA) × 100, rounded per rounding rule |
+| Threshold to Qualify | Varies by SRF — 100% of target required for each slab; or minimum absolute GA count |
+[/TABLE]
+## 4. GA Counting Method — Two Variants
+Two distinct methods for attributing GA to a BP were used across the 15 SRFs:
+## 4.1 Variant A: Cluster-Based GA (Aug 2025 SRF only)
+The Aug 2025 SRF used a cluster-differentiated GA attribution model:
+[TABLE]
+| SRF | BP GA Bonanza_1st to 31st Aug25 |
+| Cluster Rule 1 — North East & West Cluster | GA means FCD. BP Wise Retailer code will be shared by B2C. |
+| Cluster Rule 2 — North, East & Central Cluster | BP wise designated Retailer FCD data AND BP wise SMART POS (CODE: ARRANGED-3) both GA will be considered for incentive. (BP wise Retailer code shared by B2C.) |
+| Implication | In some clusters, SMART POS data supplements FCD data for GA counting — broadening what counts as a GA for BPs in those regions |
+[/TABLE]
+Note: This dual-source (FCD + SMART POS) GA attribution was unique to the Aug 2025 SRF and was not carried forward to later SRFs.
+## 4.2 Variant B: BP Assist Code-Wise GA (Nov 2025 – Apr 2026)
+[TABLE]
+| SRFs | All 14 SRFs from Nov 2025 onward (including Booster Campaign) |
+| Formula | BP GA = BP Assist Code wise GA |
+| Meaning | GA is attributed to a BP based on their unique 'Assist Code' — connections assisted or facilitated by that BP code |
+| Standardisation | Single, uniform counting method applied across all clusters and regions |
+| Advantage | Eliminates cluster-specific variation; all BPs measured the same way regardless of geography |
+[/TABLE]
+## 5. Gate Conditions — 48hr Usage & VLR Active Thresholds
+All 15 SRFs require both gate conditions to be met as a prerequisite for incentive eligibility. A BP failing either gate is disqualified regardless of GA achievement.
+[TABLE]
+| Gate 1 — 48hr Usage | ≥ X% of activated subscribers must have 48-hour usage (threshold varies by SRF) |
+| Gate 2 — VLR Active | ≥ X% of activated subscribers must be VLR Active (threshold varies by SRF) |
+| Data Provider | B2C team shares achievement data for both gates |
+| Consequence of Failure | BP is ineligible for any incentive regardless of GA count |
+[/TABLE]
+## 5.1 Gate Threshold Evolution Across Campaigns
+[TABLE]
+| SRF / Period | 48hr Usage Gate | VLR Active Gate | Notes |
+| Aug 2025 (full month) | ≥91% | ≥91% | Highest gates in entire series |
+| Nov 2025 (3 phases) | ≥90% | ≥90% | Slightly relaxed from Aug |
+| Dec 2025 (1–7 Dec) | ≥80% | ≥80% | Reduced to 80% |
+| Jan 2026 (1–7 Jan) | ≥85% | ≥85% | Raised back to 85% |
+| Jan 2026 (8–15 Jan) | ≥85% | ≥85% | Consistent |
+| Jan 2026 (16–25 Jan) | ≥80% | ≥80% | Relaxed for this window |
+| Jan 2026 Booster (21–31 Jan) | ≥80% | ≥80% | Booster campaign |
+| Feb 2026 (1–13 Feb) | ≥80% | ≥80% | Consistent |
+| Feb 2026 (14–21 Feb) | ≥85% | ≥85% | Raised |
+| Feb 2026 (22–28 Feb) | ≥85% | ≥85% | Consistent |
+| Mar 2026 (1–10 Mar) | ≥85% | ≥85% | Consistent |
+| Mar 2026 (11–20 Mar) | ≥85% | ≥85% | Consistent |
+| Mar 2026 (23–31 Mar) | ≥85% | ≥85% | Consistent |
+| Apr 2026 (1–10 Apr) | ≥85% | ≥85% | Consistent |
+| Apr 2026 (11–20 Apr) | ≥85% | ≥85% (standard) — special rule for North Cluster | See Section 5.2 |
+[/TABLE]
+## 5.2 Special VLR Prorated Rule — Apr 2026 Phase 2 (11–20 Apr)
+The Apr 2026 Phase 2 SRF introduced a unique prorated VLR rule for the North Cluster only:
+[TABLE]
+| Standard Rule (all clusters) | VLR ≥85% → full incentive eligible |
+| North Cluster — Full Incentive | VLR ≥85% → receives 100% of applicable incentive |
+| North Cluster — Prorated Incentive | VLR ≥75% and <85% → receives prorated incentive based on VLR% achieved |
+| North Cluster — No Incentive | VLR <75% → not eligible for any incentive |
+| 48hr Gate | ≥85% for all clusters (no North Cluster exception for 48hr) |
+| TCG/Self-Bar | Any type of TCG Bar and self-barred connections excluded from achievement |
+[/TABLE]
+Note: This prorated VLR gate was unique to the Apr 2026 Phase 2 SRF — the first and only instance of a partial/prorated gate condition in the entire BP GA series.
+## 6. Reward / Incentive Structures
+Five distinct incentive structure types were used across the 15 BP GA SRFs:
+## 6.1 Structure Type 1 — Weekly/Monthly Slab with Physical Gifts (Aug 2025)
+The Aug 2025 SRF used a 4-week cumulative target model with physical gift rewards:
+[TABLE]
+| SRF | BP GA Bonanza_1st to 31st Aug25 |
+| Period | 1–31 August 2025 (full month) |
+| Target Type | Cumulative weekly targets with overlapping windows |
+| Minimum GA to Qualify | Not stated — slab achievement drives eligibility |
+| Max Gifts | 1 gift per BP (highest slab reached) |
+[/TABLE]
+[TABLE]
+| Week | Date Range | Cumulative Target | Slab Achieved If... | Reward |
+| Week 1 | 1–7 Aug 2025 | Target: 20 GA | (no standalone slab) | — |
+| Week 2 | 1–14 Aug 2025 | Target: 40 GA | 100% Wk 2 + ≥90% monthly target | Grocery Box (BDT 500 worth) |
+| Week 3 | 1–21 Aug 2025 | Target: 60 GA | 100% Wk 3 + ≥95% monthly target | Iron (BDT 800 worth) |
+| Week 4 | 1–31 Aug 2025 | Target: 80 GA | 100% Week 4 target | Melamain Set (BDT 1,200 worth) |
+[/TABLE]
+Note: The Aug 2025 slab eligibility requires BOTH weekly AND monthly achievement simultaneously. This dual-condition gate (e.g., Slab 1 = 100% of Week 2 target AND ≥90% monthly target) was the most complex slab structure in the entire BP GA series.
+## 6.2 Structure Type 2 — Phase-Based Gift Vouchers (Nov & Dec 2025)
+Nov and Dec 2025 used a phase-based voucher structure with simpler single-target achievement:
+Nov 2025 — Three Phases:
+[TABLE]
+| Phase | Date Range | Target | Gate (48hr/VLR) | Achievement Required | Reward |
+| Phase 1 | 1–7 Nov 2025 | B2C-set target | ≥90% / ≥90% | ≥100% of Phase 1 target | BDT 500 worth voucher |
+| Phase 2 | 1–15 Nov 2025 | B2C-set target | ≥90% / ≥90% | ≥100% of Phase 2 target | BDT 500 worth voucher |
+| Phase 3 | 1–22 Nov 2025 | B2C-set target | ≥90% / ≥90% | ≥100% of Phase 3 target | BDT 500 worth voucher |
+[/TABLE]
+[TABLE]
+| Recipient Attribution | Report extracted by RSO (not BP — unique to Nov 2025 among all SRFs) |
+| GA Formula | BP GA = BP Code GA (not 'Assist Code' — uses BP Code, not yet standardised to Assist Code) |
+| Max Gifts | 1 gift per phase per BP |
+[/TABLE]
+Note: Nov 2025 is the only SRF where: (1) report is extracted by RSO instead of BP, and (2) GA formula uses 'BP Code GA' rather than 'BP Assist Code GA'.
+Dec 2025 — Single Phase:
+[TABLE]
+| Phase | Date Range | Min GA | Gate (48hr/VLR) | Achievement Required | Reward |
+| Phase 1 | 1–7 Dec 2025 | Min 20 GA | ≥80% / ≥80% | ≥100% of Phase 1 target (20 GA/BP) | BDT 500 worth voucher |
+[/TABLE]
+[TABLE]
+| First appearance of minimum absolute GA threshold | Dec 2025 introduces 'minimum 20 GA' as an explicit floor |
+| Agent List | BP list of 7th Dec 2025 will be considered |
+[/TABLE]
+## 6.3 Structure Type 3 — Multi-Slab Cash Incentive (Jan 2026 onward)
+From Jan 2026, the reward type shifted from vouchers/gifts to cash BDT incentives, with 2-slab or 3-slab structures and explicit minimum GA targets:
+[TABLE]
+| SRF / Period | Slab 1 Target | Slab 1 Reward | Slab 2 Target | Slab 2 Reward | AIT |
+| Jan 2026 (1–7 Jan) | Min 25 GA (100%) | BDT 1,000 voucher | — | — | No |
+| Jan 2026 (8–15 Jan) | 24 GA (100%) | BDT 500 voucher | 32 GA (100%) | BDT 1,000 [Slab 3: 40 GA → BDT 1,500] | No |
+| Jan 2026 (16–25 Jan) | 24 GA (100%) | BDT 500 voucher | 35 GA (100%) | BDT 1,000 [Slab 3: 40 GA → BDT 1,500] | No |
+| Feb 2026 (1–13 Feb) | 30 GA (100%) | BDT 1,000 cash | 50 GA (100%) | BDT 2,000 cash | YES |
+| Feb 2026 (14–21 Feb) | 30 GA (100%) | BDT 500 cash | 50 GA (100%) | BDT 1,500 cash | YES |
+| Feb 2026 (22–28 Feb) | 20 GA (100%) | BDT 500 cash | 30 GA (100%) | BDT 1,500 cash | YES |
+| Mar 2026 (1–10 Mar) | 30 GA (100%) | BDT 1,000 cash | 40 GA (100%) | BDT 2,000 cash | YES |
+| Mar 2026 (11–20 Mar) | 30 GA (100%) | BDT 800 cash | 40 GA (100%) | BDT 1,600 cash | YES |
+| Mar 2026 (23–31 Mar) | 25 GA (100%) | BDT 500 cash | 35 GA (100%) | BDT 1,000 cash | YES |
+| Apr 2026 (1–10 Apr) | 30 GA (100%) | BDT 500 cash | 40 GA (100%) | BDT 1,000 cash | YES |
+| Apr 2026 (11–20 Apr) Phase 2 only | 30 GA (100%) | BDT 800 cash | 40 GA (100%) | BDT 1,600 cash | YES |
+[/TABLE]
+Note: AIT (Advance Income Tax) is applicable on cash incentives from Feb 2026 onward. Jan 2026 SRFs used vouchers (not cash) and did not specify AIT.
+## 6.4 Structure Type 4 — Single-Target Flat Cash Incentive (Booster Campaign)
+The Booster Campaign used a simpler single flat-rate incentive:
+[TABLE]
+| SRF | BP GA Booster Campaign_21st to 31st Jan26 |
+| Period | 21–31 January 2026 |
+| Target | Achieve 40 GA |
+| Commission | BDT 1,500 incentive (no slabs — binary: hit 40 GA or nothing) |
+| Gate | 48hr ≥80%, VLR ≥80% |
+| AIT | Not specified |
+| ETSAF | 98% of ETSAF (Total against activation before Disconnection) must be vetted and accepted by Banglalink within 7th of following month |
+| SAF Condition | Explicit 98% ETSAF requirement stated (more detail than other SRFs) |
+| Recharge Detail | Expanded definition: EV (SR to Retailer R2RT and distributor to Retailer D2RT), DTR (Manual and Daily Commission from Salescom) and OTF (EV OTF + IRIS OTF), S.C (Retail lifting per DMS entry), Data/Voice/Mix bundle (i-TOP up) |
+[/TABLE]
+Note: The Booster Campaign's recharge section is the most detailed in the series — explicitly listing R2RT, D2RT, DTR, OTF, IRIS OTF sub-types. This level of detail was not present in other BP GA SRFs.
+## 6.5 Structure Type 5 — Cumulative Phase Makeup Incentive (Apr 2026 Phase 2)
+The Apr 2026 Phase 2 SRF introduced a unique combined Phase 1+2 makeup option:
+[TABLE]
+| SRF | BP GA Bonanza_11th to 20th Apr26 |
+| Standard Phase 2 Slabs | Slab 1: 30 GA → BDT 800 | Slab 2: 40 GA → BDT 1,600 |
+| Makeup Option (Phase 1+2 Combined) | Slab 1: 60 GA cumulative → BDT 1,300 | Slab 2: 80 GA cumulative → BDT 2,600 |
+| Makeup Purpose | Allows BPs who missed Phase 1 target (or only achieved Slab 1 in Phase 1) to earn higher incentive by combining Phase 1+2 GA |
+| Deduction Rule | From Phase 1+2 incentive, deduct any incentive already received in Phase 1 |
+| Eligibility for Makeup | Only for BPs who: (a) missed Phase 1 target entirely, OR (b) achieved only Slab 1 in Phase 1 |
+| Exclusion from Makeup | Who achieved Slab 2 in Phase 1 → not eligible for Phase 1+2 Slab 1 makeup |
+[/TABLE]
+Note: This makeup/catch-up mechanism is the only instance in the BP GA series where performance from two consecutive periods is combined for incentive eligibility. It effectively gives struggling BPs a second chance.
+## 7. ETSAF & SAF Conditions
+[TABLE]
+| Standard ETSAF (most SRFs) | Above ETSAF QC condition will be considered as implemented (general reference) |
+| Aug 2025 Explicit ETSAF | At least 98% (Total against activation before Disconnection) ETSAF vetted/submitted and accepted within 7th of following month |
+| Booster Campaign ETSAF | 98% of ETSAF (Total against activation before Disconnection) must be vetted and accepted by Banglalink within 7th of following month |
+| ETSAF Scope | Applied against all activations before disconnection — not just active subscribers |
+| Deadline | 7th of following month from activation date |
+| Consequence | Non-compliance with ETSAF gate disqualifies the BP from incentive |
+[/TABLE]
+Note: Most SRFs reference ETSAF generically ('above ETSAF QC condition will be considered'). The Aug 2025 and Booster Campaign SRFs are the only ones with explicit 98% thresholds stated — all SRFs implicitly carry this standard.
+## 8. AIT (Tax) Treatment
+[TABLE]
+| Aug 2025 – Jan 2026 SRFs | AIT not mentioned — rewards were physical gifts and vouchers |
+| Feb 2026 onward (cash incentive SRFs) | AIT Applicable — stated explicitly in each SRF from Feb 2026 |
+| AIT trigger | AIT applies when reward type is cash BDT incentive; does not apply to gift vouchers/physical gifts |
+| AIT rate | Not specified in SRFs — standard BDT income tax rate applies |
+| Disbursement implication | Cash incentives from Feb 2026 must have AIT deducted before disbursement |
+[/TABLE]
+[TABLE]
+| Period | Reward Type | AIT Applicable? |
+| Aug 2025 | Physical gifts (Grocery Box, Iron, Melamain Set) | No |
+| Nov 2025 | BDT 500 worth Gift Voucher | No |
+| Dec 2025 | BDT 500 worth Gift Voucher | No |
+| Jan 2026 (1–7, 8–15, 16–25) | Gift Voucher (BDT 500/1,000/1,500) | No |
+| Jan 2026 Booster (21–31) | Cash BDT 1,500 | Not stated |
+| Feb 2026 onward (all SRFs) | Cash BDT incentive | YES |
+[/TABLE]
+## 9. Eligibility — Agent List & Minimum GA Threshold
+Two eligibility controls apply: which BP list is used and the minimum GA to be eligible for any slab:
+## 9.1 Agent List Snapshot Rule
+[TABLE]
+| Rule | The BP agent list as of the campaign END DATE is used to determine eligible BPs |
+| Example | 'Agent list of 31st Aug 2025 will be considered' — BPs who joined or left before/after this date are handled accordingly |
+| Implication | BPs must be on the active roster as of the last day of each campaign window to be eligible |
+[/TABLE]
+[TABLE]
+| SRF | Agent List Snapshot Date |
+| Aug 2025 (1–31 Aug) | 31st Aug 2025 |
+| Nov 2025 (1–30 Nov) | 30th Nov 2025 |
+| Dec 2025 (1–7 Dec) | 7th Dec 2025 |
+| Jan 2026 (1–7 Jan) | 7th Jan 2026 |
+| Jan 2026 (8–15 Jan) | 15th Jan 2026 |
+| Jan 2026 (16–25 Jan) | 25th Jan 2026 |
+| Jan 2026 Booster (21–31 Jan) | 31st Jan 2026 |
+| Feb 2026 (1–13 Feb) | 13th Feb 2026 |
+| Feb 2026 (14–21 Feb) | 21st Feb 2026 |
+| Feb 2026 (22–28 Feb) | 28th Feb 2026 |
+| Mar 2026 (1–10 Mar) | 10th Mar 2026 |
+| Mar 2026 (11–20 Mar) | 20th Mar 2026 |
+| Mar 2026 (23–31 Mar) | 31st Mar 2026 |
+| Apr 2026 (1–10 Apr) | 10th Apr 2026 |
+| Apr 2026 (11–20 Apr) | 20th Apr 2026 |
+[/TABLE]
+## 9.2 Minimum GA Threshold
+[TABLE]
+| SRF / Period | Minimum GA to Qualify | Notes |
+| Aug 2025 | Not stated (slab-based only) | No explicit floor |
+| Nov 2025 | Not stated | 100% of target required per phase |
+| Dec 2025 | Minimum 20 GA/BP | First explicit minimum in series |
+| Jan 2026 (1–7) | Minimum 25 GA | Single-slab; 25 GA = P1 target |
+| Jan 2026 (8–15) | 24 GA (Slab 1 target) | Must hit 100% of slab target |
+| Jan 2026 (16–25) | 24 GA (Slab 1 target) | Must hit 100% of slab target |
+| Jan 2026 Booster | 40 GA (flat target) | Binary threshold |
+| Feb–Apr 2026 (all) | Varies by slab (20–30 GA for Slab 1) | 100% of slab target required |
+[/TABLE]
+## 10. Rounding & Calculation Rules
+[TABLE]
+| Rounding Rule | Standard mathematical rounding |
+| Round Down | Achievement below 0.5 (e.g., 24.4 GA) rounds down |
+| Round Up | Achievement ≥0.5 (e.g., 24.5 GA) rounds up |
+| Application | Applied to achievement % calculation (Actual GA ÷ Target GA × 100) |
+| Consistency | Identical across all 15 SRFs — no variation |
+[/TABLE]
+## 11. Maturity Date & Report Publication
+[TABLE]
+| SRF / Period | Maturity Date for Data | Report Published Date |
+| Aug 2025 (1–31 Aug) | 8th Sep 2025 | As per tracker |
+| Nov 2025 (1–30 Nov) | 3rd of following month (3rd Dec 2025) | As per tracker |
+| Dec 2025 (1–7 Dec) | 3rd of following month (3rd Jan 2026) | As per tracker |
+| Jan 2026 (1–7 Jan) | 8th Jan 2026 | As per tracker |
+| Jan 2026 (8–15 Jan) | 18th Jan 2026 | As per tracker |
+| Jan 2026 (16–25 Jan) | 27th Jan 2026 | As per tracker |
+| Jan 2026 Booster (21–31) | 3rd Feb 2026 | As per tracker |
+| Feb 2026 (1–13 Feb) | 15th Feb 2026 | As per tracker |
+| Feb 2026 (14–21 Feb) | 24th Feb 2026 | As per tracker |
+| Feb 2026 (22–28 Feb) | 6th Mar 2026 | As per tracker |
+| Mar 2026 (1–10 Mar) | Not specified | As per tracker |
+| Mar 2026 (11–20 Mar) | Not specified | As per tracker |
+| Mar 2026 (23–31 Mar) | Not specified | As per tracker |
+| Apr 2026 (1–10 Apr) | Not specified | As per tracker |
+| Apr 2026 (11–20 Apr) | Not specified | As per tracker |
+[/TABLE]
+Note: Maturity dates for Mar and Apr 2026 SRFs were not explicitly stated in the extracted text — they follow the pattern of campaign-end + ~3–6 days.
+## 12. Campaign-by-Campaign Quick Reference Table
+All 15 SRFs summarised — unique KPI parameters highlighted:
+[TABLE]
+| SRF / Period | Campaign Type | GA Formula | Gate 48hr/VLR | Slabs | Reward Type | Min GA | AIT |
+| Aug 2025 (full month) | Bonanza | Cluster-based FCD + SMART POS | ≥91%/≥91% | 3 slabs (wk+monthly) | Physical gifts | None stated | No |
+| Nov 2025 (3 phases) | Bonanza | BP Code GA | ≥90%/≥90% | 1 per phase (3 phases) | BDT 500 voucher each | None stated | No |
+| Dec 2025 (1–7 Dec) | Bonanza | BP Assist Code | ≥80%/≥80% | 1 slab (P1 only) | BDT 500 voucher | 20 GA | No |
+| Jan 1–7 Jan26 | Bonanza | BP Assist Code | ≥85%/≥85% | 1 slab | BDT 1,000 voucher | 25 GA | No |
+| Jan 8–15 Jan26 | Bonanza | BP Assist Code | ≥85%/≥85% | 3 slabs | BDT 500/1,000/1,500 voucher | 24 GA | No |
+| Jan 16–25 Jan26 | Bonanza | BP Assist Code | ≥80%/≥80% | 3 slabs | BDT 500/1,000/1,500 voucher | 24 GA | No |
+| Jan 21–31 Jan26 | Booster | BP Assist Code | ≥80%/≥80% | Flat (40 GA) | BDT 1,500 cash | 40 GA | Not stated |
+| Feb 1–13 Feb26 | Bonanza | BP Assist Code | ≥80%/≥80% | 2 slabs | BDT 1,000/2,000 cash | 30 GA | YES |
+| Feb 14–21 Feb26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 500/1,500 cash | 30 GA | YES |
+| Feb 22–28 Feb26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 500/1,500 cash | 20 GA | YES |
+| Mar 1–10 Mar26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 1,000/2,000 cash | 30 GA | YES |
+| Mar 11–20 Mar26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 800/1,600 cash | 30 GA | YES |
+| Mar 23–31 Mar26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 500/1,000 cash | 25 GA | YES |
+| Apr 1–10 Apr26 | Bonanza | BP Assist Code | ≥85%/≥85% | 2 slabs | BDT 500/1,000 cash | 30 GA | YES |
+| Apr 11–20 Apr26 | Bonanza | BP Assist Code | ≥85%/≥85%* | 2+makeup slabs | BDT 800/1,600 cash (+makeup) | 30 GA | YES |
+[/TABLE]
+Note: * Apr 2026 Phase 2 has North Cluster VLR prorated rule (see Section 5.2). Makeup option allows Phase 1+2 combined targets of 60/80 GA for BDT 1,300/2,600.
+Document generated from 15 BP GA SRFs (Aug 2025 – Apr 2026).
+Requester: Noyemul Islam / Sadia Tahsin Ananna | Department: Channel Planning, Banglalink.

@@ -1,0 +1,277 @@
+Banglalink SalesCom — Distributor Scratch Card
+Unique KPI Conditions Reference
+Compiled from all 10 SRFs  |  Dec 2025 – Apr 2026
+Index
+1   Overview & SRF Coverage
+2   Campaign Type Summary — Lifting vs Tertiary
+3   Campaign Type A: SC Lifting Discount Campaigns (7 SRFs)
+3.1     Common Conditions — All Lifting Campaigns
+3.2     Achievement vs Incentive Calculation Basis
+3.3     Cap / Ceiling Variants
+3.4     Eligible Card Set Variants
+3.5     Commission Rate Variants
+3.6     Special Eligibility Gate (Feb26 17-22)
+3.7     Incentive Exclusion from Incentive Basis (Jan26 6-11)
+4   Campaign Type B: SC Tertiary Campaigns (3 SRFs)
+4.1     Common Conditions — All Tertiary Campaigns
+4.2     Tertiary Metric Definition
+4.3     Celebration Budget Rule
+5   Product Reference — All Scratch Card Codes Used
+6   Version Comparison Table — All 10 SRFs
+7   Maturity Date Summary
+8   General Conditions (All SRFs)
+9   Glossary
+1. Overview & SRF Coverage
+[TABLE]
+| Programme | Distributor Scratch Card Campaign |
+| SRF Count | 10 SRFs (Dec 2025 – Apr 2026) |
+| Recipient | DD — Direct Distributor |
+| Product Type | Scratch Card (SC) |
+| Campaign Types | Two types: (A) SC Lifting Discount — 7 SRFs; (B) SC Tertiary — 3 SRFs |
+| Periodicity | Ad-hoc; each SRF covers a specific campaign window (multi-day, within a month) |
+| Report Slot | Disbursement — end of campaign |
+[/TABLE]
+All campaigns are short-window, ad-hoc incentive schemes issued to distributors (DDs). Lifting campaigns reward DDs for purchasing (lifting) scratch cards from the warehouse. Tertiary campaigns reward DDs for ensuring scratch cards are recharged by end subscribers via BTS-wise SC recharge. Both types are independent and may run concurrently within the same calendar period.
+2. Campaign Type Summary — Lifting vs Tertiary
+[TABLE]
+| Dimension | Type A: Lifting Discount | Type B: Tertiary |
+| KPI Measured | Warehouse → Distributor SC lifting volume | DD BTS-wise SC recharge (Retailer → Subscriber) |
+| Achievement Basis | Face value of SC lifted (cumulative) | Cumulative SC tertiary target (BTS-wise) |
+| Incentive Basis | Face value or Lifting value (varies) | Amount shared by B2C (DD-wise target) |
+| Commission Rate | 1% (most SRFs) or B2C-defined amount | B2C-defined amount (no fixed % in SRF) |
+| Celebration Budget | None | TK 200 per RSO upon achieving target |
+| Achievement Criteria | % achievement (threshold = 100%) | Hit/Miss (binary) |
+| Cap | No cap / 150% (varies by SRF) | Not specified |
+| SRF Count | 7 SRFs | 3 SRFs |
+[/TABLE]
+3. Campaign Type A: SC Lifting Discount Campaigns (7 SRFs)
+Seven SRFs cover lifting discount campaigns across Dec 2025 – Mar 2026. While they share a common structure, there are meaningful variations in commission basis, cap rules, eligible card sets, and eligibility gate conditions.
+3.1  Common Conditions — All Lifting Campaigns
+[TABLE]
+| Trigger | DD achieves 100% or above of SC Lifting target (Face value) cumulatively during campaign period |
+| Lifting Direction | Warehouse to Distributor (W→D) only — not Distributor to Retailer |
+| Measurement | Face value of selected SC products lifted during the campaign window |
+| Rounding | General mathematical rounding: below 0.5 rounds down; 0.5 and above rounds up |
+| Agent List Date | Last day of the campaign period (date stated in each SRF) |
+| Commission | 1% on value (face or lifting) — amount shared by B2C for some SRFs |
+[/TABLE]
+3.2  Achievement vs Incentive Calculation Basis
+Most lifting SRFs use Face Value for both achievement measurement and incentive calculation. However, one SRF (Jan26 1-12) uniquely uses Lifting Value for incentive calculation while retaining Face Value for achievement measurement:
+[TABLE]
+| SRF | Achievement Basis | Incentive Calculation Basis | Note |
+| Dec25 (9-11 Dec) | Face value | Face value | Standard |
+| Jan26 (1-12 Jan) | Face value | Lifting value | UNIQUE — incentive on lifting price, not face value |
+| Jan26 (6-11 Jan) | Face value | Face value | Excludes SCV-39-60M-48H from incentive (see 3.7) |
+| Jan26 (14-22 Jan) | Face value | Face value | Standard |
+| Feb26 (1-8 Feb) | Face value | Face value | Standard |
+| Feb26 (17-22 Feb) | Face value | B2C-defined | No % rate stated; eligibility gate applies |
+| Mar26 (10-15 Mar) | Face value | Face value | 1% rate; broadest product list |
+[/TABLE]
+i  Lifting value = the actual price paid by the distributor (typically 96.25% of face value). Face value = the printed denomination on the scratch card.
+3.3  Cap / Ceiling Variants
+[TABLE]
+| SRF | Cap Condition |
+| Dec25 (9-11 Dec) | No cap — incentive is uncapped |
+| Jan26 (1-12 Jan) | Capped at 150% of target |
+| Jan26 (6-11 Jan) | Capped at 150% of target |
+| Jan26 (14-22 Jan) | Capped at 150% of target |
+| Feb26 (1-8 Feb) | Uncapped (stated as 'Incentives capped uncapped') |
+| Feb26 (17-22 Feb) | Not mentioned — B2C-defined |
+| Mar26 (10-15 Mar) | Capped at 150% of target |
+[/TABLE]
+i  150% cap means the incentive is calculated only up to 150% of the lifting target even if actual lifting exceeds 150%.
+3.4  Eligible Card Set Variants
+The set of SC products qualifying for the campaign varies significantly across SRFs:
+[TABLE]
+| SRF | Eligible SC Products | No. of Products |
+| Dec25 (9-11 Dec) | SCV-29-45M-24H, SCV-39-60M-48H | 2 |
+| Jan26 (1-12 Jan) | SCV-39-60M-48H | 1 (narrowest) |
+| Jan26 (6-11 Jan) | Multiple (list shared by B2C), must include SCV-39-60M-48H | B2C-defined |
+| Jan26 (14-22 Jan) | SCV-29-45M-24H, SCV-39-60M-48H, SCD-39-GB1-24H | 3 |
+| Feb26 (1-8 Feb) | SCV-39-60M-48H, SCD-49-1GB-24H | 2 |
+| Feb26 (17-22 Feb) | SCD-39-GB1-24H, SCD-39-MB500-24H, SCD-49-1GB-24H, SCV-29-45M-24H, SCV-39-60M-3D, SCV-39-60M-48H | 6 |
+| Mar26 (10-15 Mar) | Full product range: 27 SC codes (see Section 5) | 27 (broadest) |
+[/TABLE]
+3.5  Commission Rate Variants
+[TABLE]
+| SRF | Commission Rate | Applied On |
+| Dec25 (9-11 Dec) | 1% | Face value of SCV-29-45M-24H and SCV-39-60M-48H |
+| Jan26 (1-12 Jan) | 1% | Lifting value of SCV-39-60M-48H |
+| Jan26 (6-11 Jan) | 1% | Total Face value EXCLUDING SCV-39-60M-48H |
+| Jan26 (14-22 Jan) | 1% | Face value of all eligible cards |
+| Feb26 (1-8 Feb) | 1% | Face value of SCV-39-60M-48H and SCD-49-1GB-24H |
+| Feb26 (17-22 Feb) | B2C-defined | Amount per B2C — no % stated in SRF |
+| Mar26 (10-15 Mar) | 1% | Face value of all 27 eligible SC products |
+[/TABLE]
+3.6  Special Eligibility Gate (Feb26 17-22 Feb)
+[TABLE]
+| SRF | Lifting Discount Campaign_17th to 22nd Feb26 |
+| Gate Condition | To be eligible for any incentive, DD must ensure minimum lifting target for BOTH SCV-39-60M-48H AND SCV-39-60M-3D |
+| Rule | Both SCV-39-60M-48H and SCV-39-60M-3D must meet their minimum lifting targets as a prerequisite |
+| Without gate | If minimum lifting target for either gated product is not met, DD is not eligible for incentive |
+| Unique to | Only this SRF has a dual-product minimum gate condition; other SRFs have no eligibility gate |
+[/TABLE]
+3.7  Incentive Exclusion from Basis (Jan26 6-11 Jan)
+[TABLE]
+| SRF | Lifting Discount Campaign_6th to 11th Jan26 |
+| Qualification rule | DD must lift 100%+ of target INCLUDING SCV-39-60M-48H (i.e., SCV-39-60M-48H counts toward the achievement threshold) |
+| Incentive rule | 1% commission calculated on Face value of all eligible cards EXCEPT SCV-39-60M-48H |
+| Net effect | SCV-39-60M-48H contributes to qualifying for incentive but is excluded from the incentive amount calculation |
+| Unique to | Only this SRF has a split role card — qualifying but non-compensating |
+[/TABLE]
+4. Campaign Type B: SC Tertiary Campaigns (3 SRFs)
+Three SRFs cover SC Tertiary campaigns (Feb 2026, Mar 2026, Apr 2026). All three are structurally identical — conditions are consistent across the full set.
+4.1  Common Conditions — All Tertiary Campaigns
+[TABLE]
+| SRFs | Feb26 (17-26 Feb), Mar26 (7-12 Mar), Apr26 (16-22 Apr) |
+| Trigger | Cumulative 100% and above SC Tertiary target achieved |
+| Achievement Criteria | Hit/Miss — binary; no partial payment |
+| Incentive Amount | DD-wise target and incentive amount shared by B2C (amount not stated in SRF) |
+| Celebration Budget | TK 200 per RSO upon achieving SC tertiary target (amount shared by B2C) |
+| Rounding | General mathematical rounding (below 0.5 down, 0.5+ up) |
+| Agent List Date | Last day of campaign period |
+[/TABLE]
+4.2  Tertiary Metric Definition
+[TABLE]
+| Metric Name | SC Tertiary |
+| Definition | DD designated BTS-wise SC recharge — recharge of scratch cards by end subscribers within the DD's designated BTS (Base Transceiver Station) coverage area |
+| Data Source | Achievement data shared by B2C team |
+| Direction | Retailer → Subscriber (end-user recharge of SC) |
+| Difference from Lifting | Lifting = Warehouse → Distributor. Tertiary = Retailer → Subscriber. These are opposite ends of the supply chain. |
+[/TABLE]
+4.3  Celebration Budget Rule
+[TABLE]
+| Condition | DD achieves 100%+ of SC tertiary target (same trigger as main incentive) |
+| Amount | TK 200 per RSO assigned to that DD |
+| Source | Incentive amount shared/defined by B2C team |
+| Unique to | Tertiary campaigns only — no celebration budget in any Lifting campaign |
+| Payment flow | Included in disbursement; reported in same SRF |
+[/TABLE]
+5. Product Reference — All Scratch Card Codes Used
+Voice Scratch Cards (SCV)
+[TABLE]
+| Product Code | Description | Face Value (BDT) | Lifting Price (BDT) | Used In |
+| SCV-14 | Scratch Card Voice TK 14 | 14 | — | Mar26 lifting |
+| SCV-19 | Scratch Card Voice TK 19 | 19 | — | Mar26 lifting |
+| SCV-19-25M-24-H | Voice 25 Min 24 Hours TK 19 | 19 | — | Mar26 lifting |
+| SCV-19-30M-24-H | Voice 30 Min 24 Hours TK 19 | 19 | — | Mar26 lifting |
+| SCV-29-40M-48-H | Voice 40 Min 48 Hours TK 29 | 29 | — | Mar26 lifting |
+| SCV-29-45M-24H | Voice 45 Min 24 Hours TK 29 | 29 | 27.9125 | Dec25, Jan26(14-22), Feb26(17-22), Mar26 |
+| SCM-29-45M-48H | Voice 45 Min 48 Hours TK 29 | 29 | — | Mar26 lifting |
+| SCV-39-60M-3D | Voice 60 Min 3 Days TK 39 | 39 | — | Feb26(17-22), Mar26 |
+| SCV-39-60M-48H | Voice 60 Min 48 Hours TK 39 | 39 | 37.5375 | All lifting SRFs (Dec25–Mar26) |
+[/TABLE]
+Data Scratch Cards (SCD)
+[TABLE]
+| Product Code | Description | Face Value (BDT) | Lifting Price (BDT) | Used In |
+| SCD-09 | Data SC TK 9 | 9 | — | Mar26 lifting |
+| SCD-14 | Data SC TK 14 | 14 | — | Mar26 lifting |
+| SCD-29-MB300 | Data SC 29 TK MB300 | 29 | — | Mar26 lifting |
+| SCD-29-MB500 | Data SC 29 TK MB500 | 29 | — | Mar26 lifting |
+| SCD-29-MB500-24H | Data SC 29 TK MB500 24 Hours | 29 | — | Mar26 lifting |
+| SCD-29-1GB-1-DAY | Data SC 29 TK 1GB 1 Day | 29 | — | Mar26 lifting |
+| SCD-39-GB1-24H | Data SC 39 TK 1GB 24 Hours | 39 | 37.5375 | Jan26(14-22), Feb26(17-22), Mar26 |
+| SCD-39-MB500-24H | Data SC 39 TK MB500 24 Hours | 39 | — | Feb26(17-22), Mar26 |
+| SCD-49-1GB-24H | Data SC 49 TK 1GB 24 Hours | 49 | 47.1625 | Feb26(1-8), Feb26(17-22), Mar26 |
+| SCD-49-1GB-3-DAY | Data SC 49 TK 1GB 3 Days | 49 | — | Mar26 lifting |
+| SCD-69-1.5GB-7D | Data SC 69 TK 1.5GB 7 Days | 69 | — | Mar26 lifting |
+[/TABLE]
+Mixed / Combo Scratch Cards (SCMB, SC, MV)
+[TABLE]
+| Product Code | Description | Used In |
+| SC-19 | Scratch Card TK 19 | Mar26 lifting |
+| SCMB-09 | Mixed Bundle SC TK 9 | Mar26 lifting |
+| SCMB-29 | Mixed Bundle SC TK 29 | Mar26 lifting |
+| MV10TK | Mixed Voucher TK 10 | Mar26 lifting |
+| MV20TK | Mixed Voucher TK 20 | Mar26 lifting |
+| MV50TK | Mixed Voucher TK 50 | Mar26 lifting |
+[/TABLE]
+i  Lifting prices are only stated in SRFs where they were explicitly listed. Blank = not stated in any SRF in this folder.
+6. Version Comparison Table — All 10 SRFs
+[TABLE]
+| SRF | Type | Period | Eligible Products | Ach Basis | Incentive Basis | Rate | Cap | Special |
+| Dec25 | Lifting | 9–11 Dec 25 | SCV-29-45M-24H, SCV-39-60M-48H | Face val | Face val | 1% | No cap | — |
+| Jan26 (1-12) | Lifting | 1–12 Jan 26 | SCV-39-60M-48H | Face val | Lifting val | 1% | 150% | UNIQUE: incentive on lifting value |
+| Jan26 (6-11) | Lifting | 6–11 Jan 26 | B2C list (incl. SCV-39-60M-48H) | Face val | Face val | 1% | 150% | SCV-39-60M-48H qualifies but excluded from incentive |
+| Jan26 (14-22) | Lifting | 14–22 Jan 26 | SCV-29, SCV-39, SCD-39-GB1-24H | Face val | Face val | 1% | 150% | — |
+| Feb26 (1-8) | Lifting | 1–8 Feb 26 | SCV-39-60M-48H, SCD-49-1GB-24H | Face val | Face val | 1% | Uncapped | — |
+| Feb26 (17-22) | Lifting | 17–22 Feb 26 | 6 products (SCV+SCD mix) | Face val | B2C-defined | B2C | N/A | Gate: min lifting for SCV-39-60M-48H & SCV-39-60M-3D |
+| Mar26 (10-15) | Lifting | 10–15 Mar 26 | 27 products (full range) | Face val | Face val | 1% | 150% | Broadest product list |
+| Feb26 Ter. | Tertiary | 17–26 Feb 26 | All SC (BTS-wise recharge) | Tertiary | B2C-defined | B2C+TK200/RSO | N/A | Hit/Miss; celebration budget TK200/RSO |
+| Mar26 Ter. | Tertiary | 7–12 Mar 26 | All SC (BTS-wise recharge) | Tertiary | B2C-defined | B2C+TK200/RSO | N/A | Hit/Miss; celebration budget TK200/RSO |
+| Apr26 Ter. | Tertiary | 16–22 Apr 26 | All SC (BTS-wise recharge) | Tertiary | B2C-defined | B2C+TK200/RSO | N/A | Hit/Miss; celebration budget TK200/RSO |
+[/TABLE]
+7. Maturity Date Summary
+[TABLE]
+| SRF / Campaign | Campaign Period | Maturity Date (Data) |
+| Lifting Discount — Dec25 | 9–11 Dec 2025 | 12th Dec 2025 (next day) |
+| Lifting Discount — Jan26 (1-12) | 1–12 Jan 2026 | 13th Jan 2026 (next day) |
+| Lifting Discount — Jan26 (6-11) | 6–11 Jan 2026 | 12th Jan 2026 (next day) |
+| Lifting Discount — Jan26 (14-22) | 14–22 Jan 2026 | 23rd Jan 2026 (next day) |
+| Lifting Discount — Feb26 (1-8) | 1–8 Feb 2026 | 9th Feb 2026 (next day) |
+| Lifting Discount — Feb26 (17-22) | 17–22 Feb 2026 | 23rd Feb 2026 (next day) |
+| Lifting Campaign — Mar26 (10-15) | 10–15 Mar 2026 | 16th Mar 2026 (next day) |
+| Tertiary Campaign — Feb26 (17-26) | 17–26 Feb 2026 | 1st Mar 2026 (next day) |
+| Tertiary Campaign — Mar26 (7-12) | 7–12 Mar 2026 | 13th Mar 2026 (next day) |
+| Tertiary Campaign — Apr26 (16-22) | 16–22 Apr 2026 | 23rd Apr 2026 (next day) |
+[/TABLE]
+i  Maturity date is consistently one calendar day after the campaign end date across all 10 SRFs.
+8. General Conditions (All SRFs)
+The following general conditions are consistent across all 10 SRFs:
+Lifting / Issue Condition
+[TABLE]
+| Active Condition | Lifting/Issue — ticked in all SRFs |
+| Definition | Warehouse to Distributor Scratch Card Lifting |
+| Scope | All SC products eligible under the campaign |
+[/TABLE]
+Disconnection Rule
+[TABLE]
+| Rule | T-3 Disconnection Cutoff |
+| Definition | Latest data up to report generation date minus 3 days |
+| Note | This is T-3 (not T-6 as used in distribution monthly SRFs) — specific to these short ad-hoc campaigns |
+[/TABLE]
+Product Scope
+[TABLE]
+| Eligible Products | All Prepaid and C&C (Calling Card) |
+| SC Condition | All SC types are considered under the SC-specific conditions |
+[/TABLE]
+Rounding Rule
+[TABLE]
+| Rule | General mathematical rounding |
+| Logic | Below 0.5 → rounds down; 0.5 and above → rounds up |
+| Applied to | All achievement and incentive amount calculations |
+[/TABLE]
+Agent List Reference Date
+[TABLE]
+| Rule | Agent list from the last day of the campaign period is used |
+| Purpose | Determines which DDs are active/eligible for the campaign disbursement |
+[/TABLE]
+Report Sharing
+[TABLE]
+| Slot | Disbursement — end of campaign |
+| Frequency | Ad-hoc — one report per campaign window |
+| Published | As per Tracker |
+[/TABLE]
+9. Glossary
+[TABLE]
+| Term | Meaning |
+| SC | Scratch Card — physical/digital prepaid voucher |
+| DD | Direct Distributor |
+| W→D Lifting | Warehouse to Distributor — primary purchase of SC stock by DD from Banglalink warehouse |
+| SC Tertiary | Scratch card recharge by end subscriber via BTS-designated retailer (Retailer → Subscriber) |
+| Face Value | Printed denomination of the scratch card (e.g., TK 29, TK 39) |
+| Lifting Value | Actual price paid by distributor — typically 96.25% of face value (e.g., SCV-39-60M-48H at 37.5375) |
+| BTS | Base Transceiver Station — geographic coverage unit for tertiary target allocation |
+| Hit/Miss | Binary achievement criteria — 100%+ = Hit (paid); below 100% = Miss (no payment) |
+| Cap 150% | Incentive ceiling — calculated only on up to 150% of target even if achievement is higher |
+| Uncapped | No ceiling on incentive — full 1% on all face value regardless of achievement level |
+| B2C | Business-to-Consumer team at Banglalink — defines target and incentive amounts for some campaigns |
+| RSO | Retail Sales Officer — field agent; used for celebration budget calculation in tertiary campaigns |
+| Celebration Budget | TK 200 per RSO paid in addition to main incentive upon achieving SC tertiary target |
+| T-3 | Report generation date minus 3 days — disconnection cutoff for these ad-hoc SC campaigns |
+| SCV | Scratch Card Voice product type |
+| SCD | Scratch Card Data product type |
+| SCMB | Scratch Card Mixed Bundle product type |
+| MV | Mixed Voucher product type |
+| DMS | Distribution Management System — Banglalink retailer/distributor registry |
+[/TABLE]

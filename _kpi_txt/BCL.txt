@@ -1,0 +1,444 @@
+BANGLALINK CHAMPIONS LEAGUE
+Unique KPI Conditions & Campaign Rules
+[TABLE]
+| Comprehensive Analysis of All 32 SRFs  |  Channel Planning Department  |  Banglalink |
+[/TABLE]
+[TABLE]
+| Campaign Scope | Sep 2025 – Mar 2026 (Monthly & Quarterly) |
+| Recipient Types | Cluster  |  Region  |  MDO  |  ZM / TO / SZM |
+| Total SRFs Analysed | 32 SRFs |
+| KPI Dimensions | Recharge, GA, GA Productivity, BSO, LSO, SSO, Bundle |
+| Prepared by | Channel Planning — IT Sales Commissioning |
+[/TABLE]
+Table of Contents
+[TABLE]
+| 1 | Campaign Overview & Structure | 3 |
+| 2 | KPI Dimensions Used | 4 |
+| 3 | KPI-01 — Recharge (EV Secondary + SC Primary) | 5 |
+| 4 | KPI-02 — Gross Addition (GA) | 6 |
+| 5 | KPI-03 — GA Productivity | 8 |
+| 6 | KPI-04 — BSO (Base Seller Objective) | 9 |
+| 7 | KPI-05 — LSO (Loyalty Seller Objective) | 10 |
+| 8 | KPI-06 — SSO (Secondary Seller Objective) | 11 |
+| 9 | KPI-07 — Total Bundle (Data + Voice + Mix) | 12 |
+| 10 | Scoring & Point System | 13 |
+| 11 | Eligibility Gates | 15 |
+| 12 | Winner Evaluation Rules | 16 |
+| 13 | Rounding Rules | 17 |
+| 14 | Exclusion Conditions | 18 |
+| 15 | General Conditions Table | 19 |
+| 16 | Input Data Sources | 20 |
+| 17 | Quick Reference Summary | 21 |
+[/TABLE]
+1. Campaign Overview & Structure
+The Banglalink Champions League (BCL) is a monthly and quarterly performance recognition programme for internal field hierarchy and distribution channel stakeholders. It rewards top performers across multiple KPI dimensions using a points-based ranking system. The campaign spans Sep 2025 through Mar 2026 and covers four distinct recipient tiers.
+Recipient Tiers
+[TABLE]
+| Tier | Who | SRF Count | Evaluation Scope |
+| Cluster | Cluster-level distributors / territory | 9 | National Top — Best Cluster |
+| Region | Regional grouping of clusters | 9 | Best Region per Cluster |
+| MDO | Market Development Officers | 5 | National Top 10 MDO |
+| ZM / TO / SZM | Zone Manager / Territory Officer / Sr. ZM | 9 | Top 2 per Region / Top 3 per Cluster / National Top 5 |
+[/TABLE]
+Campaign Periods
+[TABLE]
+| Period Type | Months Covered | Files |
+| Monthly | Sep, Oct, Nov, Dec 2025 | Jan, Feb, Mar 2026 | ~26 SRFs |
+| Quarterly | Q4'25 (Oct–Dec 2025) | Q1'26 (Jan–Mar 2026) | ~6 SRFs |
+[/TABLE]
+[TABLE]
+| Note: All 32 SRFs share the same requester (Akrabina Tajwar, Channel Planning) and follow a common structural framework, but differ in KPI composition, scoring weights, eligibility gates, and winner evaluation logic across periods. |
+[/TABLE]
+2. KPI Dimensions Used
+The following KPIs appear across all 32 BCL SRFs. Each SRF selects a relevant subset depending on the month and recipient tier.
+[TABLE]
+| RCH Recharge | GA Gross Add | GAP GA Productivity | BSO Base Seller Obj | LSO Loyalty Seller | SSO Secondary Seller | BND Total Bundle |
+[/TABLE]
+[TABLE]
+| Code | KPI Name | Applies From | Sep–Oct 25 | Nov–Dec 25 | Jan–Mar 26 |
+| RCH | Recharge (EV Sec + SC Primary) | Sep 2025 | Yes | Yes | Yes |
+| GA | Gross Addition | Nov 2025 | No | Yes | Yes |
+| GAP | GA Productivity | Nov 2025 | No | Yes | Yes |
+| BSO | Base Seller Objective | Sep 2025 | Yes | Yes | Yes |
+| LSO | Loyalty Seller Objective | Sep 2025 | Yes | Yes | Yes |
+| SSO | Secondary Seller Objective | Jan 2026 | No | No | Yes |
+| BND | Total Bundle (Data+Voice+Mix) | Sep 2025 | Yes | Oct Only | No |
+[/TABLE]
+[TABLE]
+| Sep and Oct 2025 SRFs use: BSO + LSO + Recharge + Total Bundles (4 KPIs). From Nov 2025 onwards the campaign shifted to: Recharge + GA + GA Productivity + BSO + LSO (and SSO from Jan 2026). Total Bundle was phased out after Oct 2025. |
+[/TABLE]
+3. KPI-01 — Recharge (EV Secondary + SC Primary)
+Definition
+Recharge achievement is the sum of two components:
+EV Secondary (RSO to Retail): Includes R2RT, D2RT, SUD12AGENT, DTR (Manual & Daily Commission from Salescom) and OTF (EV OTF + IRIS OTF), taken as per usual process. Less withdrawal deducted.
+SC Primary (BL to DH/Lifting): Primary lifting by distributor from Banglalink warehouse (DD lifting). Less withdrawal deducted.
+Conditions
+[TABLE]
+| Condition | Rule |
+| DRC Exclusion | DRC EV Secondary is excluded from recharge achievement in all SRFs |
+| Monobrand Exclusion | Monobrand transactions are excluded from all KPI achievements |
+| Withdrawal | Less withdrawal applied to both EV Secondary and SC Primary |
+| Achievement Basis | EV Tertiary (retailer to subscriber) + SC Primary lifting combined |
+| Data Bundle Recharge | Valid i-TOP UP recharge only for Data Pack Upsell |
+| Voice Bundle Recharge | Valid i-TOP UP recharge only for Voice Pack Upsell |
+| Mix Bundle Recharge | Valid i-TOP UP recharge only for Mix Bundle Upsell |
+| Data Source | IT SC + IT BI + DWH |
+[/TABLE]
+Recharge as a Gate Condition (from Jan 2026)
+From Jan 2026, Recharge is also used as a Campaign Eligibility Gate. The minimum gate varies by month:
+[TABLE]
+| Period | Recharge Gate Threshold |
+| Sep–Nov 2025 (Campaign Gate) | Recharge eligibility gate — exact % shared by B2C via VLR |
+| Dec 2025 | Campaign Gates: Recharge must meet eligibility threshold |
+| Jan–Mar 2026 | Campaign Gate: Recharge 100% of Slab 1 Target |
+| Feb–Mar 2026 | Campaign Gate: Recharge 100% of Slab 1 Target (confirmed) |
+| Q4'25 Quarterly | 100% of Q4'25 Target for Cluster/Region-level evaluation |
+| Q1'26 Quarterly | 95% or 100% of Q1'26 Slab 1 Target (two tiers shown) |
+[/TABLE]
+4. KPI-02 — Gross Addition (GA)
+Definition
+GA (Gross Addition) measures new SIM activations. From Nov 2025 it became a primary KPI alongside Recharge.
+GA Calculation Rules
+[TABLE]
+| Rule | Details |
+| Connection types included | MNP (Mobile Number Portability) & RYZE connections are counted as GA based on FCD (First Call Date) |
+| Disconnected numbers | Excluded from GA achievement in all SRFs |
+| DRC exclusion | GA Achievement calculated without DRC in all SRFs |
+| Monobrand exclusion | Monobrand GA is excluded from achievement |
+| Activation timing | Activation must occur During the Promotion Period |
+| Data basis | FCD between activation and latest data up to report generation date (T-6) |
+| Products counted | Prepaid; for MNP — all connections |
+[/TABLE]
+GA: Date-Based Calculation Split (Oct 2025)
+[TABLE]
+| Special rule for Oct 2025 only: Achievement from 1st–16th October 2025 follows current policy. New calculation criteria applies for GA from 17th October 2025 onwards (example shared in SRF). |
+[/TABLE]
+Quality GA — Usage Condition
+From Nov 2025, GA quality is measured with a usage threshold:
+At least 95% of total GA (before disconnection) must have more than BDT 5 usage within 7 days of Activation.
+This is linked to the 'No Play' condition: any outgoing call or internet usage in the calendar month for minimum 93% of GA.
+Regional Demarcation Rule
+Applied selectively across SRFs:
+[TABLE]
+| SRF | Demarcation Rule Applied |
+| Cluster Sep & Oct 2025 | No — not mentioned |
+| Region Nov 2025 onwards | Yes — Lower MOP cross-border GA eliminated from calculation |
+| Jan 2026 Cluster & above | Yes — Regional demarcation must be considered; lower MOP cross-border GA excluded |
+| ZM/TO/MDO tiers | Yes — lower MOP GA excluded as per shared file from B2C |
+[/TABLE]
+Lower MOP GA Exclusion
+In all SRFs from Nov 2025 onwards, Lower MOP (Market Operating Price) GA is excluded from achievement based on a report shared by B2C. This applies uniformly across Cluster, Region, MDO and ZM/TO tiers.
+ETSAF (ETisalat SAF) Quality Condition
+GA quality is also subject to ETSAF vetting:
+98% of ETSAF (against total GA before disconnection) must be vetted and accepted by Banglalink within the 7th of the following month.
+Sep 2025 SRFs: SAF is a checked condition (active).
+Oct 2025 onwards: SAF field unchecked in General Conditions table — superseded by the new quality GA metric.
+5. KPI-03 — GA Productivity
+Definition
+GA Productivity measures the quality and efficiency of GA achievement — not just volume. It tracks whether the activated SIMs generate meaningful usage. This KPI appears from Nov 2025 onwards.
+Conditions
+[TABLE]
+| Condition | Rule |
+| Report source | GA Productivity report is shared by B2C team — not computed by IT SC |
+| Usage threshold | At least 95% of total GA (before disconnection) must have BDT 5+ usage within 7 days of activation |
+| Measurement basis | Measured against FCD (First Call Date) |
+| Applicable period | Nov 2025 onwards for all Cluster, Region, MDO, ZM/TO SRFs |
+| Bonus Point Impact | In Q4'25, GA Productivity contributes bonus points based on % of profitable base achieved |
+[/TABLE]
+GA Productivity Bonus Points (Q4 2025 Quarterly SRF)
+For the Q4'25 quarterly SRF, a bonus/penalty point system was applied based on GA productivity:
+[TABLE]
+| GA Profitable Base Achievement | Points Adjustment |
+| <= 75% of profitable base | -2 Points (Penalty) |
+| <= 80% of profitable base | -1 Point (Penalty) |
+| >= 85% of profitable base | +2 Points (Bonus) |
+| >= 90% of profitable base | +3 Points (Bonus) |
+| >= 95% of profitable base | +5 Points (Bonus) |
+[/TABLE]
+[TABLE]
+| This bonus/penalty system appears ONLY in the Q4'25 quarterly SRFs (Cluster, Region, ZM/TO). Monthly SRFs do not use this model. |
+[/TABLE]
+6. KPI-04 — BSO (Base Seller Objective)
+Definition
+BSO (Base Seller Objective) tracks the number of active base-level sellers. The exact BSO definition is referenced in the SRF but the detailed threshold is shared separately by B2C in target files.
+BSO Conditions
+[TABLE]
+| Condition | Rule |
+| Achievement exclusions | DRC & monobrand excluded from BSO achievement |
+| Data source | IT SC + IT BI + DWH; VLR shared by B2C |
+| Eligibility gate (Jan 2026) | BSO must achieve 100% of Slab 1 Target (Point Eligibility Gate) |
+| Non-GA Market rule (Jan 26) | For Non-GA markets: BSO target weight = 20% (vs. 10% in GA markets) |
+| Gate trigger | Used as a Point Eligibility Gate alongside LSO and SSO from Jan 2026 |
+| Scope | Applied across all recipient tiers: Cluster, Region, MDO, ZM/TO |
+[/TABLE]
+BSO Weight in Non-GA Markets
+From Jan 2026, Non-GA markets (specifically CHICOX09 & CHICOX11) have a higher BSO weighting:
+[TABLE]
+| Market Type | BSO Weight | LSO Weight | SSO Weight |
+| GA Market | 10% | 10% | 10% |
+| Non-GA Market | 20% | 20% | N/A |
+[/TABLE]
+7. KPI-05 — LSO (Loyalty Seller Objective)
+Definition
+LSO (Loyalty Seller Objective) tracks sellers maintaining loyalty/active engagement. Like BSO, the detailed threshold is defined in the B2C-provided target files.
+LSO Conditions
+[TABLE]
+| Condition | Rule |
+| Achievement exclusions | DRC & monobrand excluded |
+| Active LSO definition | Specified in individual SRF appendix (BSO/LSO definition section) |
+| Eligibility gate (Jan 2026) | LSO must achieve 100% of Slab 1 Target (Point Eligibility Gate) |
+| Non-GA Market rule (Jan 26) | For Non-GA markets: LSO target weight = 20% (vs. 10% in GA markets) |
+| Data source | IT SC + IT BI + DWH |
+| Scope | Present in all 32 SRFs across all periods |
+[/TABLE]
+LSO as Point Eligibility Gate (Jan 2026 onwards)
+From January 2026, LSO achievement is required to qualify for points:
+LSO must reach 100% of Slab 1 Target to qualify for the Point Eligibility Gate.
+In Non-GA markets the LSO gate remains at 100% of Slab 1 Target but the weighting in scoring doubles (20%).
+8. KPI-06 — SSO (Secondary Seller Objective)
+Definition
+SSO (Secondary Seller Objective) was introduced as a new KPI from January 2026. It measures secondary-level seller performance and is used both as a scoring KPI and as a Point Eligibility Gate.
+SSO Conditions
+[TABLE]
+| Condition | Rule |
+| Introduced | January 2026 (not present in Sep–Dec 2025 SRFs) |
+| Eligibility gate | SSO must achieve 100% of Slab 1 Target (Point Eligibility Gate) |
+| Scoring weight (GA mkt) | 10% of total quality execution score |
+| Non-GA market | SSO not applicable in Non-GA markets (CHICOX09 & CHICOX11) |
+| Data source | IT SC + IT BI + DWH |
+| Scope | Jan 2026 Cluster, Region, ZM/TO/MDO SRFs |
+[/TABLE]
+Quality Execution Targets (Jan 2026)
+The Jan 2026 SRF specifies exact quality execution thresholds:
+[TABLE]
+| Market | SSO Gate | BSO Gate | LSO Gate |
+| GA Market | 10% | 10% | 10% |
+| Non-GA Market | N/A | 20% | 20% |
+[/TABLE]
+[TABLE]
+| Only the Jan 2026 SRF explicitly states the quality execution percentages. Feb and Mar 2026 SRFs reference 'quality execution' but use the gate structure (100% of Slab 1 Target) without restating the exact %. |
+[/TABLE]
+9. KPI-07 — Total Bundle (Data + Voice + Mix)
+Definition
+Total Bundle is the summation of three bundle types sold by retailers to subscribers (not SC/primary lifting):
+Data Pack Upsell (i-TOP UP based recharge)
+Voice Bundle Upsell (i-TOP UP based recharge)
+Mix Bundle Upsell (i-TOP UP based recharge)
+Bundle Conditions
+[TABLE]
+| Condition | Rule |
+| Transaction scope | Bundle upsell means retailer to customer — SC excluded |
+| DRC exclusion | DRC achievements excluded from bundle achievement in all SRFs |
+| Deno list | Denomination list for valid bundles shared by B2C |
+| Measurement basis | Valid recharge = i-TOP UP only (not SC) |
+| Achievement period | Sep and Oct 2025 SRFs only — phased out from Nov 2025 |
+| Retail SCR & VLR | Retail SCR (Sim Card Reload) & VLR achievement shared by B2C |
+| Data source | IT SC + IT BI + DWH |
+[/TABLE]
+Bundle Phase-Out
+Total Bundle as a KPI appears only in Sep and Oct 2025 SRFs. From November 2025, the campaign replaced Bundle with GA and GA Productivity as primary KPIs.
+[TABLE]
+| Period | Bundle KPI Status |
+| Sep 2025 | Active — 1 of 4 KPIs (BSO + LSO + Recharge + Bundle) |
+| Oct 2025 | Active — 1 of 4 KPIs (BSO + LSO + Recharge + Bundle) |
+| Nov 2025+ | Removed — replaced by GA + GA Productivity |
+[/TABLE]
+10. Scoring & Point System
+BCL uses a points-based ranking system. Each KPI contributes points, and the total determines the winner. The system evolved from Sep 2025 to Mar 2026.
+Monthly Point System (Nov 2025 – Mar 2026)
+Each KPI is scored and points are aggregated. The exact point allocation per KPI is defined in the B2C-provided target files (Detail Format). The SRFs reference 'Details format shared in the target file' without specifying exact weights.
+Quarterly Point System — Q4 2025
+The Q4'25 quarterly SRFs include an explicit Total Point Calculation with Bonus Point logic:
+[TABLE]
+| Component | Rule |
+| Total Points | Sum of monthly points across Oct, Nov, Dec 2025 for each KPI |
+| Bonus Point Trigger | GA Productivity vs. Profitable Base — adds or deducts points |
+| Bonus: <=75% base | -2 points penalty |
+| Bonus: <=80% base | -1 point penalty |
+| Bonus: >=85% base | +2 points bonus |
+| Bonus: >=90% base | +3 points bonus |
+| Bonus: >=95% base | +5 points bonus |
+| Winner criteria | Highest total points (including bonus) = Best Cluster / Region |
+[/TABLE]
+Quarterly Point System — Q1 2026
+Q1'26 introduces a two-tier target achiever ranking separate from best points:
+[TABLE]
+| Category | Recharge Gate | GA Gate | Award |
+| Best (Top 1 National) | — | — | Highest Total Points |
+| 95% Achiever | 95% of Q1'26 Slab 1 Target | 95% of Q1'26 Slab 1 Target | National Top 1 |
+| 100% Achiever | 100% of Q1'26 Slab 1 Target | 100% of Q1'26 Slab 1 Target | National Top 1 |
+[/TABLE]
+[TABLE]
+| ZM/MDO Q1'26: Top 3 per Cluster + National Top 5 100% Target Achievers. Post Gate Averaging is applied after gate evaluation. |
+[/TABLE]
+Quarterly Point System — Q4 2025 (Target Achiever)
+[TABLE]
+| Category | Recharge Threshold | GA Threshold | Award |
+| Target Achiever | 100% of Q4'25 Target | 90% of Q4'25 Target | Best Cluster + Target Achieving Cluster |
+[/TABLE]
+11. Eligibility Gates
+BCL SRFs use two types of gates: Campaign Eligibility Gates (to participate in ranking) and Point Eligibility Gates (to earn points). Gates are mandatory — failure to meet a gate disqualifies the participant from the relevant award.
+Campaign Eligibility Gates — Evolution by Period
+[TABLE]
+| Period | Gate Conditions |
+| Sep 2025 | Campaign Eligibility & Point Eligibility Gate to be considered (details in VLR shared by B2C) |
+| Oct 2025 | Campaign Eligibility & Point Eligibility Gate to be considered (Retail SCR & VLR from B2C) |
+| Nov 2025 | Campaign Eligibility & Point Eligibility Gate to be considered (VLR from B2C) |
+| Dec 2025 | Campaign Eligibility & Point Eligibility Gate to be considered |
+| Jan 2026 | Campaign Gate: Recharge 100% of Slab 1 Target AND GA of Slab 1 Target |
+| Feb 2026 | Campaign Gate: Recharge 100% & GA 95% of Slab 1 Target |
+| Mar 2026 | Campaign Gate: Recharge 100% & GA 95% of Slab 1 Target |
+| Q4'25 Quarterly | Campaign Gate + Target Achiever gate (Recharge 100%, GA 90% of Q4'25 Target) |
+| Q1'26 Quarterly | 95% gate (Recharge & GA 95% of Slab 1) AND 100% gate (both 100% of Slab 1) |
+[/TABLE]
+Point Eligibility Gates (Jan 2026 onwards)
+[TABLE]
+| Gate KPI | Threshold | Notes |
+| BSO | 100% of Slab 1 Target | Required to earn BSO points |
+| LSO | 100% of Slab 1 Target | Required to earn LSO points |
+| SSO | 100% of Slab 1 Target | Required to earn SSO points; N/A in Non-GA markets |
+[/TABLE]
+[TABLE]
+| Jan 2026 SRF specifies explicit quality execution targets: SSO 10%, BSO 10%, LSO 10% for GA markets. Non-GA markets: BSO 20%, LSO 20%, no SSO. |
+[/TABLE]
+12. Winner Evaluation Rules
+Winner Identification — by Tier
+[TABLE]
+| Tier | Winner Criteria | Tie-Break Rule |
+| Cluster | Best Cluster = highest total points nationally | Higher % Retail Recharge achievement |
+| Region | Best Region per Cluster = highest points in cluster | Higher % Retail Recharge achievement |
+| MDO | National Top 10 MDO by total points | Higher % Retail Recharge achievement |
+| ZM/TO/SZM | Top 2 per Region (Sep–Oct) | Top 3 per Cluster (Jan–Mar) | Higher % Retail Recharge achievement |
+[/TABLE]
+Non-GA Market Exclusion
+Two specific market codes are flagged as Non-GA markets in all SRFs from Oct 2025:
+CHICOX09 — Non-GA Market
+CHICOX11 — Non-GA Market
+After evaluation, these markets are noted separately. In Jan 2026, Non-GA market BSO/LSO weights are doubled (20% each).
+Evaluation Labelling Convention
+[TABLE]
+| Period | What to Label After Evaluation |
+| Sep–Oct 2025 (Cluster) | Best Cluster |
+| Nov–Dec 2025 (Cluster) | Best Cluster |
+| Nov–Dec 2025 (Region) | Best Region per Cluster |
+| Nov–Dec 2025 (MDO) | National Top 10 MDO |
+| Nov 2025 (ZM/TO) | Top 2 SZM/ZM/TO per Region |
+| Dec 2025 (ZM/TO) | Top 2 SZM/ZM/TO per Region |
+| Jan–Mar 2026 (ZM/TO/MDO) | Top 3 per Cluster + National Top 5 (100% Achievers) |
+| Q4'25 (Cluster) | Best Cluster & Target Achieving Cluster |
+| Q1'26 (Cluster) | Best Cluster + 95% Achievers + 100% Achievers |
+[/TABLE]
+13. Rounding Rules
+Rounding rules changed significantly between Sep 2025 and Oct 2025, and remained consistent after that.
+[TABLE]
+| Period | Rounding Rule |
+| Sep 2025 | Standard mathematical rounding APPLICABLE: below 0.5 rounds down, >= 0.5 rounds up |
+| Oct 2025 | Standard mathematical rounding NOT APPLICABLE (N/A) for this campaign |
+| Nov 2025 | General mathematical rounding NOT APPLICABLE — 3 decimal points considered |
+| Dec 2025 | General mathematical rounding NOT APPLICABLE — 3 decimal points considered |
+| Jan 2026 | General mathematical rounding NOT APPLICABLE — 3 decimal points considered |
+| Feb 2026 | General mathematical rounding NOT APPLICABLE for this campaign |
+| Mar 2026 | General mathematical rounding NOT APPLICABLE for this campaign |
+| Q4'25 Quarterly | General mathematical rounding NOT APPLICABLE — 3 decimal points considered |
+| Q1'26 Quarterly | General mathematical rounding NOT APPLICABLE for this campaign |
+[/TABLE]
+[TABLE]
+| Key difference: Sep 2025 applied standard mathematical rounding. From Oct 2025 onwards all SRFs explicitly state rounding is NOT applicable — three decimal points are used for precision in target achievement calculations. |
+[/TABLE]
+14. Exclusion Conditions
+The following exclusions apply universally across all 32 BCL SRFs unless otherwise stated.
+[TABLE]
+| Exclusion | Scope | All SRFs? |
+| DRC (Direct Recharge) — EV Secondary | Excluded from Recharge achievement | Yes |
+| DRC — GA Achievement | GA calculated without DRC | Yes |
+| DRC — Bundle achievement | DRC bundle achievements excluded | Sep–Oct only |
+| Monobrand transactions | Excluded from all KPI achievements | Yes |
+| BL Franchise Store retailers | Retailers in DMS tagged as 'BL Franchise Store' excluded | Yes |
+| Disconnected SIM numbers | Excluded from GA count | Yes |
+| Lower MOP cross-border GA | Eliminated from GA calculation (regional demarcation) | From Nov 2025 |
+| Lower MOP GA (shared file) | Excluded per B2C-shared file | From Nov 2025 |
+| SC in Bundle count | Bundle upsell = retailer to customer, SC excluded | Sep–Oct only |
+| Non-GA Market exclusions (CHICOX09/11) | Flagged separately; weight rules differ | From Oct 2025 |
+[/TABLE]
+BL Franchise Store Exclusion — Detail
+Retailers registered in the DMS (Dealer Management System) retail database with 'BL Franchise Store' in the Retailer Type column/page are excluded from commission calculations. This condition appears verbatim in all 32 SRFs.
+15. General Conditions Table
+Every BCL SRF contains a standardised General Conditions table with checkboxes for active considerations. The following summarises which conditions are checked and what they specify.
+[TABLE]
+| Factor | Checked? | Condition / Specification |
+| FAD (First Activity Date) | No | Not used as measurement basis |
+| FCD (First Call Date) | Varies | Jan 2026 SRFs: FCD checked. Others: not checked. GA based on FCD when checked. |
+| Activation | Yes (all) | Activation during the promotion period; products: itop-up, SC, Data Pack Upsell, GA, Mix Bundle, Voice Bundle |
+| TABS | No | Not applied |
+| SAF (ETSAF) | Sep 2025 only | 98% of ETSAF (against GA before disconnection) vetted and accepted by BL within 7th of next month |
+| Lifting / Issue | Yes (all) | Primary KPI: both i-Top-Up & SC lifting (BL to Distributor). SC = DD lifting. N/A applies to secondary counting. |
+| Recharge | Yes (all) | All valid recharges. EV tertiary (retailer to subscriber) + SC. SC = primary lifting from warehouse. |
+| Usage | No | Not checked (valid usage condition not applied to primary KPI) |
+| Disconnection | Varies | Sep 2025: Disconnection checked (N/A specified). Oct 2025 onwards: unchecked. |
+| Product | Yes (all) | Prepaid. For MNP: all connections. |
+| Reactivation | No | Not applied |
+[/TABLE]
+16. Input Data Sources
+All 32 BCL SRFs reference the same set of data sources for computing KPI achievement.
+[TABLE]
+| Source | Type | Used For |
+| IT SC (Sales Commissioning) | Channel Operation | Primary commission data — Recharge, GA, BSO, LSO, SSO |
+| IT BI (Business Intelligence) | Channel Operation | Analytics and reporting layer |
+| DWH (Data Warehouse) | IT | Underlying data store — all KPI source data |
+| Target File (B2C) | Channel Operation | KPI targets, VLR, GA productivity report, Lower MOP report |
+| VLR (Value Leakage Report) | B2C Shared | Eligibility gates, Retail SCR/VLR achievement |
+| DMS (Dealer Management System) | Other | Retailer type verification (Franchise Store exclusion) |
+| POS | Other | Point of Sale — checked in Jan 2026 SRFs |
+| IN House | Technical | Internal technical systems |
+[/TABLE]
+Maturity Date for Data — by Period
+[TABLE]
+| Period | Maturity Date for Data |
+| Sep 2025 | 8th of the following month |
+| Oct 2025 | 3rd of the following month |
+| Nov 2025 | 3rd of the following month |
+| Dec 2025 | 3rd of the following month |
+| Jan 2026 | 3rd of the following month |
+| Feb 2026 | 6th of the following month |
+| Mar 2026 | 6th of the following month |
+| Q4'25 Quarterly | 3rd of the following month |
+| Q1'26 Quarterly | 6th of the following month |
+[/TABLE]
+[TABLE]
+| Report Published Date is 'As per tracker' for all 32 SRFs. Details format is shared in the B2C-provided target file — not embedded in the SRF itself. |
+[/TABLE]
+17. Quick Reference Summary — All Unique KPI Conditions
+This table consolidates every distinct KPI condition type identified across all 32 Banglalink Champions League SRFs.
+[TABLE]
+| Code | KPI / Condition | Category | First Appeared | Applies To |
+| KPI-01 | Recharge: EV Secondary (R2RT+D2RT+SUD12+DTR+OTF) + SC Primary | Recharge | Sep 2025 | All 32 SRFs |
+| KPI-02 | GA based on FCD; MNP & RYZE counted | Gross Add | Nov 2025 | Nov 25 – Mar 26 |
+| KPI-03 | GA Productivity — 95% of GA must have BDT 5 usage within 7 days | GA Quality | Nov 2025 | Nov 25 – Mar 26 |
+| KPI-04 | BSO (Base Seller Objective) — target from B2C | Seller Metric | Sep 2025 | All 32 SRFs |
+| KPI-05 | LSO (Loyalty Seller Objective) — target from B2C | Seller Metric | Sep 2025 | All 32 SRFs |
+| KPI-06 | SSO (Secondary Seller Objective) | Seller Metric | Jan 2026 | Jan–Mar 26 |
+| KPI-07 | Total Bundle = Data + Voice + Mix bundle upsell (i-TOP UP) | Bundle | Sep 2025 | Sep–Oct 2025 only |
+| ELG-01 | Campaign Eligibility Gate: Recharge 100% of Slab 1 Target | Gate | Jan 2026 | Jan–Mar 26 + Q1'26 |
+| ELG-02 | Campaign Eligibility Gate: GA 95% of Slab 1 Target | Gate | Feb 2026 | Feb–Mar 26 |
+| ELG-03 | Point Eligibility Gate: BSO/LSO/SSO 100% of Slab 1 Target | Gate | Jan 2026 | Jan–Mar 26 |
+| ELG-04 | Q4'25 Target Achiever: Recharge 100% + GA 90% of Q4'25 Target | Gate | Q4'25 | Q4'25 SRFs |
+| ELG-05 | Q1'26 Two-tier: 95% Achiever + 100% Achiever gates | Gate | Q1'26 | Q1'26 SRFs |
+| SCR-01 | Scoring: Points per KPI (weights in B2C target file) | Scoring | Sep 2025 | All 32 SRFs |
+| SCR-02 | Q4 Bonus Points: GA Productivity vs. profitable base (-2 to +5) | Scoring | Q4'25 | Q4'25 SRFs |
+| SCR-03 | Post Gate Averaging applied after gate evaluation | Scoring | Q1'26 | Q1'26 SRFs |
+| EXC-01 | DRC excluded from Recharge, GA, and Bundle achievements | Exclusion | Sep 2025 | All 32 SRFs |
+| EXC-02 | Monobrand excluded from all KPIs | Exclusion | Sep 2025 | All 32 SRFs |
+| EXC-03 | BL Franchise Store retailers excluded from commission | Exclusion | Sep 2025 | All 32 SRFs |
+| EXC-04 | Disconnected SIM numbers excluded from GA | Exclusion | Sep 2025 | All 32 SRFs |
+| EXC-05 | Lower MOP cross-border GA eliminated (regional demarcation) | Exclusion | Nov 2025 | Nov 25 – Mar 26 |
+| EXC-06 | Non-GA markets (CHICOX09/11) flagged separately, weight rules differ | Exclusion | Oct 2025 | Oct 25 – Mar 26 |
+| RND-01 | Standard rounding applicable (below 0.5 down, >=0.5 up) | Rounding | Sep 2025 | Sep 2025 only |
+| RND-02 | No rounding — 3 decimal points used | Rounding | Oct 2025 | Oct 25 – Mar 26 |
+| WIN-01 | Tie-break: Higher % Retail Recharge Achievement is TOP | Winner Rule | Q4'25 | Q4 + Q1 SRFs |
+| WIN-02 | Non-GA market weight: BSO/LSO 20% (GA market: 10%) | Winner Rule | Jan 2026 | Jan–Mar 26 |
+| WIN-03 | SAF gate: 98% of ETSAF vetted within 7th of next month | Quality | Sep 2025 | Sep 2025 only |
+| WIN-04 | Usage quality: 93% GA must have outgoing call or internet in month | Quality | Jan 2026 | Jan 2026 |
+[/TABLE]
+[TABLE]
+| Prepared by: IT Sales Commissioning | Source: 32 Banglalink Champions League SRFs (Sep 2025 – Mar 2026) | This document catalogues all unique KPI condition types found across the full BCL SRF set for use in SalesCom automation development. |
+[/TABLE]

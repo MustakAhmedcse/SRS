@@ -1,0 +1,260 @@
+Banglalink SRF
+Unique KPI Conditions
+Campaign Folder: MDOs Variable Incentive
+Total SRFs Analyzed: 15  |  Period: Apr 2025 – Mar 2026  |  Prepared: May 2026
+Index
+[TABLE]
+| # | Section |
+| 1 | Campaign Overview & Recipient |
+| 2 | KPI Set Evolution by Epoch (Apr25 → Mar26) |
+| 3 | KPI Definitions — Active LSO |
+| 4 | KPI Definitions — BSO |
+| 5 | KPI Definitions — SSO (Introduced Jan26) |
+| 6 | KPI Definitions — Site Monetization: Phase 1 (Revenue Bucket Movement, Jul–Sep25) |
+| 7 | KPI Definitions — Site Monetization: Phase 2 (Absolute LUS Conversion, Oct25 onward) |
+| 8 | KPI Definitions — GA (Gross Add) |
+| 9 | KPI Definitions — EV Secondary Recharge |
+| 10 | KPI Definitions — SC Primary (Lifting) |
+| 11 | KPI Definitions — Total Bundles |
+| 12 | CHICOX09 Special Consideration — Weightage Structures |
+| 13 | Pro-Rated Calculation for Mid-Month New DDs |
+| 14 | GA-Only Supplementary SRFs (Oct25_GA, Jan26_GA) |
+| 15 | DRC Exclusion Conditions |
+| 16 | Fixed / Invariant General Conditions |
+| 17 | SRF Reference Summary Table (All 15 SRFs) |
+[/TABLE]
+1. Campaign Overview & Recipient
+[TABLE]
+| Recipient | MDOs (Market Development Officers) / Distributors (DDs) |
+| Department | Distribution Planning & Operation |
+| Report Type | Regular, Monthly |
+| Frequency | Monthly — End of campaign |
+| Disbursement Slot | Disbursement |
+| Report Title Format | MDOs Variable incentive_[MonthYear] |
+| Total SRFs | 15 SRFs covering Apr 2025 – Mar 2026 |
+| Max Reward | BDT 10,000 (all main SRFs); BDT 1,500 (GA-only supplementary SRFs) |
+| Requester | Murshida Begum Boby, Distribution Planning & Operation |
+| DMS Exclusion | Retailers registered as 'BL Franchise Store' in DMS are excluded from all KPIs |
+| DMS Mapping | Month-end DMS mapping is considered for all SRFs |
+| Rounding | General mathematical rounding: below 0.5 rounds down; >=0.5 rounds up (all KPIs) |
+| Achievement Basis | Without DRC (DRC exclusion applied from Jul25 onward; Apr–Jun25 also exclude DRC EV Secondary) |
+[/TABLE]
+2. KPI Set Evolution by Epoch (Apr25 → Mar26)
+The KPI set for MDOs Variable Incentive evolved significantly over the 12-month period. Four distinct epochs are identifiable based on structural changes to which KPIs are active and how they are defined.
+[TABLE]
+| Epoch | Period | Active KPIs | Key Changes |
+| 1 | Apr25 – Jun25 | EV Secondary (Recharge) + SC Primary + Total Bundles + Active LSO + BSO | Baseline set. No GA, no Site Monetization. Maturity 1st–3rd of next month. |
+| 2 | Jul25 – Sep25 | EV Secondary + SC Primary + Total Bundles + Active LSO + BSO + GA + Site Monetization (Revenue Bucket) | GA and Site Monetization added. Monobrand excluded. CHICOX09 prorated condition added. Maturity 10th. |
+| 3 | Oct25 – Dec25 | EV Secondary + SC Primary + Active LSO + BSO + GA + Site Monetization (Absolute LUS Conversion) | Site Monetization redefined: absolute LUS→Non-LUS conversion (threshold: Core >=200K, Non-Core >=150K). Nov25 adds CHICOX09 weightage table. DHKGAZ08/MYMTAN18 RSO-wise rule added in Nov25. |
+| 4 | Jan26 – Mar26 | EV Secondary + SC Primary + Active LSO + SSO + GA + Site Monetization (Absolute LUS Conversion) | BSO replaced by SSO as quality KPI. Active LSO raised: 7 days + BDT 500 C2S. VLR condition added to GA. Usage gate changed to 93% No-Play. CHICOX09 weightage restructured. |
+[/TABLE]
+Note: Bundle KPI (Total Bundles) was present in Epoch 1 & 2. It disappears from the main KPI list in Nov25 onward (Epoch 3 & 4), though bundle recharge remains defined in the recharge section.
+3. KPI Definitions — Active LSO
+The Active LSO definition changed significantly between Epochs 1–3 and Epoch 4. The threshold for both days and C2S value was raised from Jan26 onward, and the Core/Non-Core split was removed.
+[TABLE]
+| Epoch | Period | Active LSO Definition | Change? |
+| 1, 2, 3 | Apr25 – Dec25 | Core: C2S (Retail to sub) by Retail in min 4 days of a month + BDT 200 C2S Value in total in a month Non-Core: C2S by Retail in min 4 days of a month + BDT 100 C2S Value in total in a month | Baseline |
+| 4 | Jan26 – Mar26 | C2S (Retail to sub) by Retail in min 7 days of a month + BDT 500 C2S Value in total in a month (No Core/Non-Core split — single unified threshold) | CHANGED: days raised 4→7; C2S value raised 200/100→500; Core/Non-Core split removed |
+[/TABLE]
+Note: The Jan26 change represents a meaningful tightening of the LSO quality standard — retailers now need to transact on 7 days (not 4) with a higher C2S value. DRC exclusion applied to LSO from Jul25 onward.
+4. KPI Definitions — BSO
+BSO (Bundle Sales Out / Bundle Subscriber Out) was active from Apr25 through Dec25. From Jan26 onward, BSO was replaced by SSO as the subscriber quality KPI.
+[TABLE]
+| BSO Definition | BSO 200 TK Bundle Sales in a Month + 4 Days C2S |
+| Active Period | Apr25 – Dec25 (Epochs 1, 2, 3) |
+| DRC Exclusion | DRC achievements excluded from Jul25 onward |
+| Replaced by | SSO (from Jan26, Epoch 4) |
+[/TABLE]
+5. KPI Definitions — SSO (Introduced Jan26)
+SSO (Subscriber SIM Out / Sales SIM Out) replaced BSO as the subscriber quality metric from Jan26 onward. The SSO definition is contained in an image/table within the PDF and could not be extracted as text; it must be referenced directly from the Jan26 SRF. SSO appears in the prorated tables of Feb26 and Mar26 alongside Active LSO.
+[TABLE]
+| KPI Name | SSO (exact acronym from SRF) |
+| Active Period | Jan26 – Mar26 (Epoch 4) |
+| Replaces | BSO (which was active Apr25–Dec25) |
+| Definition | Contained in image/embedded table in PDF — not extractable as plain text. Refer to Jan26 SRF directly. |
+| DRC Exclusion | DRC achievements excluded |
+[/TABLE]
+Note: In Mar26, the SRF explicitly lists KPIs as 'LSO, SSO, site monetization, Recharge and GA' — confirming BSO is fully dropped and SSO is the active quality KPI.
+6. KPI Definitions — Site Monetization: Phase 1 (Revenue Bucket Movement, Jul–Sep25)
+Site Monetization was introduced in Jul25 as a 'Revenue Bucket Movement' KPI. It measures growth in service revenue at selected BTS sites above a fixed base month (May 2025).
+[TABLE]
+| KPI Name | Site Monetization (LUS Conversion — Revenue Bucket Movement) |
+| Active Period | Jul25, Aug25, Sep25 |
+| Revenue Metric | Month-end Service Revenue at selected BTS |
+| Base Revenue | May'25 actual Service Revenue (fixed base for Jul, Aug, Sep 25) |
+| Growth Target | Service Revenue Achievement minus Base Revenue |
+| Achievement Scope | Calculated based on selected BTS only |
+| Payout | Prorated payout from 60%–100% achievement (example: 60% ach → 60% of BDT 1,000; 100% ach → BDT 1,000; >100% capped at BDT 1,000) |
+| Maturity | 9th of the following month |
+| Example (Jul25) | Total BTS=5, Service Rev Target=100, Base=90, Growth Target=10, Actual=96 (96%), Growth Ach=6 (60%), Payout=60%, Amount=BDT 600 |
+[/TABLE]
+7. KPI Definitions — Site Monetization: Phase 2 (Absolute LUS Conversion, Oct25 onward)
+From Oct25 onward, Site Monetization was fundamentally redefined. It no longer tracks revenue bucket movement but instead measures the absolute conversion of LUS (Low Usage Sites) to Non-LUS status based on a fixed service revenue threshold.
+[TABLE]
+| KPI Name | Site Monetization (LUS Conversion — Absolute) |
+| Active Period | Oct25, Nov25, Dec25, Jan26, Feb26, Mar26 |
+| LUS Conversion Threshold — Core | Service Revenue >= BDT 200,000 per month |
+| LUS Conversion Threshold — Non-Core | Service Revenue >= BDT 150,000 per month |
+| Revenue Metric | Month-end Service Revenue |
+| BTS Scope | Selected BTS only; BTS-wise DH mapping used; MDO availability considered |
+| LUS Reference List | Oct'25 LUS list shared by B2C |
+| Payout Basis | Incentive proportional to % LUS sites converted (pro-rated); minimum conversion required to qualify |
+| Maturity | 9th of the following month |
+| Example | BTS Count=10, LUS converted=6, LUS converted%=60% → Incentive Payout=BDT 600 (60% of BDT 1,000). If converted%=43% → BDT 0 (below minimum) |
+[/TABLE]
+CHICOX09 — Site Monetization Weight by Market Type
+[TABLE]
+| Market Type | Site Monetization Weight | Incentive Amount (of BDT 10,000) | Notes |
+| LUS market (CHICOX09) | 20% | BDT 2,000 | Active for LUS distributors — weighted at 20% |
+| Non-LUS market | 0% | BDT 0 | No site monetization incentive for non-LUS distributors |
+[/TABLE]
+Note: This 0% weighting for Non-LUS means non-LUS MDOs get their full BDT 10,000 allocated to other KPIs (EV, SC, LSO, BSO/SSO), while LUS MDOs have 20% of their max reward tied to site conversion.
+8. KPI Definitions — GA (Gross Add)
+GA was not part of the original KPI set (Apr–Jun25) but was added from Jul25 onward. A VLR (Visitor Location Register) condition was added to GA from Jan26 onward.
+[TABLE]
+| KPI Active From | Jul25 (added to main SRF from Epoch 2 onward) |
+| MNP & RYZE | MNP and RYZE connections also counted as GA based on FCD |
+| Disconnection | Disconnected numbers are excluded |
+| DRC Exclusion | GA Achievement calculated without DRC (from Jul25 onward) |
+| Monobrand | Excluded from GA achievement (from Jul25 onward) |
+| VLR Condition | Introduced from Jan26 (Epoch 4) — VLR conditions will be considered for GA qualification |
+| VLR Definition | VLR example is embedded as image in SRF — not extractable as text; refer to Jan26 SRF directly |
+[/TABLE]
+GA-Only Supplementary SRFs
+Two GA-only standalone SRFs were issued: one for Oct25 and one for Jan26. These are separate from the main monthly SRF and cover only the GA KPI with a different max reward. See Section 14 for full details.
+9. KPI Definitions — EV Secondary Recharge
+EV Secondary measures RSO-to-retail recharge. The definition was extended from Jul25 to include SUD12AGENT.
+[TABLE]
+| Epoch | Period | EV Secondary Definition | Change? |
+| 1 | Apr25–Jun25 | EV (SR to Retailer R2RT + Distributor to Retailer D2RT) + DTR (Manual and Daily Commission from Salescom) + OTF (EV OTF + IRIS OTF). Less withdrawal. DRC EV Secondary excluded. | Baseline |
+| 2–4 | Jul25–Mar26 | EV (SR to Retailer R2RT + Distributor to Retailer D2RT + SUD12AGENT) + DTR + OTF. Less withdrawal. DRC EV Secondary excluded. | SUD12AGENT ADDED to the EV Secondary definition |
+[/TABLE]
+10. KPI Definitions — SC Primary (Lifting)
+[TABLE]
+| Definition | Primary lifting: Distributor lifting from the warehouse (BL to DH) |
+| Also called | DD lifting; S.C means primary lifting as per DMS entry |
+| Less Withdrawal | Withdrawal deducted — taken as usual process |
+| Consistent across | All 15 SRFs — definition unchanged throughout |
+| Note (Jan26+) | Jan26 reformats the recharge definition to specify: 'S.C means Retail lifting as per DMS entry' (slightly different wording, same concept) |
+[/TABLE]
+11. KPI Definitions — Total Bundles
+[TABLE]
+| Definition | Bundle upsell = retailer to customer (Except SC) |
+| Components | Total Bundle = Data Pack Upsell + Voice Bundle Upsell + Mix Bundle (MXB) Upsell |
+| Deno List | Shared by B2C |
+| DRC Exclusion | DRC achievements excluded from Jul25 onward |
+| Active Period | Apr25–Oct25 (Epoch 1 & 2); drops from main KPI list from Nov25 onward |
+[/TABLE]
+Note: From Nov25, Total Bundles is no longer listed as a separate KPI in the SRF KPI list, though bundle recharge types (Data, Voice, Mix) continue to appear in the Recharge section definitions. The CHICOX09 weightage tables from Nov25 onward do not include a 'Bundle' row.
+12. CHICOX09 Special Consideration — Weightage Structures
+CHICOX09 is a special condition introduced from Jul25. It defines KPI weightages for the distributor CHICOX09, distinguishing between LUS market and Non-LUS market MDOs. The weightage structure changed between Epoch 3 and Epoch 4.
+Structure A — Epoch 3 (Oct25, Nov25, Dec25)
+[TABLE]
+| KPI | CHICOX09 / Non-GA Mkt. (LUS) % | Incentive (LUS) BDT | CHICOX09 / Non-GA Mkt. (Non-LUS) % | Incentive (Non-LUS) BDT |
+| EV Secondary | 35% | 3,500 | 35% | 3,500 |
+| SC Primary | 15% | 1,500 | 15% | 1,500 |
+| Active LSO | 15% | 1,500 | 25% | 2,500 |
+| BSO | 15% | 1,500 | 25% | 2,500 |
+| Site Monetization | 20% | 2,000 | 0% | 0 |
+| TOTAL | 100% | 10,000 | 100% | 10,000 |
+[/TABLE]
+Note: For Non-LUS MDOs, LSO and BSO get higher weight (25% each) because Site Monetization drops to 0%. EV Secondary and SC Primary remain the same.
+Structure B — Epoch 4 (Jan26, Feb26, Mar26)
+[TABLE]
+| KPI | CHICOX09 / Non-GA Mkt. (LUS) % | Incentive (LUS) BDT | CHICOX09 / Non-GA Mkt. (Non-LUS) % | Incentive (Non-LUS) BDT |
+| EV Secondary | 35% | 3,500 | 45% | 4,500 |
+| SC Primary | 15% | 1,500 | 20% | 2,000 |
+| Active LSO | 30% | 3,000 | 35% | 3,500 |
+| Site Monetization | 20% | 2,000 | 0% | 0 |
+| TOTAL | 100% | 10,000 | 100% | 10,000 |
+[/TABLE]
+Note: BSO removed from the weightage table in Jan26 (replaced by SSO). Active LSO weight raised from 15% to 30% (LUS) and 25% to 35% (Non-LUS). EV Secondary Non-LUS weight raised from 35% to 45%. SC Primary Non-LUS raised from 15% to 20%.
+Key Changes: Structure A to Structure B
+[TABLE]
+| KPI | Epoch 3 LUS % | Epoch 4 LUS % | Epoch 3 Non-LUS % | Epoch 4 Non-LUS % | Change |
+| EV Secondary | 35% | 35% | 35% | 45% | Non-LUS: +10% |
+| SC Primary | 15% | 15% | 15% | 20% | Non-LUS: +5% |
+| Active LSO | 15% | 30% | 25% | 35% | Both up: LUS +15%, Non-LUS +10% |
+| BSO | 15% | — | 25% | — | REMOVED (replaced by SSO) |
+| SSO | — | N/A | — | N/A | ADDED (definition in image, not extractable) |
+| Site Monetization | 20% | 20% | 0% | 0% | No change |
+[/TABLE]
+13. Pro-Rated Calculation for Mid-Month New DDs
+When a distributor (DD) is newly onboarded or activated mid-month, a pro-rated special consideration applies. All KPI achievements and incentive amounts are calculated proportionally for the active period only. This condition appears in most SRFs from Apr25 onward.
+[TABLE]
+| Condition | Achievements and incentives calculated on a pro-rated basis for the given active timeline |
+| Modality Change | No other change in incentive modality — only the timeline and amounts are pro-rated |
+| Format | DD Code, Region, Achievement Count Timeline (start–end dates), KPI-wise incentive amounts, Total Incentive Eligibility |
+| Example (Jun25) | KHUJHE08 (Kushtia): Active 6/15/2025–6/30/2025 → EV Secondary 1,600 + SC Primary 800 + Bundle 1,867 + LSO 533 + BSO 533 = Total 5,333 |
+| Example (Jul25) | SYLBRA04 (Brahman Baria): Active 7/7/2025–7/31/2025 → includes Site Monetization + GA |
+| Example (Jan26) | RAJGAI07 (Bogura): Active 1/19/2026–1/31/2026 → VLR condition applies to GA |
+| Applies To | All main monthly SRFs where a DD was not active for the full month |
+[/TABLE]
+14. GA-Only Supplementary SRFs (Oct25_GA, Jan26_GA)
+Two standalone GA-only SRFs were issued separately from the main monthly SRFs. These cover specific distributors or scenarios where only the GA KPI applies with a different max reward.
+MDOs Variable incentive_GA_Oct25
+[TABLE]
+| Period | 1–31 Oct 2025 |
+| KPI | GA only |
+| Max Reward | BDT 1,500 (vs BDT 10,000 in main Oct25 SRF) |
+| GA Conditions | MNP & RYZE counted; Disconnected numbers excluded; without DRC; without Monobrand |
+| CHICOX09 | No CHICOX09 special consideration |
+| Maturity | 10th of following month |
+| Incentive Modality | In image/table format in PDF — not extractable as text |
+[/TABLE]
+MDOs Variable incentive_GA_Jan26
+[TABLE]
+| Period | 1–31 Jan 2026 |
+| KPI | GA only |
+| Max Reward | BDT 10,000 (same as main Jan26 SRF — this supplements the main SRF for a specific DD) |
+| GA Conditions | MNP & RYZE counted; Disconnected numbers excluded; VLR conditions considered; without DRC |
+| CHICOX09 | No CHICOX09 special consideration in this supplementary SRF |
+| Pro-rated DD | RAJGAI07 (Bogura): Active 1/19/2026–1/31/2026 → pro-rated incentive amounts |
+| Maturity | 10th of following month |
+| Purpose | Issued to cover the GA KPI for a newly onboarded DD not yet in the main Jan26 SRF |
+[/TABLE]
+Note: The Jan26_DHKDHK67 SRF is another supplementary SRF for the same Jan26 period, issued specifically for distributor DHKDHK67 with the same conditions as the main Jan26 SRF.
+15. DRC Exclusion Conditions
+DRC (presumably a market segment or transaction type) is excluded from achievement calculations. The scope of exclusion expanded over time.
+[TABLE]
+| Epoch | Period | DRC Exclusion Scope |
+| 1 | Apr25–Jun25 | DRC EV Secondary excluded only. DRC list shared by B2C. No DRC exclusion stated for LSO, BSO, Bundle. |
+| 2 | Jul25–Sep25 | DRC excluded from: EV Secondary, GA, Total Bundles, Active LSO, BSO. (Explicitly stated for each KPI in Jul25+) |
+| 3–4 | Oct25–Mar26 | DRC excluded from all KPIs. Achievement calculated 'without DRC & monobrand' stated globally at top of SRF. |
+[/TABLE]
+Note: Monobrand exclusion was added alongside DRC from Jul25 ('All Achievement will be calculated without DRC & monobrand'). Prior to Jul25, monobrand was not mentioned.
+16. Fixed / Invariant General Conditions
+The following conditions are consistent across all 15 SRFs or across a clearly defined period.
+[TABLE]
+| Factor | Condition | Exceptions |
+| Activation | FCD (First Call Date) during the promotion period | Consistent across all |
+| SAF | 98% of ETSAF (against total GA before disconnection) must be vetted and accepted by Banglalink within 7th of next month | Epoch 1–3 phrasing: 'against total GA number before disconnection'; Epoch 4: 'Total against activation before Disconnection' — same concept |
+| Product | All Prepaid & for MNP all connections | Epoch 1–3: 'itop'up, SC, Data Pack Upsell, GA, Mixed Bundle, Voice Bundle' |
+| Disconnection | Between FCD and latest data up to report generation date (T-6) | Consistent across all |
+| Lifting/Issue | Primary KPI: ITop-Up & SC lifting (BL to Distributor); DD lifting | Consistent in Epochs 1–3; field blank in Epoch 4 |
+| Usage Gate | At least 95% of total GA must have >BDT 5 usage within 7 days of Activation | Epoch 4 (Jan26+): 'No Play (outgoing call or internet usage in min 93% GA)' — gate CHANGED to 93%; 7-day window removed |
+| Report Slot | Disbursement | Consistent across all |
+| DMS Exclusion | BL Franchise Store retailers excluded | Consistent across all |
+| Input Sources | IT SC, IT BI, DWH (all SRFs); DMS not checked for most; POS added in Epoch 4 Jan26+ | Consistent pattern |
+| Maturity | 3rd (Apr25); 1st (May25, Jun25); 10th (Jul25 onward) | Epoch-dependent |
+[/TABLE]
+17. SRF Reference Summary Table (All 15 SRFs)
+Complete reference of all 15 SRFs with key KPI conditions at a glance.
+[TABLE]
+| SRF | Period | Active KPIs | Active LSO | Max Reward | Site Mon. Type | Maturity | Key Unique Condition |
+| Apr25 | Apr25 | EV+SC+Bundle+LSO+BSO | 4d+200/100 TK | 10,000 | — | 3rd | Prorated DD: RAJPAN03 (15–30 Apr) |
+| May25 | May25 | EV+SC+Bundle+LSO+BSO | 4d+200/100 TK | 10,000 | — | 1st | No special prorated case |
+| Jun25 | Jun25 | EV+SC+Bundle+LSO+BSO | 4d+200/100 TK | 10,000 | — | 1st | Prorated DD: KHUJHE08 (15–30 Jun) |
+| Jul25 | Jul25 | EV+SC+Bundle+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Rev. Bucket (base May25) | 10th | GA+SiteMon added; SUD12AGENT in EV; monobrand excluded; CHICOX09 prorated |
+| Aug25 | Aug25 | EV+SC+Bundle+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Rev. Bucket (base May25) | 10th | Same as Jul25; CHICOX09 special case |
+| Sep25 | Sep25 | EV+SC+Bundle+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Rev. Bucket (base May25) | 10th | Same as Aug25 |
+| Oct25 | Oct25 | EV+SC+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Abs. LUS Conv. (200K/150K) | 10th | Site Mon redefined to absolute LUS conversion |
+| Oct25_GA | Oct25 | GA only | — | 1,500 | — | 10th | GA-only supplementary SRF; max reward BDT 1,500 |
+| Nov25 | Nov25 | EV+SC+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Abs. LUS Conv. | 10th | CHICOX09 weightage table visible; DHKGAZ08/MYMTAN18 RSO-wise rule |
+| Dec25 | Dec25 | EV+SC+LSO+BSO+GA+SiteMon | 4d+200/100 TK | 10,000 | Abs. LUS Conv. | 10th | Same as Nov25; no DHKGAZ08 mention |
+| Jan26 | Jan26 | EV+SC+LSO+SSO+GA+SiteMon | 7d+500 TK (unified) | 10,000 | Abs. LUS Conv. | — | BSO→SSO; LSO raised 7d+500; VLR for GA; 93% No-Play usage; CHICOX09 Structure B |
+| Jan26_DHKDHK67 | Jan26 | EV+SC+LSO+SSO+GA+SiteMon | 7d+500 TK | 10,000 | Abs. LUS Conv. | 10th | DD-specific SRF for DHKDHK67; same as Jan26 |
+| Jan26_GA | Jan26 | GA only | — | 10,000 | — | 10th | GA-only supplementary; VLR condition; prorated RAJGAI07 |
+| Feb26 | Feb26 | EV+SC+LSO+SSO+GA+SiteMon | 7d+500 TK | 10,000 | Abs. LUS Conv. | 10th | SSO in prorated table; 2 DDs prorated (KHUKHU18, MYMMYM25) |
+| Mar26 | Mar26 | EV+SC+LSO+SSO+GA+SiteMon | 7d+500 TK | 10,000 | Abs. LUS Conv. | — | BSO fully absent from KPI list; SSO confirmed as replacement; 3 DDs prorated |
+[/TABLE]

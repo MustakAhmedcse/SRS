@@ -1,0 +1,322 @@
+Distribution Accelerate
+Unique KPI Conditions — All SRFs
+Programmes: Campaign Hygiene (Apr–Aug 2025) | Distributor Accelerate Profitable (Oct 2025–Jan 2026)
+SalesCom Automation Reference | Compiled May 2026
+INDEX
+[TABLE]
+| Section | Title |
+| 1 | Programme Overview |
+| 2 | SRF Inventory & Programme Classification |
+| 3 | Campaign Hygiene — Programme (Apr–Aug 2025) |
+| 3.1 | Programme Summary & Recipient |
+| 3.2 | KPI Framework & Measurement Basis |
+| 3.3 | Metric Definitions (Active LSO, BSO, SSO, DSO, SCR, RSO Productivity) |
+| 3.4 | Key Conditions & Rules |
+| 3.5 | Version Differences Across Monthly SRFs |
+| 4 | Distributor Accelerate Profitable — Programme (Oct 2025–Jan 2026) |
+| 4.1 | Programme Summary & Recipient |
+| 4.2 | KPI: GA Target Achievement |
+| 4.3 | Quality Gates (48hr Usage & VLR Active) |
+| 4.4 | Incentive Structure — Category & Gift |
+| 4.5 | Eligibility Slab Conditions |
+| 4.6 | Exclusion Conditions (TCG Bar, Self-Barred) |
+| 4.7 | Version Differences Across Sub-Period SRFs |
+| 5 | General Conditions — Full Comparison (Both Programmes) |
+| 5.1 | Campaign Hygiene General Conditions |
+| 5.2 | Distributor Accelerate Profitable General Conditions |
+| 5.3 | Side-by-Side Comparison |
+| 6 | Input Data Sources & Report Format |
+| 7 | Maturity Date Summary |
+| 8 | Key Definitions & Glossary |
+[/TABLE]
+1. Programme Overview
+[TABLE]
+| Folder Name | Distribution Accelerate |
+| Total SRFs | 12 SRFs (6 Campaign Hygiene + 6 Distributor Accelerate Profitable) |
+| Requesting Department | Channel Planning |
+| Requester(s) | Noyemul Islam (primary); Sadia Tahsin Ananna (Jan 2026 Profitable 16–25); Md Hasibul Karim (manager, all SRFs) |
+| Recipient Type | Distributor (DD — Distribution House) |
+| Report Slot | Disbursement |
+| Period Covered | April 2025 – January 2026 |
+| Incentive Nature | Cash incentive (Campaign Hygiene) or Gift Voucher / Daraz Voucher (Distributor Accelerate Profitable) |
+| Automation Flag | Salescom to EV Automation: Yes (Profitable series only) |
+[/TABLE]
+2. SRF Inventory & Programme Classification
+[TABLE]
+| SRF Title | Period | Programme Type | Maturity Date |
+| Campaign Hygiene Apr25 | 1–30 Apr 2025 | Campaign Hygiene | 5th of following month |
+| Campaign Hygiene May25 | 1–31 May 2025 | Campaign Hygiene | 5th of following month |
+| Campaign Hygiene Jun25 | 1–30 Jun 2025 | Campaign Hygiene | 3rd of following month |
+| Campaign Hygiene Jul25 | 1–31 Jul 2025 | Campaign Hygiene | 3rd of following month |
+| Campaign Hygiene Aug25 (Main) | 1–31 Aug 2025 | Campaign Hygiene | 3rd of following month |
+| Campaign Hygiene Aug25 (RSO Productivity) | 1–31 Aug 2025 | Campaign Hygiene — RSO Productivity subset | 3rd of following month |
+| Distributor Accelerate Profitable Oct25 | 1–31 Oct 2025 | Distributor Accelerate Profitable | 8th of following month |
+| Distributor Accelerate Profitable Nov25 | 1–30 Nov 2025 | Distributor Accelerate Profitable | 3rd of following month |
+| Distributor Accelerate Profitable Dec25 | 1–31 Dec 2025 | Distributor Accelerate Profitable | 3rd of following month |
+| Distributor Accelerate Profitable 1st–7th Jan26 | 1–7 Jan 2026 | Distributor Accelerate Profitable | 8th Jan 2026 |
+| Distributor Accelerate Profitable 8th–15th Jan26 | 8–15 Jan 2026 | Distributor Accelerate Profitable | 18th Jan 2026 |
+| Distributor Accelerate Profitable 16th–25th Jan26 | 16–25 Jan 2026 | Distributor Accelerate Profitable | 27th Jan 2026 |
+[/TABLE]
+Note: Aug 2025 has two SRFs: one for the main Campaign Hygiene (with FF GA Participation note) and one specifically for RSO Productivity eligibility. Both share the same conditions but cover different KPI components.
+3. Campaign Hygiene — Programme (Apr–Aug 2025)
+3.1 Programme Summary & Recipient
+[TABLE]
+| Programme Name | Distribution Accelerate Campaign Hygiene |
+| Recipient | Distributor (DD — Distribution House), all markets |
+| Incentive Type | Cash incentive upon achieving targets |
+| Cycle | Monthly (calendar month) |
+| Target Setting | DD-wise targets shared by B2C in separate Excel file |
+| Budget Setting | DH-wise budget shared by B2C |
+| Product Types Covered | Prepaid + On Site Strike Rate + DH SCR + Active LSO + Active BSO |
+| Periodicity | Ad-hoc (end of campaign) |
+| Report Description | Distributors will be given cash incentive upon achieving Targets |
+[/TABLE]
+3.2 KPI Framework & Measurement Basis
+Campaign Hygiene SRFs do not list explicit KPI weights in the document — the detailed campaign modality and KPI weightage are shared externally by B2C in a separate file. The following metrics are referenced as KPI components:
+[TABLE]
+| KPI / Metric | How Shared | Notes |
+| GA (Gross Add) | Target shared by B2C in Excel | Primary activation KPI. FCD-gated. |
+| On Site Strike Rate (SCR) | DH SCR Achievement file shared separately | Distribution House-level strike rate. Gate for eligibility. |
+| Active LSO Count | Eligibility file shared by B2C | Active Local Sales Officer count at DD level. |
+| Active BSO Count | Eligibility file shared by B2C | Active Business Support Officer count at DD level. |
+| SSO / DSO Count | Referenced in May–Aug SRFs (not Apr) | Additional field force role counts added from May 2025. |
+| RSO Wise Daily Minimum Transaction Count | Shared in separate mail | RSO productivity threshold. Minimum daily transaction gate. |
+| FF GA Participation | Shared by B2C (Aug 2025 only) | Field Force GA Participation metric — added in Aug 2025. |
+| Month-end RDB | Auto (system) | Month-end Retail Database — the agent list snapshot used for attribution. |
+[/TABLE]
+Note: KPI weightage may vary from DD to DD — explicitly stated in all Campaign Hygiene SRFs. Weights are not fixed in the SRF itself.
+3.3 Metric Definitions
+The SRF template includes definition fields for each metric, but the actual definitions are left blank in the document and are shared separately. The metric names referenced are:
+[TABLE]
+| Metric | Referenced In | Definition (from SRF context) |
+| Active LSO | All months (Apr–Aug) | Local Sales Officer active at a DD. Count tracked per DD. Definition shared externally. |
+| BSO | All months (Apr–Aug) | Business Support Officer. Count tracked per DD. Definition shared externally. |
+| SSO | May, Jun, Jul, Aug | New metric added May 2025 (not in Apr). Definition shared externally. |
+| DSO | Apr only | Appears in Apr SRF definition section; replaced by SSO from May onwards. |
+| DH SCR | All months | Distribution House Strike Rate — ratio of active/productive retailers at DH level. Shared via achievement file. |
+| RSO Productivity | All months (in mail) | Retail Sales Officer daily minimum transaction count. Eligibility file shared by B2C. |
+| FF GA Participation | Aug 2025 only | Field Force GA Participation rate. New metric added in Aug 2025. |
+| Month-end RDB | All months | The retailer database snapshot taken at month end. Used for agent list attribution. |
+[/TABLE]
+3.4 Key Conditions & Rules
+[TABLE]
+| Condition | Rule |
+| KPI Variability | KPI and weightage MAY VARY from DD to DD — not fixed in SRF |
+| Target Source | B2C will share targets in separate Excel file |
+| Budget Source | DH-wise budget will be shared by B2C |
+| Rounding Rule | General mathematical rounding: below 0.5 rounded DOWN; >=0.5 rounded UP. Applies to all calculations. |
+| RDB Snapshot | Month-end RDB of the campaign month will be considered for the agent list |
+| RSO Productivity Gate | RSO Wise Daily Minimum Transaction Count and DD Wise SCR Status shared in separate mail |
+| SCR Achievement File | DH SCR Achievement and RSO productivity eligibility file shared separately by B2C |
+| DD Wise Target | DD-wise target and offer amount shared by B2C |
+| Activation Gate | FCD (First Call Date) — activation must occur during the promotion period |
+| SAF Condition | 98% of ETSAF must be vetted and accepted by Banglalink within 7th of following month |
+| Lifting / Issue | Primary S.C means DD lifting |
+| Recharge Definition | EV sales: RSO to retailer (R2RT) + Distributor to retailer (D2RT) i-top-up + Manual and Daily Commission from Salescom + EV OTF + IRIS OTF + Scratch card sales (lifted from Warehouse to DD). DRC EV EXCLUDED. |
+| Usage Gate (Apr–Jul) | No Play — any outgoing call or internet usage in calendar month in minimum 93% GA. Usage checked. |
+| Usage Gate (Aug) | Usage field NOT checked (unchecked in Aug SRF — minor variation) |
+| Disconnection | Between FCD and latest data up to report generation date (T-6) |
+| Product Scope | Prepaid — i-top-up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle upsell |
+[/TABLE]
+3.5 Version Differences Across Monthly Campaign Hygiene SRFs
+[TABLE]
+| Condition / Element | Apr 2025 | May 2025 | Jun 2025 | Jul 2025 | Aug 2025 (Main) | Aug 2025 (RSO Prod.) |
+| Effective Date | 1–30 Apr | 1–31 May | 1–30 Jun | 1–31 Jul | 1–31 Aug | 1–31 Aug |
+| SSO Definition Field | DSO (Apr only) | SSO added | SSO | SSO | SSO | Not listed |
+| FF GA Participation note | No | No | No | No | Yes (added) | No |
+| RSO Productivity note | Yes (in mail) | Yes (in mail) | Yes (in mail) | Yes (in mail) | Yes (in mail) | Yes (selected DD) |
+| Usage Gate Checked | Yes | Yes | Yes | Yes | No (unchecked) | No (unchecked) |
+| Maturity Date | 5th next month | 5th next month | 3rd next month | 3rd next month | 3rd next month | 3rd next month |
+| Requester | Noyemul Islam | Noyemul Islam | Noyemul Islam | Noyemul Islam | Noyemul Islam | Noyemul Islam |
+| All other conditions | Identical | Identical | Identical | Identical | Identical | Identical |
+[/TABLE]
+Note: Apr and May have maturity on 5th of following month; Jun–Aug shifted to 3rd. The Aug RSO Productivity SRF is a separate report for the RSO productivity subset of DDs — same campaign period but different scope.
+4. Distributor Accelerate Profitable — Programme (Oct 2025–Jan 2026)
+4.1 Programme Summary & Recipient
+[TABLE]
+| Programme Name | Distributor Accelerate Profitable |
+| Recipient | Distributor (DD — Distribution House), extracted DD-wise |
+| Incentive Type | Category/Slab-wise Gift Voucher (Daraz Voucher) — NOT cash |
+| Cycle | Monthly (Oct–Dec 2025) and Sub-Monthly/Phase-wise (Jan 2026: 3 phases) |
+| Target Setting | Distributor-wise target shared by B2C |
+| KPI | GA (Gross Add) only — single KPI |
+| Product Type | Prepaid, Deno HIT |
+| Periodicity | Regular (not Ad-hoc — differs from Campaign Hygiene) |
+| Automation | Salescom to EV Automation: Yes |
+| Report Description | Distributor will be given slab wise Gift Voucher upon achieving target |
+[/TABLE]
+4.2 KPI: GA Target Achievement
+The sole KPI is GA (Gross Add). There is a single achievement threshold required to earn any incentive.
+[TABLE]
+| Condition | Details |
+| KPI | GA (Gross Add) |
+| Achievement Threshold | >=100% of Monthly GA Target (standard condition for all months) |
+| East Cluster Exception (Jan 2026 Phase 1) | East Cluster: >=100% Ach OR >=70% Ach of Target eligible for slab-wise incentive voucher. Rest Cluster: >=100% only. |
+| Report Extraction | DD-wise (per Distribution House) |
+| Target Source | Distributor-wise target shared by B2C |
+| Agent List Date | Snapshot taken on the campaign end date (e.g., 31st Oct, 31st Dec, 7th Jan, 15th Jan, 25th Jan) |
+| Rounding Rule | Below 0.5 rounded down; >=0.5 rounded up — applies to achievement calculation |
+[/TABLE]
+4.3 Quality Gates (48hr Usage & VLR Active)
+Two mandatory quality gates must be met before GA activations count toward the target. Both thresholds are provided by B2C.
+[TABLE]
+| Gate | Threshold (Oct 2025) | Threshold (Nov 2025) | Threshold (Dec 2025) | Threshold (Jan 2026: 1–7, 8–15) | Threshold (Jan 2026: 16–25) |
+| 48 Hour Usage | >=85% | >=80% | >=85% | >=85% | >=80% |
+| VLR Active Usages | >=85% | >=80% | >=85% | >=85% | >=80% |
+[/TABLE]
+Note: Gate thresholds are NOT fixed — they vary between 80% and 85% across periods. Both gates must be met simultaneously. B2C provides the achievement data for both gates.
+4.4 Incentive Structure — Category & Gift
+Incentive is a Daraz voucher. Category (A/B/C/D) or Slab (1/2/3) determines the voucher value. Categories and targets are shared by B2C.
+[TABLE]
+| Period | Category/Slab Structure | Incentive Values | Max per DD |
+| Oct 2025 (1–31 Oct) | Category A/B/C/D | A=BDT 20K | B=BDT 15K | C=BDT 10K | D=BDT 5K — Daraz Voucher | 1 gift per DD (implied) |
+| Nov 2025 (1–30 Nov) | Not detailed in SRF (Dec SRF content used) | — | — |
+| Dec 2025 (1–31 Dec) | Category A/B/C/D | A=BDT 25K | B=BDT 20K | C=BDT 15K | D=BDT 8K — Daraz Voucher | 1 gift per DD (implied) |
+| Jan 2026: 1–7 Jan (Phase 1) | Slab-based (not Category) | Slab amounts shared by B2C | Not specified |
+| Jan 2026: 8–15 Jan (Phase 2) | Slab 1/2/3 | Slab amounts shared by B2C | DD eligible for 1 gift (max consider) |
+| Jan 2026: 16–25 Jan (Phase 3) | Slab 1/2/3 | Slab amounts shared by B2C | DD eligible for 1 gift (max consider) |
+[/TABLE]
+Note: Nov 2025 SRF file is stored as 'Profitable_Nov25' but the SRF content is the Dec25 version (report title says Dec25). Verify the actual Nov25 conditions with B2C. Dec2025 gift values are higher than Oct 2025 (Category A: 25K vs 20K).
+4.5 Eligibility Slab Conditions
+[TABLE]
+| Version | Slab Structure |
+| Oct 2025 | >=100% Ach of Monthly GA Target = eligible for Category-wise Gift. Category and target shared by B2C. |
+| Dec 2025 | >=100% Ach of Monthly GA Target = eligible for Category-wise Gift. Category and target shared by B2C. |
+| Jan 2026 (1–7, Phase 1) | East Cluster: >=100% OR >=70% Ach = eligible for slab-wise incentive voucher. Rest Cluster: >=100% only. Distributor-wise target and incentive amount shared by B2C. |
+| Jan 2026 (8–15, Phase 2) | Slab 1: >=100% Ach = Slab 1 Voucher. Slab 2: >=100% Ach = Slab 2 Voucher. Slab 3: >=100% Ach = Slab 3 Voucher. DD eligible for 1 gift (max consider). |
+| Jan 2026 (16–25, Phase 3) | Same as Phase 2 (Slab 1/2/3 at >=100%). DD eligible for 1 gift (max consider). |
+[/TABLE]
+Note: The 'max consider' rule for Jan 2026 phases means a DD gets only 1 gift even if eligible for multiple slabs — highest applicable slab is awarded.
+4.6 Exclusion Conditions (TCG Bar, Self-Barred)
+[TABLE]
+| Exclusion | Applicable From | Condition |
+| TCG Bar | Dec 2025 onwards (not in Oct/Nov) | Any type of TCG Bar connections will NOT be counted in the GA achievement |
+| Self-Barred | Dec 2025 onwards (not in Oct/Nov) | Self-barred connections will NOT be counted in the GA achievement |
+[/TABLE]
+Note: TCG Bar and Self-Barred exclusions were introduced in Dec 2025. Oct 2025 and Nov 2025 SRFs do NOT mention these exclusions. This is a key difference in eligibility logic between earlier and later SRFs.
+4.7 Version Differences Across Distributor Accelerate Profitable SRFs
+[TABLE]
+| Element | Oct 2025 | Nov 2025 | Dec 2025 | Jan 1–7 | Jan 8–15 | Jan 16–25 |
+| Period Duration | Full month | Full month | Full month | 7 days | 8 days | 10 days |
+| 48hr Gate Threshold | >=85% | >=80% | >=85% | >=85% | >=85% | >=80% |
+| VLR Gate Threshold | >=85% | >=80% | >=85% | >=85% | >=85% | >=80% |
+| TCG/Self-Barred Exclusion | No | No | Yes | Yes | Yes | Yes |
+| Incentive Structure | Cat A/B/C/D | Cat A/B/C/D (Dec content) | Cat A/B/C/D | Phase 1 (cluster split) | Slab 1/2/3 | Slab 1/2/3 |
+| East Cluster Exception | No | No | No | Yes (>=70%) | No | No |
+| Max 1 Gift Rule | Not stated | Not stated | Not stated | Not stated | Yes | Yes |
+| Maturity Date | 8th next month | 3rd next month | 3rd next month | 8th Jan | 18th Jan | 27th Jan |
+| Requester | Noyemul Islam | Noyemul Islam | Noyemul Islam | Noyemul Islam | Noyemul Islam | Sadia Tahsin Ananna |
+[/TABLE]
+5. General Conditions — Full Comparison (Both Programmes)
+5.1 Campaign Hygiene General Conditions
+[TABLE]
+| Factor | Gate Checked | Condition |
+| Activation | FCD (First Call Date) | Activation must occur During the Promotion Period |
+| SAF | Not checked | 98% of ETSAF (Total against activation before Disconnection) must be vetted and accepted by Banglalink within 7th of following month |
+| Lifting/Issue | N/A | Primary S.C means DD lifting |
+| Recharge | All Valid Recharges | EV sales = RSO to retailer (R2RT) + D2RT i-top-up + Manual/Daily Commission from Salescom + EV OTF + IRIS OTF + Scratch card sales (lifted from Warehouse to DD). DRC EV EXCLUDED. |
+| Usage | Valid Usage (Apr–Jul); Unchecked (Aug) | No Play — any outgoing call or internet usage in calendar month in minimum 93% GA |
+| Disconnection | N/A | Between FCD and latest data up to report generation date (T-6) |
+| Product | Prepaid | i-top-up, SC, Data Upsell, GA, Mix Bundle, Voice Bundle upsell |
+| Reactivation | Not checked | — |
+[/TABLE]
+5.2 Distributor Accelerate Profitable General Conditions
+[TABLE]
+| Factor | Gate Checked | Condition |
+| Activation | FCD (First Call Date) | Activation must occur During the Promotion Period |
+| SAF | Not checked | Above ETSAF QC condition will be considered which implemented |
+| Lifting/Issue | N/A | Needs to be activated within 365 days of lifting |
+| Recharge | All Valid C2S Recharges | Valid bundle recharge upsell. Valid recharge means I-TOP up. |
+| Usage | Valid Usage | 48 Hours usages |
+| Disconnection | N/A | Latest data up to report generation date (T-6) |
+| Product | Prepaid | All Prepaid & successful MNP |
+| VLR Status | VLR Active (Other) | VLR Active — additional gate unique to Profitable programme |
+| Reactivation | Not checked | — |
+[/TABLE]
+5.3 Side-by-Side Comparison
+[TABLE]
+| Factor | Campaign Hygiene | Distributor Accelerate Profitable |
+| Activation Gate | FCD | FCD |
+| SAF Standard | 98% ETSAF within 7th of following month | 'Above ETSAF QC condition will be considered which implemented' (less prescriptive) |
+| Lifting Window | Not specified (DD lifting = primary SC) | 365 days from lifting |
+| Recharge Basis | EV/I-TOP + SC + OTF + IRIS OTF. DRC EV excluded. | C2S (Customer-to-Subscriber) valid bundle recharge. I-TOP up only. |
+| Usage Gate | 93% GA No Play rule (Apr–Jul). Aug unchecked. | 48-hour usage gate (binary — 48hrs after activation) |
+| Product Scope | Prepaid: i-top, SC, Data Upsell, GA, Mix Bundle, Voice Bundle | All Prepaid & successful MNP |
+| VLR Gate | Not applicable | VLR Active required (additional gate) |
+| 48hr Gate | Not applicable | >=80% or >=85% (varies by period) |
+| Disconnection Cutoff | T-6 from report generation date | T-6 from report generation date |
+| Data Source | IT SC + IT BI + DWH + POS | IT SC + IT BI + DWH + POS |
+[/TABLE]
+Note: Key difference: Campaign Hygiene uses a 93% GA No Play usage rule; Profitable uses a 48-hour usage gate + VLR Active gate. Recharge basis also differs — Hygiene is broader (EV+SC+OTF), Profitable is specifically C2S bundle recharge.
+6. Input Data Sources & Report Format
+6.1 Input Data Sources (Both Programmes)
+[TABLE]
+| Source | Campaign Hygiene | Distributor Accelerate Profitable |
+| Target (Channel Operation) | Yes | Yes |
+| IT SC | Yes | Yes |
+| IT BI | Yes | Yes |
+| DWH | Yes | Yes |
+| POS | Yes | Yes |
+| DMS | No (not checked) | No (not checked) |
+| Channel Mapping | No | No |
+| Issue Detail | No | No |
+| TABS | No | No |
+[/TABLE]
+6.2 Report Output Format — Distributor Accelerate Profitable
+Two separate output tables are defined:
+[TABLE]
+| Table | Fields |
+| Summary / Achievement Table | Cluster | Region | DD Code | Target | Ach | % Ach | Winning Status | Incentive |
+| Detail / Attribution Table | Cluster | Region | DD Code | Retailer Code | Retailer MSISDN | Customer MSISDN | FCD Date |
+[/TABLE]
+Note: Campaign Hygiene does not define a specific report format in the SRF — the format is shared separately by B2C.
+7. Maturity Date Summary
+[TABLE]
+| SRF | Campaign Period | Maturity Date for Data |
+| Campaign Hygiene Apr25 | 1–30 Apr 2025 | 5th May 2025 |
+| Campaign Hygiene May25 | 1–31 May 2025 | 5th Jun 2025 |
+| Campaign Hygiene Jun25 | 1–30 Jun 2025 | 3rd Jul 2025 |
+| Campaign Hygiene Jul25 | 1–31 Jul 2025 | 3rd Aug 2025 |
+| Campaign Hygiene Aug25 | 1–31 Aug 2025 | 3rd Sep 2025 |
+| Campaign Hygiene Aug25 (RSO Prod.) | 1–31 Aug 2025 | 3rd Sep 2025 |
+| Profitable Oct25 | 1–31 Oct 2025 | 8th Nov 2025 |
+| Profitable Nov25 | 1–30 Nov 2025 | 3rd Dec 2025 |
+| Profitable Dec25 | 1–31 Dec 2025 | 3rd Jan 2026 |
+| Profitable 1–7 Jan26 | 1–7 Jan 2026 | 8th Jan 2026 |
+| Profitable 8–15 Jan26 | 8–15 Jan 2026 | 18th Jan 2026 |
+| Profitable 16–25 Jan26 | 16–25 Jan 2026 | 27th Jan 2026 |
+[/TABLE]
+Note: Campaign Hygiene Apr–May maturity is 5th of following month. Jun–Aug shifted to 3rd. Profitable Oct is 8th of following month; Nov–Dec is 3rd. Jan 2026 sub-phases each have a specific fixed date (campaign end + 1–3 days).
+8. Key Definitions & Glossary
+[TABLE]
+| Term | Definition |
+| DD | Distribution House / Distributor — the recipient of incentive in all Distribution Accelerate SRFs. |
+| GA | Gross Add — successful new SIM activation. Measured by FCD (First Call Date) in the promotion period. |
+| FCD | First Call Date — the date on which a subscriber first makes a call after activation. Used as the activation gate. |
+| RDB | Retail Database — the agent/retailer list snapshot. Month-end RDB is used for attribution in Campaign Hygiene. |
+| SCR | Strike Rate — ratio of productive/active retailers at a Distribution House level. |
+| DH SCR | Distribution House Strike Rate — SCR measured at the DH level. Shared as an eligibility gate. |
+| LSO | Local Sales Officer — field force role at retailer-servicing level. Active LSO count is a KPI metric. |
+| BSO | Business Support Officer — field force role. Active BSO count is a KPI metric. |
+| SSO | Sales Support Officer — field force role added from May 2025 (replaced DSO in Apr 2025). |
+| DSO | Distribution Support Officer — appeared in Apr 2025 SRF only; replaced by SSO from May 2025. |
+| RSO | Retail Sales Officer — field force role. RSO wise daily minimum transaction count is tracked. |
+| FF GA Participation | Field Force GA Participation rate — introduced in Aug 2025 Campaign Hygiene. |
+| 48hr Usage | Usage within 48 hours of SIM activation — quality gate in Distributor Accelerate Profitable. Threshold: >=80% or >=85%. |
+| VLR Active | Visitor Location Register Active — subscriber must be on VLR (i.e., active in the network) to count. Gate for Profitable programme. |
+| TCG Bar | Technical/Commercial Grade Bar — barred connection type. Excluded from GA count in Dec 2025 onwards. |
+| Self-Barred | Subscriber-initiated bar — excluded from GA count in Dec 2025 onwards. |
+| ETSAF | End-to-End SAF compliance metric — 98% of activations must be vetted and accepted within 7th of following month (Campaign Hygiene). |
+| EV OTF | Electronic Voucher Over The Form — a recharge method counted in the Recharge definition. |
+| IRIS OTF | IRIS Over The Form — included in recharge definition for Campaign Hygiene. |
+| DRC EV | Digital Recharge Center EV — specifically EXCLUDED from recharge definition in Campaign Hygiene. |
+| R2RT | RSO/Retailer-to-Retailer Transfer — counted as EV sales in Campaign Hygiene recharge definition. |
+| D2RT | Distributor-to-Retailer Transfer — counted as EV sales in Campaign Hygiene recharge definition. |
+| C2S | Customer-to-Subscriber recharge — the valid recharge basis for Distributor Accelerate Profitable. |
+| T-6 | Report generation date minus 6 days — used as the cutoff for disconnection data. |
+| Daraz Voucher | E-commerce gift voucher (Daraz platform) — the incentive format for Distributor Accelerate Profitable. |
+| Category A/B/C/D | Distributor performance tiers. Higher category = higher incentive value. Targets shared by B2C. |
+| Slab 1/2/3 | Alternative tiering used in Jan 2026 Profitable phases. Values shared by B2C. |
+| East Cluster Exception | In Jan 2026 Phase 1 only: East Cluster DDs eligible at >=70% achievement (vs >=100% for all other clusters/periods). |
+| Max Consider | Rule in Jan 2026 Phase 2 and 3: DD is eligible for only 1 gift — the maximum applicable slab is awarded even if multiple slabs are met. |
+[/TABLE]

@@ -1,0 +1,787 @@
+Banglalink Recharge Campaign
+Unique KPI Conditions — Master Reference Document
+Compiled from 51 Sales Requirement Forms (SRFs) | Commission Automation Team
+INDEX
+[TABLE]
+| Section | Title | Campaign Type |
+| 1 | Overview & Campaign Taxonomy | All 51 SRFs |
+| 2 | Digital Distributor % Commission Campaigns | BDSMARTPAY, ADN Tech, Service Hub, Wintel |
+| 3 | DD Manager Monthly BSO Campaigns | Nov25 & Dec25 |
+| 4 | DD Manager Monthly LSO Campaigns | Jan26 & Feb26 (VLR Penalty) |
+| 5 | DD Manager Short / Accelerate Campaign | Oct25 (4-Day Hit-or-Miss) |
+| 6 | DD / Distributor Weekly Recharge Phased Campaigns | Aug25 (3-Phase Cumulative) |
+| 7 | DD Recharge Race & Distributor Bundle/C2C Campaigns | Mar26 & Feb26 |
+| 8 | RSO C2C Sprint Campaigns | Aug25, Dec25, Feb26 (3-Sprint Structure) |
+| 9 | RSO C2S Campaign | Aug25 (0.4% Rate) |
+| 10 | RSO Monthly BSO Campaigns | Nov25 & Dec25 (Platinum/Gold/Silver) |
+| 11 | RSO Monthly LSO Campaigns | Jan26 & Feb26 (VLR Penalty) |
+| 12 | RSO Supervisor Campaigns | BSO & LSO Nov25 – Feb26 |
+| 13 | RSO Boishakhi Campaigns | Apr26 Bundle & EV Recharge |
+| 14 | Retailer C2C / C2S Short Campaigns | Aug25 & Feb26 |
+| 15 | Selected Retailer C2S Campaigns | Dec25 – Feb26 (Cross-Cluster Rules) |
+| 16 | Tiger Retailer Recharge Powerplay Campaign | Oct25 |
+| 17 | Universal General Conditions | All SRFs |
+| App A | Recharge Definition Master Reference | Terminology & Formulas |
+| App B | Exclusion Rules Summary | All Exclusion Scenarios |
+| App C | Campaign Quick Reference Matrix | All 51 SRFs |
+[/TABLE]
+Section 1: Overview & Campaign Taxonomy
+This document consolidates all unique KPI conditions across 51 Sales Requirement Forms (SRFs) in the Recharge Campaign folder. Campaigns span August 2025 – April 2026 and cover Digital Distributors, DD Managers, RSOs, RSO Supervisors, and Retailers. Each section documents the most granular, unique conditions applicable to that campaign type.
+1.1  Campaign Coverage Summary
+[TABLE]
+| Campaign Group | # SRFs | Channel | Period |
+| Digital Distributor % Commission | 6 | DD (BDSMARTPAY/ADN/ServiceHub/Wintel) | Apr25–Mar26 |
+| DD Manager Monthly BSO | 3 | DD Manager (BSO) | Nov25–Dec25 |
+| DD Manager Monthly LSO | 2 | DD Manager (LSO) | Jan26–Feb26 |
+| DD Manager Short/Accelerate | 1 | DD Manager | Oct25 |
+| DD/Distributor Weekly Phased | 4 | DD/Distributor | Aug25 |
+| DD Recharge Race | 1 | DD (Rangpur specific) | Mar26 |
+| Distributor Bundle/C2C | 2 | Distributor | Feb26–Mar26 |
+| RSO C2C Sprint | 6 | RSO | Aug25–Feb26 |
+| RSO C2S | 1 | RSO | Aug25 |
+| RSO Monthly BSO | 3 | RSO (BSO) | Nov25–Dec25 |
+| RSO Monthly LSO | 2 | RSO (LSO) | Jan26–Feb26 |
+| RSO Supervisor BSO | 3 | RSO Supervisor (BSO) | Nov25–Dec25 |
+| RSO Supervisor LSO | 2 | RSO Supervisor (LSO) | Jan26–Feb26 |
+| RSO Boishakhi | 2 | RSO | Apr26 |
+| Retailer C2C/C2S Short | 5 | Retailer | Aug25–Feb26 |
+| Selected Retailer C2S | 6 | Selected Retailer | Dec25–Feb26 |
+| Tiger Retailer Powerplay | 1 | Retailer | Oct25 |
+| TOTAL | 51 | All Channels | Apr25–Apr26 |
+[/TABLE]
+1.2  Core Recharge Definitions
+[TABLE]
+| NOTE: These definitions apply uniformly across ALL recharge campaigns unless a specific SRF overrides them. |
+[/TABLE]
+[TABLE]
+| Term | Definition |
+| C2C (Charge to Customer) | Transfer/EV recharge from DD/RSO to Retailer. Includes: R2RT, D2RT, SUD12AGENT transaction types. |
+| C2S (Charge to Subscriber) | Any amount recharge to subscriber (customer) from retailer. |
+| EV (Electronic Voucher) | Electronic voucher recharge — divided into EV Primary and EV Secondary. |
+| SC (Scratch Card) | Physical scratch card — divided into SC Primary (lifting) and SC Secondary. |
+| Recharge (combined) | EV Secondary + SC Primary + SC Secondary (unless otherwise specified). |
+| EV OTF | Electronic Voucher Off-The-Face commission component. |
+| IRIS OTF | IRIS system OTF commission component. |
+| OTF (total) | EV OTF + IRIS OTF combined. |
+| DTR (Daily Trade Return) | Manual + Daily Commission sourced from Salescom system. |
+| DRC (Digital Recharge Channel) | Digital recharge method — EXCLUDED from DD achievement unless specifically included. |
+| Ryze Recharge | Service Class ID = 141 — EXCLUDED from all Retailer and Distributor campaigns. |
+| Postpaid Recharge | SERVICE_CLASS_ID >= 1000 — EXCLUDED from all recharge campaigns. |
+| BL Employee Pool Numbers | Banglalink employee numbers — EXCLUDED from all achievement calculations. |
+| C2C Achievement (DD/RSO) | Sum of all C2C transactions excluding DRC, BL employee pool, Ryze (141), and Postpaid. |
+| C2S Achievement (Retailer) | Sum of all C2S transactions excluding Ryze (141), Postpaid (SC_ID >= 1000), and BL employee pool. |
+| AIT (Advance Income Tax) | Applicable deduction for all channel types in Recharge campaigns per NBR regulation. |
+| GA (Gross Addition) | New subscriber activation — used as secondary KPI in some DD Manager campaigns. |
+| VLR (Visitor Location Register) | Active network usage metric — used as penalty trigger for LSO campaigns. |
+| Sprint | Short date window (typically 3–7 days) within a broader campaign period. |
+| BSO | Business Support Officer — field officer category under DD Manager. |
+| LSO | Local Sales Officer — field officer category under DD Manager. |
+[/TABLE]
+Section 2: Digital Distributor % Commission Campaigns
+These campaigns pay a percentage of total recharge (EV+SC) to specific digital distributors. Commission is calculated on cumulative total recharge achieved against a target, with ceiling caps on payout. Revisions are issued for AIT or rate adjustments.
+2.1  BDSMARTPAY — Target Campaign (Aug25–Sep25)
+[TABLE]
+| SRF Reference | BDSMARTPAY Target Campaign Aug25 to Sep25 |
+| Channel | Digital Distributor — BDSMARTPAY |
+| Period | August–September 2025 |
+| Basis | Total Recharge (EV + SC) vs. Target |
+| Commission Rate | % of total recharge achieved — slab-wise based on achievement % |
+| Ceiling | Maximum payout cap applied per slab |
+| AIT | Applicable and deducted from gross payout |
+| Exclusions | Ryze (SC_ID 141), Postpaid (SC_ID ≥ 1000), BL employee pool |
+| Payment Trigger | Achievement must meet minimum threshold to qualify for any payout |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION: BDSMARTPAY uses target-based % commission with ceiling per period. If target is not met, no commission is paid (hit-or-miss at threshold, slab above threshold). |
+[/TABLE]
+2.2  ADN Tech — Total Recharge Commission (Apr25–May25 & Dec25)
+[TABLE]
+| SRF References | Commission for ADN TECH on total recharge 17th Apr–31st May25 + Revision; Commission for Target campaign for ADN Tech limited 1st–31st Dec25 + Revision |
+| Channel | Digital Distributor — ADN Tech Limited |
+| Period 1 | 17 April – 31 May 2025 |
+| Period 2 | 1–31 December 2025 |
+| Basis | % of total recharge (EV+SC secondary) achieved |
+| Apr–May25 Rate | Flat % on total recharge — no slab structure (revised for AIT correction) |
+| Dec25 Rate | Target-based % commission with slab structure; revised version updates AIT calculation |
+| Revision Trigger | AIT rate or calculation methodology change triggers a revised SRF |
+| Ceiling | Maximum payout BDT cap applied |
+| AIT | Deducted per NBR regulation in all versions |
+[/TABLE]
+2.3  Service Hub Limited — Recharge Commission (Mar26)
+[TABLE]
+| SRF Reference | Commission for Service Hub Limited 1st to 18th Mar26 |
+| Channel | Digital Distributor — Service Hub Limited |
+| Period | 1–18 March 2026 |
+| Basis | % of total recharge achieved vs. target |
+| Commission Structure | Slab-wise % commission — higher achievement % = higher commission rate |
+| Ceiling | Per-slab maximum BDT payout cap |
+| AIT | Applicable — deducted from gross commission |
+| Exclusions | Ryze, Postpaid, BL employee pool |
+[/TABLE]
+2.4  Wintel Limited — Target Campaign (Sep25)
+[TABLE]
+| SRF Reference | Wintel limited Target Campaign Sep25 |
+| Channel | Digital Distributor — Wintel Limited |
+| Period | September 2025 |
+| Basis | % of total recharge (EV+SC) vs. target |
+| Commission Structure | Slab-wise % commission with ceiling; same structure as other digital DDs |
+| AIT | Applicable — deducted from gross payout |
+| Exclusions | Ryze (141), Postpaid (SC_ID ≥ 1000), BL employee pool |
+[/TABLE]
+2.5  Common KPI Conditions — All Digital DD % Campaigns
+[TABLE]
+| Condition | Rule | Scope |
+| Commission Basis | % of total recharge (EV Secondary + SC Primary + SC Secondary) achieved | All 4 DDs |
+| Target Benchmark | Target set per campaign period; achievement % determines slab | All 4 DDs |
+| Ceiling Cap | Maximum BDT payout per slab — cannot exceed ceiling even if higher recharge | All 4 DDs |
+| AIT Deduction | Advance Income Tax deducted per NBR regulation from gross payout | All 4 DDs |
+| Revision SRFs | Issued when AIT rate changes mid-period or calculation error found | ADN Tech |
+| Exclusion: Ryze | Service Class 141 transactions excluded from recharge total | All 4 DDs |
+| Exclusion: Postpaid | SERVICE_CLASS_ID >= 1000 excluded | All 4 DDs |
+| Exclusion: BL Pool | BL employee pool numbers excluded | All 4 DDs |
+| DRC | Digital Recharge Channel — included in total recharge for DD-level calculation | All 4 DDs |
+| No Payout Below Min | If achievement < minimum threshold slab, zero commission paid | All 4 DDs |
+[/TABLE]
+Section 3: DD Manager Monthly BSO Campaigns
+DD Manager BSO campaigns pay a flat monthly incentive based on 100% achievement of EV C2C and GA (Gross Addition) targets. Two tiers: BDT 11,111 for 100% and above; BDT 8,889 for below 100%.
+3.1  DD Manager BSO Nov25
+[TABLE]
+| SRF References | DD Manager Campaign_Recharge_BSO_Nov25 + Revision |
+| Channel | DD Manager (BSO category) |
+| Period | November 2025 |
+| Primary KPI | EV C2C achievement (Charge-to-Customer EV transactions from DD to Retailer) |
+| Secondary KPI | GA (Gross Addition) target achievement |
+| Payout — 100% EV C2C + 100% GA | BDT 11,111 per DD Manager |
+| Payout — Below 100% | BDT 8,889 per DD Manager (reduced tier) |
+| Payout — Zero GA | BDT 8,889 (GA miss treated as below-100% tier; no zero payout for C2C hit) |
+| AIT | Applicable — deducted from gross payout |
+| Revision Trigger | BSO_Nov25 Revision issued to correct AIT calculation |
+| Exclusions | DRC excluded from C2C achievement; BL employee pool excluded |
+| Source System | Salescom — EV C2C data; GA data from activation system |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Nov25 BSO: Two-tier flat payout. Must achieve BOTH 100% EV C2C AND 100% GA to get the higher BDT 11,111 tier. Either shortfall moves to BDT 8,889. There is no zero-payout condition — all DD Managers who attempt receive at least BDT 8,889. |
+[/TABLE]
+3.2  DD Manager BSO Dec25
+[TABLE]
+| SRF Reference | DD Manager Campaign_Recharge_BSO_Dec25 |
+| Channel | DD Manager (BSO category) |
+| Period | December 2025 |
+| Structure | Same two-tier flat incentive as Nov25 (BDT 11,111 / 8,889) |
+| Primary KPI | EV C2C achievement vs. target |
+| Secondary KPI | GA achievement vs. target |
+| Payout — 100% both | BDT 11,111 |
+| Payout — Any shortfall | BDT 8,889 |
+| AIT | Applicable |
+| Exclusions | DRC excluded from C2C; BL pool excluded |
+[/TABLE]
+3.3  Unique Conditions — DD Manager BSO
+[TABLE]
+| Condition | Detail |
+| Dual KPI Gate | Both EV C2C AND GA must be 100% for top tier — single KPI achievement not sufficient |
+| Flat Payout (not % based) | Unlike Digital DD campaigns, BSO Manager incentive is a fixed BDT amount, not % of recharge |
+| No Zero-Payout Tier | All qualifying DD Managers receive at least BDT 8,889 regardless of achievement level |
+| DRC Exclusion from C2C | Digital Recharge Channel transactions excluded from EV C2C measurement |
+| BL Employee Pool Excluded | BL employee pool numbers excluded from GA and C2C counts |
+| AIT Deduction | AIT applied on gross BDT amount (11,111 or 8,889) |
+| Revision SRF | Nov25 had a revision for AIT correction — final payout uses revised calculation |
+[/TABLE]
+Section 4: DD Manager Monthly LSO Campaigns
+LSO campaigns mirror the BSO structure (BDT 11,111 / 8,889) but add a VLR-based penalty condition and use a different data source for LSO-category field officers.
+4.1  DD Manager LSO Jan26 & Feb26
+[TABLE]
+| SRF References | DD Manager Campaign_Recharge_LSO_Jan26; DD Manager Campaign_Recharge_LSO_Feb26 |
+| Channel | DD Manager (LSO category) |
+| Periods | January 2026; February 2026 |
+| Primary KPI | EV C2C achievement vs. target |
+| Secondary KPI | GA achievement vs. target |
+| Payout — 100% both | BDT 11,111 |
+| Payout — Shortfall | BDT 8,889 |
+| VLR Penalty | If VLR (Visitor Location Register) falls below defined threshold, penalty deduction applied |
+| VLR Definition | VLR = % of active subscribers on network; low VLR indicates inactive subscriber base |
+| Penalty Trigger | VLR < campaign-defined threshold → deduction from earned incentive |
+| Penalty Amount | Specified per-SRF (fixed BDT or % of earned incentive) |
+| Data Source | RSO Campaign_Recharge_LSO files used for LSO-specific performance data |
+| AIT | Applicable on net payout after penalty |
+| Exclusions | DRC excluded from C2C; BL pool excluded |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — LSO vs BSO: LSO campaigns add a VLR penalty not present in BSO campaigns. VLR measures subscriber activity on Banglalink network. Poor VLR performance reduces the earned incentive. AIT is applied on the net amount after VLR penalty deduction. |
+[/TABLE]
+4.2  VLR Penalty Rule Detail
+[TABLE]
+| VLR Condition | Impact | Applicability |
+| VLR >= Threshold | No penalty — full earned incentive paid | LSO campaigns only |
+| VLR < Threshold | Penalty deducted from earned BDT incentive | LSO campaigns only |
+| Penalty Calculation | Specified in individual SRF (fixed BDT or % of incentive) | LSO campaigns only |
+| AIT Application | AIT applied on net (post-penalty) amount | LSO campaigns only |
+| BSO campaigns | No VLR penalty condition — BSO campaigns immune to VLR | BSO campaigns only |
+[/TABLE]
+Section 5: DD Manager Short / Accelerate Campaign
+A 4-day hit-or-miss incentive for DD Managers. Unlike the monthly structure, this campaign pays a flat BDT 1,000 only if 100% EV C2C target is achieved within the short date window.
+5.1  DD Manager Recharge Accelerate Campaign (8th–11th Oct25)
+[TABLE]
+| SRF Reference | DD Manager Recharge Accelerate Campaign_8th to 11th Oct25 |
+| Channel | DD Manager |
+| Period | 8–11 October 2025 (4 days) |
+| Campaign Type | Short sprint / accelerate (hit-or-miss) |
+| KPI | EV C2C achievement vs. 4-day target |
+| Payout — 100% hit | BDT 1,000 flat per DD Manager |
+| Payout — Miss | BDT 0 (zero payout — true hit-or-miss) |
+| AIT | Applicable on BDT 1,000 if earned |
+| Exclusions | DRC excluded from C2C; BL pool excluded |
+| No Partial Payout | No tiered or partial payout — must achieve exactly 100% or above |
+| No GA KPI | Unlike monthly BSO/LSO campaigns, no GA secondary KPI in this short campaign |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Accelerate: This is a true hit-or-miss campaign. Below 100% EV C2C = BDT 0. No secondary tier unlike the monthly BSO/LSO campaign which always pays at least BDT 8,889. |
+[/TABLE]
+Section 6: DD / Distributor Weekly Recharge Phased Campaigns (Aug25)
+Four cumulative-phase campaigns in August 2025 with progressive date windows. Achievement is measured cumulatively from the start date, with payout slabs at 80%, 90%, and 100%.
+6.1  Phase Structure Overview
+[TABLE]
+| Phase | SRF File | Cumulative Window | Target Basis |
+| Phase 1 | DD weekly Recharge Campaign_1st to 7th Aug25 | 1–7 Aug25 | 7-day cumulative recharge vs. target |
+| Phase 2 | DD weekly Recharge Campaign_1st to 14th Aug25 | 1–14 Aug25 | 14-day cumulative recharge vs. target |
+| Phase 3 | DD weekly Recharge Campaign_1st to 23rd Aug25 | 1–23 Aug25 | 23-day cumulative recharge vs. target |
+| Phase 4 | DD weekly Recharge Campaign_26th to 28th Aug25 | 26–28 Aug25 | 3-day standalone window, separate target |
+[/TABLE]
+6.2  Common Payout Structure — Phases 1–3 (Cumulative)
+[TABLE]
+| Measurement | Cumulative recharge (EV Secondary + SC Primary + SC Secondary) from 1st Aug |
+| Slab — 100% & above | Full payout per slab rate |
+| Slab — 90%–99% | Intermediate payout (90% tier rate) |
+| Slab — 80%–89% | Lower payout (80% tier rate) |
+| Below 80% | No payout for phases 1–3 |
+| SC Primary Cap | SC Primary (lifting) capped at 120% of target — excess not counted |
+| DRC Exclusion | DRC excluded from DD achievement measurement |
+| BL Pool Excluded | BL employee pool numbers excluded |
+| Ryze Excluded | Service Class 141 excluded |
+| Postpaid Excluded | SERVICE_CLASS_ID >= 1000 excluded |
+| AIT | Applicable on all payouts |
+[/TABLE]
+6.3  Phase 4 (26–28 Aug25) — Standalone Window
+[TABLE]
+| Period | 26–28 August 2025 (3 days only — not cumulative from 1st) |
+| Target | Separate target for this 3-day window |
+| Payout Structure | Hit-or-miss on this standalone window |
+| SC Primary Cap | 120% cap on SC Primary still applies |
+| Exclusions | Same as phases 1–3 (DRC, BL pool, Ryze, Postpaid) |
+| AIT | Applicable |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Phased Cumulative: Phases 1–3 are cumulative from August 1st. A distributor who improves performance in phase 2 benefits from the full 1–14 day accumulation. Phase 4 is a separate standalone window — NOT cumulative with phases 1–3. SC Primary is capped at 120% of target across all phases. |
+[/TABLE]
+Section 7: DD Recharge Race & Distributor Bundle/C2C Campaigns
+7.1  DD Recharge Race Secondary Campaign — Rangpur (9th–12th Mar26)
+[TABLE]
+| SRF Reference | DD Recharge Race Secondary Campaign_Rangpur_9th to 12th Mar26 |
+| Channel | DD (Distributor) — Rangpur region only |
+| Period | 9–12 March 2026 (4 days) |
+| Campaign Type | Race / hit-or-miss — EV Secondary only |
+| KPI | EV Secondary C2C (not total recharge — secondary only) |
+| Payout | Slab-wise BDT payout based on EV Secondary achievement rank or volume |
+| Geographic Scope | Rangpur region distributors only (not national) |
+| AIT | Applicable |
+| Exclusions | DRC excluded; BL pool excluded; SC Primary/Secondary NOT counted |
+| Unique Feature | Only EV Secondary counted — SC excluded entirely from this campaign |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — EV Secondary Only: Unlike most recharge campaigns, this DD Race uses ONLY EV Secondary recharge as the KPI. SC (both Primary and Secondary) is excluded. Also geographically restricted to Rangpur region. |
+[/TABLE]
+7.2  Distributor Bundle Campaign (16th–19th Mar26)
+[TABLE]
+| SRF Reference | Distributor Bundle Campaign_16th to 19th Mar26 |
+| Channel | Distributor |
+| Period | 16–19 March 2026 (4 days) |
+| KPI | Bundle recharge achievement (cumulative within window) |
+| Payout Structure | Hit-or-miss: must meet bundle recharge threshold to earn incentive |
+| Bundle Definition | Specific bundle recharge types as defined in SRF |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid, BL pool excluded |
+[/TABLE]
+7.3  Distributor C2C Campaign (1st–7th Feb26)
+[TABLE]
+| SRF Reference | Distributor C2C Campaign_1st to 7th Feb26 |
+| Channel | Distributor |
+| Period | 1–7 February 2026 |
+| KPI | C2C volume (EV C2C) vs. target — slab-wise |
+| Payout Structure | Slab-wise BDT payout based on C2C volume bands |
+| Measurement | Total C2C EV within 7-day window |
+| AIT | Applicable |
+| Exclusions | DRC excluded from C2C; BL pool excluded |
+[/TABLE]
+Section 8: RSO C2C Sprint Campaigns
+RSO C2C Sprint campaigns use a 3-sprint structure with consecutive date windows. Each sprint is a short window. Achieving each sprint individually earns the base rate; cumulative achievement across sprints can earn higher payout. Special rules apply for missed-sprint catch-up and hybrid/digital outlets.
+8.1  Sprint Date Windows — All 6 RSO C2C SRFs
+[TABLE]
+| SRF File | Sprint 1 | Sprint 2 | Sprint 3 | Notes |
+| RSO C2C Campaign_2nd to 7th Aug25 | 2–4 Aug | 5–6 Aug | 7 Aug | 3-day / 2-day / 1-day windows |
+| RSO C2C Campaign_9th to 14th Aug25 | 9–11 Aug | 12–13 Aug | 14 Aug | Same structure |
+| RSO C2C Campaign_16th to 21st Aug25 | 16–18 Aug | 19–20 Aug | 21 Aug | Same structure |
+| RSO C2C Campaign_GAZ_10th_11th and 13th Dec25 | 10 Dec | 11 Dec | 13 Dec | Non-consecutive dates; GAZ variant |
+| RSO C2C Campaign_1st to 7th Feb26 | 1–2 Feb | 3–4 Feb | 5–7 Feb | Standard 3-sprint |
+| RSO C2C Campaign_Hybrid Distribution_Feb26 | Hybrid dates | — | — | Hybrid/digital outlet variant |
+[/TABLE]
+8.2  Standard 3-Sprint Payout Logic
+[TABLE]
+| Sprint KPI | EV C2C volume per RSO per sprint window |
+| Sprint 1 Payout | BDT X if Sprint 1 target met (hit-or-miss per sprint) |
+| Sprint 2 Payout | BDT Y if Sprint 2 target met (can earn independently of Sprint 1) |
+| Sprint 3 Payout | BDT Z if Sprint 3 target met |
+| All 3 Sprints Achieved | Higher total BDT (sum of all 3 sprint payouts, possibly with bonus) |
+| Consecutive Bonus | Achieving all 3 consecutive sprints may unlock additional BDT |
+| Missed Sprint Catch-up | If Sprint 1 missed but cumulative through Sprint 2 meets Sprint 1+2 target, Sprint 1 payout unlocked retroactively |
+| GAZ Variant (Dec25) | Non-consecutive dates (10, 11, 13 Dec) — same payout logic applied to non-sequential windows; adjustment rules for date gaps |
+| Hybrid/Digital (Feb26) | Hybrid distribution RSOs get BDT 30 per outlet achieving C2C vs. target |
+| AIT | Applicable on all sprint payouts |
+| Exclusions | DRC excluded from C2C; BL pool excluded; Ryze excluded |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Sprint Adjustment Rule: If Sprint N is missed but cumulative C2C from Sprint 1 through Sprint N meets the combined target, the individual sprint payout can be awarded retroactively. This prevents penalizing RSOs with uneven daily volumes. |
+[/TABLE]
+8.3  GAZ Variant Conditions (Dec25 Non-Consecutive)
+[TABLE]
+| SRF Reference | RSO C2C Campaign_GAZ_10th_11th and 13th Dec25 |
+| Date Pattern | 10 Dec, 11 Dec, 13 Dec 2025 — note: 12 Dec is skipped |
+| Sprint Windows | Sprint 1 = 10 Dec; Sprint 2 = 11 Dec; Sprint 3 = 13 Dec |
+| Gap Day (12 Dec) | Not counted as a sprint day; does not reset cumulative |
+| Payout Logic | Same hit-or-miss per sprint; cumulative adjustment rule applies across non-consecutive dates |
+| AIT | Applicable |
+[/TABLE]
+8.4  Hybrid Distribution RSO Conditions (Feb26)
+[TABLE]
+| SRF Reference | RSO C2C Campaign_Hybrid Distribution_Feb26 |
+| Channel Variant | Hybrid/digital distribution outlets only |
+| Payout Basis | BDT 30 per outlet achieving C2C target within campaign window |
+| Measurement | Each outlet counted individually if C2C target met |
+| Maximum Earning | Number of eligible outlets × BDT 30 |
+| AIT | Applicable on total earned amount |
+| Standard Sprints | Standard 3-sprint date structure applies (Feb26 dates) |
+[/TABLE]
+Section 9: RSO C2S Campaign (Aug25)
+9.1  RSO C2S Campaign (2nd–7th Aug25)
+[TABLE]
+| SRF Reference | RSO C2S Campaign_2nd to 7th Aug25 |
+| Channel | RSO (Retailer-facing) |
+| Period | 2–7 August 2025 |
+| KPI | C2S (Charge to Subscriber) — recharge sent to customer from retailer |
+| Commission Rate | 0.4% of total C2S achieved |
+| Cap | C2S achievement capped at 130% of target — excess not counted for commission |
+| Basis | RSO's total C2S within period (all retailers under that RSO) |
+| AIT | Applicable on 0.4% gross commission |
+| Exclusions | Ryze (SC_ID 141) excluded; Postpaid (SC_ID >= 1000) excluded; BL pool excluded |
+| DRC | DRC included in C2S for retailer-level measurement (unlike DD C2C) |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — C2S vs C2C: This is the only RSO campaign based on C2S (subscriber recharge) rather than C2C (retailer-level distribution). Rate is 0.4% with 130% target cap. DRC is INCLUDED in C2S unlike DD campaigns where DRC is excluded from C2C. |
+[/TABLE]
+Section 10: RSO Monthly BSO Campaigns (Platinum/Gold/Silver)
+RSO Monthly BSO campaigns use a 3-tier system: Platinum (≥100%), Gold (≥95%), Silver (<95%). Payouts are BDT 8,000 / 7,000 / 6,000 respectively.
+10.1  RSO Campaign BSO Nov25 (+ Revision)
+[TABLE]
+| SRF References | RSO Campaign_Recharge_BSO_Nov25 + Revision |
+| Channel | RSO (BSO category) |
+| Period | November 2025 |
+| KPI | Recharge achievement (EV Secondary + SC Primary + SC Secondary) vs. target |
+| Platinum Threshold | >= 100% achievement |
+| Gold Threshold | >= 95% and < 100% achievement |
+| Silver Threshold | < 95% achievement (minimum qualifying level) |
+| Platinum Payout | BDT 8,000 |
+| Gold Payout | BDT 7,000 |
+| Silver Payout | BDT 6,000 |
+| Below Silver | No payout if below minimum qualifying recharge |
+| AIT | Applicable on all tier payouts |
+| Revision | Nov25 Revision corrects AIT or threshold details |
+| Exclusions | Ryze (141), Postpaid (SC_ID >= 1000), BL pool, Cross-cluster (if applicable) |
+| Data Source | RSO Campaign_Recharge_BSO files |
+[/TABLE]
+10.2  RSO Campaign BSO Dec25
+[TABLE]
+| SRF Reference | RSO Campaign_Recharge_BSO_Dec25 |
+| Channel | RSO (BSO category) |
+| Period | December 2025 |
+| Threshold Change | Dec25 thresholds: Platinum >= 100%; Gold >= 90% (lower than Nov25's 95%); Silver < 90% |
+| Payouts | Same BDT 8,000 / 7,000 / 6,000 structure |
+| AIT | Applicable |
+| Exclusions | Same as Nov25 |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Threshold Shift: Nov25 BSO uses Gold threshold of >= 95%. Dec25 BSO lowers Gold threshold to >= 90%. Platinum remains >= 100% in both months. More RSOs qualify for Gold tier in Dec25 than in Nov25 under identical performance. |
+[/TABLE]
+10.3  Platinum/Gold/Silver Tier Matrix — BSO
+[TABLE]
+| Tier | Nov25 Threshold | Dec25 Threshold | Payout (BDT) |
+| Platinum | >= 100% | >= 100% | 8,000 |
+| Gold | >= 95% and < 100% | >= 90% and < 100% | 7,000 |
+| Silver | >= Min and < 95% | >= Min and < 90% | 6,000 |
+| No Payout | < Minimum qualifying | < Minimum qualifying | 0 |
+[/TABLE]
+Section 11: RSO Monthly LSO Campaigns (Platinum/Gold/Silver + VLR)
+RSO LSO campaigns use the same 3-tier structure as BSO but add VLR penalty and use a different data source (RSO Campaign_Recharge_LSO files).
+11.1  RSO Campaign LSO Jan26 & Feb26
+[TABLE]
+| SRF References | RSO Campaign_Recharge_LSO_Jan26; RSO Campaign_Recharge_LSO_Feb26 |
+| Channel | RSO (LSO category) |
+| Periods | January 2026; February 2026 |
+| KPI | EV + SC Secondary recharge vs. target (LSO-specific basis) |
+| Platinum | >= 100%  → BDT 8,000 |
+| Gold | >= 90% and < 100% → BDT 7,000 |
+| Silver | < 90% (qualifying) → BDT 6,000 |
+| VLR Penalty | VLR < threshold → deduction from earned tier payout |
+| VLR Threshold | Campaign-specific threshold defined per SRF |
+| Data Source | RSO Campaign_Recharge_LSO files (separate from BSO data files) |
+| AIT | Applicable on net amount after VLR penalty |
+| Exclusions | Ryze, Postpaid, BL pool excluded |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — LSO Data Source: LSO RSO campaigns use a separate data file (RSO Campaign_Recharge_LSO) which tracks LSO-specific metrics including VLR. BSO campaigns do NOT use this file and do NOT have VLR penalty. |
+[/TABLE]
+Section 12: RSO Supervisor Campaigns
+RSO Supervisor campaigns calculate incentive based on cumulative performance of ALL RSOs under a supervisor. Same BSO/LSO split applies. Payouts are BDT 8,889 / 7,778 (supervisor level).
+12.1  RSO Supervisor BSO Campaigns (Nov25, Dec25 + Revision)
+[TABLE]
+| SRF References | RSO Sup Campaign_Recharge_BSO_Nov25 + Revision; RSO Sup Campaign_Recharge_BSO_Dec25 |
+| Channel | RSO Supervisor (BSO category supervisors) |
+| Periods | November 2025; December 2025 |
+| KPI | Cumulative recharge of all RSOs under this supervisor vs. cumulative target |
+| Achievement Basis | Aggregate of all RSOs' EV+SC recharge achievement |
+| Payout — 100% & above | BDT 8,889 per RSO Supervisor |
+| Payout — Below 100% | BDT 7,778 per RSO Supervisor |
+| No Zero Tier | All supervisors qualify for at least BDT 7,778 (no zero payout unless no activity) |
+| AIT | Applicable |
+| Revision Nov25 | Revision for AIT correction in November |
+| Exclusions | Same as RSO BSO: Ryze, Postpaid, BL pool excluded |
+[/TABLE]
+12.2  RSO Supervisor LSO Campaigns (Jan26 & Feb26)
+[TABLE]
+| SRF References | RSO Sup Campaign_Recharge_LSO_Jan26; RSO Sup Campaign_Recharge_LSO_Feb26 |
+| Channel | RSO Supervisor (LSO category supervisors) |
+| Periods | January 2026; February 2026 |
+| KPI | Cumulative EV+SC recharge of all LSO RSOs under supervisor |
+| Payout Structure | BDT 8,889 / 7,778 (same as BSO supervisor) |
+| VLR Penalty | VLR penalty applied at supervisor level if aggregate VLR < threshold |
+| AIT | Applicable on net after penalty |
+| Data Source | RSO Campaign_Recharge_LSO supervisor files |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Supervisor vs RSO Payout: RSO individual earns BDT 8,000/7,000/6,000 (3 tiers). RSO Supervisor earns BDT 8,889/7,778 (2 tiers only). Supervisor payout is based on aggregate team performance, not individual RSO performance. |
+[/TABLE]
+12.3  Supervisor Payout vs RSO Payout Comparison
+[TABLE]
+| Level | Tier System | 100% Payout | Below 100% Payout | VLR Penalty |
+| RSO (BSO) | 3 tiers (Platinum/Gold/Silver) | BDT 8,000 | BDT 7,000 or 6,000 | No |
+| RSO (LSO) | 3 tiers (Platinum/Gold/Silver) | BDT 8,000 | BDT 7,000 or 6,000 | Yes |
+| Supervisor (BSO) | 2 tiers only | BDT 8,889 | BDT 7,778 | No |
+| Supervisor (LSO) | 2 tiers only | BDT 8,889 | BDT 7,778 | Yes |
+[/TABLE]
+Section 13: RSO Boishakhi Campaigns (Apr26)
+Two Boishakhi (Bangla New Year) RSO campaigns in April 2026 — one for bundle recharge and one for EV recharge per retailer. Both apply cross-cluster exclusion rules.
+13.1  RSO Boishakhi Dhakamka Campaign (21st–30th Apr26)
+[TABLE]
+| SRF Reference | RSO Boishakhi Dhakamka Campaign_21st to 30th Apr26 |
+| Channel | RSO |
+| Period | 21–30 April 2026 |
+| KPI | Bundle recharge achievement |
+| Payout Structure | Slab-wise BDT per bundle recharge volume band (BDT 300–850 range) |
+| Cross-Cluster | Cross-cluster recharge DEDUCTED from achievement (transactions where subscriber's home cluster differs from recharging retailer's cluster) |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid, BL pool, cross-cluster recharge |
+[/TABLE]
+13.2  RSO Boishakhi Recharge Campaign (18th–30th Apr26)
+[TABLE]
+| SRF Reference | RSO Boishakhi Recharge Campaign_18th to 30th Apr26 |
+| Channel | RSO |
+| Period | 18–30 April 2026 |
+| KPI | EV recharge per retailer achieving target |
+| Payout | BDT 100 per retailer achieving EV recharge target within period |
+| Earning Basis | RSO earns BDT 100 for EACH retailer under them who hits the EV recharge target |
+| Cross-Cluster | Cross-cluster recharge excluded from retailer's EV recharge count |
+| AIT | Applicable on total earned (number of qualifying retailers × BDT 100) |
+| Exclusions | Ryze, Postpaid, BL pool, cross-cluster |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Per-Retailer Payout: This Boishakhi campaign pays BDT 100 PER RETAILER who achieves target, not a flat per-RSO amount. RSO's total earning = qualifying retailers × BDT 100. Cross-cluster recharge is excluded from the retailer's qualifying EV recharge. |
+[/TABLE]
+13.3  Cross-Cluster Rule Definition
+[TABLE]
+| Definition | A recharge transaction where the subscriber's home cluster (billing cluster) is different from the retailer's cluster performing the recharge |
+| Treatment | Cross-cluster recharge is DEDUCTED from achievement — not counted toward target |
+| Applicability | RSO Boishakhi campaigns, Selected Retailer campaigns (Jan26 window), Retailer Boishakhi campaign |
+| Penalty Scope | In Selected Retailer campaigns: if any cross-cluster in window → entire cluster excluded from that campaign period |
+| RSO Campaigns | Only the specific cross-cluster transaction excluded (not entire cluster) |
+[/TABLE]
+Section 14: Retailer C2C / C2S Short Campaigns
+Short-duration retailer campaigns (4–7 days) based on C2C (lifting) or C2S (recharge to subscriber). Retailers are categorized into A/B/C tiers by their recharge volume. Hybrid distribution retailers have different rates.
+14.1  Retailer C2C Campaign — 450LUS (11th–14th Aug25)
+[TABLE]
+| SRF Reference | Retailer C2C Campaign_450LUS_11th to 14th Aug25 |
+| Channel | Retailer |
+| Period | 11–14 August 2025 (4 days) |
+| KPI | C2C (lifting from distributor to retailer) |
+| Category A Threshold | ≥ 7,000 BDT lifting |
+| Category B Threshold | ≥ 5,000 BDT lifting |
+| Category C Threshold | ≥ 3,000 BDT lifting |
+| Commission Rate | 1% of lifting amount (C2C) |
+| Maximum Payout | BDT 200 (cap on 1% commission — equivalent to max BDT 20,000 lifting counted) |
+| Classification | Retailer category assigned at campaign start based on historical lifting |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid excluded; BL pool excluded |
+[/TABLE]
+14.2  Retailer C2S Campaign (2nd–7th Aug25 & 11th–14th Aug25)
+[TABLE]
+| SRF References | Retailer C2S Campaign_2nd to 7th Aug25; Retailer C2S Campaign_11th to 14th Aug25 |
+| Channel | Retailer |
+| Periods | 2–7 Aug25; 11–14 Aug25 |
+| KPI | C2S (recharge to subscriber from retailer) |
+| Commission Rate | 1% of C2S amount |
+| Achievement Cap | 130% of target — C2S above 130% not counted for commission |
+| AIT | Applicable |
+| Exclusions | Ryze (141), Postpaid (SC_ID >= 1000), BL pool |
+[/TABLE]
+14.3  Retailer C2C Hybrid Distribution Campaign (Feb26)
+[TABLE]
+| SRF Reference | Retailer C2C Campaign_Hybrid Distribution_Feb26 |
+| Channel | Retailer — Hybrid Distribution outlets |
+| Period | February 2026 |
+| KPI | C2C (lifting from distributor) |
+| Commission Rate | 3.056% of C2C amount |
+| Maximum Payout | BDT 1,000 per retailer |
+| Outlet Type | Hybrid distribution outlets only — separate rate from standard retailers |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid, BL pool |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Hybrid Rate: Hybrid distribution retailer C2C rate is 3.056% (vs. 1% for standard retailers). Maximum cap is BDT 1,000. This higher rate compensates hybrid outlets for dual-channel operation. |
+[/TABLE]
+14.4  Retailer Boishakhi Recharge Campaign (18th–30th Apr26)
+[TABLE]
+| SRF Reference | Retailer Boishakhi Recharge Campaign_18th to 30th Apr26 |
+| Channel | Retailer |
+| Period | 18–30 April 2026 |
+| KPI | EV recharge to subscriber |
+| Commission Rate | % or flat BDT on EV recharge |
+| Maximum Payout | BDT 2,000 per retailer |
+| Cross-Cluster | Cross-cluster EV recharge excluded from qualifying total |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid, BL pool, cross-cluster |
+[/TABLE]
+14.5  Retailer Rate Comparison
+[TABLE]
+| Campaign | KPI | Rate | Max Payout (BDT) | Cap |
+| C2C 450LUS Aug25 | Lifting (C2C) | 1% | 200 | BDT 200 ceiling |
+| C2S Aug25 (×2 SRFs) | Subscriber recharge (C2S) | 1% | Uncapped | 130% target cap |
+| C2C Hybrid Feb26 | Lifting (C2C) | 3.056% | 1,000 | BDT 1,000 ceiling |
+| Boishakhi EV Apr26 | EV Recharge | Slab | 2,000 | BDT 2,000 ceiling |
+[/TABLE]
+Section 15: Selected Retailer C2S Campaigns
+Selected (pre-identified) retailer C2S campaigns run Dec25–Feb26. Dec25 is flat-rate; Jan26 and Feb26 are slab-wise with cross-cluster cluster-level exclusion.
+15.1  SRF Coverage — 6 Selected Retailer SRFs
+[TABLE]
+| SRF File | Period | Rate Type | Max Payout | Cross-Cluster Rule |
+| Selected Retailer_14th to 25th Dec25 | 14–25 Dec25 | 1% flat | — | No |
+| Selected Retailer_1st to 12th Dec25 | 1–12 Dec25 | 1% flat | — | No |
+| Selected Retailer_1st to 10th Jan26 | 1–10 Jan26 | Slab-wise | 2,000 | Yes (13–20 Jan window) |
+| Selected Retailer_11th to 20th Jan26 | 11–20 Jan26 | Slab-wise | 2,000 | Yes (11–20 Jan window) |
+| Selected Retailer_21st to 30th Jan26 | 21–30 Jan26 | Slab-wise | 2,000 | Yes |
+| Selected Retailer_1st to 10th Feb26 | 1–10 Feb26 | Slab-wise | 2,000 | Yes |
+[/TABLE]
+15.2  December 2025 — Flat Rate Conditions
+[TABLE]
+| SRF References | Selected Retailer_1st to 12th Dec25; Selected Retailer_14th to 25th Dec25 |
+| Channel | Selected Retailers (pre-identified list) |
+| Periods | 1–12 Dec25 and 14–25 Dec25 (two separate SRFs for same month) |
+| Commission Rate | 1% flat on total C2S |
+| Achievement Cap | No upper slab — flat 1% on all C2S |
+| Cross-Cluster | NOT applicable in December SRFs |
+| AIT | Applicable |
+| Exclusions | Ryze, Postpaid, BL pool |
+[/TABLE]
+15.3  January–February 2026 — Slab-Wise with Cross-Cluster Exclusion
+[TABLE]
+| SRF References | Selected Retailer Jan26 (3 SRFs); Selected Retailer_1st to 10th Feb26 |
+| Commission Rate | Slab-wise: higher C2S volumes earn higher % rate |
+| Maximum Payout | BDT 2,000 per retailer per campaign period |
+| Cross-Cluster Rule | If a retailer in a cluster performs ANY cross-cluster recharge during the campaign window (or 13–20 Jan26 window for Jan SRFs), the ENTIRE CLUSTER is excluded from that campaign period's payout |
+| Cluster Exclusion Scope | All retailers in the affected cluster lose their incentive — not just the retailer who did cross-cluster recharge |
+| Jan26 Window | The cross-cluster check window for 1–10 Jan SRF is 13–20 Jan26 (monitoring window) |
+| AIT | Applicable on slab payout |
+| Exclusions | Ryze, Postpaid, BL pool, cross-cluster C2S |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Cluster-Level Cross-Cluster Penalty: In Jan26 & Feb26 Selected Retailer campaigns, cross-cluster recharge by ANY ONE retailer in a cluster triggers exclusion of the ENTIRE CLUSTER. This is a collective penalty — not individual. In Dec25 SRFs, no cross-cluster rule applies. The monitoring window for Jan 1–10 SRF is 13–20 Jan26 (not the campaign period itself). |
+[/TABLE]
+15.4  Slab Structure — Jan26 & Feb26 Selected Retailer
+[TABLE]
+| C2S Achievement Band | Commission Rate | Maximum Commission |
+| Below minimum threshold | 0% (no payout) | BDT 0 |
+| Minimum to Slab 1 upper | Rate 1% | Slab-capped |
+| Slab 2 range | Rate 2% | Slab-capped |
+| Slab 3 and above | Rate 3% | Max BDT 2,000 |
+| Overall cap | Any slab | BDT 2,000 per retailer per period |
+[/TABLE]
+[TABLE]
+| Exact slab BDT thresholds and rates are defined per SRF. The BDT 2,000 maximum is the ceiling across all slabs — no retailer can earn above BDT 2,000 in a single campaign period. |
+[/TABLE]
+Section 16: Tiger Retailer Recharge Powerplay Campaign
+16.1  Tiger Retailer Recharge Powerplay (8th–11th Oct25)
+[TABLE]
+| SRF Reference | Tiger Retailer Recharge Powerplay Campaign_8th to 11th Oct25 |
+| Channel | Tiger Retailer (designated high-volume retailer tier) |
+| Period | 8–11 October 2025 (4 days) |
+| KPI | Recharge (EV+SC) vs. target — % of target achieved |
+| Commission Rate | 1% of total recharge qualifying for target |
+| Achievement Basis | % achievement of Tiger Retailer's assigned target |
+| Postpaid Exclusion | SERVICE_CLASS_ID >= 1000 EXPLICITLY excluded |
+| Ryze Exclusion | Service Class 141 EXPLICITLY excluded |
+| BL Pool Excluded | BL employee pool numbers excluded |
+| AIT | Applicable |
+| Tiger Retailer Def | Pre-designated high-volume retailers with special Tiger category status |
+[/TABLE]
+[TABLE]
+| UNIQUE CONDITION — Tiger Retailer: Tiger Retailers are a distinct category from standard retailers. The 1% commission applies on total eligible recharge. Both Postpaid (SC_ID >= 1000) and Ryze (141) are EXPLICITLY called out for exclusion in this SRF — most other retailer SRFs mention these implicitly. |
+[/TABLE]
+Section 17: Universal General Conditions (All SRFs)
+The following conditions apply universally across all 51 Recharge Campaign SRFs unless a specific SRF explicitly overrides them.
+17.1  Universal Exclusion Rules
+[TABLE]
+| Exclusion | Definition | Applies To |
+| Ryze (Service Class 141) | All recharge transactions on SC_ID 141 excluded from achievement | All SRFs |
+| Postpaid Recharge | SERVICE_CLASS_ID >= 1000 excluded from all recharge counts | All SRFs |
+| BL Employee Pool | Banglalink employee pool numbers excluded from achievement and GA | All SRFs |
+| DRC (DD C2C) | Digital Recharge Channel excluded from DD-level C2C achievement | DD SRFs |
+| DRC (Retailer C2S) | DRC INCLUDED in retailer C2S (not excluded at retailer level) | Retailer SRFs |
+| Cross-Cluster Recharge | Deducted or triggers cluster exclusion in specific campaigns | Boishakhi, Selected Retailer Jan-Feb26 |
+| Below Minimum Threshold | No payout if achievement below defined minimum | All slab-based SRFs |
+[/TABLE]
+17.2  Universal Payment Conditions
+[TABLE]
+| Condition | Rule |
+| AIT (Advance Income Tax) | Applicable on ALL payouts across ALL 51 SRFs per NBR regulation |
+| Payout Basis | Commission/incentive paid on achievement during campaign period only |
+| Pro-rating | No pro-rating for partial periods unless SRF explicitly states otherwise |
+| Dispute Period | Usually 7–15 days post-campaign for data dispute resolution |
+| Payment Timing | Typically processed in following month payroll/commission cycle |
+| Source Data | All calculations based on Salescom system data unless otherwise stated |
+| Revision SRFs | If a revision SRF is issued, the revised version supersedes the original |
+| Target Definition | Targets are set at campaign start and are not revised mid-campaign |
+| Rounding | Commission amounts rounded per standard financial rounding rules |
+| No Double-Dipping | Same transaction cannot count in two overlapping campaigns simultaneously |
+[/TABLE]
+17.3  Recharge Component Inclusion Summary by Campaign Type
+[TABLE]
+| Recharge Component | DD % Campaigns | DD Manager | RSO Campaigns | Retailer Campaigns |
+| EV Primary | Included | Not counted | Not counted | Not counted |
+| EV Secondary | Included | Included (C2C) | Included | Included (C2S) |
+| SC Primary (Lifting) | Included | Not counted | Included (capped 120%) | Included (C2C) |
+| SC Secondary | Included | Not counted | Included | Included |
+| DRC | Included | Excluded from C2C | Excluded from C2C | Included in C2S |
+| Ryze (SC 141) | Excluded | Excluded | Excluded | Excluded |
+| Postpaid (SC≥1000) | Excluded | Excluded | Excluded | Excluded |
+[/TABLE]
+Appendix A: Recharge Definition Master Reference
+A.1  Transaction Type Reference
+[TABLE]
+| Transaction Code | Full Name | Description | Direction |
+| R2RT | Retailer to Retailer Transfer | EV C2C from one retailer to another | Retailer → Retailer |
+| D2RT | Distributor to Retailer Transfer | EV C2C from distributor to retailer | Distributor → Retailer |
+| SUD12AGENT | SUD Agent Transfer | Agent-based EV C2C distribution | Agent → Retailer |
+| C2C | Charge to Customer | Umbrella term for R2RT + D2RT + SUD12AGENT | DD/RSO → Retailer |
+| C2S | Charge to Subscriber | EV recharge from retailer to subscriber | Retailer → Subscriber |
+| EV OTF | EV Off-The-Face | EV commission component paid OTF | System commission |
+| IRIS OTF | IRIS Off-The-Face | IRIS-sourced OTF component | System commission |
+| DTR | Daily Trade Return | Manual + daily commission from Salescom | Commission payment |
+[/TABLE]
+A.2  Service Class ID Reference
+[TABLE]
+| Service Class | Description | Treatment in Recharge Campaigns |
+| SC_ID = 141 | Ryze recharge service | EXCLUDED from all campaigns |
+| SC_ID < 1000 | Prepaid subscribers | INCLUDED (unless otherwise excluded) |
+| SC_ID >= 1000 | Postpaid subscribers | EXCLUDED from all campaigns |
+| BL Employee Pool | Banglalink employee numbers | EXCLUDED from all campaigns |
+[/TABLE]
+A.3  Commission Type Summary
+[TABLE]
+| Commission Type | Formula | Applicable Channels |
+| % of Recharge | Achievement Amount × Rate% (with ceiling) | Digital DD campaigns |
+| Flat Monthly | Fixed BDT amount (11,111 or 8,889) based on 100%/below-100% | DD Manager BSO/LSO |
+| Flat Short | Fixed BDT 1,000 (hit-or-miss) | DD Manager Accelerate |
+| Slab Recharge | % rate varies by achievement slab; ceiling per slab | DD Weekly, Selected Retailer |
+| Per-Outlet | BDT 30 per qualifying outlet | RSO C2C Hybrid |
+| Per-Retailer | BDT 100 per qualifying retailer | RSO Boishakhi EV |
+| 3-Tier Flat | BDT 8,000 / 7,000 / 6,000 based on Platinum/Gold/Silver | RSO Monthly BSO/LSO |
+| 2-Tier Supervisor | BDT 8,889 / 7,778 based on 100% / below | RSO Supervisor |
+| % of C2C | 1% or 3.056% with max cap | Retailer C2C |
+| % of C2S | 0.4% or 1% with 130% achievement cap | RSO C2S, Retailer C2S |
+[/TABLE]
+Appendix B: Exclusion Rules Summary
+[TABLE]
+| Exclusion Type | Trigger Condition | Scope | Impact |
+| Ryze Exclusion | SC_ID = 141 | All SRFs | Transaction not counted in achievement |
+| Postpaid Exclusion | SC_ID >= 1000 | All SRFs | Transaction not counted |
+| BL Employee Pool | Subscriber in BL employee pool | All SRFs | Transaction not counted |
+| DRC from DD C2C | Digital Recharge Channel method | DD campaigns | Not counted in DD C2C achievement |
+| SC Primary Cap | SC Primary > 120% of target | DD Aug25 phased | Excess SC Primary not counted |
+| VLR Penalty | VLR < campaign threshold | LSO campaigns only | BDT penalty deducted from earned incentive |
+| Cross-Cluster (transaction) | Subscriber cluster ≠ retailer cluster | Boishakhi, RSO Boishakhi | That transaction excluded |
+| Cross-Cluster (cluster) | Any retailer in cluster does cross-cluster in window | Selected Retailer Jan-Feb26 | ENTIRE cluster excluded from payout |
+| 130% C2S Cap | C2S achievement > 130% of target | RSO C2S, Retailer C2S Aug25 | Achievement capped at 130% |
+| EV Secondary Only Scope | SC excluded from KPI basis | DD Rangpur Race | Only EV Secondary counted |
+| Below Minimum Slab | Achievement below minimum threshold | All slab-based | Zero payout |
+| No Double-Count | Same transaction in two campaigns | All SRFs | Counted in one campaign only |
+[/TABLE]
+Appendix C: Campaign Quick Reference Matrix (All 51 SRFs)
+[TABLE]
+| SRF File (Abbreviated) | Channel | Period | KPI Basis | Rate/Payout | AIT | VLR | Cross-Cluster |
+| BDSMARTPAY Target Aug25–Sep25 | DD | Aug–Sep25 | Total Recharge % | Slab% w/ ceiling | Yes | No | No |
+| ADN Tech Apr–May25 | DD | Apr–May25 | Total Recharge % | Flat % | Yes | No | No |
+| ADN Tech Apr–May25 Revision | DD | Apr–May25 | Total Recharge % | Flat % (revised) | Yes | No | No |
+| ADN Tech Dec25 | DD | Dec25 | Total Recharge % | Slab% w/ ceiling | Yes | No | No |
+| ADN Tech Dec25 Revision | DD | Dec25 | Total Recharge % | Slab% (revised) | Yes | No | No |
+| Service Hub Mar26 | DD | Mar26 | Total Recharge % | Slab% w/ ceiling | Yes | No | No |
+| Wintel Sep25 | DD | Sep25 | Total Recharge % | Slab% w/ ceiling | Yes | No | No |
+| DD Mgr BSO Nov25 | DD Mgr | Nov25 | EV C2C + GA | 11,111/8,889 BDT | Yes | No | No |
+| DD Mgr BSO Nov25 Revision | DD Mgr | Nov25 | EV C2C + GA | 11,111/8,889 BDT | Yes | No | No |
+| DD Mgr BSO Dec25 | DD Mgr | Dec25 | EV C2C + GA | 11,111/8,889 BDT | Yes | No | No |
+| DD Mgr LSO Jan26 | DD Mgr | Jan26 | EV C2C + GA | 11,111/8,889 BDT | Yes | Yes | No |
+| DD Mgr LSO Feb26 | DD Mgr | Feb26 | EV C2C + GA | 11,111/8,889 BDT | Yes | Yes | No |
+| DD Mgr Accelerate Oct25 | DD Mgr | 8–11 Oct25 | EV C2C (4-day) | 1,000 BDT HOM | Yes | No | No |
+| DD Weekly 1–7 Aug25 | DD/Dist | 1–7 Aug25 | Cum. Recharge | Slab 80/90/100% | Yes | No | No |
+| DD Weekly 1–14 Aug25 | DD/Dist | 1–14 Aug25 | Cum. Recharge | Slab 80/90/100% | Yes | No | No |
+| DD Weekly 1–23 Aug25 | DD/Dist | 1–23 Aug25 | Cum. Recharge | Slab 80/90/100% | Yes | No | No |
+| DD Weekly 26–28 Aug25 | DD/Dist | 26–28 Aug25 | Standalone Recharge | HOM | Yes | No | No |
+| DD Recharge Race Rangpur Mar26 | DD (Rangpur) | 9–12 Mar26 | EV Secondary Only | Slab BDT | Yes | No | No |
+| Distributor Bundle Mar26 | Distributor | 16–19 Mar26 | Bundle Recharge | HOM BDT | Yes | No | No |
+| Distributor C2C Feb26 | Distributor | 1–7 Feb26 | C2C Volume | Slab BDT | Yes | No | No |
+| RSO C2C 2–7 Aug25 | RSO | 2–7 Aug25 | EV C2C Sprint ×3 | Sprint BDT | Yes | No | No |
+| RSO C2C 9–14 Aug25 | RSO | 9–14 Aug25 | EV C2C Sprint ×3 | Sprint BDT | Yes | No | No |
+| RSO C2C 16–21 Aug25 | RSO | 16–21 Aug25 | EV C2C Sprint ×3 | Sprint BDT | Yes | No | No |
+| RSO C2C GAZ Dec25 | RSO | 10,11,13 Dec25 | EV C2C Sprint ×3 | Sprint BDT (GAZ) | Yes | No | No |
+| RSO C2C 1–7 Feb26 | RSO | 1–7 Feb26 | EV C2C Sprint ×3 | Sprint BDT | Yes | No | No |
+| RSO C2C Hybrid Feb26 | RSO | Feb26 | EV C2C per outlet | BDT 30/outlet | Yes | No | No |
+| RSO C2S 2–7 Aug25 | RSO | 2–7 Aug25 | C2S recharge | 0.4% cap 130% | Yes | No | No |
+| RSO BSO Nov25 | RSO | Nov25 | Recharge vs. target | P8000/G7000/S6000 | Yes | No | No |
+| RSO BSO Nov25 Revision | RSO | Nov25 | Recharge vs. target | P8000/G7000/S6000 | Yes | No | No |
+| RSO BSO Dec25 | RSO | Dec25 | Recharge vs. target | P8000/G7000/S6000 | Yes | No | No |
+| RSO LSO Jan26 | RSO | Jan26 | EV+SC vs. target | P8000/G7000/S6000 | Yes | Yes | No |
+| RSO LSO Feb26 | RSO | Feb26 | EV+SC vs. target | P8000/G7000/S6000 | Yes | Yes | No |
+| RSO Sup BSO Nov25 | RSO Sup | Nov25 | Aggregate team rech. | 8889/7778 BDT | Yes | No | No |
+| RSO Sup BSO Nov25 Revision | RSO Sup | Nov25 | Aggregate team rech. | 8889/7778 BDT | Yes | No | No |
+| RSO Sup BSO Dec25 | RSO Sup | Dec25 | Aggregate team rech. | 8889/7778 BDT | Yes | No | No |
+| RSO Sup LSO Jan26 | RSO Sup | Jan26 | Aggregate EV+SC | 8889/7778 BDT | Yes | Yes | No |
+| RSO Sup LSO Feb26 | RSO Sup | Feb26 | Aggregate EV+SC | 8889/7778 BDT | Yes | Yes | No |
+| RSO Boishakhi Dhakamka Apr26 | RSO | 21–30 Apr26 | Bundle Recharge | Slab BDT 300–850 | Yes | No | Yes |
+| RSO Boishakhi Recharge Apr26 | RSO | 18–30 Apr26 | EV per retailer | BDT 100/retailer | Yes | No | Yes |
+| Retailer C2C 450LUS Aug25 | Retailer | 11–14 Aug25 | C2C Lifting | 1% max BDT 200 | Yes | No | No |
+| Retailer C2C Hybrid Feb26 | Retailer | Feb26 | C2C Lifting | 3.056% max BDT 1000 | Yes | No | No |
+| Retailer C2S 2–7 Aug25 | Retailer | 2–7 Aug25 | C2S Recharge | 1% cap 130% | Yes | No | No |
+| Retailer C2S 11–14 Aug25 | Retailer | 11–14 Aug25 | C2S Recharge | 1% cap 130% | Yes | No | No |
+| Retailer Boishakhi Apr26 | Retailer | 18–30 Apr26 | EV Recharge | % max BDT 2000 | Yes | No | Yes |
+| Sel. Retailer 1–12 Dec25 | Sel. Retailer | 1–12 Dec25 | C2S Recharge | 1% flat | Yes | No | No |
+| Sel. Retailer 14–25 Dec25 | Sel. Retailer | 14–25 Dec25 | C2S Recharge | 1% flat | Yes | No | No |
+| Sel. Retailer 1–10 Jan26 | Sel. Retailer | 1–10 Jan26 | C2S Recharge | Slab max BDT 2000 | Yes | No | Yes |
+| Sel. Retailer 11–20 Jan26 | Sel. Retailer | 11–20 Jan26 | C2S Recharge | Slab max BDT 2000 | Yes | No | Yes |
+| Sel. Retailer 21–30 Jan26 | Sel. Retailer | 21–30 Jan26 | C2S Recharge | Slab max BDT 2000 | Yes | No | Yes |
+| Sel. Retailer 1–10 Feb26 | Sel. Retailer | 1–10 Feb26 | C2S Recharge | Slab max BDT 2000 | Yes | No | Yes |
+| Tiger Retailer Powerplay Oct25 | Tiger Ret. | 8–11 Oct25 | Recharge vs. target | 1% of recharge | Yes | No | No |
+[/TABLE]

@@ -1,0 +1,284 @@
+BANGLALINK
+POSTPAID GA FOLDER
+Unique KPI Conditions
+All Unique Commissioning Conditions Across All Campaign Types
+Total SRFs Analysed: 6
+Department: Alternate Channel and Digital Recharge
+Recipient Roles: B2C Postpaid BDO / Monobrand CCR
+Prepared: May 2026
+INDEX — Postpaid GA Folder Campaign Types
+[TABLE]
+| # | Campaign Type | Brief Description |
+| 1 | Postpaid GA Achievement with Daily Participation — BDO | BDO gets fixed bonus (BDT 4,000 or BDT 2,000) based on ≥93% GA target achievement AND minimum active participation days in the month |
+| 2 | Postpaid Slab-wise GA Achievement Bonus — BDO | BDO earns up to BDT 2,000 via two within-month date-based slabs (1st–10th and 11th–20th), each requiring 20 GAs; must also achieve ≥93% overall monthly target |
+| 3 | BL Prepaid and Postpaid GA Campaign — Monobrand CCR | Monobrand CCR earns per-GA incentive on a 3-slab basis for both Prepaid and Postpaid; requires recharge completion rate ≥95%; AIT NOT applicable |
+[/TABLE]
+[TABLE]
+| All three campaign types in this folder share the same postpaid eligible product IDs and security deposit framework. See Appendix A (Products) and Appendix B (Security Deposits). The Monobrand CCR campaign also covers Prepaid activations. |
+[/TABLE]
+Section 1: Postpaid GA Achievement with Daily Participation — BDO
+BDO earns a fixed monthly bonus for achieving at least 93% of their GA target, provided they also maintain a minimum number of active participation days in that month. Two bonus tiers exist — higher bonus for more participation days, lower bonus for fewer. The participation day thresholds are adjusted each month to reflect the total working days available.
+1.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual retailer code) |
+| Commission Concept | Dual condition: GA % achievement ≥93% AND minimum monthly participation days |
+| Commission Tiers | BDT 4,000 (higher tier) or BDT 2,000 (lower tier) — fixed, not proportional |
+| Periodicity | Regular — Monthly (Jan26 onwards) |
+| Reporting | Jan26 and Apr26 as Regular; Mar26 filed as Ad-hoc |
+| Report Slot | Disbursement only |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| Salescom to POS | No |
+| Salescom to IN HOUSE | No |
+| Data Source | ED, IT BI, DWH, TABS, DMS, POS; DWH table: POSTPAID_COMMISSION_DATA_MONTHLY_DWH |
+[/TABLE]
+1.2 Bonus Structure — by Month
+The GA achievement threshold (93%) is constant across all months. Only the participation day thresholds change to reflect the number of working/calendar days per month:
+[TABLE]
+| Month | GA Achievement Required | Tier 1 (Higher Bonus) | Participation Days for Tier 1 | Tier 2 (Lower Bonus) | Participation Days for Tier 2 |
+| Jan 2026 | ≥ 93% of monthly GA target | BDT 4,000 | ≥ 24 days | BDT 2,000 | ≥ 20 days |
+| Feb 2026 | ≥ 93% of monthly GA target | BDT 4,000 | ≥ 22 days | BDT 2,000 | ≥ 18 days |
+| Mar 2026 | ≥ 93% of monthly GA target | BDT 4,000 | ≥ 20 days | BDT 2,000 | ≥ 19 days |
+| Apr 2026 | ≥ 93% of monthly GA target | BDT 4,000 | ≥ 24 days | BDT 2,000 | ≥ 20 days |
+[/TABLE]
+[TABLE]
+| KEY RULE: Both conditions (GA ≥93% AND participation days ≥ threshold) must be met to qualify for either tier. A BDO who achieves 95% GA but participates only 19 days in January gets BDT 0 — below the 20-day lower threshold. The participation day thresholds are set lower in shorter months (e.g., Feb requires only 18/22 days vs Jan's 20/24). |
+[/TABLE]
+1.3 Eligibility Logic
+[TABLE]
+| Scenario | GA Achievement | Participation Days (e.g. Jan26) | Commission Earned |
+| Qualifies for Tier 1 | ≥ 93% | ≥ 24 days | BDT 4,000 |
+| Qualifies for Tier 2 only | ≥ 93% | ≥ 20 days but < 24 days | BDT 2,000 |
+| Does not qualify | ≥ 93% | < 20 days | BDT 0 |
+| Does not qualify | < 93% | Any | BDT 0 |
+[/TABLE]
+1.4 GA Conditions
+GA & MNP Eligibility Conditions
+[TABLE]
+| 1 | GA includes both New Activations and MNP (Mobile Number Portability). |
+| 2 | New Activation: on Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) base package, with mentioned bundle or non-bundle. |
+| 3 | MNP: to subscription ID Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid), with mentioned bundle or non-bundle. |
+| 4 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 5 | Only eligible subscription IDs and option group bundles count (see Appendix A). |
+| 6 | Security deposit must be ensured on the same day as activation. |
+| 7 | Security deposit must be equal to or greater than the bundle-wise minimum amount (see Appendix B). |
+| 8 | Top-up for security deposit can be in one shot or multiple — total must add up to required deposit. |
+| 9 | Security deposit top-up can be done via i-top number list (to be shared) OR via BL Power App (any registered number). |
+| 10 | For TK200 packs, deposit amount must be extracted from DWH (Table: POSTPAID_COMMISSION_DATA_MONTHLY_DWH). |
+| 11 | DWH source file for BL Power deposits: bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+| 12 | 98% ETSAF must be submitted by 7th of the following month. |
+| 13 | One shot or multiple recharge from any source considered — must add up as deposit. |
+| 14 | Disconnection data: latest up to report generation date (T-6). |
+| 15 | AIT applicable. |
+| 16 | Field force (B2C Postpaid BDO) is eligible for monthly commission. |
+[/TABLE]
+1.5 General Conditions Table
+[TABLE]
+| Factor | Consideration | Condition Detail |
+| Activation | FCD (First Call Date) | Retail2Postpaid / BL Select Postpaid (M2MADV) + (blkSelPostpaid) base package activation + option group bundle activation |
+| SAF | ETSAF | 98% ETSAF must be submitted by 7th of following month by all retailer codes under his DDCODE |
+| Lifting/Issue | N/A | Needs to be activated within 180 days of lifting |
+| Recharge | All Valid Recharges | Any recharge; one shot or multiple from any source counts as deposit |
+| Disconnection | N/A | Latest data up to report generation date (T-6) |
+| Product | Postpaid | B2C postpaid product details of base package and bundles as per Appendix A |
+[/TABLE]
+1.6 Report Detail Format
+[TABLE]
+| Retailer Code | Target | GA Before Disconnection | Total GA | Disconnection Count | ETSAF Qualified Count | Deposit Count | Commission Amount |
+| [from system] | [shared] | [computed] | [computed] | [computed] | [computed] | [computed] | [BDT 2000/4000] |
+[/TABLE]
+Section 2: Postpaid Slab-wise GA Achievement Bonus — BDO
+BDO earns bonuses based on achieving two within-month date-specific GA count targets. Each slab covers a 10-day window (1st–10th and 11th–20th), requiring 20 GAs per slab. Can earn both slabs (BDT 2,000 total) or just one. Missing the first slab does not prevent earning the second. Overall monthly GA achievement of ≥93% is also required.
+2.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | B2C Postpaid BDO (individual retailer code) |
+| Commission Concept | Within-month date-based slabs — two 10-day windows each requiring 20 GAs |
+| Max Commission | BDT 2,000 (BDT 1,000 per slab × 2 slabs) |
+| Overall GA Threshold | BDO must achieve at least 93% of monthly GA target to be eligible |
+| Periodicity | Regular — Monthly (observed: Jan26) |
+| Report Slot | Disbursement only |
+| AIT | Applicable |
+| Maturity Date | 8th of following month |
+| Data Source | ED, IT BI, DWH, TABS, DMS, POS |
+[/TABLE]
+2.2 Slab Structure
+[TABLE]
+| Slab | Date Window | GA Count Required | Commission | Independence Rule |
+| Slab 1 | 1st – 10th of month | 20 GAs within this window | BDT 1,000 | Can earn without Slab 2 |
+| Slab 2 | 11th – 20th of month | 20 GAs within this window | BDT 1,000 | Can earn WITHOUT achieving Slab 1 |
+| Both Slabs | Full month | 20 GAs by 10th AND 20 more by 20th | BDT 2,000 | Both earned if both windows met |
+[/TABLE]
+[TABLE]
+| INDEPENDENCE RULE: If a BDO misses Slab 1 (does not achieve 20 GAs by 10th), they are still eligible for Slab 2 commission (BDT 1,000) if they achieve 20 GAs between 11th and 20th. However, the overall 93% monthly GA target must STILL be met. |
+[/TABLE]
+2.3 Eligibility Matrix
+[TABLE]
+| Overall GA ≥93%? | Slab 1 Met (20 GAs by 10th)? | Slab 2 Met (20 GAs by 20th)? | Total Commission |
+| Yes | Yes | Yes | BDT 2,000 |
+| Yes | Yes | No | BDT 1,000 |
+| Yes | No | Yes | BDT 1,000 |
+| Yes | No | No | BDT 0 |
+| No | Any | Any | BDT 0 (overall 93% not met) |
+[/TABLE]
+2.4 Specific Conditions
+Specific Conditions
+[TABLE]
+| 1 | BDO must achieve at least 93% of their monthly GA target to be eligible for any slab commission. |
+| 2 | Slab 1: BDO must complete 20 valid GAs within 1st–10th of the month to earn BDT 1,000. |
+| 3 | Slab 2: BDO must complete 20 valid GAs within 11th–20th of the month to earn BDT 1,000. |
+| 4 | Missing Slab 1 does NOT disqualify the BDO from Slab 2 — slabs are independently evaluated. |
+| 5 | Achieving both slabs earns a total of BDT 2,000. |
+| 6 | GA includes both New Activations and MNP. |
+| 7 | Activation retailer type must be 'B2C_postpaid' in DMS. |
+| 8 | Only eligible subscription IDs and option group bundles count (Appendix A). |
+| 9 | Security deposit must be on same day as activation; one shot or multiple; BL Power App accepted. |
+| 10 | For TK200 packs, deposit from DWH (POSTPAID_COMMISSION_DATA_MONTHLY_DWH). |
+| 11 | 98% ETSAF must be submitted by 7th of following month. |
+| 12 | Disconnection data: T-6. |
+| 13 | AIT applicable. |
+[/TABLE]
+2.5 Key Differentiator vs. Section 1
+[TABLE]
+| Attribute | Section 1 (Daily Participation) | Section 2 (Slab-wise) |
+| Commission Model | Fixed bonus based on total monthly participation days | Fixed bonus based on GA count within specific date windows |
+| Metric Tracked | Days active in month | GAs completed within each 10-day window |
+| Tiers | 2 tiers: BDT 4,000 or BDT 2,000 | 2 independent slabs: BDT 1,000 each, max BDT 2,000 |
+| Independence | Only one tier applies per month | Each slab is independent — can earn Slab 2 without Slab 1 |
+| Max Earnings | BDT 4,000 | BDT 2,000 |
+| GA Threshold | ≥ 93% overall | ≥ 93% overall (mandatory gate) |
+[/TABLE]
+Section 3: BL Prepaid and Postpaid GA Campaign — Monobrand CCR
+Monobrand Customer Care Representatives (CCR) earn per-GA incentive across three achievement slabs for both Prepaid and Postpaid activations. Unlike BDO commissions, this campaign has a 3-slab per-GA rate structure, a recharge completion rate condition, AIT is NOT applicable, and the maturity date is 45 days after activation.
+3.1 Campaign Overview
+[TABLE]
+| Parameter | Detail |
+| Recipient | Monobrand CCR (Customer Care Representative) |
+| Product Coverage | Both BL Prepaid AND BL Postpaid activations |
+| Commission Type | Per-GA incentive — BDT amount per qualifying GA based on slab |
+| Slab Basis | % achievement vs. individual CCR target AND recharge completion rate |
+| Periodicity | Regular — Monthly (from Feb26 onwards) |
+| AIT | NOT APPLICABLE (unlike all BDO commissions) |
+| Maturity Date | 45 days after activation date (unique — all BDO types use 8th of month) |
+| Max GA per Agent | Incentive eligible up to 100 GA per agent per month |
+| Report Slot | Disbursement |
+| Salescom to POS | No |
+| Salescom to EV | No |
+| Data Source | ED, IT BI, DWH, TABS, DMS, POS |
+[/TABLE]
+3.2 Incentive Slabs — Prepaid
+[TABLE]
+| Slab | Achievement vs. Target | 1st Recharge Completion Rate | Incentive per GA |
+| Slab 1 | ≥ 93% | ≥ 95% of GAs must have 1st recharge within 45 days | BDT 10 / GA |
+| Slab 2 | > 93% to < 101% | ≥ 95% of GAs must have 1st recharge within 45 days | BDT 30 / GA |
+| Slab 3 | ≥ 101% | ≥ 95% of GAs must have 1st recharge within 45 days | BDT 40 / GA |
+[/TABLE]
+3.3 Incentive Slabs — Postpaid
+[TABLE]
+| Slab | Achievement vs. Target | 2nd Recharge/Bundle Purchase Rate | Incentive per GA |
+| Slab 1 | ≥ 93% | ≥ 95% of GAs must have 2nd recharge or 2nd bundle purchase within 45 days | BDT 10 / GA |
+| Slab 2 | > 93% to < 101% | ≥ 95% of GAs must have 2nd recharge or 2nd bundle purchase within 45 days | BDT 30 / GA |
+| Slab 3 | ≥ 101% | ≥ 95% of GAs must have 2nd recharge or 2nd bundle purchase within 45 days | BDT 40 / GA |
+[/TABLE]
+[TABLE]
+| POSTPAID RECHARGE CONDITION: For Postpaid, 'first recharge' in Prepaid is replaced by 'second recharge or second bundle purchase' within 45 days of activation. This means the customer must make a second payment (renewal or additional bundle) to validate the GA. No additional Postpaid bundle commission is considered from Feb26. |
+[/TABLE]
+3.4 Specific Conditions
+Specific Conditions
+[TABLE]
+| 1 | Both Prepaid and Postpaid activations are eligible for this campaign. |
+| 2 | Only listed Monobrand CCRs are eligible — CCR list shared with commission team before calculation. |
+| 3 | For each Monobrand, there is a set Target for CCRs. The target list (by Monobrand and by CCR) is shared before commission run. |
+| 4 | The CUMULATIVE GA of all CCRs assigned to a Monobrand must be ≥ 90% of that Monobrand's monthly target for individual CCR incentives to apply. |
+| 5 | Individual incentive is eligible up to 100 GA per agent per month — GAs beyond 100 are not incentivized. |
+| 6 | For Prepaid: first recharge must be completed within 45 days of activation date. |
+| 7 | For Postpaid: second recharge or second bundle purchase must be completed within 45 days of activation date. |
+| 8 | At least 95% of the CCR's total GAs must have completed the recharge/bundle condition (95% completion rate threshold). |
+| 9 | 90% of Monobrand center target must be met for individual CCR achievement to qualify for slab incentive. |
+| 10 | Only MNP and new activation are considered for incentive eligibility. |
+| 11 | AIT is NOT applicable for this commission (this is applicable for Sales Team only). |
+| 12 | No additional Postpaid bundle commission will be considered from Feb26 onwards. |
+| 13 | TK300BORGAPOSTOG — source: POSTPAID_COMMISSION_DATA_MONTHLY_DWH (specific to this campaign). |
+| 14 | Security deposit must be equal to or greater than bundle-wise minimum, deposited on same day of activation. |
+| 15 | Multiple shot deposits allowed but must be on the same day of activation. |
+| 16 | For TK200 (non-bundle) packs, deposit verified from DPOS checking activation date and required deposit. |
+| 17 | Maturity date: 45 days after activation date. |
+[/TABLE]
+3.5 Monobrand CCR Postpaid Eligible Products
+[TABLE]
+| Type | EQUIPID | Segment | Service Type | Min. Security Deposit (BDT) |
+| Base Package (Activation) | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) | B2C | Base package | — |
+| Non-renewal bundle | TK214USSD30DPOSTOG | B2C | Bundle | Not Applicable |
+| Non-Bundle/Non-Renewal | TK200NB30DPOSTOG | B2C | NON-BUNDLE | 170 |
+| Non-renewal bundle | TK794POSTGAUMIXBDNLOG | B2C | Bundle | 750 |
+| Non-renewal bundle | TK394POSTGAUMIXBDNLOG | B2C | Bundle | 350 |
+| Non-renewal bundle | TK494POSTGAUSSDMIXOG | B2C | Bundle | 450 |
+| Non-renewal bundle | TK1143CGAMXBOGPOST | B2C | Bundle | 1,150 |
+| Non-renewal bundle | TK2343CGAMXBOGPOST | B2C | Bundle | 2,350 |
+[/TABLE]
+[TABLE]
+| NOTE: TK214USSD30DPOSTOG appears in the Monobrand CCR SRF (Feb26) with 'Not Applicable' for security deposit — this pack is present for Monobrand even though it was discontinued for BDO commissions from May25. The Monobrand campaign also lists TK300BORGAPOSTOG as a separate source in DWH. |
+[/TABLE]
+3.6 General Conditions Table
+[TABLE]
+| Factor | Consideration | Condition Detail |
+| Activation | FCD (First Call Date) | Activation during the calendar month; Prepaid and Postpaid both eligible |
+| SAF | Vetting Date | Standard vetting condition |
+| Lifting/Issue | N/A | N/A |
+| Recharge | All Valid Recharges | 1st recharge (Prepaid) or 2nd recharge/bundle (Postpaid) within 45 days |
+| Product | BL Prepaid, Postpaid | Both product types eligible; see product table above |
+[/TABLE]
+3.7 Key Differences: Monobrand CCR vs. BDO Commission Types
+[TABLE]
+| Attribute | BDO Commissions (Sections 1 & 2) | Monobrand CCR (Section 3) |
+| Recipient | B2C Postpaid BDO | Monobrand CCR |
+| Product Coverage | Postpaid only | Prepaid AND Postpaid |
+| Commission Rate | Fixed flat (BDT 2k/4k or 1k per slab) | Per-GA rate: BDT 10/30/40 per GA |
+| GA Cap per Agent | No cap | Capped at 100 GAs per agent per month |
+| Recharge Condition | None (deposit only) | 1st recharge (Prepaid) or 2nd recharge/bundle (Postpaid) within 45 days, ≥95% rate |
+| Center Target | Not applicable | Cumulative CCR GAs ≥ 90% of Monobrand monthly target required |
+| AIT | Applicable | NOT Applicable |
+| Maturity Date | 8th of following month | 45 days after activation date |
+| CCR List | All BDOs with B2C_postpaid type | Only listed Monobrand CCRs (shared before run) |
+[/TABLE]
+Appendix A: Eligible Postpaid Product IDs (BDO Campaigns)
+All BDO commission types (Sections 1 and 2) use these product IDs. Security deposits must be confirmed on the same day as activation.
+[TABLE]
+| Type | EQUIPID | Segment | Service Type |
+| Base Package (Activation) | Retail2Postpaid / Banglalink Select Postpaid (M2MADV) + (blkSelPostpaid) | B2C | Base package |
+| Non-Bundle/Non-Renewal | TK200NB30DPOSTOG | B2C | NON-BUNDLE |
+| Non-renewal bundle | TK394POSTGAUMIXBDNLOG | B2C | Bundle |
+| Non-renewal bundle | TK494POSTGAUSSDMIXOG | B2C | Bundle |
+| Non-renewal bundle | TK794POSTGAUMIXBDNLOG | B2C | Bundle |
+| Non-renewal bundle | TK1143CGAMXBOGPOST | B2C | Bundle |
+| Non-renewal bundle | TK2343CGAMXBOGPOST | B2C | Bundle |
+[/TABLE]
+Appendix B: Security Deposit Amounts (All Postpaid GA Campaigns)
+Applicable for all campaign types in this folder. Deposits must be made on the same day as activation. One shot or multiple installments are allowed but must accumulate to the required minimum.
+[TABLE]
+| Bundle Value (incl. Tax) | Minimum Security Deposit (BDT) | Condition |
+| TK 200 (Non-bundle) | 170 | MNP / New Activation + Bundle + Security Deposit |
+| TK 394 | 350 | MNP / New Activation + Bundle + Security Deposit |
+| TK 494 | 450 | MNP / New Activation + Bundle + Security Deposit |
+| TK 794 | 750 | MNP / New Activation + Bundle + Security Deposit |
+| TK 1143 | 1,150 | MNP / New Activation + Bundle + Security Deposit |
+| TK 2343 | 2,350 | MNP / New Activation + Bundle + Security Deposit |
+| TK 214 (Monobrand only) | Not Applicable | Monobrand CCR campaign only — no deposit required for this pack |
+[/TABLE]
+[TABLE]
+| For TK200 packs, extract actual deposit amounts from DWH. DWH table: POSTPAID_COMMISSION_DATA_MONTHLY_DWH. BL Power App deposit also accepted for all packs — DWH source file: bl_power_recharge_dwh_yyyymmdd.csv at /ccn1/downstream/export/daily/salescom. |
+[/TABLE]
+Appendix C: Campaign Comparison Summary
+[TABLE]
+| Attribute | Section 1 Daily Participation | Section 2 Slab-wise | Section 3 Monobrand CCR |
+| Recipient | B2C Postpaid BDO | B2C Postpaid BDO | Monobrand CCR |
+| Product | Postpaid only | Postpaid only | Prepaid + Postpaid |
+| Max Commission | BDT 4,000 | BDT 2,000 | BDT 40/GA (up to 100 GAs) |
+| GA Threshold | ≥ 93% of target | ≥ 93% of target (gate) | ≥ 93% (for Slab 1) |
+| Additional KPI | Participation days ≥ N | 20 GAs per 10-day window | ≥ 95% recharge completion |
+| AIT | Applicable | Applicable | NOT Applicable |
+| Maturity Date | 8th of next month | 8th of next month | 45 days after activation |
+| CCR List Required | No | No | Yes — listed CCRs only |
+| Slab Independence | N/A | Yes — Slab 2 without Slab 1 | N/A |
+[/TABLE]

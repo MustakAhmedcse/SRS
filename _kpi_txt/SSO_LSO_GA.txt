@@ -1,0 +1,275 @@
+SSO / LSO / GA CHANNEL
+Unique KPI Conditions Reference
+Compiled from all 5 Service Request Forms
+Distribution Planning & Operation / Channel Planning | Banglalink | Jan 2026 – Mar 2026
+Section 1: Overview & Taxonomy
+This document consolidates all unique KPI conditions from 5 Service Request Forms (SRFs) covering the SSO (Sales Support Officer) / LSO (Location-based Sales Officer) / GA programmes. The SRFs span January 2026 through March 2026 across two distinct programme families: (1) Project Thunderstorm – Distributor Active SSO GA Campaign, and (2) RSO / RSO Supervisor Campaign on GA, Recharge, and LSO.
+1.1 SRF Inventory
+[TABLE]
+| # | SRF Title | Requester Dept. | Period | Recipient |
+| 1 | Distributor Active SSO GA Campaign – Project Thunderstorm (Jan26) | Distribution Planning & Operation | Jan 2026 | Distributor (RSO) |
+| 2 | Distributor Active SSO GA Campaign – Project Thunderstorm (Feb26) | Distribution Planning & Operation | Feb 2026 | Distributor |
+| 3 | Distributor Active SSO GA Campaign – Project Thunderstorm (Mar26) | Distribution Planning & Operation | Mar 2026 | Distributor |
+| 4 | RSO Campaign – GA, Recharge, LSO (Mar26) | Channel Planning | Mar 2026 | RSO (Field Force) |
+| 5 | RSO Supervisor Campaign – GA, Recharge, LSO (Mar26) | Channel Planning | Mar 2026 | RSO Supervisor |
+[/TABLE]
+1.2 Channel & Recipient Types
+[TABLE]
+| Distributor | Distribution company responsible for managing retailers (SSOs) in selected Thanas. Earns incentive if the active SSO target per BTS is achieved. |
+| RSO | Retail Sales Officer – direct field force under a distributor/CM. Earns incentive based on Recharge (EV+SC), GA, Strike Rate, and LSO KPIs. |
+| RSO Supervisor | Supervisor overseeing multiple RSOs. Earns incentive based on the cumulative performance of all RSOs under them. |
+| SSO (Active SSO) | Sales Support Officer / Retailer tagged to a specific BTS. An SSO is 'Active' for a BTS if they are tagged to that BTS AND achieve at least 2 FCD GA in that BTS. |
+| LSO | Location-based Sales Officer metric – specific targets/definition shared by B2C team (appears in images in SRFs; exact LSO definition provided via supporting files). |
+| BTS | Base Transceiver Station – the targeted cell tower location. Distributor incentive is BTS-level: each target BTS must have ≥2 Active SSOs. |
+| Non-GA Market | Markets using CHICOX09 & CHICOX11 DH. For these markets, only EV Secondary + SC Secondary KPI is considered (no GA KPI). |
+[/TABLE]
+Section 2: Core Definitions
+Key terms referenced across all SRFs in this channel.
+[TABLE]
+| Gross Add (GA) | A new FCD (First Call Date) connection activated during the promotion period, meeting all SAF, recharge, and product conditions. |
+| FCD GA | Only First Call Date-based Gross Adds are counted. FAD (First Activity Date) and TABS are noted but FCD is the operative reference. |
+| DRC GA | Distribution Retail Channel Gross Add. Excluded from Mar 2026 Project Thunderstorm campaign (explicitly stated in Mar26 SRF). |
+| Active SSO | A retailer (SSO) who: (a) is tagged to a specific target BTS, AND (b) achieves at least 2 FCD GA within that same BTS in the measurement month. |
+| BTS Tagging | BTS-wise SSO/Retailer tagging is shared by B2C for calculation. An SSO's GA only counts for the BTS they are tagged to – not for any other BTS where they may have made sales. |
+| EV Secondary | Electronic Voucher recharge distributed from SR→Retailer (R2RT) and Distributor→Retailer (D2RT) and SUD12AGENT routes. |
+| SC Secondary | Scratch Card secondary – Retail lifting as per DMS entry. |
+| Recharge (Full Def.) | EV (R2RT + D2RT + SUD12AGENT) + DTR (Manual & Daily Commission from Salescom) + OTF (EV OTF + IRIS OTF) + SC (DMS Retail lifting). Net of withdrawals. |
+| DTR | Daily Transaction Recharge – Manual and Daily Commission transferred from Salescom. |
+| OTF | One-Time Free recharge: includes both EV OTF and IRIS OTF components. |
+| C2C | Customer-to-Customer recharge from Digital Distribution Retailers (retailer list shared by B2C). Counted in Recharge KPI for RSO campaign. |
+| Strike Rate | Retailer-level activation efficiency metric. Definition and targets shared by B2C team. |
+| LSO Target | Location-based Sales Officer performance metric. Detail format shared via supporting files by B2C. |
+| VLR | Visitor Location Register – measures active/present SIM cards. Used as a penalty gate in RSO/RSO Sup campaigns. |
+| ETSAF | Electronic/Total SAF (Subscriber Acquisition Form) submission count. Measured as total against activations before disconnection. |
+| RDB Mapping | Month-end Route Database mapping used for Retail-RSO-Supervisor tagging and Supervisor-CM/BP/DRC tagging. Applied at month-end for all calculations. |
+| CHICOX09 / CHICOX11 | DH (Distribution Hub) codes identifying Non-GA Market areas where only EV+SC Secondary KPI applies (no GA component). |
+| Slab 1 Target | The baseline (first) target slab used for RSO/RSO Sup categorization. Higher slabs exist for incremental incentive calculation. |
+| Valid Recharge | I-TOP UP recharge for Data/Voice/Mix bundle upsell. For GA qualification purposes. |
+| Valid Usage | Any outgoing call or internet usage in the calendar month. |
+| T-6 | Disconnection reference: latest data up to T-6 days before report generation date. |
+[/TABLE]
+Section 3: Project Thunderstorm – Distributor Active SSO GA Campaign
+A recurring monthly campaign rewarding Distributors for achieving their Active SSO count per targeted BTS. Ran for three consecutive months (Jan–Mar 2026) with evolving conditions.
+3.1 Campaign Core Mechanics (All Three Months)
+[TABLE]
+| Programme Name | Distributor Active SSO GA Campaign – Project Thunderstorm |
+| Channel | Distribution Planning & Operation (Requester: Junaid Aslam) |
+| Recipient | Distributor (of Selected Thanas) |
+| Incentive Type | Hit/Miss (Distributor achieves target BTS-level condition → full incentive; fails → no incentive). Jan26 and Mar26 explicitly state Hit/Miss; Feb26 does not explicitly name it. |
+| Target Basis | B2C provides target file with: (a) Target per Distributor, and (b) Targeted BTS list. |
+| Core Condition | For every Target BTS: at least 2 Active SSOs must be achieved. |
+| Active SSO Definition | SSO must be tagged to that specific BTS AND must achieve ≥2 FCD GA within that BTS in the measurement period. |
+| SSO Tagging | BTS-wise SSO/Retailer tagging shared by B2C for final calculation. |
+| GA Type Counted | Only FCD (First Call Date) GA counted. DRC GA is excluded (Mar26 explicitly). |
+| Payout Determination | Distributor-wise offer amount shared by B2C (not a fixed BDT amount in SRF; B2C assigns per distributor). |
+| Data Maturity | 8th of the following month (report published as per tracker). |
+| RDB Mapping | Month-end RDB of the respective campaign month is used. |
+[/TABLE]
+3.2 Active SSO – Illustrated Examples
+[TABLE]
+| Scenario | SSO Tagged To | GA Done In | Counts as Active SSO of BTS A? |
+| Example 1 (VALID) | BTS A | BTS A (≥2 GA) | ✓ YES – tagged BTS matches GA BTS |
+| Example 2 (INVALID) | BTS B | BTS A (≥2 GA) | ✗ NO – SSO tagged to BTS B, not BTS A |
+[/TABLE]
+📌 Cross-BTS GA does NOT count. An SSO must generate GA specifically within the BTS they are tagged to.
+3.3 Version-by-Version Differences
+[TABLE]
+| Condition | Jan 2026 | Feb 2026 | Mar 2026 |
+| Incentive Modality | Hit/Miss (explicit) | Not explicitly named (inferred Hit/Miss) | Hit/Miss (explicit) |
+| DRC GA Exclusion | Not mentioned | Not mentioned | Explicitly excluded |
+| Product Scope | All Prepaid, Ryze & MNP | All Prepaid & MNP | All Prepaid & MNP |
+| Usage Condition | ≥95% GA must have >BDT 5 usage within 15 days of Activation | No Play – min 93% GA | No Play – min 93% GA |
+| SAF Condition | 98% ETSAF vetted by 7th of following month | 98% ETSAF vetted by 7th of following month | 98% ETSAF vetted by 7th of following month |
+| Periodicity | Regular | Ad-hoc | Regular |
+| Reporting by B2C | Retailer, BTS, Distributor-wise achievement shared | DD-wise achievement and incentive shared | Distributor-wise offer amount shared |
+[/TABLE]
+📌 Jan 2026 uniquely specifies a BDT 5 usage gate within 15 days of activation for 95% of GA. Feb and Mar 2026 shift to 'No Play' (any outgoing call or internet) for minimum 93% of GA.
+📌 Ryze connections are explicitly included in Jan 2026 but not mentioned in Feb/Mar 2026 versions.
+3.4 GA General Conditions – Project Thunderstorm (All Months)
+[TABLE]
+| Activation Reference | FCD (First Call Date) during the promotion period. |
+| SAF Condition | 98% of ETSAF (total against activations before disconnection) must be vetted and accepted by Banglalink within 7th of the following month. |
+| Recharge Condition | All Valid Recharges: • EV: SR→Retailer (R2RT) and Distributor→Retailer (D2RT), taken as usual process. • DTR: Manual and Daily Commission from Salescom. • OTF: EV OTF + IRIS OTF. • SC: Retail lifting as per DMS entry. • Data/Voice/Mix bundle upsell: I-TOP UP only (valid recharge). |
+| Usage Condition | Jan 2026: At least 95% of total GA must have >BDT 5 usage within 15 days of activation. Feb/Mar 2026: No Play required in calendar month for minimum 93% of GA (any outgoing call or internet usage). |
+| Disconnection Cutoff | T-6 (latest data up to 6 days before report generation). Connection must be active. |
+| Product | Jan 2026: All Prepaid + Ryze + MNP. Feb/Mar 2026: All Prepaid + MNP. |
+| DRC GA | Mar 2026: DRC GA explicitly excluded from count. |
+| Lifting/Issue | N/A (no activation-within-lifting-days condition for this programme). |
+| Reactivation | Not applicable. |
+[/TABLE]
+Section 4: RSO Campaign – GA, Recharge & LSO (Mar 2026)
+Incentive programme for RSOs (Retail Sales Officers) measuring performance across three KPIs: Recharge (EV Secondary + SC Secondary), Gross Add (GA), and LSO. RSOs are categorized into Platinum / Gold / Silver tiers based on overall achievement.
+4.1 RSO Categorization & Payout Structure
+RSO category is calculated based on combined (EV Secondary + SC Secondary) & GA achievement. For Non-GA Markets (CHICOX09 & CHICOX11 DH), only EV+SC Secondary KPI applies.
+[TABLE]
+| Category | Achievement Condition | Payout (BDT) | Note |
+| 🥇 Platinum | ≥ 100% achievement of Recharge (EV+SC Secondary) AND GA | 8,000 | Full target met |
+| 🥈 Gold | ≥ 95% achievement of Recharge (EV+SC Secondary) AND GA | 7,000 | Near-full target |
+| 🥉 Silver | < 95% achievement of Recharge (EV+SC Secondary) AND GA | 6,000 | Partial achievement |
+[/TABLE]
+[TABLE]
+| Categorization Target | Slab 1 target is used for GA & Recharge categorization (not higher slabs). |
+| Non-GA Market Rule | For Non-GA Markets (CHICOX09/CHICOX11 DH): only EV+SC Secondary KPI determines category. GA is excluded from category calculation. |
+[/TABLE]
+4.2 Incremental Incentive – Above Slab 3 Target
+For the Recharge (EV Secondary + SC Secondary) KPI only: if achievement exceeds Slab 3 target, an additional incremental payout applies.
+[TABLE]
+| Applicable KPI | Recharge (EV Secondary + SC Secondary) ONLY (not GA or LSO). |
+| Trigger | Achievement must exceed Slab 3 target. |
+| Incremental Rate | For every 10% above Slab 3 target: +20% additional payout on the allocated Recharge incentive. |
+| Payout Calculation | 120% payout for reaching Slab 3 target + 20% additional for each 10% above Slab 3 = Cumulative incremental payout |
+[/TABLE]
+Worked Example:
+[TABLE]
+| Slab 3 Target | Actual Achievement | Achievement % | Payout Calculation | Total Payout % |
+| 400,000 BDT | 440,000 BDT | 110% of Slab 3 | 120% (for Slab 3) + 20% (for 10% above Slab 3) | 140% of allocated Recharge incentive |
+[/TABLE]
+📌 The incremental incentive applies beyond Slab 3 only; within Slab 1–3, standard slab payouts apply. The slab table and target values are provided in a supporting file shared by B2C.
+4.3 Growth Calculation Methodology
+When comparing Last Month (LM) to Current Month (CM) performance, a day-count adjustment is applied to normalize for different month lengths.
+[TABLE]
+| Purpose | Adjusts raw LM numbers to account for different day counts between LM and CM. |
+| Formula | Growth (%) = ((CM ÷ Day_CM) – (LM ÷ Day_LM)) ÷ (LM ÷ Day_LM) × 100 |
+| Day Normalization | Monthly totals are divided by their respective day counts before comparison. |
+[/TABLE]
+Worked Examples:
+[TABLE]
+| LM Day Count | CM Day Count | LM Value | CM Value | Calculated Growth |
+| 28 | 31 | 100 | 102 | -8%  (daily: 100/28=3.57 vs 102/31=3.29) |
+| 28 | 31 | 120 | 121 | -9%  (daily: 120/28=4.29 vs 121/31=3.90) |
+| 28 | 31 | 115 | 135 | +6%  (daily: 115/28=4.11 vs 135/31=4.35) |
+[/TABLE]
+📌 A Feb (28 days) → Mar (31 days) comparison with the same absolute number still results in negative growth due to the extra 3 days in March normalising the daily rate down.
+4.4 VLR Penalty Structure
+VLR (Visitor Location Register) performance acts as a penalty gate applied to the total earned incentive.
+[TABLE]
+| VLR Achievement | Penalty Applied | Final Payout |
+| < 65% VLR | 100% penalty (full incentive forfeited) | 0% of earned incentive |
+| ≥ 65% to < 85% VLR | Prorated deduction | Prorated on total incentive |
+| ≥ 85% VLR | No penalty | 100% of earned incentive |
+[/TABLE]
+📌 VLR penalty is applied AFTER category-based payout is calculated. Even a Platinum-category RSO receives 0 payout if VLR is below 65%.
+4.5 Recharge KPI Definition
+[TABLE]
+| Recharge Components | EV: SR→Retailer (R2RT) + Distributor→Retailer (D2RT) + SUD12AGENT DTR: Manual and Daily Commission from Salescom OTF: EV OTF + IRIS OTF SC: Retail lifting as per DMS entry |
+| C2C Inclusion | C2C recharge from Digital Distribution Retailers is counted. Retailer list shared by B2C. |
+| Withdrawal Deduction | Recharge is net of withdrawals (i.e., recharge minus withdrawal amounts). |
+| BL Employee Exclusion | Any recharge at Banglalink employee pool phone numbers is NOT counted. |
+| EV+SC Definition | Recharge = EV Secondary + SC Secondary (combined, net of withdrawals). |
+[/TABLE]
+4.6 Strike Rate KPI
+[TABLE]
+| Definition | Retailer-level activation efficiency / productivity metric. |
+| Data Source | Strike rate performance data shared directly by B2C team. |
+| Target | Targets provided in supporting file by B2C. |
+[/TABLE]
+4.7 LSO KPI
+[TABLE]
+| LSO | Location-based Sales Officer performance metric. |
+| Definition | Detailed LSO definition provided in a table/image within the SRF (not captured in text); full detail format shared with target & supporting files by B2C. |
+| Minimum Target | Minimum target for RSO also provided in supporting files. |
+[/TABLE]
+4.8 GA & General Conditions – RSO Campaign
+[TABLE]
+| Activation | FCD (First Call Date) during the promotion period. |
+| SAF | 98% of ETSAF must be vetted and accepted by Banglalink within 7th of following month. |
+| Recharge | All Valid Recharges (same full definition as 4.5 above). Data/Voice/Mix bundle: I-TOP UP. |
+| Usage | No Play – any outgoing call or internet usage in calendar month required for minimum 93% of GA. |
+| Disconnection | T-6 cutoff: between FCD and latest data up to report generation date. |
+| Product | All Prepaid & MNP connections. |
+| Data Maturity | 8th of the following month. |
+[/TABLE]
+Section 5: RSO Supervisor Campaign – GA, Recharge & LSO (Mar 2026)
+The RSO Supervisor (RSO Sup) earns incentive based on the cumulative performance of all RSOs under their supervision. The Supervisor's performance is aggregated from individual RSO results.
+5.1 Supervisor Incentive Structure
+Supervisor incentive is based on 100% vs. below-100% achievement of combined Recharge (EV+SC Secondary) & GA target.
+[TABLE]
+| Achievement Condition | Payout (BDT) | Notes |
+| 100% achievement of Recharge (EV+SC) AND GA target | 8,889 | Full target hit by supervisor's team |
+| Below 100% achievement of Recharge (EV+SC) AND GA target | 7,778 | Team partially achieves target |
+[/TABLE]
+[TABLE]
+| Key Difference from RSO | RSO has 3 tiers (Platinum/Gold/Silver = 8,000/7,000/6,000 BDT). Supervisor has only 2 tiers (8,889/7,778 BDT) – a simpler binary structure with higher amounts. |
+| No Silver Equivalent | There is no minimum threshold for supervisor payout. Below 100% always pays BDT 7,778 (unlike RSO Silver requiring <95%). |
+[/TABLE]
+5.2 Supervisor Performance Calculation
+[TABLE]
+| Aggregation Method | Supervisor performance = cumulative performance of ALL RSOs under that supervisor. |
+| RSO Tagging Source | RSO-Supervisor tagging sourced from DMS (month-end). If not available in DMS, B2C provides the tagging. |
+| Recharge Data Source | Supervisor's team Recharge performance is sourced directly from RSO Campaign_GA_Recharge_LSO_Mar26 (the RSO-level report). |
+| Non-GA Market | CHICOX09 & CHICOX11 DH: only EV+SC Secondary KPI considered. |
+| BL Employee Exclusion | Recharges at BL employee pool phone numbers are excluded. |
+| Categorization | Slab 1 target used for GA & Recharge categorization (same as RSO). |
+[/TABLE]
+5.3 VLR Penalty – RSO Supervisor
+Identical penalty structure to RSO Campaign:
+[TABLE]
+| VLR Achievement | Penalty Applied | Final Payout |
+| < 65% VLR | 100% penalty | 0% of earned incentive |
+| ≥ 65% to < 85% VLR | Prorated deduction | Prorated on total incentive |
+| ≥ 85% VLR | No penalty | 100% of earned incentive |
+[/TABLE]
+5.4 Growth & LSO/Strike Rate Conditions
+[TABLE]
+| Growth Calculation | Same day-count normalization methodology as RSO Campaign (see Section 4.3). |
+| Strike Rate | Performance shared by B2C team. |
+| LSO | Same LSO definition as RSO Campaign; details in supporting files. |
+| Data Maturity | 3rd of the following month (different from RSO's 8th – supervisor report is published earlier). |
+[/TABLE]
+📌 Important: RSO Supervisor report matures on the 3rd of the following month, while the RSO report matures on the 8th. The supervisor report is an early consolidated summary.
+5.5 General Conditions – RSO Supervisor Campaign
+[TABLE]
+| Activation | FCD (First Call Date) during the promotion period. |
+| SAF | 98% ETSAF vetted and accepted within 7th of following month. |
+| Recharge | All Valid Recharges (full definition per Section 4.5). Data/Voice/Mix bundle: I-TOP UP. |
+| Usage | No Play – any outgoing call or internet usage in calendar month for min 93% of GA. |
+| Disconnection | T-6 cutoff. |
+| Product | All Prepaid & MNP connections. |
+| Data Maturity | 3rd of the following month. |
+[/TABLE]
+Section 6: Universal General Conditions
+The following conditions are consistent across all 5 SRFs in this channel and govern all commission programmes unless a specific SRF states otherwise.
+[TABLE]
+| Activation Reference | FCD (First Call Date) during the promotion period. FAD and TABS noted but FCD is the primary reference. |
+| SAF / ETSAF Condition | Minimum 98% of ETSAF (total SAF against activations before disconnection) must be vetted and accepted by Banglalink within the 7th of the following month. |
+| Valid Recharge (Bundle) | For Data/Voice/Mix bundle upsell: I-TOP UP only. OTF recharges included as part of overall EV definition. |
+| Recharge Types Accepted | EV (R2RT + D2RT + SUD12AGENT), DTR (Manual + Daily Salescom), OTF (EV OTF + IRIS OTF), SC (DMS Retail lifting). Net of withdrawals. |
+| Usage Condition | Jan 2026 (Thunderstorm): ≥95% of GA must have >BDT 5 usage within 15 days of activation. Feb/Mar 2026: No Play (outgoing call or internet) for minimum 93% of GA in the calendar month. |
+| Disconnection Cutoff | T-6: data up to 6 days before report generation date. Active connections only. |
+| Product Scope | All Prepaid (including Ryze in Jan26) and MNP connections. Call & Control products. Postpaid N/A. |
+| RDB Mapping | Month-end RDB of the campaign month used for all tagging (Retail-RSO, RSO-Supervisor, Distributor-CM/BP/DRC). |
+| Mathematical Rounding | Standard rounding: <0.5 rounded down, ≥0.5 rounded up. |
+| Exclusions | BL employee pool phone numbers excluded from all recharge counts. DRC GA excluded in Mar 2026 Thunderstorm campaign. |
+| Target Files | All targets shared by B2C team (not fixed amounts in SRF; variable per distributor/RSO). |
+| Data Sources | IT SC, IT BI, DWH, POS. |
+| Data Maturity | Project Thunderstorm (Distributor): 8th of following month. RSO Campaign: 8th of following month. RSO Supervisor Campaign: 3rd of following month. |
+| Salescom to EV | Yes – all reports shared to EV system. |
+| Technical Build | In-House IT development. |
+[/TABLE]
+Section 7: Cross-Programme Comparison
+Side-by-side comparison of the three programme families in this channel to highlight key structural differences.
+[TABLE]
+| Parameter | Thunderstorm (Distributor) | RSO Campaign (Field Force) | RSO Sup (Supervisor) |
+| Recipient | Distributor | RSO | RSO Supervisor |
+| KPIs Measured | Active SSO per BTS | Recharge + GA + LSO + Strike Rate | Team Recharge + GA + LSO + Strike Rate |
+| Payout Tiers | Hit/Miss (B2C assigns amount) | 3 tiers: 8K/7K/6K BDT | 2 tiers: 8,889/7,778 BDT |
+| Incentive Modality | Hit/Miss | Category (Platinum/Gold/Silver) | Binary (100% vs below) |
+| Incremental Bonus | None | Yes – above Slab 3 Recharge | Not specified separately |
+| VLR Penalty | Not applicable | Yes (65%/85% gates) | Yes (65%/85% gates) |
+| DRC Exclusion | Mar26 only | N/A | N/A |
+| Ryze Inclusion | Jan26 only | N/A | N/A |
+| Data Maturity | 8th of following month | 8th of following month | 3rd of following month |
+| GA Usage Gate | Jan26: 95%@BDT5/15days Feb/Mar26: 93% No Play | 93% No Play | 93% No Play |
+| Period | Jan–Mar 2026 | Mar 2026 | Mar 2026 |
+[/TABLE]
+Appendix A: Campaign Quick Reference Matrix
+All 5 SRFs indexed with key parameters.
+[TABLE]
+| # | SRF / Campaign Name | Recipient | Period | Max Payout | Key Unique Condition |
+| 1 | Project Thunderstorm – Distributor Active SSO GA (Jan26) | Distributor | Jan 2026 | B2C Assigned | Hit/Miss; ≥2 Active SSO per target BTS; 95% GA with >BDT5 usage in 15 days; Ryze included |
+| 2 | Project Thunderstorm – Distributor Active SSO GA (Feb26) | Distributor | Feb 2026 | B2C Assigned | ≥2 Active SSO per target BTS; 93% GA No Play; DRC not yet excluded; Ad-hoc periodicity |
+| 3 | Project Thunderstorm – Distributor Active SSO GA (Mar26) | Distributor | Mar 2026 | B2C Assigned | Hit/Miss; ≥2 Active SSO per target BTS; DRC GA explicitly excluded; 93% GA No Play |
+| 4 | RSO Campaign – GA, Recharge & LSO (Mar26) | RSO | Mar 2026 | 8,000 Tk (Platinum) | Platinum/Gold/Silver tiers; VLR penalty gates (65%/85%); Incremental above Slab 3 Recharge; C2C counted |
+| 5 | RSO Supervisor Campaign – GA, Recharge & LSO (Mar26) | RSO Supervisor | Mar 2026 | 8,889 Tk | Cumulative RSO team performance; 2-tier binary (100% vs below); matures 3rd of month (not 8th) |
+[/TABLE]
+📌 Total: 5 SRFs from 2 departments (Distribution Planning & Operation, and Channel Planning). All campaigns are Prepaid-focused, FCD-based, with 98% ETSAF SAF condition and T-6 disconnection cutoff.

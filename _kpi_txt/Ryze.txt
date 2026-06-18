@@ -1,0 +1,533 @@
+RYZE Campaign
+Unique KPI Conditions
+Banglalink – RYZE Digital Prepaid | 28 SRFs | Apr 2025 – Apr 2026+
+[TABLE]
+| Attribute | Detail |
+| Coverage Period | April 2025 – April 2026 (ongoing) |
+| Total SRFs Covered | 28 Service Request Forms |
+| Channels Covered | Device BP, BSP CCR, Monobrand CCR, Distributors, Retailers, CC, DSO, Supervisor |
+| Product | RYZE Prepaid (Service Class 141) |
+| Document Purpose | Catalogue all unique KPI conditions across all RYZE SRFs |
+[/TABLE]
+TABLE OF CONTENTS
+Section 1:  Overview & Campaign Taxonomy
+Section 2:  Core Definitions & Eligibility Rules
+Section 3:  Device BP GA Campaigns (Apr25–Jun25)
+Section 4:  BSP CCR GA Campaign (May25)
+Section 5:  Monobrand CCR GA Campaigns (May25–Jun25)
+Section 6:  Jun25 Upfront + Conditional Commission
+Section 7:  Distributor Per-GA Flat Commission
+Section 8:  Distributor ROI Support (Sep25–Oct25)
+Section 9:  Distributor Slab-Based GA Campaigns
+Section 10:  Distributor Follow-Up Recharge (Oct25)
+Section 11:  Distributor Follow-Up Bundle Recharge (Jan26)
+Section 12:  Distributor Preponement Commission
+Section 13:  Distributor Powerplay Campaign (Apr26)
+Section 14:  Retailer GA Commission (Jan26+)
+Section 15:  CC Variable Commission (Jan26–Mar26)
+Section 16:  CC Pohela Boishak Campaign (14 Apr 2026)
+Section 17:  DSO Variable Commission (Jan26)
+Section 18:  DSO Pohela Boishak Campaign (14 Apr 2026)
+Section 19:  Supervisor Variable Commission (Jan26)
+Section 20:  Universal General Conditions
+Section A:  Appendix A – Campaign Quick Reference Matrix
+Section 1: Overview & Campaign Taxonomy
+RYZE is Banglalink's digital-first prepaid product assigned to Service Class 141. It is completely distinct from all other prepaid products; therefore RYZE GAs are excluded from all standard prepaid commission calculations and tracked separately under the RYZE team.
+This document catalogues all unique KPI conditions extracted from 28 RYZE SRFs spanning April 2025 through April 2026 and beyond.
+1.1 Channels & Campaign Summary
+[TABLE]
+| # | Channel | Campaign Type | Period | SRF Count |
+| 1 | Device BP (Business Partner) | Per-GA slab + upfront/conditional | Apr25–Jun25 | 3 |
+| 2 | BSP CCR | Per-GA slab + daily participation bonus | May25 | 1 |
+| 3 | Monobrand CCR | Per-GA slab + center gate + upfront/conditional | May25–Jun25 | 2 |
+| 4 | Distributor | Flat per-GA, ROI Support, Slab-based, Follow-up Recharge, Preponement, Powerplay | Sep25–Apr26+ | 14 |
+| 5 | Retailer | Tier-based gift voucher (Daraz) | Jan26+ | 3 |
+| 6 | CC (Channel Coordinator) | Variable + Boishak one-day | Jan26–Apr26 | 3 |
+| 7 | DSO (Distribution Support Officer) | Variable + Boishak one-day | Jan26–Apr26 | 2 |
+| 8 | Supervisor | Variable (GA + daily allowance) | Jan26 | 1 |
+[/TABLE]
+1.2 Product Code Reference
+DMS Product Codes: RYZ1001 (Physical SIM), RYZ1001-ESIM (eSIM variant)
+Service Class: 141 (exclusive to RYZE prepaid – not shared with other prepaid products)
+MNP Port-IN: Counted as a RYZE GA when porting into RYZE based on FCD/FAD
+Section 2: Core Definitions & Eligibility Rules
+2.1 RYZE Gross Add (GA) Definition
+A RYZE GA is a successful RYZE Prepaid activation verified by:
+FCD (First Call Date): Primary activation timestamp used for commission month attribution
+FAD (First Activity Date): Used in some SRFs as an alternative activation date
+Activation must occur within the defined promotion period
+Only ETSAF-validated activations are counted (see Section 2.2)
+MNP Port-IN connections also qualify as GA based on FCD/FAD
+From Jun25 onwards for field force campaigns: RYZE App sign-up on the FCD is mandatory for the GA to qualify
+IMPORTANT: RYZE GAs are completely separate from standard prepaid activations. Service Class 141 is dedicated exclusively to RYZE.
+2.2 ETSAF (Electronic Telecom Subscriber Activation Form)
+98% ETSAF compliance threshold applies universally across all RYZE SRFs
+Deadline: All accepted/verified or submitted ETSAFs must be cleared by the 7th of the following month
+Consequence of falling below 98%: The entire payout becomes zero (binary gate – not proportional)
+Exception (Distributor Flat Commission): ETSAF is validated per-GA; non-compliant GAs are individually excluded rather than zeroing the entire batch
+ETSAF 98% compliance is the most critical universal gate in all RYZE campaigns.
+2.3 RYZE App Sign-Up Requirement
+Mandatory from Jun25 onwards for field force campaigns (Device BP, Monobrand, CC, DSO, Supervisor, Retailers)
+The customer must complete RYZE App sign-up on/before the FCD
+GAs without App sign-up are excluded from commission even if ETSAF-valid
+Pohela Boishak one-day campaigns (Apr26): Only GAs with completed App sign-up count toward slab achievement
+Retailer campaigns: 100% of GAs on the list must have App sign-up (gate; zero if below 100%)
+2.4 VLR (Visitor Location Register) – Variable Commission Modifier
+VLR measures active subscriber presence in the network
+Used as a payout modifier in CC and DSO Variable Commission campaigns
+VLR ≥ 80%: Full 100% of earned variable commission paid
+VLR ≥ 60% and < 80%: Prorated payout (proportional to VLR%)
+VLR < 60%: Zero commission paid (despite achieving GA threshold)
+Supervisor Variable Commission: VLR condition does NOT apply
+2.5 Disconnection Policy
+Data cutoff: T-6 (6 days before report generation date)
+Any GA disconnected due to non-compliance is excluded from commission calculation
+Disconnection between FCD and latest data up to T-6 is checked
+Distributors: Non-compliant disconnections are discarded from the per-GA commission count
+2.6 Advance Income Tax (AIT)
+APPLICABLE: Distributor campaigns (all types) – as per Income Tax Law provisions and any government charges
+NOT APPLICABLE: BSP CCR, Device BP, Monobrand field force campaigns (explicitly stated in SRFs)
+CC, DSO, Supervisor: Not explicitly stated (handled through payroll/HR)
+2.7 Mathematical Rounding Rule
+Universal across all campaigns: Standard rounding – below 0.5 rounds down; 0.5 and above rounds up
+Applies to all commission calculations, target achievement percentages, and prorated amounts
+2.8 DMS Mapping
+All distributor-retailer-MSISDN mapping uses DMS (Distribution Management System)
+DMS mapping is used for commission month attribution of all distributor campaigns
+Product codes in DMS: RYZ1001 and RYZ1001-ESIM
+2.9 Minimum Recharge Condition
+BDT 200 within 60 days of activation qualifies as a valid recharge
+Counted cumulatively (any channel, OTT, bundles, add-ons all qualify)
+Used in distributor ROI Support and slab-based GA campaigns as a follow-up condition
+The 60-day window is absolute from activation date (not calendar month)
+Section 3: Device BP GA Campaigns (Apr25–Jun25)
+3.1 Apr25 – Device BP Incentive (Initial Launch Campaign)
+Effective: Apr 2025 onwards (first RYZE Device BP SRF)
+[TABLE]
+| Slab | GA Range | Commission/GA | Notes |
+| Slab 1 | 30 – 59 GA | BDT 70 | Monthly cumulative |
+| Slab 2 | 60 – 100 GA | BDT 100 | Max 100 GA cap |
+[/TABLE]
+Key Conditions (Apr25):
+Product codes: RYZ1001 and RYZ1001-ESIM in DMS (specific to Apr25)
+No RYZE App sign-up requirement (pre-App launch period)
+ETSAF: Standard condition applies
+Maturity: 1st of following month
+AIT: Not applicable for Device BP
+No daily participation bonus in this period
+3.2 May25 – Device BP GA Campaign
+Effective: May 2025
+[TABLE]
+| Slab | GA Range | Commission/GA | Notes |
+| Slab 1 | 31 – 50 GA | BDT 50/GA | Monthly cumulative |
+| Slab 2 | 51 – 100 GA | BDT 70/GA | Max 100 GA cap |
+| Participation Bonus | 100% daily participation | BDT 1,000 (flat) | Stricter than BSP's 85% requirement |
+[/TABLE]
+Key Conditions (May25 Device BP):
+Daily participation rate must be exactly 100% for the BDT 1,000 bonus (stricter than BSP CCR's 85% threshold)
+No RYZE App sign-up requirement yet
+AIT: Not applicable for Device BP
+ETSAF 98% compliance by 7th of following month
+3.3 Jun25 – Device BP Upfront + Conditional Commission
+Effective: June 2025 (first campaign with RYZE App requirement + conditional commission structure)
+This introduced the 2-tier commission structure: upfront per GA + conditional bonus based on Jul25 pack purchases.
+[TABLE]
+| Component | Achievement | Commission | Condition |
+| Upfront – Slab 1 | 90% – 115% of target | BDT 35/GA | Max 100 GA cap; App sign-up mandatory |
+| Upfront – Slab 2 | >115% of target | BDT 45/GA | Max 100 GA cap; App sign-up mandatory |
+| Conditional Bonus 1 | Customer buys weekly pack in Jul25 | +BDT 10/GA | Pack codes: 177, 227, 277 |
+| Conditional Bonus 2 | Customer buys monthly pack in Jul25 | +BDT 20/GA | Pack codes: 377, 577, 677, 777, 977 |
+[/TABLE]
+Jun25 Device BP Key Conditions:
+RYZE App activity/sign-up: Mandatory for GA to qualify (introduced this month)
+Maximum 100 GA cap applies to both slabs
+Achievement below 90% of target: Zero upfront commission
+Maturity: Last day of following month (changed from 1st of following month)
+Conditional commission paid based on Jul25 pack recharge behavior of activated customers
+Section 4: BSP CCR GA Campaign (May25)
+BSP = Business Support Point; CCR = Customer Care Representative. The BSP CCR campaign ran only in May25 with unique slab structure distinct from Device BP.
+[TABLE]
+| Slab | GA Range | Commission/GA | Notes |
+| Slab 1 | 25 – 50 GA | BDT 50/GA | Lower entry threshold vs Device BP |
+| Slab 2 | 51 – 100 GA | BDT 70/GA | Same rate as Device BP Slab 2 |
+| Daily Participation Bonus | ≥ 85% daily participation | BDT 1,000 (flat) | More lenient than Device BP's 100% requirement |
+[/TABLE]
+BSP CCR Key Conditions:
+Slab 1 entry threshold is 25 GA (lower than Device BP's 31 GA threshold)
+Daily participation bonus threshold: ≥85% (more lenient than Device BP's 100%)
+AIT: Explicitly NOT applicable for BSP CCR
+ETSAF 98% compliance by 7th of following month
+No RYZE App sign-up requirement (May25 – pre-App mandate)
+Max 100 GA cap applies
+Section 5: Monobrand CCR GA Campaigns (May25–Jun25)
+Monobrand CCR campaigns add a center-level achievement gate on top of individual GA slabs. The center gate percentage evolved between May25 and Jun25.
+5.1 May25 Monobrand CCR
+[TABLE]
+| Component | Threshold | Commission | Notes |
+| Slab 1 (individual) | 25 – 50 GA | BDT 50/GA | Same as BSP CCR May25 |
+| Slab 2 (individual) | 51 – 100 GA | BDT 70/GA | Same as BSP CCR May25 |
+| Participation Bonus | ≥ 85% daily participation | BDT 1,000 (flat) | Same threshold as BSP CCR |
+| Center Gate | Cumulative GA ≥ 80% of center target | Gate – must be met | Binary; if center fails, individual also fails |
+[/TABLE]
+5.2 Jun25 Monobrand CCR
+Jun25 introduced upfront+conditional structure (same as Device BP Jun25) but with a stricter center gate:
+[TABLE]
+| Component | Threshold | Commission | Notes |
+| Upfront Slab 1 | 90–115% of individual target | BDT 35/GA | Max 100 GA cap |
+| Upfront Slab 2 | >115% of individual target | BDT 45/GA | Max 100 GA cap |
+| Conditional – Weekly pack | Customer recharges weekly pack in Jul25 | +BDT 10/GA | Packs 177, 227, 277 |
+| Conditional – Monthly pack | Customer recharges monthly pack in Jul25 | +BDT 20/GA | Packs 377, 577, 677, 777, 977 |
+| Center Gate | Center cumulative GA ≥ 90% of target | Gate – must be met | Raised from 80% (May25) to 90% (Jun25) |
+[/TABLE]
+RYZE App sign-up mandatory from Jun25 onwards
+Center gate evolution: ≥80% in May25 → ≥90% in Jun25 (tightening of standards)
+Section 6: Jun25 Upfront + Conditional Commission Structure
+Introduced in Jun25 for Device BP and Monobrand CCR. Key distinctions from previous slab structures:
+Target-based percentage achievement (not absolute GA volume) determines upfront slab
+Two-phase payout: upfront (immediately post-month) + conditional (based on Jul25 pack purchases by customers)
+Hard cap of 100 GA per agent applies to upfront commission regardless of actual achievement
+Eligible pack codes are explicitly listed (not open-ended)
+6.1 Upfront Commission Slabs
+[TABLE]
+| Slab | Achievement % | Rate/GA | Max GA |
+| Below Slab 1 | < 90% of target | BDT 0 | N/A |
+| Slab 1 | 90% – 115% of target | BDT 35 | 100 GA |
+| Slab 2 | > 115% of target | BDT 45 | 100 GA |
+[/TABLE]
+6.2 Conditional Commission (Pack-Based – Jul25)
+[TABLE]
+| Condition | Pack Type | Bonus/GA | Eligible Pack Codes |
+| Customer buys weekly pack in Jul25 | Weekly | +BDT 10/GA | 177, 227, 277 |
+| Customer buys monthly pack in Jul25 | Monthly | +BDT 20/GA | 377, 577, 677, 777, 977 |
+[/TABLE]
+6.3 Maturity Date
+Upfront: Last day of the following month (e.g., Jul31 for Jun25 GAs)
+Conditional: Subsequent month after pack purchase confirmation
+Section 7: Distributor Per-GA Flat Commission (Sep25–Apr26+)
+Distributors earn a flat commission per each RYZE GA. The rate depends on the distributor code and the commission period. All rates are per-GA with no monthly target required.
+7.1 Rate Structure by Period
+[TABLE]
+| Period | Distributor Group | Rate/GA | Notes |
+| Sep20–Nov25 | ALTASBO2 code | BDT 35/GA | Specific single-distributor rate |
+| Sep25–Nov25 | RYZE-prefix codes (e.g. RYZDHK07) | BDT 60/GA | All RYZE-dedicated distributors |
+| Sep25–Nov25 | Other distributors | Per RYZE team list | Variable by distributor |
+| Apr26+ | 32 named RYZE-prefix codes | BDT 50/GA | Rate reduced from 60 to 50 in Apr26 |
+| Apr26+ | All other distributors | BDT 60/GA | List shared by RYZE team |
+[/TABLE]
+Rate change in Apr26: RYZE-prefix distributors moved from BDT 60/GA to BDT 50/GA. Non-RYZE-prefix distributors retained BDT 60/GA.
+7.2 Distributor Flat Commission – Conditions
+ETSAF compliance validated per-GA (not batch-zeroed); non-compliant GAs excluded individually
+All accepted/verified/submitted ETSAFs by 7th of following month are considered
+MNP Port-IN counted as GA based on FCD
+Non-compliant disconnections discarded from commission calculation
+DMS system used for DD-Retailer-MSISDN mapping
+AIT applicable as per Income Tax Law and government provisions
+Data maturity: 8th of following month
+[TABLE]
+| Detail Format Column | Description |
+| DISTRIBUTOR_CODE | Unique DD code from DMS |
+| RETAILER_CODE | Retailer mapped to distributor |
+| MSISDN | Activated number |
+| FCD | First Call Date (activation date) |
+| DISCONNECTION (Y/N) | T-6 check |
+| ETSAF_PASSED (Y/N) | ETSAF validation status |
+[/TABLE]
+Section 8: Distributor ROI Support (Sep25–Oct25)
+ROI Support is a supplementary incentive rewarding distributors whose activated RYZE customers demonstrate early recharge activity. It is separate from the flat per-GA commission.
+8.1 ROI Support Conditions
+Achievement Gate: Minimum 60% of monthly GA target must be achieved (binary gate – zero ROI support if not met)
+Customer Usage: Minimum BDT 5 paid usage by each activated customer by the 7th of the following month
+Payout amount: Variable per distributor (based on actual ROI calculation shared by RYZE team)
+ETSAF: 98% compliance required (same universal gate)
+AIT: Applicable
+8.2 Maturity Date Variation
+[TABLE]
+| Period | Maturity Date | Notes |
+| Sep25 | 8th of following month (Oct 8th) | Earlier maturity |
+| Oct25 | 3rd of following month (Nov 3rd) | Later maturity – tight cutoff |
+[/TABLE]
+The ROI Support payout is variable per distributor and requires a separate ROI calculation file from the RYZE team. It cannot be computed from standard DMS data alone.
+Section 9: Distributor Slab-Based GA Campaigns (Oct25–Jan26)
+These campaigns group distributors into categories (A–E) based on their monthly GA targets and provide fixed monthly incentives for achieving minimum achievement thresholds.
+9.1 Oct25 Slab-Based Campaign
+Minimum achievement threshold: 60% | Incentive: Linear from 60% achievement | One slab upgradation allowed
+[TABLE]
+| Cat | Target Range | Monthly Incentive | Min Achievement | Notes |
+| A | Lowest volume | BDT 25,000/month | ≥ 60% | Linear payout from 60% |
+| B | Low-medium | BDT 40,000/month | ≥ 60% | Linear payout from 60% |
+| C | Medium | BDT 50,000/month | ≥ 60% | Linear payout from 60% |
+| D | High | BDT 80,000/month | ≥ 60% | Linear payout from 60% |
+| E | Highest volume | BDT 100,000/month | ≥ 60% | Linear payout from 60% |
+[/TABLE]
+Oct25 Unique Features:
+One slab upgradation: A distributor can move up one category tier if performance warrants
+Customer recharge condition: BDT 200 within 60 days of activation (cumulative, any channel)
+Below 60% achievement: Zero incentive (not prorated from 0)
+Incentive is linear between 60% and 100% (proportional to achievement)
+9.2 Jan26 Slab-Based Campaign
+Minimum achievement threshold raised to 80% | Two-slab structure (Slab 1 at standard target + Slab 2 at higher target)
+Minimum achievement raised from 60% (Oct25) to 80% (Jan26) – significantly tighter requirement
+Two-slab structure: Slab 1 (standard monthly target) + Slab 2 (higher stretch target)
+Linear payout from 80% achievement for Slab 1; Slab 2 incentive added on top if reached
+Customer recharge condition retained: BDT 200 within 60 days
+Category groupings (A–E) retained from Oct25 structure
+Key evolution: Oct25 → Jan26: Minimum threshold raised from 60% to 80%; one-slab upgradation removed in Jan26; two-slab structure introduced.
+Section 10: Distributor Follow-Up Recharge Campaign (Oct25)
+Separate from the base GA commission. Rewards distributors whose activated customers make a qualifying recharge within 60 days. Paid as a percentage of the distributor's slab entitlement.
+10.1 Follow-Up Recharge Conditions (Oct25)
+Base: 50% of the distributor's Oct25 slab entitlement is paid via this route
+Gate: DH-wise recharge percentage must meet threshold:
+[TABLE]
+| Category | Required Recharge% | Notes |
+| Cat A, B, C | ≥ 30% of GAs must recharge | Higher threshold for lower-tier distributors |
+| Cat D, E | ≥ 25% of GAs must recharge | Lower threshold for high-volume distributors |
+[/TABLE]
+Customer recharge condition: Minimum BDT 200 within 60 days of activation (cumulative)
+Calculation: Cumulative per activation + 60-day window (rolling, not calendar month)
+AIT: Applicable on follow-up recharge commission
+Maturity: 60 days from activation date (not end of month)
+This is on top of – not instead of – the base GA slab commission. Both are earned simultaneously.
+Section 11: Distributor Follow-Up Bundle Recharge Campaign (Jan26)
+A pack-specific follow-up campaign rewarding distributors when their activated customers purchase defined bundle packs within 60 days of activation.
+11.1 Bundle Recharge Gate
+Minimum 20% of the distributor's total monthly GA must perform a bundle recharge
+Gate is binary: if <20% bundle recharge rate → zero bundle commission for that distributor
+Only first-time bundle purchase per MSISDN is eligible (once per MSISDN lifetime)
+Time window: Within first 60 days of activation only
+11.2 Bundle Incentive Rates
+[TABLE]
+| Pack Code | Incentive | Notes |
+| 197-pack | BDT 30/activation | Entry-level bundle |
+| 297-pack | BDT 40/activation | Mid-tier bundle |
+| 497-pack | BDT 60/activation | Premium bundle |
+[/TABLE]
+Once per MSISDN lifetime – if a customer already purchased one of these packs before (in a prior month's campaign), they do not qualify again.
+Section 12: Distributor Preponement Commission (Feb26–Mar26)
+Preponement means early achievement of the monthly GA target before a specified mid-month date. Distributors who achieve a set percentage of their monthly target early earn a bonus.
+12.1 Feb26 Preponement
+[TABLE]
+| Condition | Achievement by 18th Feb | Bonus/GA | Notes |
+| Full Preponement | ≥ 76% of monthly target | BDT 30/GA | Paid on all GAs in the achieved 76% |
+| Partial Preponement | 95%–99.5% of the 76% target by 18th | BDT 15/GA | Partial bonus for near-miss on preponement |
+| No Preponement | < 95% of 76% target | BDT 0 | No preponement bonus |
+[/TABLE]
+12.2 Mar26 Preponement
+[TABLE]
+| Condition | Achievement by 19th Mar | Bonus/GA | Notes |
+| Full Preponement | ≥ 77% of monthly target | BDT 30/GA | Target raised from 76% in Feb |
+| Partial Preponement | ≥ 67% of monthly target | BDT 15/GA | Different partial structure vs Feb26 |
+| No Preponement | < 67% of monthly target | BDT 0 | No preponement bonus |
+[/TABLE]
+Key Preponement Notes:
+Agent list used: Month-end list (not mid-month list)
+Feb26 partial: 95%–99.5% of the 76% sub-target; Mar26 partial: separate 67% threshold (different structure)
+Preponement bonus is in addition to the regular monthly GA commission (not a replacement)
+The mid-month cutoff date changed: 18th in Feb26 → 19th in Mar26
+Section 13: Distributor Powerplay Campaign (Apr26)
+A comprehensive multi-KPI distributor campaign launched from Apr26. Unlike single-metric GA campaigns, Powerplay evaluates multiple performance dimensions simultaneously.
+13.1 Powerplay KPI Dimensions
+EV Secondary (Electronic Voucher secondary sales)
+SC Primary (SIM Card primary activations)
+Recharge (EV + SC combined recharge)
+All Bundle Sales
+GA Excluding DRC (Gross Add excluding Direct Retailer Connect)
+Retail SCR (Retailer Scratch Card Ratio)
+RSO Productivity (Retail Sales Officer productivity)
+KPI weightages vary by distributor. RYZE team shares individual targets and weightages in separate Excel files.
+13.2 Powerplay GA Commission Component
+Upon achieving the assigned GA target: BDT 50 incentive per GA achieved
+100% target achievement is MANDATORY (unlike distributor flat commission which has no target; unlike slab campaigns which have linear payout from 60%/80%)
+Below 100% achievement: Zero GA commission under Powerplay
+ETSAF ≥98% by 7th: Binary gate (zero if below 98%)
+Month-end RDB (Apr26 RDB) is the reference database for agent list
+MNP Port-IN counted based on FCD
+Data maturity: 8th of following month
+13.3 Payout Illustration
+[TABLE]
+| GA Target | GA Achievement | Target Ach% | ETSAF% | Incentive |
+| 100 | 113 | 113% | 100% | BDT 1,695 (100% paid) |
+| 100 | 50 | 50% | 98% | BDT 0 (below 100% target) |
+| 100 | 100 | 100% | 97% | BDT 0 (ETSAF below 98%) |
+[/TABLE]
+In example row 1: 113 GAs achieved × BDT 50 × (capped at 113% achievement, all paid) = BDT 5,650? Note: actual SRF shows BDT 1,695 suggesting a formula; verify with RYZE team on exact calculation basis.
+Section 14: Retailer GA Commission (Jan26–Mar26+)
+Retailers earn gift-in-kind (Daraz voucher) based on their monthly RYZE GA count. Unlike cash commissions, this is a non-cash incentive. No monthly target is set – it is purely volume-based.
+14.1 Retailer Incentive Tiers
+[TABLE]
+| Tier | Monthly GA | Daraz Voucher | Notes |
+| Tier 1 | ≥ 3 GA | BDT 200 voucher | Entry level |
+| Tier 2 | 4 – 5 GA | BDT 300 voucher | Mid tier |
+| Tier 3 | ≥ 6 GA | BDT 600 voucher | Highest tier |
+| Below Threshold | < 3 GA | No incentive | Minimum 3 GA required |
+[/TABLE]
+14.2 Retailer Eligibility Gates
+Listed retailers only: Only retailers on the official RYZE eligibility list qualify
+100% RYZE App sign-up: Every GA by that retailer in the month must have RYZE App sign-up on the FCD (100% gate – not 95% or 98%)
+Usage condition: ≥95% of GAs must show valid usage (outgoing call or internet) for at least 48 hours after FCD
+Gift-in-kind: Daraz e-voucher (not cash) – no AIT implications
+ETSAF: Standard 98% condition applies
+MNP Port-IN: Counted as GA based on FAD/FCD
+Retailer campaign does NOT have a monthly target. It is purely based on total GA count. The 100% App sign-up gate is the strictest per-GA condition in all RYZE campaigns.
+Section 15: CC Variable Commission (Jan26–Mar26)
+CC = Channel Coordinator. Variable commission with a minimum GA threshold, then per-GA bonus above threshold, plus App sign-up and VLR performance bonuses.
+15.1 GA Variable Commission
+Minimum threshold: 50 GA per 30-day window (prorated for CCs who join mid-month)
+Commission earned: BDT 200 per GA achieved above the 50 GA threshold
+Maximum cap: 300 GA (commission earned on GAs 51 through 300 only)
+GAs below 50 threshold: Zero commission earned for those GAs
+ETSAF gate: If ETSAF compliance falls below 98%, ALL GAs become invalid (entire commission = zero)
+VLR modifier applies on top (see Section 15.3)
+15.2 App Sign-Up Bonus (Monthly)
+[TABLE]
+| App Sign-Up Rate | Jan26 Bonus | Mar26 Bonus | Notes |
+| ≥ 95% | BDT 4,000 | BDT 2,000 | Top tier – bonus halved in Mar26 |
+| ≥ 90% and < 95% | BDT 2,000 | BDT 1,000 | Middle tier – bonus halved in Mar26 |
+| < 90% | BDT 0 | BDT 0 | No bonus below 90% |
+[/TABLE]
+15.3 VLR Bonus (Monthly)
+[TABLE]
+| VLR Rate | Jan26 Bonus | Mar26 Bonus | Notes |
+| ≥ 85% | BDT 4,000 | — | Jan26 only threshold |
+| ≥ 95% | — | BDT 2,000 | Mar26 raises threshold to 95% |
+| ≥ 80% and < 85% (Jan) / ≥ 90% and < 95% (Mar) | BDT 2,000 | BDT 1,000 | Middle tier |
+| Below lower threshold | BDT 0 | BDT 0 | No bonus |
+[/TABLE]
+15.4 VLR Payout Modifier for Variable Commission
+VLR also acts as a modifier to the GA variable commission (BDT 200/GA component):
+[TABLE]
+| VLR Level | Payout Multiplier | Effect |
+| ≥ 80% | 100% of earned commission | Full variable commission paid |
+| ≥ 60% and < 80% | Prorated (VLR% × earned) | Reduced variable commission |
+| < 60% | 0% – Zero | No variable commission at all |
+[/TABLE]
+15.5 CC Variable – Bonus Trend (Jan26 vs Mar26)
+Trend: Mar26 bonuses are half of Jan26 levels for both App sign-up and VLR. The GA variable rate (BDT 200/GA) remains unchanged. This suggests a reduction in supplementary incentives while core commission holds.
+Section 16: CC Pohela Boishak Campaign (14 Apr 2026)
+A special one-day campaign coinciding with the Bengali New Year (Pohela Boishakh). CC agents earn slab bonuses for GAs achieved specifically on 14th April 2026.
+16.1 One-Day Campaign Structure
+Campaign window: 14th April 2026 ONLY (single day)
+Agent list: 14th Apr26 active agent list is used
+RYZE App sign-up: MANDATORY for each GA to count toward slab
+MNP Port-IN: Counted based on FAD
+[TABLE]
+| Slab | GA on 14th Apr | Cash Bonus | Notes |
+| Slab 1 | 10 – 14 GA | BDT 300 | App-verified GAs only |
+| Slab 2 | 15 – 19 GA | BDT 500 | App-verified GAs only |
+| Slab 3 | ≥ 20 GA | BDT 1,000 | App-verified GAs only |
+| Below threshold | < 10 GA | BDT 0 | No incentive below 10 GA |
+[/TABLE]
+16.2 Critical Condition – App-Gated Slab Count
+The slabs are determined by App-verified GAs, not total GAs. Example:
+[TABLE]
+| Date | Agent | Total GA | App GAs | Payout | Reason |
+| 14 Apr | CC1 | 10 | 10 | BDT 300 | Slab 1 – all App verified |
+| 14 Apr | CC1 | 10 | 9 | BDT 0 | Only 9 App GAs – below 10 threshold |
+| 14 Apr | CC1 | 20 | 19 | BDT 500 | Only 19 App GAs – qualifies Slab 2, not Slab 3 |
+[/TABLE]
+Maturity: 8th of following month (May 8, 2026)
+ETSAF: Only ETSAF-valid GA & Apps are considered
+Section 17: DSO Variable Commission (Jan26)
+DSO = Distribution Support Officer. Variable commission structure mirrors CC Variable but with a lower per-GA rate and a daily allowance component.
+17.1 DSO Variable – GA Commission
+Minimum threshold: 50 GA per 30-day window (same as CC – prorated for late joiners)
+Commission earned: BDT 150 per GA above threshold (vs BDT 200/GA for CC)
+Maximum cap: Not explicitly stated – same framework as CC (up to 300 GA in earned range)
+ETSAF gate: 98% (same – entire commission zeroed if below)
+VLR modifier: Same as CC (≥80%=100%; ≥60-80%=prorated; <60%=zero)
+App sign-up bonus: Same structure as CC Variable Jan26 (≥95%=4,000; ≥90-95%=2,000)
+VLR bonus: Same structure as CC Variable Jan26 (≥85%=4,000; ≥80-85%=2,000)
+17.2 DSO Daily Allowance
+Amount: BDT 100 per working day
+Maximum: 26 days per month
+Maximum monthly allowance: BDT 2,600 (100 × 26)
+This is in addition to GA variable commission and bonuses
+DSO rate: BDT 150/GA vs CC rate: BDT 200/GA. All other conditions identical to CC Variable Jan26. The daily allowance (BDT 100/day) is unique to DSO.
+Section 18: DSO Pohela Boishak Campaign (14 Apr 2026)
+Identical structure to CC Pohela Boishak (Section 16) but for DSO agents.
+[TABLE]
+| Slab | GA on 14th Apr | Cash Bonus | Condition |
+| Slab 1 | 10 – 14 GA | BDT 300 | App-verified GAs only |
+| Slab 2 | 15 – 19 GA | BDT 500 | App-verified GAs only |
+| Slab 3 | ≥ 20 GA | BDT 1,000 | App-verified GAs only |
+| Below threshold | < 10 GA | BDT 0 | No incentive |
+[/TABLE]
+All conditions identical to CC Pohela Boishak: one-day campaign, App-gated slab counting, agent list of 14th Apr26, maturity 8th May26
+The SRF recipient description incorrectly shows 'Field Force: Others…Distributors' but is clearly for DSOs (field force)
+Section 19: Supervisor Variable Commission (Jan26)
+Supervisor-level variable commission with a much higher GA threshold, lower per-GA rate, and daily allowance. VLR modifier does NOT apply to supervisors.
+19.1 Supervisor Variable – GA Commission
+Minimum threshold: 350 GA per 30-day window (7× higher than CC/DSO threshold of 50 GA)
+Threshold prorated for supervisors who join mid-month
+Commission earned: BDT 20 per GA above threshold (vs BDT 200 for CC, BDT 150 for DSO)
+ETSAF gate: 98% (same – entire commission zeroed if below)
+App sign-up bonus: Same structure as CC/DSO (≥95%=4,000; ≥90-95%=2,000)
+19.2 Supervisor VLR – Key Difference
+CRITICAL DISTINCTION: VLR condition does NOT apply to Supervisor Variable Commission. Supervisors receive full commission regardless of VLR rate, unlike CC and DSO where VLR gates the payout.
+19.3 Supervisor Daily Allowance
+Amount: BDT 200 per working day (2× DSO's allowance of BDT 100/day)
+Maximum: 26 days per month
+Maximum monthly allowance: BDT 5,200 (200 × 26)
+19.4 Comparison: CC vs DSO vs Supervisor
+[TABLE]
+| Parameter | CC | DSO | Supervisor |
+| GA Threshold | 50 GA/30 days | 50 GA/30 days | 350 GA/30 days |
+| Rate above threshold | BDT 200/GA | BDT 150/GA | BDT 20/GA |
+| VLR Modifier | Yes (≥80%/60%/below) | Yes (same as CC) | NOT applicable |
+| App Bonus (≥95%) | BDT 4,000 | BDT 4,000 | BDT 4,000 (same) |
+| VLR Bonus | Yes | Yes | No |
+| Daily Allowance | Not mentioned | BDT 100/day (max 26d) | BDT 200/day (max 26d) |
+| ETSAF Gate | 98% (zeroes all) | 98% (zeroes all) | 98% (zeroes all) |
+[/TABLE]
+Section 20: Universal General Conditions
+The following conditions appear across all or nearly all RYZE SRFs regardless of campaign type or channel.
+[TABLE]
+| Condition | Value / Requirement | Exceptions / Notes |
+| ETSAF Compliance | ≥ 98% by 7th of following month | Distributor flat: per-GA exclusion (not batch zero) |
+| Activation Basis | FCD (First Call Date) | Some SRFs also accept FAD (First Activity Date) |
+| MNP Port-IN | Counted as GA based on FCD/FAD | Universal across all SRFs |
+| Disconnection Cutoff | T-6 (6 days before report date) | Non-compliant disconnections excluded |
+| Mathematical Rounding | Standard: ≥0.5 rounds up | Universal – no exceptions |
+| Data Maturity | 8th of following month | Some exceptions: ROI Oct25 = 3rd; ROI Sep25 = 8th |
+| AIT | Applicable for Distributors | NOT applicable for Device BP / BSP / Monobrand |
+| Product | RYZE Prepaid only (SC 141) | Excludes all other prepaid products |
+| DMS Mapping | DD-Retailer mapping from DMS | Used for all distributor commission attribution |
+| Target Sharing | RYZE team shares targets separately | IT SC processes commission; RYZE team provides targets |
+| Report Published | As per tracker | Disbursement slot (not provision) |
+| RYZE App Sign-up | Mandatory from Jun25+ for field force | Not required in Apr25–May25 campaigns |
+| Customer Recharge | BDT 200 / 60 days (cumulative, any channel) | Used in ROI support and slab-based campaigns |
+| Minimum Slab GA | Varies: 25 (BSP) / 31 (Dev BP) / 50 (CC/DSO) / 350 (Supervisor) | Zero payout below minimum threshold |
+[/TABLE]
+Appendix A: Campaign Quick Reference Matrix
+All 28 RYZE SRFs at a glance. Sorted by effective date.
+[TABLE]
+| # | Campaign / SRF | Channel | Period | Rate/GA | Min Threshold | Key Gate |
+| 1 | Device BP Incentive (Apr25) | Device BP | Apr25+ | BDT 70/100 | 30 GA | ETSAF 98% |
+| 2 | BSP CCR GA (May25) | BSP CCR | May25 | BDT 50/70 | 25 GA | ETSAF 98% |
+| 3 | Device BP GA (May25) | Device BP | May25 | BDT 50/70 | 31 GA | ETSAF 98% |
+| 4 | Monobrand CCR GA (May25) | Monobrand | May25 | BDT 50/70 | 25 GA | Center ≥80% |
+| 5 | Device BP Upfront+Cond (Jun25) | Device BP | Jun25 | BDT 35/45 | 90% target | App + ETSAF |
+| 6 | Monobrand CCR Upfront+Cond (Jun25) | Monobrand | Jun25 | BDT 35/45 | 90% target | Center ≥90% |
+| 7 | Dist GA Commission (20th Sep25) | Distributor | Sep25+ | BDT 35/60 | None | ETSAF per GA |
+| 8 | Dist ROI Support (Sep25) | Distributor | Sep25 | Variable | 60% GA target | BDT 5 usage |
+| 9 | Dist GA Commission (Oct25) | Distributor | Oct25 | BDT 35/60 | None | ETSAF per GA |
+| 10 | Dist ROI Support (Oct25) | Distributor | Oct25 | Variable | 60% GA target | BDT 5 usage |
+| 11 | Dist Slab GA (Oct25) | Distributor | Oct25 | 25K–100K/mo | 60% of target | Linear from 60% |
+| 12 | Dist Follow-up Recharge (Oct25) | Distributor | Oct25 | 50% of slab | 30%/25% rechg% | BDT 200/60d |
+| 13 | Dist GA Commission (Nov25) | Distributor | Nov25 | BDT 35/60 | None | ETSAF per GA |
+| 14 | Dist Slab GA (Jan26) | Distributor | Jan26 | 2-slab monthly | 80% of target | Linear from 80% |
+| 15 | Dist Follow-up Bundle Recharge (Jan26) | Distributor | Jan26 | BDT 30/40/60 | ≥20% bundle% | Once/MSISDN |
+| 16 | Retailer GA Commission (Jan26) | Retailer | Jan26 | Voucher 200-600 | ≥3 GA | 100% App+Usage |
+| 17 | CC Variable (Jan26) | CC | Jan26 | BDT 200/GA | 50 GA/30d | VLR+ETSAF+App |
+| 18 | DSO Variable (Jan26) | DSO | Jan26 | BDT 150/GA | 50 GA/30d | VLR+ETSAF+App |
+| 19 | Supervisor Variable (Jan26) | Supervisor | Jan26 | BDT 20/GA | 350 GA/30d | ETSAF+App |
+| 20 | Dist Preponement (Feb26) | Distributor | Feb26 | BDT 30/15/GA | 76% by 18th | Preponement date |
+| 21 | Retailer GA Commission (Feb26) | Retailer | Feb26 | Voucher 200-600 | ≥3 GA | 100% App+Usage |
+| 22 | Dist Preponement (Mar26) | Distributor | Mar26 | BDT 30/15/GA | 77%/67% by 19th | Preponement date |
+| 23 | CC Variable (Mar26) | CC | Mar26 | BDT 200/GA | 50 GA/30d | VLR+ETSAF+App |
+| 24 | Retailer GA Commission (Mar26+) | Retailer | Mar26+ | Voucher 200-600 | ≥3 GA | 100% App+Usage |
+| 25 | RYZE GA Commission (Apr26+) | Distributor | Apr26+ | BDT 50/60 | None | ETSAF per GA |
+| 26 | CC Pohela Boishak (14 Apr26) | CC | 14 Apr26 | BDT 300/500/1K | 10 GA (1 day) | App per GA |
+| 27 | DSO Pohela Boishak (14 Apr26) | DSO | 14 Apr26 | BDT 300/500/1K | 10 GA (1 day) | App per GA |
+| 28 | Dist Powerplay (Apr26) | Distributor | Apr26+ | BDT 50/GA | 100% target | ETSAF 98% gate |
+[/TABLE]
+This document covers all 28 RYZE SRFs. All KPI conditions are based on the SRFs as submitted. For exact calculation formulas, target files, and distributor-specific rates, consult the RYZE team's supplementary Excel files referenced in each SRF.

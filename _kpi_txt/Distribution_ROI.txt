@@ -1,0 +1,279 @@
+Banglalink SalesCom — Distribution ROI
+Unique KPI Conditions Reference
+Compiled from all 13 SRFs  |  Apr 2025 – Mar 2026
+Index
+1   Overview & SRF Coverage
+2   KPI Era Summary — Two-Phase Model
+3   Phase 1: Bundle + Recharge (Apr–Aug 2025)
+3.1     KPI Definitions — Bundle
+3.2     KPI Definitions — Recharge
+3.3     SCR Gate Condition
+3.4     Exception Threshold Evolution (Phase 1)
+3.5     Payment / Incentive Table (Phase 1)
+4   Phase 2: SCR + RSO Productivity (Sep 2025–Mar 2026)
+4.1     KPI Definitions — SCR
+4.2     KPI Definitions — RSO Productivity
+4.3     Exception Threshold — Phase 2
+4.4     Payment / Incentive Table (Phase 2)
+5   Special Monthly Variants
+5.1     Feb 2026 — SCR Only (Single KPI Month)
+5.2     Mar 2026 — RSO Productivity Sub-Metrics
+5.3     Mar 2026 — Non-GA Market Exception (CHICOX11)
+6   Special Distributor Exceptions
+6.1     Jan 2026 — DHKDHK67 (SCR Only)
+7   Recharge Definition Evolution
+8   General Conditions (All SRFs)
+9   Version Comparison Table — All 13 SRFs
+10   Maturity Date Summary
+11   Glossary
+1. Overview & SRF Coverage
+[TABLE]
+| Programme | Distribution ROI Support Scheme |
+| SRF Count | 13 SRFs (Apr 2025 – Mar 2026) |
+| Metric | Monthly commission/incentive for distribution partners |
+| Coverage | All active distribution channels under Banglalink SalesCom |
+| KPI Eras | Two structural phases with a pivot in Sep 2025 |
+[/TABLE]
+The Distribution ROI folder spans 12 calendar months across two structurally different KPI models. April–August 2025 uses Bundle and Recharge as the two paid KPIs, with SCR acting as a binary gate. From September 2025 onwards, the model pivots: SCR becomes a paid KPI and RSO Productivity replaces Bundle+Recharge. February 2026 is a unique single-KPI month (SCR only). March 2026 reintroduces RSO Productivity but splits it into sub-metrics.
+2. KPI Era Summary — Two-Phase Model
+[TABLE]
+| Period | KPI 1 (50%) | KPI 2 (50%) | Gate Condition | Exception Threshold |
+| Apr 2025 | Bundle | Recharge | SCR must be achieved | 70% |
+| May–Aug 2025 | Bundle | Recharge | SCR must be achieved | 80% |
+| Sep–Dec 2025 | SCR (50%) | RSO Productivity (50%) | None (both paid) | 70% |
+| Jan 2026 | SCR (50%) | RSO Productivity (50%) | None (both paid) | 70% |
+| Feb 2026 | SCR (100%) | — | None (single KPI) | N/A |
+| Mar 2026 | SCR (50%) | RSO Productivity (50%) | None (both paid) | 40% (RSO sub-metrics) |
+[/TABLE]
+ℹ  SCR = Stock Coverage Ratio. RSO = Retail Sales Officer. In Phase 1 SCR is a gate (binary pass/fail); in Phase 2 SCR is a paid KPI.
+3. Phase 1: Bundle + Recharge (Apr–Aug 2025)
+April through August 2025 SRFs share a common two-KPI model: Bundle and Recharge each carry 50% of the total incentive weight. SCR achievement is a prerequisite gate — without it, no KPI incentive is paid regardless of Bundle or Recharge performance.
+3.1  KPI Definitions — Bundle
+[TABLE]
+| KPI Name | Bundle |
+| Weight | 50% of total incentive |
+| Definition | Data + Voice + MXB bundle sold by Retailer to Customer (excluding SC retailer type) |
+| Scope | Retailer → Customer transactions only |
+| Exclusions | SC (Service Centre) retailer type excluded from bundle count |
+| Target Setting | Monthly target per distributor set in SRF attachment |
+[/TABLE]
+3.2  KPI Definitions — Recharge
+[TABLE]
+| KPI Name | Recharge |
+| Weight | 50% of total incentive |
+| Definition (Apr–Jun 2025) | EV + SC + DTR + OTF(EV+IRIS), SR→Retailer + DD→Retailer BL Franchise Store EV Secondary excluded |
+| Definition (Jul 2025+) | EV + SC + DTR + OTF(EV+IRIS) + SUD12AGENT, SR→Retailer + DD→Retailer BL Franchise Store EV Secondary excluded |
+| Key Addition (Jul 2025) | SUD12AGENT channel added to recharge definition from July 2025 |
+| Exclusions | BL Franchise Store (registered retailer type in DMS) |
+[/TABLE]
+ℹ  SUD12AGENT is an additional recharge channel incorporated from July 2025 onwards into the recharge KPI definition.
+3.3  SCR Gate Condition (Phase 1)
+[TABLE]
+| Gate KPI | SCR — Stock Coverage Ratio |
+| Nature | Binary gate — must be achieved to unlock any KPI incentive |
+| If SCR NOT achieved | No Bundle or Recharge incentive paid, regardless of performance |
+| If SCR achieved | Bundle and Recharge incentives are unlocked (subject to exception threshold) |
+| SCR Target | Per-distributor target set in SRF; typically coverage ratio of stock vs. primary lifting |
+| SCR is NOT paid | In Phase 1, SCR itself carries no monetary weight — it is purely a gate |
+[/TABLE]
+3.4  Exception Threshold Evolution (Phase 1)
+[TABLE]
+| Month | Exception Threshold | Meaning |
+| Apr 2025 | 70% | Achieve ≥70% of target → earn 50% of allotted KPI incentive |
+| May 2025 | 80% | Threshold raised — achieve ≥80% of target → earn 50% of allotted KPI incentive |
+| Jun 2025 | 80% | Same as May |
+| Jul 2025 | 80% | Same as May |
+| Aug 2025 | 80% | Same as May |
+[/TABLE]
+ℹ  Below the exception threshold = 0% incentive for that KPI. At or above exception threshold but below 100% = 50% of allotted incentive. At 100% = 100% of allotted incentive.
+3.5  Payment / Incentive Table (Phase 1)
+[TABLE]
+| SCR Gate | KPI Achievement | Incentive Paid |
+| NOT achieved | Any | 0% — No payment |
+| Achieved | < Exception threshold | 0% of that KPI incentive |
+| Achieved | ≥ Exception threshold but < 100% | 50% of that KPI incentive |
+| Achieved | = 100% or above | 100% of that KPI incentive |
+[/TABLE]
+ℹ  Bundle and Recharge are independent — each is calculated separately. SCR gate applies to both together.
+4. Phase 2: SCR + RSO Productivity (Sep 2025–Mar 2026)
+From September 2025, the KPI model restructures: SCR is promoted from a gate to a paid KPI (50% weight), and RSO Productivity replaces Bundle+Recharge as the second paid KPI (50% weight). The two KPIs are independent — each pays separately.
+4.1  KPI Definitions — SCR (Phase 2)
+[TABLE]
+| KPI Name | SCR — Stock Coverage Ratio |
+| Weight (Phase 2) | 50% of total incentive |
+| Nature | Binary — achieved = 100% of allotted incentive; not achieved = 0% |
+| No partial payment | SCR does not use the exception threshold — it is all-or-nothing |
+| Target | Per-distributor monthly target set in SRF |
+[/TABLE]
+4.2  KPI Definitions — RSO Productivity
+[TABLE]
+| KPI Name | RSO Productivity |
+| Weight | 50% of total incentive |
+| Base Definition (Sep 2025–Jan 2026) | RSO daily minimum transaction count / GA productivity — measured across all RSOs |
+| Achievement Rule | ≥70% of RSOs must meet daily minimum → incentive paid in full |
+| Below threshold | < 70% RSOs meet minimum → 0% incentive for this KPI |
+| Mar 2026 Variant | Split into two sub-metrics (see Section 5.2) |
+[/TABLE]
+4.3  Exception Threshold (Phase 2)
+[TABLE]
+| Period | SCR Threshold | RSO Productivity Threshold |
+| Sep 2025–Jan 2026 | Binary (no threshold) | 70% |
+| Feb 2026 | Binary (no threshold) | N/A — RSO Productivity dropped |
+| Mar 2026 | Binary (no threshold) | 40% (GA Best 20 Days) / 70% (C2C vs C2S GAP) |
+[/TABLE]
+4.4  Payment / Incentive Table (Phase 2)
+[TABLE]
+| KPI | Achievement | Incentive Paid |
+| SCR | Achieved | 100% of SCR allotted incentive (50% of total) |
+| SCR | Not Achieved | 0% |
+| RSO Productivity | ≥ threshold | 100% of RSO allotted incentive (50% of total) |
+| RSO Productivity | < threshold | 0% |
+[/TABLE]
+ℹ  SCR and RSO Productivity are independent. Failure on one does not affect the other.
+5. Special Monthly Variants
+5.1  Feb 2026 — SCR Only (Single KPI Month)
+[TABLE]
+| Period | February 2026 |
+| Active KPIs | SCR only |
+| RSO Productivity | Dropped entirely for this month — not applicable |
+| SCR Weight | 100% of total incentive |
+| Payment Rule | SCR achieved = 100% incentive; SCR not achieved = 0% |
+| Reason | Structural simplification for the month; RSO Productivity reappears in Mar 2026 |
+[/TABLE]
+5.2  Mar 2026 — RSO Productivity Sub-Metrics
+March 2026 reintroduces RSO Productivity but splits it into two independent sub-metrics, each with its own threshold and weight:
+[TABLE]
+| Sub-Metric | Weight within RSO KPI | Achievement Threshold | Definition |
+| GA Best 20 Days | Part of RSO Productivity (50%) | 40% | GA must have best 20 active days (transactions) in the month |
+| C2C vs C2S GAP | Part of RSO Productivity (50%) | 70% | Gap between C2C (customer-to-customer) and C2S (customer-to-subscriber) — measures network usage quality |
+[/TABLE]
+ℹ  Both sub-metrics must be assessed independently. Each has its own threshold. Mar 2026 also lowers the RSO exception threshold to 40% (for GA Best 20 Days).
+5.3  Mar 2026 — Non-GA Market Exception (CHICOX11)
+[TABLE]
+| Distributor | CHICOX11 (Non-GA Market) |
+| Exception | GA Best 20 Days sub-metric does NOT apply |
+| Applicable RSO Metric | C2C vs C2S GAP only (70% threshold) |
+| Reason | Non-GA market — GA productivity metric is not relevant |
+| SCR KPI | Applies normally (same as all other distributors in Mar 2026) |
+[/TABLE]
+6. Special Distributor Exceptions
+6.1  Jan 2026 — DHKDHK67 (SCR Only)
+[TABLE]
+| Distributor | DHKDHK67 |
+| Period | January 2026 |
+| Exception | RSO Productivity KPI does NOT apply |
+| Active KPI | SCR only — 100% of total support amount allocated to SCR |
+| Reason | Specific distributor exception filed in the Jan 2026 SRF |
+| Payment Rule | SCR achieved = 100% incentive; not achieved = 0% |
+[/TABLE]
+ℹ  All other distributors in Jan 2026 have both SCR (50%) and RSO Productivity (50%).
+7. Recharge Definition Evolution
+[TABLE]
+| Component | Apr–Jun 2025 | Jul 2025 onwards |
+| EV (Electronic Voucher) | ✓ | ✓ |
+| SC (SIM Card) | ✓ | ✓ |
+| DTR | ✓ | ✓ |
+| OTF (EV+IRIS) | ✓ | ✓ |
+| SUD12AGENT | ✗ | ✓ (Added Jul 2025) |
+| SR→Retailer | ✓ | ✓ |
+| DD→Retailer | ✓ | ✓ |
+| BL Franchise Store EV Secondary | Excluded | Excluded |
+[/TABLE]
+ℹ  SUD12AGENT is an additional recharge channel added to the definition from July 2025. Phase 2 (SCR+RSO model) no longer uses a Recharge KPI, so this definition is only relevant for Apr–Aug 2025.
+8. General Conditions (All SRFs)
+The following conditions apply consistently across all Distribution ROI SRFs:
+Activation Gate (FCD)
+[TABLE]
+| Condition | FCD — First Call Date |
+| Rule | SIM must have a First Call Date to be eligible for commission calculation |
+| Applies to | All months, all SRFs in the folder |
+[/TABLE]
+Disconnection Rule (T-6)
+[TABLE]
+| Rule | T-6 Disconnection Cutoff |
+| Definition | Report generation date minus 6 days |
+| Effect | Any subscriber disconnected before T-6 is excluded from performance calculation |
+[/TABLE]
+ETSAF (Settlement)
+[TABLE]
+| ETSAF Rate | 98% of outstanding amount settled by the 7th of the following month |
+| Applies to | All SRFs — standard settlement condition |
+[/TABLE]
+GA No Play Rule (Jan 2026+ Format SRFs)
+[TABLE]
+| Rule | GA No Play — No outgoing call or internet usage |
+| Threshold | Minimum 93% of GAs must have no outgoing call/internet usage in the calendar month |
+| Applicable SRFs | January 2026, February 2026, March 2026 (newer SRF format) |
+| Effect on Calculation | GAs failing the No Play rule are flagged; affects RSO Productivity base |
+[/TABLE]
+ℹ  The GA No Play rule appears in newer-format SRFs (Jan–Mar 2026) which have expanded general conditions sections (SRN format). Earlier SRFs (Apr–Dec 2025) do not explicitly state this rule.
+BL Franchise Store Exclusion
+[TABLE]
+| Exclusion | BL Franchise Store |
+| Condition | Retailers registered as 'BL Franchise Store' in DMS are excluded from commission calculation |
+| Applies to | Recharge KPI in Phase 1; all KPI counts in Phase 2 |
+[/TABLE]
+9. Version Comparison Table — All 13 SRFs
+[TABLE]
+| SRF | Period | Phase | KPI 1 | KPI 2 | Gate | Exc. Threshold | Special |
+| Apr25 | Apr 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 70% | — |
+| May25 | May 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 80% | — |
+| Jun25 | Jun 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 80% | — |
+| Jul25 | Jul 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 80% | SUD12AGENT added |
+| Jul25_KHUMEH04 | Jul 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 80% | Supplementary SRF for KHUMEH04; maturity = 2nd |
+| Aug25 | Aug 2025 | 1 | Bundle 50% | Recharge 50% | SCR Gate | 80% | — |
+| Sep25 | Sep 2025 | 2 | SCR 50% | RSO Prod 50% | None | 70% | — |
+| Oct25 | Oct 2025 | 2 | SCR 50% | RSO Prod 50% | None | 70% | — |
+| Nov25 | Nov 2025 | 2 | SCR 50% | RSO Prod 50% | None | 70% | — |
+| Dec25 | Dec 2025 | 2 | SCR 50% | RSO Prod 50% | None | 70% | — |
+| Jan26 | Jan 2026 | 2 | SCR 50% | RSO Prod 50% | None | 70% | DHKDHK67: SCR only (100%) |
+| Feb26 | Feb 2026 | 2 | SCR 100% | — | None | N/A | Single KPI month |
+| Mar26 | Mar 2026 | 2 | SCR 50% | RSO Prod 50% | None | 40%/70% | Sub-metrics; CHICOX11 exception |
+[/TABLE]
+10. Maturity Date Summary
+[TABLE]
+| SRF / Period | Maturity Date (of Following Month) |
+| Apr 2025 | 4th |
+| May 2025 | 2nd |
+| Jun 2025 | 2nd |
+| Jul 2025 (main) | 3rd |
+| Jul 2025 (KHUMEH04 supplementary) | 2nd |
+| Aug 2025 | 3rd |
+| Sep 2025 | 5th |
+| Oct 2025 | 5th |
+| Nov 2025 | 4th |
+| Dec 2025 | 4th |
+| Jan 2026 | 4th |
+| Feb 2026 | 4th |
+| Mar 2026 | 4th |
+[/TABLE]
+ℹ  Maturity date = day of the following month by which settlement/reporting is due.
+11. Glossary
+[TABLE]
+| Term | Full Form / Meaning |
+| SCR | Stock Coverage Ratio — distribution house-level stock metric |
+| RSO | Retail Sales Officer — field sales agent assigned to retailer coverage |
+| Bundle | Data + Voice + MXB bundle sold Retailer → Customer (excl. SC) |
+| Recharge | EV+SC+DTR+OTF(EV+IRIS)[+SUD12AGENT from Jul25], SR→Retailer + DD→Retailer |
+| SUD12AGENT | Additional recharge channel added July 2025 to Recharge definition |
+| FCD | First Call Date — SIM activation gate; must exist to be counted |
+| T-6 | Report generation date minus 6 days — disconnection cutoff |
+| ETSAF | 98% of amount settled by 7th of following month |
+| GA | Gross Addition — newly activated SIM |
+| GA No Play | No outgoing call or internet usage by GA in calendar month (93% threshold) |
+| BL Franchise Store | Retailer type in DMS — excluded from all KPI calculations |
+| DHKDHK67 | Specific distributor code — Jan 2026 exception: SCR only |
+| CHICOX11 | Non-GA Market distributor — Mar 2026: only C2C vs C2S GAP applies |
+| C2C vs C2S GAP | Customer-to-Customer vs Customer-to-Subscriber gap — RSO Productivity sub-metric |
+| GA Best 20 Days | RSO Productivity sub-metric: GA active transaction days — 40% threshold |
+| MXB | Mixed Bundle — bundled data+voice+MXB product type |
+| EV | Electronic Voucher — digital recharge product |
+| DTR | Direct Top-up Recharge |
+| OTF | Over-The-First recharge (EV+IRIS channel) |
+| SR | Sales Representative channel (SR→Retailer recharge flow) |
+| DD | Direct Distributor channel (DD→Retailer recharge flow) |
+| DMS | Distribution Management System — Banglalink's retailer registry |
+| Phase 1 | Apr–Aug 2025: Bundle+Recharge KPI model with SCR gate |
+| Phase 2 | Sep 2025–Mar 2026: SCR+RSO Productivity KPI model (SCR is paid, no gate) |
+| Exception Threshold | Minimum KPI achievement to earn 50% of allotted incentive (varies by month) |
+[/TABLE]
