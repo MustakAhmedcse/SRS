@@ -898,9 +898,9 @@ Two things consume a registered data source:
 1. The **wizard** (Report Step-3 / Step-4) — a block's `source` / `combine.join_with` of `type: "data_source"` picks a registered source by its `source_table_name` (see Appendix A / `IR_Schema_and_MultiKPI_Join.md` Section 2–Section 3.2).
 2. The **SQL Generator** — at Final Save it resolves every `data_source` ref against the registry and emits the physical table name into the stage SQL; the execute-time allowlist (D2) only permits reads against registered source tables and the `salescom_upload` schema.
 
-This section also specifies the **Supporting CSV → DB table ingestion** mechanics (Section 5.7), because Report Step-2 turns user-uploaded CSVs into physical tables that the IR references with `source.type: "upload"`. Registered data sources and uploaded tables are the **only two physical-table inputs** an IR may read (the third input type, `block`, is just another block's in-run temp output).
+This section also specifies the **Supporting CSV → DB table ingestion** mechanics (Section 5.5), because Report Step-2 turns user-uploaded CSVs into physical tables that the IR references with `source.type: "upload"`. Registered data sources and uploaded tables are the **only two physical-table inputs** an IR may read (the third input type, `block`, is just another block's in-run temp output).
 
-> **Schema note.** This section uses the real implemented tables from Section 3: **`data_sources`** (catalog) and **`report_supporting_uploads`** (Report module). The real `data_sources` table has **no `column_aliases` column** — it stores only `source_table_name`, `table_description`, `is_active`, and audit columns. Per-column friendly labels needed by the wizard are therefore **derived by live introspection** of the physical table at pick-time (Section 5.4 / endpoint #4), **not persisted**. This keeps generated SQL stable (the IR always references the physical column name) and avoids alias drift.
+**Tables:** `data_sources` (catalog, Section 3.3) and `report_supporting_uploads` (Report module, Section 3.4) — **no new tables**. The real `data_sources` table stores only `source_table_name`, `table_description`, `is_active`, and audit columns; it has **no `column_aliases` column** — per-column friendly labels are **derived by live introspection** of the physical table at pick-time (Section 5.3), never persisted. This keeps generated SQL stable (the IR always references the physical column name) and avoids alias drift.
 
 ---
 
@@ -911,19 +911,21 @@ This section also specifies the **Supporting CSV → DB table ingestion** mechan
 | Who manages it | **Administrator** only (register / edit / activate / deactivate). Business User and Approver have **read-only** access (they need the active list to build reports). |
 | What it is | One row in **`data_sources`** pointing at a physical table the ETL layer maintains, plus a human `table_description` and an `is_active` flag. Column metadata (names, types, friendly labels) is read live from the database, not stored. |
 | Lifecycle | Register → optionally edit `table_description` → activate / deactivate. **Never hard-deleted** (BR2) — only `is_active = false`. |
-| Key guard | A source **referenced by any non-archived report's IR** cannot be deactivated (Section 5.6, R5). |
+| Key guard | A source **referenced by any non-archived report's IR** cannot be deactivated. |
 | Phase | Phase 1. The registry shape is final; later phases only register more tables. |
-| ETL coupling | The Final-run pre-check (Section 3 decision 7) verifies that every registered system source used by a report has its **ETL finished up to the report End Date** before a Scheduled / Run-Now FINAL run executes. That check reads the source table's latest data date; registration is what makes a table eligible to be checked. |
+| ETL coupling | The Final-run pre-check (Section 6.10) verifies that every registered system source used by a report has its **ETL finished up to the report End Date** before a Scheduled / Run-Now FINAL run executes. |
+
+**Rules enforced** (inline in Section 5.3; error codes per endpoint in Section 5.4): BR1 Admin-only, BR2 never-delete, source name system-wide unique, source name immutable, in-use guard on deactivate, Final-run ETL pre-check.
 
 ---
 
-## 5.2 User Interface
+## 5.2 Screens (UI)
 
 **Data Source list** — `/admin/data-sources` (Administrator nav):
 
 - **Columns:** SL · **Source Table Name** · **Description** · **#Columns** (live count from introspection) · **Status** (Active / Inactive toggle) · Updated On · Action menu.
 - **Toolbar:** search box (matches `source_table_name` + `table_description`), Status filter (All / Active / Inactive), **"Register Data Source"** button (top-right, Administrator only).
-- **Row actions:** **View**, **Edit**, **Activate / Deactivate** (the toggle is disabled with tooltip *"In use by N report(s)"* when the source is referenced — R5).
+- **Row actions:** **View**, **Edit**, **Activate / Deactivate** (the toggle is disabled with tooltip *"In use by N report(s)"* when the source is referenced (in-use guard).
 
 **Register / Edit drawer:**
 
@@ -936,48 +938,30 @@ This section also specifies the **Supporting CSV → DB table ingestion** mechan
 
 ---
 
-## 5.3 Data Model
+## 5.3 Process Logic — register / edit / deactivate
 
-Primary table: **`data_sources`** (canonical DDL Section 3.3).
-
-| Column | Type | Role |
-|---|---|---|
-| `id` | int8 identity | PK |
-| `source_table_name` | varchar(200) | Physical table name (system-wide unique — `ux_data_sources_source_table`). The IR's `data_source` ref equals this value. |
-| `table_description` | varchar(1000) NULL | Admin-entered human description, searchable. |
-| `is_active` | bool | Active flag. `false` = deactivated (BR2 soft-delete). |
-| `created_at` / `updated_at` | timestamptz | Audit timestamps (UTC). |
-| `created_by` / `updated_by` | varchar(200) | Audit user_name. |
-
-**Column metadata is not stored.** When the wizard or the Register drawer needs the column list / types / friendly labels for a source, the BE introspects PostgreSQL `information_schema.columns` live (endpoint #4). The mapping from PG type → wizard-facing **logical type** is the same table used for upload inference (Section 5.7.2), collapsed to: `text · integer · numeric · date · timestamp · boolean`.
-
-**Related tables (referenced, not redefined here):**
-- **`report_supporting_uploads`** (Section 3.4) — written by the Step-2 ingestion (Section 5.7).
-- **`report_setups.definition`** JSONB (Section 3.4) — holds the IR whose `source` refs point at `data_sources.source_table_name` or an upload table; the "in use" check (R5) is logical, resolved by scanning the IR JSONB.
-
-No new tables are introduced by this module.
-
----
-
-## 5.4 Process Logic — register / edit / deactivate
+> **Live introspection (no stored column metadata).** Whenever the wizard or the Register drawer needs a source's columns / types / friendly labels, the BE introspects PostgreSQL `information_schema.columns` **live** (endpoint #4). The PG type → wizard **logical type** mapping is the same table used for upload inference (Section 5.5.2), collapsed to: `text · integer · numeric · date · timestamp · boolean`.
 
 **Register a data source (Administrator):**
 
 1. Admin opens the Register drawer; FE calls `GET /api/v1/data-sources/db-tables` → list of physical tables in the allowed source schema(s) that are **not already registered**.
 2. Admin selects a table. FE calls `GET /api/v1/data-sources/db-tables/{tableName}/columns` → BE introspects `information_schema.columns` and returns each column with its PG type, a **suggested logical type**, and a **suggested friendly label** (Title-Cased from the physical name). Display-only.
 3. Admin fills the table `table_description` and sets status (`is_active`).
-4. **`POST /api/v1/data-sources`** → BE validates (R1–R4), inserts one `data_sources` row (`source_table_name`, `table_description`, `is_active`, `created_at`, `created_by`), writes an `audit_logs` row (`action_type = 1` Create, `entity_name = 'data_sources'`, `entity_id = <id>`).
+4. **`POST /api/v1/data-sources`** → BE validates, inserts one `data_sources` row, writes an `audit_logs` row (`action_type = 1` Create, `entity_name = 'data_sources'`, `entity_id = <id>`).
+   ⛔ `source_table_name` is **required**, must match a real physical table in an allowed schema (else `422 TABLE_NOT_FOUND`), and is **system-wide unique** (`ux_data_sources_source_table` → `409 DUPLICATE_SOURCE`). `table_description` ≤ 1000 chars.
 
-**Edit:** `PUT /api/v1/data-sources/{id}` — only `table_description` and (rarely) `is_active` may change; **`source_table_name` is immutable** once registered (changing the physical table = register a new source). Audited (`action_type = 2` Update, with `changed_columns` + `old_values`/`new_values` JSONB).
+**Edit:** `PUT /api/v1/data-sources/{id}` — only `table_description` and (rarely) `is_active` may change; ⛔ **`source_table_name` is immutable** once registered (changing the physical table = register a new source). Audited (`action_type = 2` Update, with `changed_columns` + `old_values`/`new_values` JSONB).
 
 **Activate / deactivate:** `PATCH /api/v1/data-sources/{id}/status`.
 - **Activate** → set `is_active = true`. Always allowed.
-- **Deactivate** → **first run the in-use check (R5)**: scan every non-archived `report_setups.definition` for a `source` / `combine.join_with` of `type = 'data_source'` whose ref equals this `source_table_name`. If any match → reject `409 SOURCE_IN_USE` with the offending report names. Otherwise set `is_active = false`. Audited (`action_type = 2`, diff on `is_active`).
-- **Never delete.** There is no `DELETE` endpoint (BR2).
+- **Deactivate** → ⛔ **first run the in-use check:** scan every non-archived `report_setups.definition` for a `source` / `combine.join_with` of `type = 'data_source'` whose ref equals this `source_table_name`. If any match → reject `409 SOURCE_IN_USE` with the offending report names. Otherwise set `is_active = false`. Audited (`action_type = 2`, diff on `is_active`).
+- ⛔ **Never delete** (BR2) — there is no `DELETE` endpoint.
+
+> Deactivating a source does **not** break a report whose SQL is already frozen in `section_wise_report_sqls` / `run_stages` (compiled at Final Save); it only blocks **new** edits / Final Saves that re-select it. The wizard source-picker and the SQL Generator only see / resolve `is_active = true` sources.
 
 ---
 
-## 5.5 API Endpoints
+## 5.4 API Endpoints
 
 All under `/api/v1`. JWT required on every call. Standard error envelope:
 ```json
@@ -1058,34 +1042,18 @@ Errors: `404`; **`409 SOURCE_IN_USE`** on deactivate while referenced:
 
 ---
 
-## 5.6 Validation & Business Rules
-
-| ID | Rule | Enforcement |
-|---|---|---|
-| R1 | `sourceTableName` required, non-empty, must match a real physical table in an allowed source schema. | App check → `422 TABLE_NOT_FOUND` |
-| R2 | `sourceTableName` system-wide unique. | `ux_data_sources_source_table` + `409 DUPLICATE_SOURCE` |
-| R3 | `tableDescription` ≤ 1000 chars; trimmed. | App `400 VALIDATION_ERROR` |
-| R4 | Only **Administrator** may register / edit / activate / deactivate (BR1). Business User / Approver read-only. | JWT role check → `403` |
-| R5 | A source **referenced by any non-archived report's IR** cannot be deactivated (BR2 spirit). | App scan of `report_setups.definition` → `409 SOURCE_IN_USE` |
-| R6 | A source is **never deleted**; deactivate only. No DELETE route exists (BR2). | API surface |
-| R7 | `source_table_name` is **immutable** after registration. | App ignores it on `PUT` |
-| R8 | The wizard source-picker and the SQL Generator only see / resolve `is_active = true` sources. Deactivating a source does not break a saved IR's already-frozen `section_wise_report_sqls` (already compiled at Final Save) or a frozen `run_stages` snapshot, but it blocks **new** edits / Final Saves that re-select it. | Query filter + Final-Save resolution |
-| R9 | A registered source used by a report is subject to the **Final-run ETL pre-check** (Section 3 decision 7): its latest data date must be ≥ the report End Date, else the Scheduled / Run-Now FINAL run is blocked (Demo skips). | Run-trigger pre-check (Section 6.10) |
-
----
-
-## 5.7 Supporting CSV → DB table ingestion (Report Step-2)
+## 5.5 Supporting CSV → DB table ingestion (Report Step-2)
 
 Report Step-2 ("Supporting Uploads") lets the Maker attach CSV files — external B2C target / config files, slab tables, agent lists, exclusion lists, and prior-commission outputs for priority de-dup (see `Commission_Logic_Catalog.md`). Each CSV is loaded into a **physical table** so the IR can reference it with `source.type: "upload"` / `combine.join_with.type: "upload"`. This subsection is the contract for that pipeline; the **BE owns it** (not the Python engine), and it writes **one `report_supporting_uploads` row per file**.
 
-### 5.7.1 Target schema, table & column naming
+### 5.5.1 Target schema, table & column naming
 
 - **Schema:** all upload tables live in a dedicated schema **`salescom_upload`** (kept separate from registered source data and from SalesCom operational tables; the execute-time allowlist permits reads from `salescom_upload` + the registered-source schema only).
 - **Table name:** `up_<reportId>_<slug>` where `<reportId>` = `report_setups.id`, `<slug>` = sanitised base file name (lowercased, non-alphanumerics → `_`, collapsed, trimmed to 40 chars), with a `_<n>` suffix on collision within the same report.
   Example: report `812`, file `RSO Agent Target (Apr).csv` → `up_812_rso_agent_target_apr`. The physical reference stored on the registry row is `db_schema = 'salescom_upload'`, `db_table_name = 'up_812_rso_agent_target_apr'`; the IR's `upload` ref is `salescom_upload.up_812_rso_agent_target_apr`.
-- **Column names:** sanitised from the CSV header (Section 5.7.3). The IR / `combine.match_on` references the **sanitised** column name.
+- **Column names:** sanitised from the CSV header (Section 5.5.3). The IR / `combine.match_on` references the **sanitised** column name.
 
-### 5.7.2 Detected-type → PostgreSQL type mapping
+### 5.5.2 Detected-type → PostgreSQL type mapping
 
 The ingester samples up to the first **10,000 rows** per column to infer a type, then creates the table with that type. Inference is **narrowest-that-fits**, in this priority order; any value that doesn't fit falls back to the next wider type, ultimately `TEXT`:
 
@@ -1100,7 +1068,7 @@ The ingester samples up to the first **10,000 rows** per column to infer a type,
 
 **Rules:** empty string / configured null-tokens (`""`, `NULL`, `N/A`) → SQL `NULL` and are ignored for inference. A fully-null column → `TEXT`. **Leading-zero strings** (MSISDN, codes) stay `TEXT` when any value has a significant leading zero, so join keys aren't silently turned into integers. Monetary columns infer as `NUMERIC(38,10)` (wide; the engine narrows at calc time). The wizard preview surfaces the inferred type; the Maker may override a column to `TEXT` (only widening to TEXT is allowed — never narrowing).
 
-### 5.7.3 Column-name sanitisation
+### 5.5.3 Column-name sanitisation
 
 Applied to every CSV header cell, in order:
 
@@ -1114,7 +1082,7 @@ Applied to every CSV header cell, in order:
 
 The original → sanitised header map is returned to the FE so the wizard can show *"Original CSV column → loaded column."*
 
-### 5.7.4 Limits & pre-load validation
+### 5.5.4 Limits & pre-load validation
 
 | Limit | Value | On breach |
 |---|---|---|
@@ -1126,13 +1094,13 @@ The original → sanitised header map is returned to the FE so the wizard can sh
 
 Limits are checked **before** the COPY: the column count from the parsed header, the size from the multipart / SeaweedFS object metadata.
 
-### 5.7.5 Load mechanics (COPY-based)
+### 5.5.5 Load mechanics (COPY-based)
 
 The ingester is transactional and idempotent per `(report_setup_id, db_schema, db_table_name)`:
 
 1. **Stage the object** — the raw CSV is first stored in SeaweedFS (→ `object_bucket`, `object_key`) so it survives retries and is the audit copy.
-2. **Parse header** → sanitise (Section 5.7.3); enforce limits (Section 5.7.4).
-3. **Infer types** — stream-sample up to 10k rows (Section 5.7.2).
+2. **Parse header** → sanitise (Section 5.5.3); enforce limits (Section 5.5.4).
+3. **Infer types** — stream-sample up to 10k rows (Section 5.5.2).
 4. **DDL** — `CREATE TABLE salescom_upload.up_<reportId>_<slug> (...)` with the inferred columns (all `NULL`-able) plus an internal `_row_no BIGINT` (load order; helps fan-out / guardrail debugging). `DROP TABLE IF EXISTS` first (re-upload replaces).
 5. **Bulk load** — server-side `COPY salescom_upload.up_... FROM STDIN WITH (FORMAT csv, HEADER true, NULL '', QUOTE '"', ESCAPE '"')` streamed from the staged object via the Npgsql binary `COPY` API. Null-tokens normalised to SQL `NULL`. The whole COPY is **one transaction** — on any malformed row the load **rolls back** and returns `422 LOAD_FAILED` with the offending line number (no half-loaded table).
 6. **Index** — Step-2 indexes nothing by default (join keys aren't known until the IR is built); the **SQL Generator** issues `CREATE INDEX` on the upload table's `match_on` columns at Final Save (cheap — table is already physical). (Indexing strategy: index join keys, filter-early-then-join.)
@@ -1147,7 +1115,7 @@ The ingester is transactional and idempotent per `(report_setup_id, db_schema, d
    > The real schema (Section 3.4) has only `ix_report_supporting_uploads_report_setup`. To make the in-place upsert deterministic, add a **UNIQUE index `ux_report_supporting_uploads_setup_table ON report_supporting_uploads (report_setup_id, db_schema, db_table_name)`** (idempotency guard for re-upload). If not added at DB level, the BE must enforce the same uniqueness in the upload transaction.
 8. **Audit** — `audit_logs` row (`action_type = 1` Create on first upload / `2` Update on re-upload, `entity_name = 'report_supporting_uploads'`, `entity_id = <id>`).
 
-### 5.7.6 Upload API endpoints
+### 5.5.6 Upload API endpoints
 
 | Method / Path | Purpose | Role | Success |
 |---|---|---|---|
@@ -1178,18 +1146,18 @@ Errors: `413 FILE_TOO_LARGE`, `415 UNSUPPORTED_FORMAT`, `422 TOO_MANY_COLUMNS | 
 
 **`DELETE … /uploads/{uploadId}`** → `204`. Errors: `403 FORBIDDEN`, `404 NOT_FOUND`, `409 REPORT_LOCKED` (cannot delete once the report is approval-locked) / `409 UPLOAD_IN_USE` (referenced by the current IR — remove the IR ref first).
 
-### 5.7.7 Ingestion validation & rules
+### 5.5.7 Ingestion validation & rules
 
 | ID | Rule |
 |---|---|
 | U1 | Only the report's **Maker** (owner) or an Administrator may upload to / delete uploads for a report (BR1). Ownership resolved per the single-Maker rule (`COALESCE(updated_by, created_by)` on `report_setups`). |
 | U2 | Uploads / deletes allowed only while the report setup is **not yet approval-locked** (i.e. its `report_approvals.overall_status` is still `0` Draft, or no approval instance exists / it was sent back for edit). Once the setup enters Pre-Approval and beyond, the upload set is **frozen** → `409 REPORT_LOCKED`. |
-| U3 | ≤ 30 columns, ≤ 500 MB, `.csv` only (Section 5.7.4). |
-| U4 | Column names always sanitised (Section 5.7.3); the IR references the **sanitised** name. |
-| U5 | Type inference is narrowest-that-fits with `TEXT` fallback; leading-zero / code columns stay `TEXT` to protect join keys (Section 5.7.2). Maker override may only widen to `TEXT`. |
+| U3 | ≤ 30 columns, ≤ 500 MB, `.csv` only (Section 5.5.4). |
+| U4 | Column names always sanitised (Section 5.5.3); the IR references the **sanitised** name. |
+| U5 | Type inference is narrowest-that-fits with `TEXT` fallback; leading-zero / code columns stay `TEXT` to protect join keys (Section 5.5.2). Maker override may only widen to `TEXT`. |
 | U6 | Load is **all-or-nothing** (single-transaction COPY); a bad row rolls the whole file back (no half-loaded table). |
 | U7 | Upload tables live in `salescom_upload`; only that schema + the registered-source schema are readable by generated SQL (D2 allowlist). The trusted `final_commissions` write path never reads from generated SQL. |
-| U8 | Re-upload of the same generated table name **replaces** the table in place (drop + reload) and updates the same `report_supporting_uploads` row (idempotent via `ux_report_supporting_uploads_setup_table` — Section 5.7.5 step 7). |
+| U8 | Re-upload of the same generated table name **replaces** the table in place (drop + reload) and updates the same `report_supporting_uploads` row (idempotent via `ux_report_supporting_uploads_setup_table` — Section 5.5.5 step 7). |
 | U9 | An upload table is **dropped** when its `report_supporting_uploads` row is deleted (only allowed pre-lock) and on report archival; never left orphaned in `salescom_upload`. |
 
 ---
@@ -1304,17 +1272,17 @@ The Maker also picks the **Approval Flow** (`approval_flow_id`, dropdown of `app
 
 ### 6.4.2 Step 2 — Supporting Uploads
 
-**Overview.** The Maker uploads CSV files (targets, slab tables, agent lists, exclusion lists, prior-run outputs for de-dup). Each confirmed file becomes a **real DB table** that Steps 3–4 can read as a `source` — the engine's #1 capability (external-config join). Ingestion mechanics are specified in Section 5.7 (CSV→DB ingestion).
+**Overview.** The Maker uploads CSV files (targets, slab tables, agent lists, exclusion lists, prior-run outputs for de-dup). Each confirmed file becomes a **real DB table** that Steps 3–4 can read as a `source` — the engine's #1 capability (external-config join). Ingestion mechanics are specified in Section 5.5 (CSV→DB ingestion).
 
 **UI.** Drag-drop or browse CSV (first row = headers). Multiple files allowed, each listed with serial no., file name, generated source name, and **Remove** (before save). A preview shows the first rows with **auto-detected column types**; the Maker may override a type, and any value not matching its type is flagged as a warning (does not block).
 
 **Data model.** On confirm, one **`report_supporting_uploads`** row per file: `report_setup_id`, `db_schema`, `db_table_name`, `object_bucket`, `object_key`, `file_name`, `row_count`, `uploaded_at`, `uploaded_by`. `ix_report_supporting_uploads_report_setup` indexes the FK; the ingestion routine ensures the generated table name is unique within the report.
 
 **Process logic.**
-1. `POST /reports/{id}/uploads` (multipart) → BE stages the object in SeaweedFS (`object_bucket`/`object_key`), sanitises identifiers, infers types, creates a physical table (`db_schema`.`db_table_name`), bulk-loads it via `COPY`, records `row_count`, and writes the `report_supporting_uploads` row (Section 5.7.5).
+1. `POST /reports/{id}/uploads` (multipart) → BE stages the object in SeaweedFS (`object_bucket`/`object_key`), sanitises identifiers, infers types, creates a physical table (`db_schema`.`db_table_name`), bulk-loads it via `COPY`, records `row_count`, and writes the `report_supporting_uploads` row (Section 5.5.5).
 2. The new table is now selectable as a `source` of type `upload` in Steps 3–4 (referenced by `db_table_name`).
 
-**Validation / business rules.** Per Section 5.7 ingestion rules. Removing an upload before the report is locked deletes the registry row and the physical table.
+**Validation / business rules.** Per Section 5.5 ingestion rules. Removing an upload before the report is locked deletes the registry row and the physical table.
 
 ### 6.4.3 Step 3 — Achievements (builds the IR `achievements[]`)
 
@@ -2953,7 +2921,7 @@ Every `int4` enum column in Section 3 is listed here with its **code → meaning
 | BR | Rule | Primary enforcement point |
 |---|---|---|
 | **BR1** | Access by assigned role/right. | JWT + RBAC middleware; per-endpoint role check; sensitive actions live-re-check `user_rights` (Section 4.4.4c, Section 4.6). |
-| **BR2** | A data source is never deleted, only deactivated; cannot deactivate while in use. | No DELETE route; `data_sources.is_active=false`; in-use scan of `report_setups.definition` → `409 SOURCE_IN_USE` (Section 5.4, Section 5.6 R5/R6). |
+| **BR2** | A data source is never deleted, only deactivated; cannot deactivate while in use. | No DELETE route; `data_sources.is_active=false`; in-use scan of `report_setups.definition` → `409 SOURCE_IN_USE` (Section 5.3). |
 | **BR3** | Report name system-wide unique. | `ux_report_setups_report_name` → `409` at Step-1 create; Clone forces a new unique name (Section 6.4.1, Section 6.8). |
 | **BR4** | Start date ≤ End date. | Step-1 validation → `422` (Section 6.4.1). |
 | **BR5** | Same user can't be Maker + Checker of the same report/run. | Maker = `COALESCE(report_setups.updated_by, report_setups.created_by)`; submit pre-check `MAKER_IS_SOLE_APPROVER`; decision check `SELF_OR_DUPLICATE_APPROVER` (Section 7.4.3–7.4.4, Section 7.6). |
@@ -3002,7 +2970,7 @@ These conventions apply to **every** endpoint in this LLD; per-feature sections 
 
 **E6 — Add the `GET /reports` list-item DTO (Section 6.12):** `{ id, reportName, channelTypeId, channelName, startDate, endDate, recurrence, isEv, isPos, statusLabel (derived, Section 7.4.8), isSetupComplete }`, wrapped in the Section 12.3 pagination envelope.
 
-**E7 — One canonical pagination envelope everywhere:** `{ items, page, pageSize, totalItems, totalPages }`. Rename `total` → `totalItems` and add `totalPages` in the Section 5.5 / Section 7.5 / Section 9.5 / Section 6.12 examples.
+**E7 — One canonical pagination envelope everywhere:** `{ items, page, pageSize, totalItems, totalPages }`. Rename `total` → `totalItems` and add `totalPages` in the Section 5.4 / Section 7.5 / Section 9.5 / Section 6.12 examples.
 
 **E8 — `report_setups.status` holds ONLY `ON` / `STOP`** (the run/schedule toggle) — it never stores an approval phase. The "Pending Approval / Rejected" wording in Section 7.4.3/Section 7.4.6 means the **derived status label** (Section 7.4.8), not this column. Approval state lives in `report_approvals.overall_status` (0–4).
 
