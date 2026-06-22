@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SalesCom — CQRS + Clean Architecture Walkthrough</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Segoe UI", Calibri, Arial, sans-serif;
+    color: #1f2733; font-size: 10.5pt; line-height: 1.5; margin: 0;
+  }
+  h1 { font-size: 24pt; color: #14253b; margin: 0 0 4px; }
+  h2 { font-size: 16pt; color: #0f4c81; margin: 26px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #cfe0ef; }
+  h3 { font-size: 12.5pt; color: #14253b; margin: 18px 0 6px; }
+  h2.pb { break-before: page; }
+  p { margin: 7px 0; }
+  code { font-family: "Cascadia Code", "Consolas", monospace; font-size: 9pt; background: #eef2f6; padding: 1px 4px; border-radius: 3px; color: #b1004f; }
+  pre { background: #0f1b2d; color: #e7eef7; font-family: "Cascadia Code", "Consolas", monospace; font-size: 8.4pt; line-height: 1.45;
+        padding: 11px 13px; border-radius: 6px; overflow-x: auto; margin: 8px 0; white-space: pre-wrap; }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  pre.ascii { background: #f4f7fa; color: #1f2733; border: 1px solid #d4dde6; }
+  .lead { font-size: 11pt; color: #44515f; margin-top: 2px; }
+  .filepath { color: #6b7785; font-size: 8.2pt; font-family: "Cascadia Code","Consolas",monospace; margin: 10px 0 2px; }
+  .step { border-left: 4px solid #0f4c81; padding: 2px 0 2px 12px; margin: 18px 0 6px; }
+  .step .n { display:inline-block; min-width: 26px; height: 26px; line-height: 26px; text-align:center; background:#0f4c81; color:#fff;
+             border-radius: 50%; font-weight: 700; font-size: 10pt; margin-right: 8px; }
+  .step h3 { display: inline; border: none; margin: 0; font-size: 12.5pt; }
+  .callout { background: #f1f7ec; border: 1px solid #cfe3bd; border-left: 4px solid #5a9b2f; padding: 8px 12px; border-radius: 5px; margin: 10px 0; }
+  .callout.why { background: #fdf6ec; border-color: #f0d9a8; border-left-color: #d79023; }
+  .callout.note { background: #eef4fb; border-color: #c9ddf0; border-left-color: #0f4c81; }
+  .callout b { color: #14253b; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 9pt; }
+  th, td { border: 1px solid #d4dde6; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #e8eef5; color: #14253b; }
+  td code { font-size: 8.4pt; }
+  .tag { display:inline-block; background:#0f4c81; color:#fff; font-size:7.5pt; font-weight:700; padding:1px 7px; border-radius:10px; vertical-align:middle; letter-spacing:.3px; }
+  .tag.q { background:#5a9b2f; }
+  .subtitle { color:#6b7785; font-size:11pt; }
+  .toc { columns: 2; font-size: 9.5pt; }
+  .toc a { color:#0f4c81; text-decoration:none; }
+  ul.tight { margin: 6px 0; }
+  ul.tight li { margin: 3px 0; }
+  .hr { height: 3px; background: linear-gradient(90deg,#0f4c81,#cfe0ef); border:none; margin: 10px 0 0; }
+  .small { font-size: 9pt; color:#6b7785; }
+</style>
+</head>
+<body>
+
+<h1>CQRS &amp; Clean Architecture, by example</h1>
+<div class="subtitle">A guided walkthrough of one request — <code>POST /api/data-sources</code> — through the SalesCom service</div>
+<hr class="hr">
+<p class="lead">This document follows a <b>single HTTP request</b> from the moment it hits the controller until the JSON
+leaves the server, naming every type it passes through and explaining <i>why</i> each piece exists. By the end you
+should be able to read any feature in this codebase — and add your own — with confidence.</p>
+
+<h3>What you'll learn</h3>
+<div class="toc">
+  <a href="#ideas">1. Three ideas in one minute</a><br>
+  <a href="#layers">2. The four layers &amp; the dependency rule</a><br>
+  <a href="#cast">3. The cast of characters</a><br>
+  <a href="#trace">4. The request, traced step by step</a><br>
+  <a href="#seq">5. The whole flow on one page</a><br>
+  <a href="#fail">6. What happens when things go wrong</a><br>
+  <a href="#why">7. Why build it this way?</a><br>
+  <a href="#cheat">8. Add your own command (cheat sheet)</a><br>
+</div>
+
+<div class="callout note"><b>The example endpoint.</b> <code>POST /api/data-sources</code> registers a source table plus its
+columns in one transaction. We picked it because it exercises <i>the entire pipeline</i>: routing &amp; model-binding,
+the custom command dispatcher, the decorator chain (logging → validation → handler), the unit-of-work + repository,
+entity-to-DTO mapping, the <code>Result</code> type, and the unified <code>ApiResponse</code> envelope.</div>
+
+<!-- ============================================================= -->
+<h2 id="ideas" class="pb">1. Three ideas in one minute</h2>
+
+<h3>Clean Architecture</h3>
+<p>Code is split into four projects arranged in concentric rings. <b>Dependencies only ever point inward.</b> The
+business rules (Domain) know nothing about the database, HTTP, or JSON. The outer rings depend on the inner ones,
+never the reverse. This is what lets you swap Postgres for something else, or test a use-case with no web server.</p>
+
+<h3>CQRS — Command/Query Responsibility Segregation</h3>
+<p>Every use-case is modelled as either a <b>Command</b> (it changes state — "create a data source") or a <b>Query</b>
+(it reads state — "list data sources") . Each gets its own little message class and its own handler. There is no
+"service" class with twelve methods; there is one class per thing-the-system-can-do. In this project a use-case lives
+in a <b>vertical slice</b>: a folder holding the Command, its Handler, and its Validator side by side.</p>
+
+<h3>A custom "mediator"</h3>
+<p>The controller never news-up a handler. It hands the command to a <b>dispatcher</b>, which finds the right handler
+and invokes it. Around every handler sits a <b>decorator chain</b> (logging, then validation) so cross-cutting concerns
+are written once, not in every handler. This is the same idea as the MediatR library — but here it is ~30 lines of our
+own code, so nothing is hidden.</p>
+
+<div class="callout"><b>How they fit together:</b> Clean Architecture says <i>where</i> code lives; CQRS says <i>how a
+use-case is shaped</i>; the dispatcher + decorators are the <i>plumbing</i> that connects a controller to a use-case
+without coupling them.</div>
+
+<!-- ============================================================= -->
+<h2 id="layers" class="pb">2. The four layers &amp; the dependency rule</h2>
+
+<pre class="ascii">         ┌─────────────────────────────────────────────────────────────┐
+         │  SalesCom.Api            controllers, ApiResponse envelope,   │
+         │  (presentation)          Program.cs — the composition root    │
+         └───────────────┬───────────────────────────────┬─────────────┘
+                         │ depends on                     │ depends on
+                         ▼                                 ▼
+         ┌──────────────────────────────┐   ┌──────────────────────────────┐
+         │  SalesCom.Infrastructure     │   │                              │
+         │  EF Core, repositories,      │──▶│   SalesCom.Application        │
+         │  Central Login client,       │   │   commands, queries,          │
+         │  JWT, Serilog                │   │   handlers, dispatchers,      │
+         └──────────────┬───────────────┘   │   decorators, interfaces      │
+                        │ depends on         └───────────────┬──────────────┘
+                        │                                    │ depends on
+                        └──────────────┬─────────────────────┘
+                                       ▼
+                        ┌──────────────────────────────┐
+                        │   SalesCom.Domain             │
+                        │   entities, Result/ErrorBase, │
+                        │   enums, interfaces — NO       │
+                        │   external dependencies        │
+                        └──────────────────────────────┘
+                Arrows = "references / depends on". They only point inward.</pre>
+
+<table>
+  <tr><th>Layer</th><th>Owns</th><th>Knows about</th></tr>
+  <tr><td><b>Domain</b></td><td>Entities (<code>DataSource</code>), <code>Result</code>/<code>ErrorBase</code>, enums, repository <i>interfaces</i></td><td>Nothing else — no EF, no ASP.NET</td></tr>
+  <tr><td><b>Application</b></td><td>Commands, queries, handlers, validators, the dispatcher + decorators, and <i>interfaces</i> for things it needs (e.g. <code>IUnitOfWork</code>, <code>IClock</code>)</td><td>Domain only</td></tr>
+  <tr><td><b>Infrastructure</b></td><td><i>Implementations</i>: EF <code>DbContext</code>, the unit of work / repositories, the Central Login HTTP client, JWT, Serilog</td><td>Application + Domain</td></tr>
+  <tr><td><b>Api</b></td><td>Controllers, the <code>ApiResponse</code> mapping, middleware, <code>Program.cs</code> (wires everyone together)</td><td>Application + Infrastructure</td></tr>
+</table>
+
+<div class="callout why"><b>The key trick — dependency inversion.</b> The handler (Application) needs to save to a database,
+but Application must not reference EF Core. So Application <i>declares an interface</i> it wants
+(<code>IUnitOfWork</code> in Domain), and Infrastructure <i>implements</i> it. At runtime the DI container injects the
+Infrastructure implementation. The arrow of <i>compilation</i> points inward; the arrow of <i>control</i> at runtime
+points outward. That inversion is the whole game.</div>
+
+<!-- ============================================================= -->
+<h2 id="cast" class="pb">3. The cast of characters</h2>
+<p>Eleven types take part in our one request. Skim this table now; we'll meet each one in order.</p>
+<table>
+  <tr><th>#</th><th>Type</th><th>Layer / file</th><th>Job</th></tr>
+  <tr><td>1</td><td><code>DataSourcesController</code></td><td>Api · <code>Controllers/</code></td><td>Receives HTTP, hands the command to the dispatcher, maps the result back to HTTP.</td></tr>
+  <tr><td>2</td><td><code>CreateDataSourceCommand</code></td><td>Application · <code>Commands/…/CreateDataSource/</code></td><td>The request, as a typed message. <i>Is</i> the API contract.</td></tr>
+  <tr><td>3</td><td><code>ICommandDispatcher</code> / <code>CommandDispatcher</code></td><td>Application · <code>Messaging/</code></td><td>Finds the handler for a command and invokes it (our "mediator").</td></tr>
+  <tr><td>4</td><td><code>AddApplication</code> (DI)</td><td>Application · <code>DependencyInjection.cs</code></td><td>At startup, wraps each handler in the decorator chain and registers it.</td></tr>
+  <tr><td>5</td><td><code>LoggingCommandHandlerDecorator</code></td><td>Application · <code>Behaviours/</code></td><td>Outermost wrapper — logs entry/exit/duration.</td></tr>
+  <tr><td>6</td><td><code>ValidationCommandHandlerDecorator</code></td><td>Application · <code>Behaviours/</code></td><td>Runs FluentValidation; short-circuits to a failed <code>Result</code> if invalid.</td></tr>
+  <tr><td>7</td><td><code>CreateDataSourceValidator</code></td><td>Application · same slice</td><td>The rules for a valid command.</td></tr>
+  <tr><td>8</td><td><code>CreateDataSourceHandler</code></td><td>Application · same slice</td><td>The actual use-case logic.</td></tr>
+  <tr><td>9</td><td><code>IUnitOfWork</code> / <code>IGenericRepository&lt;T&gt;</code></td><td>Domain interface · Infra impl</td><td>Persistence, behind an interface.</td></tr>
+  <tr><td>10</td><td><code>Result&lt;T&gt;</code> / <code>ErrorBase</code></td><td>Domain · <code>Common/</code></td><td>Success-or-failure return type (no exceptions for business rules).</td></tr>
+  <tr><td>11</td><td><code>ToApiResponse</code> + <code>ApiResponse&lt;T&gt;</code></td><td>Api / Application</td><td>Turns a <code>Result</code> into an HTTP status + the unified JSON envelope.</td></tr>
+</table>
+
+<!-- ============================================================= -->
+<h2 id="trace" class="pb">4. The request, traced step by step</h2>
+<p>A client sends:</p>
+<pre><code>POST /api/data-sources
+Authorization: Bearer &lt;jwe access token&gt;
+Content-Type: application/json
+
+{
+  "sourceTableName": "ev_recharge_com",
+  "aliasTableName":  "EV Recharge",
+  "tableDescription": "Primary recharge feed",
+  "isActive": true,
+  "columns": [
+    { "columnName": "channel_type", "aliasColumnName": "Channel Type", "dataType": "character varying" }
+  ]
+}</code></pre>
+
+<div class="step"><span class="n">1</span><h3>Routing, auth &amp; model binding → the controller action</h3></div>
+<p class="filepath">src/SalesCom.Api/Controllers/DataSourcesController.cs</p>
+<p>ASP.NET routes <code>POST /api/data-sources</code> to <code>CreateAsync</code>. Before the body runs, two framework
+steps happen: the <code>[HasPermission(...)]</code> attribute checks (against the database) that the caller may
+<i>Manage</i> data sources, and the JSON body is <b>bound directly into the command object</b> — there is no separate
+"request DTO"; <b>the command is the wire contract</b>.</p>
+<pre><code>[HttpPost]
+[HasPermission(Permissions.DataSources.Manage)]
+[ProducesResponseType(typeof(ApiResponse&lt;DataSourceResponse&gt;), StatusCodes.Status201Created)]
+[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status409Conflict)]
+public async Task&lt;IActionResult&gt; CreateAsync(
+    [FromBody] CreateDataSourceCommand command,
+    CancellationToken cancellationToken)
+{
+    var result = await commandDispatcher.DispatchAsync(command, cancellationToken);
+    return result.ToApiResponse(this, "Data source created.", StatusCodes.Status201Created);
+}</code></pre>
+<div class="callout note"><b>Notice how little the controller does.</b> It does not validate, does not touch the database,
+does not build the response shape. It binds → dispatches → maps. Two collaborators are injected via the constructor:
+<code>ICommandDispatcher</code> and <code>IQueryDispatcher</code>. That's the whole controller's surface.</div>
+
+<div class="step"><span class="n">2</span><h3>The command — a typed message that <i>is</i> the use-case</h3></div>
+<p class="filepath">src/SalesCom.Application/Commands/DataSources/CreateDataSource/CreateDataSourceCommand.cs</p>
+<pre><code>public sealed record CreateDataSourceCommand(
+    string SourceTableName,
+    string AliasTableName,
+    string? TableDescription,
+    bool IsActive,
+    IReadOnlyList&lt;CreateDataSourceColumn&gt; Columns) : ICommand&lt;Result&lt;DataSourceResponse&gt;&gt;;
+
+public sealed record CreateDataSourceColumn(string ColumnName, string AliasColumnName, string DataType);</code></pre>
+<p>It is an immutable <code>record</code>. The important part is the interface it implements:
+<code>ICommand&lt;Result&lt;DataSourceResponse&gt;&gt;</code>. That single line says three things: "I am a command"
+(state-changing), "dispatch me", and "when handled I produce a <code>Result&lt;DataSourceResponse&gt;</code>." The
+marker interfaces are deliberately empty:</p>
+<p class="filepath">src/SalesCom.Application/Messaging/ICommand.cs &nbsp;·&nbsp; ICommandHandler.cs</p>
+<pre><code>public interface ICommand&lt;TResponse&gt; { }                 // a command that yields TResponse
+public interface ICommand : ICommand&lt;Result&gt; { }          // a command with no payload, just success/failure
+
+public interface ICommandHandler&lt;in TCommand, TResponse&gt;
+    where TCommand : ICommand&lt;TResponse&gt;
+{
+    Task&lt;TResponse&gt; HandleAsync(TCommand command, CancellationToken cancellationToken);
+}</code></pre>
+<div class="callout why"><b>Why a command instead of method parameters?</b> Because a single typed object can be passed
+through the dispatcher, logged by name, validated generically, and serialized straight from the HTTP body. The
+command's <i>type</i> is the key that selects the right handler.</div>
+
+<div class="step"><span class="n">3</span><h3>The dispatcher finds and invokes the handler</h3></div>
+<p class="filepath">src/SalesCom.Application/Messaging/CommandDispatcher.cs</p>
+<pre><code>public Task&lt;TResponse&gt; DispatchAsync&lt;TResponse&gt;(ICommand&lt;TResponse&gt; command, CancellationToken cancellationToken)
+{
+    ArgumentNullException.ThrowIfNull(command);
+
+    // Build the closed handler type for THIS command's runtime type, e.g.
+    // ICommandHandler&lt;CreateDataSourceCommand, Result&lt;DataSourceResponse&gt;&gt;
+    var handlerType = typeof(ICommandHandler&lt;,&gt;).MakeGenericType(command.GetType(), typeof(TResponse));
+    var handler = serviceProvider.GetRequiredService(handlerType);   // ask the DI container for it
+    var method  = handlerType.GetMethod(nameof(ICommandHandler&lt;ICommand&lt;TResponse&gt;, TResponse&gt;.HandleAsync))!;
+    return (Task&lt;TResponse&gt;)method.Invoke(handler, [command, cancellationToken])!;
+}</code></pre>
+<p>This is the "mediator". It uses the command's <b>runtime type</b> to construct the matching
+<code>ICommandHandler&lt;,&gt;</code> type, asks the DI container for whatever is registered against it, and invokes
+<code>HandleAsync</code> by reflection. The controller and the handler never reference each other.</p>
+<div class="callout note"><b>What the container hands back is not the bare handler</b> — it's the handler already wrapped
+in the decorator chain. That wrapping was decided once, at startup (next step).</div>
+
+<div class="step"><span class="n">4</span><h3>Startup wiring — how the decorator chain was assembled</h3></div>
+<p class="filepath">src/SalesCom.Application/DependencyInjection.cs</p>
+<p>At boot, <code>AddApplication()</code> reflection-scans the assembly for every
+<code>ICommandHandler&lt;,&gt;</code> and registers, against that interface, a factory that builds the onion:
+<b>Logging( Validation( realHandler ) )</b>.</p>
+<pre><code>services.TryAddTransient(implementation);   // the real CreateDataSourceHandler
+
+var loggingDecorator    = typeof(LoggingCommandHandlerDecorator&lt;,&gt;).MakeGenericType(commandType, responseType);
+var validationDecorator = typeof(ValidationCommandHandlerDecorator&lt;,&gt;).MakeGenericType(commandType, responseType);
+
+services.AddTransient(service, sp =&gt;
+{
+    var real       = sp.GetRequiredService(implementation);                        // innermost
+    var validation = ActivatorUtilities.CreateInstance(sp, validationDecorator, real);
+    var logging    = ActivatorUtilities.CreateInstance(sp, loggingDecorator, validation); // outermost
+    return logging;
+});</code></pre>
+<div class="callout why"><b>Why decorators?</b> Logging and validation must happen for <i>every</i> command. Rather than
+copy that code into 20 handlers, each concern is a class that implements the same
+<code>ICommandHandler&lt;,&gt;</code> interface and holds a reference to the next one in. Because every layer has the same
+shape, they stack like Russian dolls. The decorator order is fixed here:
+<b>Logging → Validation → Handler</b>.</div>
+
+<div class="step"><span class="n">5</span><h3>Decorator 1 (outermost): logging</h3></div>
+<p class="filepath">src/SalesCom.Application/Behaviours/LoggingCommandHandlerDecorator.cs</p>
+<pre><code>public async Task&lt;TResponse&gt; HandleAsync(TCommand command, CancellationToken cancellationToken)
+{
+    var commandName = typeof(TCommand).Name;
+    using var scope = logger.BeginScope(/* CommandName, CommandType */);
+
+    logger.LogInformation("Handling command {CommandName}", commandName);
+    var sw = Stopwatch.StartNew();
+    try
+    {
+        var response = await inner.HandleAsync(command, cancellationToken);   // ── call inward ──▶
+        logger.LogInformation("Handled command {CommandName} in {ElapsedMs} ms", commandName, sw.ElapsedMilliseconds);
+        return response;
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Command {CommandName} failed after {ElapsedMs} ms", commandName, sw.ElapsedMilliseconds);
+        throw;
+    }
+}</code></pre>
+<p>It logs, starts a stopwatch, then calls <code>inner.HandleAsync</code> — which is the validation decorator. Control
+will return here last, so it also logs the total duration. <code>inner</code> is just another
+<code>ICommandHandler&lt;TCommand,TResponse&gt;</code>; the decorator doesn't know or care that it's the validator.</p>
+
+<div class="step"><span class="n">6</span><h3>Decorator 2: validation (the short-circuit)</h3></div>
+<p class="filepath">src/SalesCom.Application/Behaviours/ValidationCommandHandlerDecorator.cs</p>
+<pre><code>public async Task&lt;TResponse&gt; HandleAsync(TCommand command, CancellationToken cancellationToken)
+{
+    if (validators.Any())
+    {
+        var context  = new ValidationContext&lt;TCommand&gt;(command);
+        var failures = (await Task.WhenAll(validators.Select(v =&gt; v.ValidateAsync(context, cancellationToken))))
+            .SelectMany(r =&gt; r.Errors).Where(f =&gt; f is not null).ToList();
+
+        if (failures.Count &gt; 0)
+        {
+            var error = ErrorBase.Validation($"Validation.{failures[0].PropertyName}", failures[0].ErrorMessage);
+            // bridge the error into the generic Result&lt;T&gt; the dispatcher expects, then RETURN — handler never runs
+            return /* Result.Failure&lt;DataSourceResponse&gt;(error) as TResponse */;
+        }
+    }
+    return await inner.HandleAsync(command, cancellationToken);   // ── valid → call the real handler ──▶
+}</code></pre>
+<p>All <code>IValidator&lt;CreateDataSourceCommand&gt;</code> instances are injected (FluentValidation found them at
+startup). If any rule fails, the decorator builds a failed <code>Result</code> and <b>returns immediately</b> — the real
+handler is never reached, and no exception is thrown. If everything passes, it calls inward to the handler.</p>
+<p class="filepath">src/SalesCom.Application/Commands/DataSources/CreateDataSource/CreateDataSourceValidator.cs &nbsp;(step&nbsp;7)</p>
+<pre><code>RuleFor(x =&gt; x.SourceTableName).NotEmpty().MaximumLength(200);
+RuleFor(x =&gt; x.AliasTableName ).NotEmpty().MaximumLength(200);
+RuleFor(x =&gt; x.Columns).NotEmpty().WithMessage("At least one column is required.");
+RuleForEach(x =&gt; x.Columns).SetValidator(new CreateDataSourceColumnValidator());</code></pre>
+<div class="callout"><b>This is why handlers are clean.</b> By the time control reaches the handler, the command is
+<i>guaranteed</i> structurally valid. The handler only worries about <i>business</i> rules (e.g. "is this table already
+registered?"), never "is this field empty?".</div>
+
+<div class="step"><span class="n">8</span><h3>The handler — the actual use-case</h3></div>
+<p class="filepath">src/SalesCom.Application/Commands/DataSources/CreateDataSource/CreateDataSourceHandler.cs</p>
+<pre><code>internal sealed class CreateDataSourceHandler(
+    IUnitOfWork unitOfWork,
+    IClock clock) : ICommandHandler&lt;CreateDataSourceCommand, Result&lt;DataSourceResponse&gt;&gt;
+{
+    public async Task&lt;Result&lt;DataSourceResponse&gt;&gt; HandleAsync(
+        CreateDataSourceCommand command, CancellationToken cancellationToken)
+    {
+        var sourceTable = command.SourceTableName.Trim();
+        var sources     = unitOfWork.Repository&lt;DataSource&gt;();          // ① get a repo from the unit of work
+
+        var lowered = sourceTable.ToLower();
+        if (await sources.AnyAsync(d =&gt; d.SourceTableName.ToLower() == lowered, cancellationToken))
+            return DataSourceErrors.AlreadyRegistered;                  // ② business rule → failed Result (409)
+
+        var now = clock.UtcNow;                                         // ③ time via an interface, not DateTime.Now
+        var dataSource = new DataSource
+        {
+            SourceTableName  = sourceTable,
+            AliasTableName   = command.AliasTableName.Trim(),
+            TableDescription = command.TableDescription?.Trim(),
+            IsActive         = command.IsActive,
+            CreatedOnUtc     = now,
+        };
+        await sources.AddAsync(dataSource, cancellationToken);          // ④ stage the parent
+
+        var columns = command.Columns.Select(c =&gt; new DataSourceColumn
+        {
+            DataSourceId    = dataSource.Id,
+            ColumnName      = c.ColumnName.Trim(),
+            AliasColumnName = c.AliasColumnName.Trim(),
+            DataType        = c.DataType.Trim(),
+            CreatedOnUtc    = now,
+        }).ToList();
+        await unitOfWork.Repository&lt;DataSourceColumn&gt;().AddRangeAsync(columns, cancellationToken);  // ⑤ stage children
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);           // ⑥ ONE commit = one transaction
+        return dataSource.ToResponse(columns);                          // ⑦ map entity → DTO (implicit success Result)
+    }
+}</code></pre>
+<p>Read the seven numbered moves. Two things deserve attention:</p>
+<ul class="tight">
+  <li><b>It depends only on interfaces</b> — <code>IUnitOfWork</code> and <code>IClock</code>, both declared in Domain.
+      It has no idea EF Core or Postgres exist. The concrete <code>UnitOfWork</code> is injected from Infrastructure.</li>
+  <li><b>One <code>SaveChangesAsync</code></b> commits the parent and all child columns together. If anything throws,
+      nothing is written — the handler is all-or-none.</li>
+</ul>
+<p class="filepath">src/SalesCom.Domain/Interfaces/IUnitOfWork.cs &nbsp;(the contract the handler leans on)</p>
+<pre><code>public interface IUnitOfWork
+{
+    IGenericRepository&lt;T&gt; Repository&lt;T&gt;() where T : class;   // a typed repo for any aggregate
+    ISqlRepository Sql { get; }
+    Task&lt;int&gt; SaveChangesAsync(CancellationToken cancellationToken);
+}</code></pre>
+<div class="callout why"><b>Why route persistence through an interface in Domain?</b> So the use-case stays testable and
+database-agnostic. A unit test injects a fake <code>IUnitOfWork</code>; production injects the EF-backed one. The
+Application project literally cannot compile a reference to EF Core — the architecture enforces the boundary.</div>
+
+<div class="step"><span class="n">9</span><h3>Mapping the entity to a response DTO</h3></div>
+<p class="filepath">src/SalesCom.Application/Mappings/DataSourceMappingExtensions.cs</p>
+<pre><code>public static DataSourceResponse ToResponse(this DataSource source, IEnumerable&lt;DataSourceColumn&gt; columns) =&gt;
+    new(source.Id, source.SourceTableName, source.AliasTableName, source.TableDescription,
+        source.IsActive, columns.Select(c =&gt; c.ToResponse()).ToList(),
+        source.CreatedOnUtc, source.UpdatedAtUtc);</code></pre>
+<p>Entities are plain data classes with no behaviour; mapping to the DTO is an <b>extension method</b> that lives with
+the feature, never on the entity. <code>DataSourceResponse</code> is the read-model the client actually receives — it
+deliberately omits internal fields (like the EF concurrency token).</p>
+
+<div class="step"><span class="n">10</span><h3>The return type: <code>Result&lt;T&gt;</code>, not exceptions</h3></div>
+<p class="filepath">src/SalesCom.Domain/Common/Result.cs</p>
+<p>Notice the handler <code>return</code>s a bare <code>DataSourceErrors.AlreadyRegistered</code> in one place and a
+bare <code>DataSourceResponse</code> in another — yet the method returns <code>Result&lt;DataSourceResponse&gt;</code>.
+That works because of two <b>implicit conversions</b>:</p>
+<pre><code>public sealed class Result&lt;TValue&gt; : Result
+{
+    public static implicit operator Result&lt;TValue&gt;(TValue value) =&gt; Success(value);   // value  → success
+    public static implicit operator Result&lt;TValue&gt;(ErrorBase error) =&gt; Failure&lt;TValue&gt;(error); // error → failure
+}</code></pre>
+<p>So business outcomes — success <i>or</i> a named failure like <code>AlreadyRegistered</code> (a
+<code>Conflict</code> error) — travel home through the normal return channel. Exceptions are reserved for genuine
+infrastructure faults. An <code>ErrorBase</code> carries a stable <code>Code</code>, a human <code>Message</code>, and
+a <code>Type</code> (Validation / NotFound / Conflict / Unauthorized / Forbidden / Unexpected) that decides the HTTP
+status later.</p>
+
+<div class="step"><span class="n">11</span><h3>Unwinding the chain &amp; mapping <code>Result</code> → HTTP</h3></div>
+<p>The <code>Result</code> now travels back <i>outward</i>: the validation decorator returns it untouched (it only acts
+on the way in), and the logging decorator records the elapsed time and returns it to the dispatcher, which returns it
+to the controller. The controller's final line converts it to an HTTP response:</p>
+<p class="filepath">src/SalesCom.Api/Extensions/ResultExtensions.cs</p>
+<pre><code>public static IActionResult ToApiResponse&lt;T&gt;(this Result&lt;T&gt; result, ControllerBase controller,
+    string successMessage = "Success", int successStatus = StatusCodes.Status200OK)
+{
+    if (result.IsSuccess)
+        return controller.StatusCode(successStatus, ApiResponse&lt;T&gt;.Ok(result.Value, successMessage));
+
+    var status = MapStatus(result.Error.Type);   // Conflict → 409, NotFound → 404, Validation → 400, …
+    return controller.StatusCode(status, ApiResponse&lt;T&gt;.Fail(result.Error.Message, result.Error.Code));
+}</code></pre>
+<p>The error <i>type</i> drives the status code, and the body is always the same unified envelope, so every endpoint —
+success or failure — returns one predictable shape.</p>
+
+<div class="step"><span class="n">12</span><h3>The HTTP response</h3></div>
+<p>On success the client receives <b>201 Created</b> and:</p>
+<pre><code>{
+  "success": true,
+  "message": "Data source created.",
+  "data": {
+    "id": "7b1f…",
+    "sourceTableName": "ev_recharge_com",
+    "aliasTableName": "EV Recharge",
+    "isActive": true,
+    "columns": [ { "id": "…", "columnName": "channel_type", "aliasColumnName": "Channel Type", "dataType": "character varying" } ],
+    "createdOnUtc": "2026-06-13T12:00:00+00:00",
+    "updatedAtUtc": null
+  }
+}</code></pre>
+
+<!-- ============================================================= -->
+<h2 id="seq" class="pb">5. The whole flow on one page</h2>
+<pre class="ascii">  CLIENT            CONTROLLER          DISPATCHER         LOGGING dec.     VALIDATION dec.      HANDLER            DB
+    │  POST /…          │                   │                  │                 │                │               │
+    │ ─────────────────▶│  (auth + bind     │                  │                 │                │               │
+    │                   │   to command)     │                  │                 │                │               │
+    │                   │ ─ Dispatch(cmd) ─▶ │                  │                 │                │               │
+    │                   │                   │ ─ resolve+invoke ▶│                 │                │               │
+    │                   │                   │                  │ log "Handling"  │                │               │
+    │                   │                   │                  │ ─ inner ───────▶│                │               │
+    │                   │                   │                  │                 │ run validators │               │
+    │                   │                   │                  │                 │ ─ valid? ─ yes ▶│               │
+    │                   │                   │                  │                 │                │ AnyAsync()  ─▶│
+    │                   │                   │                  │                 │                │ Add + Save  ─▶│
+    │                   │                   │                  │                 │                │ ToResponse()  │
+    │                   │                   │                  │                 │ ◀─ Result&lt;T&gt; ──│               │
+    │                   │                   │                  │ ◀ Result (log ms)│                │               │
+    │                   │ ◀── Result&lt;T&gt; ─────│                  │                 │                │               │
+    │ ◀ 201 + ApiResponse (ToApiResponse maps Result.Type → status code)         │                │               │
+    │                   │                   │                  │                 │                │               │
+  on INVALID input the VALIDATION decorator returns a failed Result here ─┘  (handler &amp; DB never touched → 400)</pre>
+
+<!-- ============================================================= -->
+<h2 id="fail" class="pb">6. What happens when things go wrong</h2>
+<p>Same pipeline, different exits. The <code>Error.Type</code> set deep in the stack becomes the HTTP status at the top
+— the controller code does not change.</p>
+<table>
+  <tr><th>Scenario</th><th>Where it's caught</th><th>Returns</th><th>HTTP</th></tr>
+  <tr><td>Empty <code>sourceTableName</code> / no columns</td><td>Validation decorator (step 6)</td><td><code>ErrorBase.Validation("Validation.SourceTableName", …)</code></td><td><b>400</b></td></tr>
+  <tr><td>Table already registered</td><td>Handler business rule (step 8②)</td><td><code>DataSourceErrors.AlreadyRegistered</code> (Conflict)</td><td><b>409</b></td></tr>
+  <tr><td>Caller lacks <code>DataSources.Manage</code></td><td><code>[HasPermission]</code> before the action</td><td>authorization envelope</td><td><b>403</b></td></tr>
+  <tr><td>No / invalid bearer token</td><td>JWT middleware before routing</td><td>authentication envelope</td><td><b>401</b></td></tr>
+  <tr><td>DB unreachable, bug, etc.</td><td><code>GlobalExceptionHandler</code> (last resort)</td><td><code>Server.UnexpectedError</code></td><td><b>500</b></td></tr>
+</table>
+<div class="callout note"><b>Two failure channels, by design.</b> Expected, business outcomes flow through
+<code>Result</code> (no stack-trace cost, explicit in the signature). Truly <i>exceptional</i> faults throw and are
+caught once, globally. You almost never write <code>try/catch</code> in a handler.</div>
+
+<!-- ============================================================= -->
+<h2 id="why" class="pb">7. Why build it this way?</h2>
+
+<p><span class="tag">Q</span> <b>Why not just call a service class from the controller?</b><br>
+Because a "DataSourceService" accumulates many methods and many dependencies, and every method re-implements logging,
+validation, and transaction handling. One-command-one-handler keeps each use-case small, independently testable, and
+honest about exactly what it needs (its constructor lists its dependencies).</p>
+
+<p><span class="tag">Q</span> <b>Why a custom dispatcher instead of MediatR?</b><br>
+The whole mechanism is ~30 lines you can read in one sitting (steps 3–4). There is no magic, no extra package to keep
+current, and the team controls the decorator order exactly. The trade-off — a little reflection in the dispatcher — is
+paid once and centrally.</p>
+
+<p><span class="tag">Q</span> <b>Why does the Domain own the repository interface but not the implementation?</b><br>
+This is dependency inversion (section 2). It keeps the dependency arrows pointing inward so the business logic never
+takes a hard dependency on EF Core, and so a test can swap in a fake. Infrastructure supplies the real implementation
+at runtime through DI.</p>
+
+<p><span class="tag">Q</span> <b>Why <code>Result</code> instead of throwing?</b><br>
+"This table is already registered" is an <i>expected</i> outcome, not a crash. Modelling it as a value makes it visible
+in the method signature, free of stack-unwinding cost, and trivially mappable to a 409. Exceptions stay rare and
+genuinely exceptional.</p>
+
+<p><span class="tag">Q</span> <b>Why is the command both the API request and the internal message?</b><br>
+Fewer types, no hand-written request→command copying, and the command name is a perfect logging/telemetry key. The
+trade-off is that the wire shape is coupled to the command; this project accepts that deliberately.</p>
+
+<!-- ============================================================= -->
+<h2 id="cheat" class="pb">8. Add your own command (cheat sheet)</h2>
+<p>To add, say, <code>POST /api/data-sources/{id}/archive</code>:</p>
+<ol>
+  <li>Create folder <code>Application/Commands/DataSources/ArchiveDataSource/</code>.</li>
+  <li>Add <code>ArchiveDataSourceCommand : ICommand&lt;Result&gt;</code> (a <code>record</code>).</li>
+  <li>Add <code>ArchiveDataSourceHandler : ICommandHandler&lt;ArchiveDataSourceCommand, Result&gt;</code> — inject
+      <code>IUnitOfWork</code>, do the work, <code>SaveChangesAsync</code> once, return <code>Result.Success()</code> or a named error.</li>
+  <li>(Optional) Add <code>ArchiveDataSourceValidator : AbstractValidator&lt;ArchiveDataSourceCommand&gt;</code> in the same folder.</li>
+  <li>Add the controller action: bind the command, <code>commandDispatcher.DispatchAsync(...)</code>, <code>result.ToApiResponse(this)</code>.</li>
+</ol>
+<div class="callout"><b>That's it — no registration step.</b> <code>AddApplication()</code>'s reflection scan (step 4)
+discovers the new handler and validator automatically and wraps the handler in Logging → Validation. You write the
+use-case; the pipeline is already there.</div>
+
+<hr class="hr">
+<p class="small">Generated from the SalesCom codebase · example flow: <code>POST /api/data-sources</code> →
+<code>CreateDataSourceCommand</code> → <code>CommandDispatcher</code> → Logging → Validation →
+<code>CreateDataSourceHandler</code> → <code>IUnitOfWork</code> → <code>Result&lt;DataSourceResponse&gt;</code> →
+<code>ApiResponse&lt;DataSourceResponse&gt;</code>. Code excerpts are quoted verbatim (lightly trimmed where noted with
+<code>…</code>).</p>
+
+</body>
+</html>
