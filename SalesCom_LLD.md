@@ -1781,7 +1781,7 @@ Filtering/sorting are always server-side with parameterized queries (never strin
 ## 12.4 Data retention
 
 - **Hot window — 3 months.** Source/operational data for runs stays in the active (hot) source tables; older data is moved to archive by the Airflow ETL. Reports needing >3-month history (cohort M1–M12) read pre-computed archive/DWH tables.
-- **Object purge — 30 days.** Transient run artifacts in SeaweedFS (`run_stages` outputs, Demo exports) are purged after 30 days by a Hangfire sweeper. **Disbursement artifacts are excluded:** the POS dump CSVs (at the POS location) are retained per finance policy.
+- **Object purge — 30 days.** Transient run artifacts in SeaweedFS (`run_stages` outputs, Demo exports) are purged after 30 days by a **daily Hangfire job (`ObjectPurgeWorker`, 13.2)** that deletes any object older than 30 days. **Disbursement artifacts are excluded:** the POS dump CSVs (at the POS location) are retained per finance policy.
 - **DB rows retained (never hard-deleted)** for `report_setups`, `final_commissions`, `ev_disburse`, `pos_disbursement`, the approval tables, `audit_logs`, `login_log`, `email_notifications`, `sms_notifications` — the financial/audit record. `data_sources.is_active = false` hides config rows from pick-lists without losing history.
 - **Temp namespaces** (`run_<id>`) are dropped at end-of-run; the stale-run sweeper drops any orphans within minutes.
 
@@ -1825,6 +1825,7 @@ Hangfire runs **inside the .NET app** (PostgreSQL-backed). Workers are timed/tri
 | **DisbursementWorker** | Approval completed (`overall_status=4`, arming `disburse_status=PENDING`) + `ev_disbursement_time` reached | For an approved EV Final run: publish to the EV worker (per-recipient `ev_disburse` keyed on `channel_code` + SMS). (POS is the separate Airflow job.) | `ev.disburse` → `q.ev-disburse` |
 | **NotificationWorker** | Enqueue / retry timer | Drain `email_notifications` + `sms_notifications` rows in `status=0`, send via SMTP / SMS, update `status` / `attempt_count` / `error_message` / `sent_at`. | SMS + SMTP gateways |
 | **StaleRunSweeper** | Every 5 min | Mark runs stuck Running past threshold as Failed; drop orphan temp schemas + uncleaned stages (11.7). | — |
+| **ObjectPurgeWorker** | **Daily (cron)** | Delete SeaweedFS objects older than **30 days** — `run_stages` outputs + Demo exports (retention policy, 12.4). **Disbursement artifacts (POS dump CSVs) are excluded.** | SeaweedFS (S3) |
 
 > The two **Python services** (SQL Generator, SQL Executor) are separate RabbitMQ-consumer processes, not Hangfire workers. The .NET side only *publishes* `report.saved` / `run.requested` and *consumes* `run.completed` / `approval.completed`.
 
