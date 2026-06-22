@@ -101,7 +101,9 @@ Working dir: `F:\Claude Root\Salescom Automaton\SRS\`. Other files on `E:\...\HL
 
 ## 7. Business rules (BR1–BR9)
 
-BR1 access by assigned role/right · BR2 data source never deleted (only deactivate) · BR3 report name system-wide unique · BR4 start ≤ end date · BR5 same user can't be maker+checker of same run · BR6 approval sequential ascending · BR7 reject needs comment · BR8 disburse only after full approval · BR9 only Maker manages schedule, all changes audited.
+BR1 access by assigned permission (per-action, see D8) · BR2 data source never deleted (only deactivate) · BR3 report name system-wide unique · BR4 start ≤ end date · ~~BR5 maker≠checker~~ **REVERSED 2026-06-22: the Maker CAN also be an approver of the same report — no segregation of duties** · BR6 approval sequential ascending · BR7 reject needs comment · BR8 disburse only after full approval · BR9 only Maker manages schedule, all changes audited.
+
+> **Approval reject (2026-06-22):** a reject **steps back one level** (to the previous approver), NOT a full restart from level 1. A reject at the **first level** of a phase returns to the Maker (`overall_status=0`). A reject at the first POST_RUN level keeps the setup approval (never drops to PRE). `overall_status` table wording finalized per the team's image (0 Pending-Edit/Resubmit, 1 Pre-Approval-Pending, 2 Pre-Approved, 3 Post-Approval-Pending, 4 Post-Approved).
 
 ---
 

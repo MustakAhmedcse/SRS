@@ -802,7 +802,7 @@ The platform is **designed around three roles**; their **default** permission se
 | Stop / schedule | `report_stop` / `report_schedule` | Maker · Admin |
 | Data source / catalog / flow / user admin | `datasource_manage` / `catalog_manage` / `approvalflow_manage` / `user_view` | Admin |
 
-> **Separate business rule (not a permission):** the report's own Maker can never approve it — segregation is checked against `report_approval_details` regardless of whether the user holds `report_approval` (7.4).
+> **No segregation of duties:** the report's own Maker **may also approve** it (if assigned to an approval level and holding `report_approval`) — there is no maker/checker separation (7.4).
 
 Secrets (app name/key, JWT signing secret, Central Login endpoints) live in server-side config / Docker secrets — never sent to the browser.
 
@@ -1179,24 +1179,24 @@ A report binds exactly one flow (`report_setups.approval_flow_id`). On submit, t
 
 | Code | Meaning | When |
 |---|---|---|
-| **0** | Pending for Edit & Resubmission | After a reject, or while the Maker edits — back with the Maker. |
-| **1** | Pre Approval Pending | A PRE_RUN setup request is walking its levels. |
-| **2** | Pre Approved | All PRE_RUN levels passed → report runnable. |
-| **3** | Post Approval Pending | A POST_RUN result request (for one Final run) is walking its levels. |
-| **4** | Post Approved | All POST_RUN levels passed → run cleared for disbursement. |
+| **0** | Pending for Edit & Resubmission | After a request is rejected, or while the Maker is modifying and preparing it for resubmission. |
+| **1** | Pre Approval Pending | When a PRE_RUN setup request is going through the configured approval levels. |
+| **2** | Pre Approved | When all PRE_RUN approval levels have been successfully completed, making the report runnable. |
+| **3** | Post Approval Pending | When a POST_RUN final-result request is going through the configured approval levels. |
+| **4** | Post Approved | When all POST_RUN approval levels have been successfully completed, clearing the run for disbursement. |
 
 **Locked behaviours:**
 
 | Topic | Decision |
 |---|---|
-| **Reject destination** | A reject at **any** level returns the request to the **Maker** (not the previous level); `overall_status = 0`. |
-| **Resubmit** | Maker fixes + resubmits → approval **restarts from level 1** with full re-validation (no resume). |
-| **Edit while pending** | Any edit to a pending report **voids** the in-flight progress → restart from level 1 (status → 0). A Pre-Approved setup is not editable. |
+| **Reject destination** | A reject returns the request to the **previous approval level** (one step back), **not** to the start (level 1). A reject at the **first level** of the phase returns it to the **Maker** (`overall_status = 0`) for edit & resubmission. |
+| **Resubmit / re-review** | A deeper-level reject simply steps back one level for that approver to re-review (no full restart). A first-level reject sends it to the Maker; the Maker fixes and resubmits, re-entering at level 1. |
+| **Edit while pending** | Any edit to a pending report **voids** the in-flight progress (status → 0). A Pre-Approved setup is not editable. |
 | **POST_RUN target** | A POST_RUN approval is tied to **one specific Final run** (carried on `report_runs`/the event). |
 | **Recurrent report** | Must use a **PRE_RUN-only** flow. Setup approved once (status 2); every later scheduled run pays out automatically. |
 | **Non-recurrent report** | May use PRE_RUN and/or POST_RUN. After a Final run, POST_RUN approves the results (3 → 4) before disbursement. |
 | **Demo run** | **Never** needs approval, **never** disburses; the orchestrator skips approval for `run_type = 1`. |
-| **Segregation** | The Maker (`COALESCE(report_setups.updated_by, created_by)`) can never be a Checker on the same report; one user occupies at most one level per request; no self-approval. |
+| **Segregation** | **Not enforced** — the report's **Maker can also be an approver** of the same report. A user assigned to a level may approve it even if they are the report's Maker. |
 
 ## 7.2 UI
 
@@ -1234,30 +1234,28 @@ Six tables (3.6):
 **7.4.2 Bind a flow.** The Maker picks `approval_flow_id` at create/edit. At Final Save, a recurrent report's flow must be **PRE_RUN-only** (else `FLOW_NOT_WELLFORMED`).
 
 **7.4.3 Submit (open the PRE_RUN setup request).** Maker clicks Submit on a completed report (`is_setup_complete = true`) with no live instance (or one at status 0):
-1. **Segregation pre-check:** resolve the Maker; ensure no level is Maker-only (would deadlock) → else `409 MAKER_IS_SOLE_APPROVER`.
-2. **Validate** IR shape, flow well-formedness, dates, EV/POS exclusivity.
-3. Open/reset the `report_approvals` row: `current_level_order` = lowest, `overall_status = 1`, `initiated_by`/`initiated_at`. (Reuse an existing status-0 row, else insert.)
-4. Publish `approval.requested` → email level-1 users; write `audit_logs`.
+1. **Validate** IR shape, flow well-formedness, dates, EV/POS exclusivity. (No maker/approver segregation check — the Maker may also be an approver.)
+2. Open/reset the `report_approvals` row: `current_level_order` = lowest, `overall_status = 1`, `initiated_by`/`initiated_at`. (Reuse an existing status-0 row, else insert.)
+3. Publish `approval.requested` → email level-1 users; write `audit_logs`.
 
 **7.4.4 Approve.** An eligible user of the **current** level calls the decision endpoint with Approve:
-1. **Authorize:** caller's `users.id` must be in `approval_flow_level_users` for the level at `current_level_order` → else `403 NOT_CURRENT_LEVEL_APPROVER`.
-2. **Segregation:** caller ≠ Maker; caller must not already appear in `report_approval_details` for an earlier level → else `409 SELF_OR_DUPLICATE_APPROVER`.
-3. **Sequential guard:** request must sit at this level (under `SELECT … FOR UPDATE`) → else `409 STALE_LEVEL`.
-4. Insert `report_approval_details` (`approval_status = 1`, `approval_by`, `approval_at`).
-5. **Advance:**
+1. **Authorize:** caller's `users.id` must be in `approval_flow_level_users` for the level at `current_level_order` → else `403 NOT_CURRENT_LEVEL_APPROVER`. (No segregation check — the Maker may approve too.)
+2. **Sequential guard:** request must sit at this level (under `SELECT … FOR UPDATE`) → else `409 STALE_LEVEL`.
+3. Insert `report_approval_details` (`approval_status = 1`, `approval_by`, `approval_at`).
+4. **Advance:**
    - Next level in the same phase → set `current_level_order` = next; `overall_status` stays 1 or 3; publish `approval.level.advanced` → email next-level users.
    - Last **PRE_RUN** level → `overall_status = 2` (Pre Approved); report runnable; publish `approval.completed` (phase 2). (Recurrent → done.)
    - Last **POST_RUN** level → `overall_status = 4` (Post Approved); publish `approval.completed` (phase 4) carrying `report_run_id` → the **DisbursementWorker** consumes it; the API sets `report_runs.disburse_status = 'PENDING'` (10).
-6. Write `audit_logs`.
+5. Write `audit_logs`.
 
 **7.4.5 Trigger the POST_RUN (result) request.** For a non-recurrent report with POST_RUN levels, after a Final run finishes (`run_status = 2`, `final_commissions` written): the orchestrator advances the row from `overall_status = 2` to **3**, sets `current_level_order` = the first POST_RUN level, records the run being approved, keeps `disburse_status = 'NONE'`, and publishes `approval.requested` (result phase). It then advances via 7.4.4. *(Recurrent reports have no POST_RUN block — on each Final run the orchestrator sets `disburse_status = 'PENDING'` directly, still gated on `overall_status = 2`.)*
 
-**7.4.6 Reject (→ Maker). Phase-aware — a result-reject never voids the setup approval.** An eligible current-level user calls Reject **with a non-empty comment**:
-1. Authorize + segregation as in 7.4.4.
-2. Insert `report_approval_details` (`approval_status = 2`, `remarks` required); publish `approval.rejected` → email the Maker; `audit_logs`.
-3. **Return to the Maker, depending on the phase:**
-   - **PRE_RUN reject** (was status 1) → `overall_status = 0`, `current_level_order` back to the first level. The setup becomes editable. On resubmit, re-enter at **status 1** with full re-validation (restart from level 1).
-   - **POST_RUN reject** (was status 3) → the **setup approval (status 2) is kept** — it is **never** dropped to status 1/PRE. Record the reject, set `current_level_order` back to the **first POST_RUN level**, and `disburse_status = 'NONE'` (no disbursement). The Maker fixes the issue and re-runs a new Final run (or edits), which re-opens the POST block at **status 3** — setup approval is never re-required.
+**7.4.6 Reject — returns to the previous level (one step back), not the start.** An eligible current-level user calls Reject **with a non-empty comment** (authorize + sequential guard as in 7.4.4):
+1. Insert `report_approval_details` (`approval_status = 2`, `remarks` required); publish `approval.rejected` → email the previous-level approver / Maker; `audit_logs`.
+2. **Step back one level** (the phase/status is preserved):
+   - **Reject at a level that is *not* the first of its phase** → set `current_level_order` = the **previous level** in the same phase; `overall_status` stays **1** (PRE_RUN) or **3** (POST_RUN). That previous-level approver re-reviews; if they approve again it moves forward as normal. No full restart, no Maker step.
+   - **Reject at the *first* PRE_RUN level** → no previous level → return to the **Maker**: `overall_status = 0` (Pending for Edit & Resubmission), `current_level_order` = first level. The Maker fixes and resubmits (7.4.3), re-entering at level 1.
+   - **Reject at the *first* POST_RUN level** → no previous POST level → return to the **Maker**, but the **setup approval (status 2) is kept** (never dropped to PRE); set `disburse_status = 'NONE'`. The Maker re-runs a new Final run (or edits), which re-opens the POST block at **status 3** — setup approval is never re-required.
 
 **7.4.7 Edit-while-pending (void + restart).** Editing a not-yet-Pre-Approved report (`overall_status < 2`; Edit hidden once ≥ 2) voids the in-flight progress: set `overall_status = 0`, append a system reject detail (`approval_by = 'SYSTEM'`, `remarks = 'Voided: setup edited while pending'`), reset `current_level_order`. The Maker must Submit again (restart at level 1). *(Editing a report with a POST_RUN-pending run, status 3, voids that result approval the same way and returns `disburse_status` to `'NONE'`.)*
 
@@ -1308,7 +1306,7 @@ Base `/api/v1`, JWT required, role enforced per endpoint. Money fields are `nume
 
 ### Submission, queue & decisions (Maker / Approver)
 
-**`POST /reports/{reportId}/submit-approval`** — Maker submits a completed report's setup (7.4.3). Body `{}` → `201 { approvalId, reportSetupId, phase:"PRE_RUN", currentLevelOrder:1, overallStatus:1 }`. `409 ALREADY_PENDING`, `409 MAKER_IS_SOLE_APPROVER`, `422 FLOW_NOT_WELLFORMED | IR_INVALID | SETUP_INCOMPLETE`, `404`.
+**`POST /reports/{reportId}/submit-approval`** — Maker submits a completed report's setup (7.4.3). Body `{}` → `201 { approvalId, reportSetupId, phase:"PRE_RUN", currentLevelOrder:1, overallStatus:1 }`. `409 ALREADY_PENDING`, `422 FLOW_NOT_WELLFORMED | IR_INVALID | SETUP_INCOMPLETE`, `404`.
 > 6.12's `POST /reports/{id}/submit` is the same handler — implement once, alias the route.
 
 **`GET /approvals/queue`** — the signed-in user's pending cards (`?phase`, paging):
@@ -1330,7 +1328,7 @@ Membership matched on the caller's `users.id`.
 ```
 Roles: any party (Maker, staffed Approver, Admin). `404`.
 
-**`POST /approvals/{approvalId}/decisions`** — Approve or Reject (7.4.4 / 7.4.6). `{ "approvalStatus": 2, "comments": "Cluster GA target wrong for North." }` (`approvalStatus` 1|2; `comments` **required** when 2). Response (approve, not final): `{ approvalId, approvalStatus:1, newOverallStatus:3, currentLevelOrder:2, phase, completed:false }`; final-level approve → `newOverallStatus` 2 or 4 + `completed:true`; reject → `newOverallStatus:0, returnedToMaker:true`. Errors `400 COMMENT_REQUIRED`, `403 NOT_CURRENT_LEVEL_APPROVER`, `409 SELF_OR_DUPLICATE_APPROVER`, `409 REQUEST_NOT_IN_PROGRESS`, `409 STALE_LEVEL`, `404`.
+**`POST /approvals/{approvalId}/decisions`** — Approve or Reject (7.4.4 / 7.4.6). `{ "approvalStatus": 2, "comments": "Cluster GA target wrong for North." }` (`approvalStatus` 1|2; `comments` **required** when 2). Response (approve, not final): `{ approvalId, approvalStatus:1, newOverallStatus:3, currentLevelOrder:2, phase, completed:false }`; final-level approve → `newOverallStatus` 2 or 4 + `completed:true`; reject → `newOverallStatus:0, returnedToMaker:true`. Errors `400 COMMENT_REQUIRED`, `403 NOT_CURRENT_LEVEL_APPROVER`, `409 REQUEST_NOT_IN_PROGRESS`, `409 STALE_LEVEL`, `404`.
 > **Concurrency:** the decision handler re-reads the row `FOR UPDATE` and re-checks `current_level_order` + `overall_status`; if either changed (another approver acted, or an edit-void fired) → `409 STALE_LEVEL` / `REQUEST_NOT_IN_PROGRESS`. Prevents double-advancing.
 
 **`GET /reports/{reportId}/approval-history`** — every decision across the report's lifetime (setup + result), newest first → `{ items:[{ levelOrder, approvalStatus, approvalBy, approvalAt, remarks, phase }], totalItems, totalPages }`. `404`.
@@ -1761,7 +1759,7 @@ All non-2xx responses use one **standard error envelope** with the matching HTTP
 | 200 / 201 / 202 / 204 | — | OK / Created / Async accepted / No content |
 | 400 | `VALIDATION_ERROR` | Malformed body / bad params / business-rule violation |
 | 401 | `UNAUTHENTICATED` | Missing / expired / invalid JWT (incl. 3-hour inactivity) |
-| 403 | `FORBIDDEN` | Authenticated but lacks the right; or maker == checker |
+| 403 | `FORBIDDEN` | Authenticated but lacks the required permission |
 | 404 | `NOT_FOUND` | Unknown id |
 | 409 | `CONFLICT` | Duplicate unique key, illegal state transition, run already active |
 | 422 | `UNPROCESSABLE_ENTITY` | IR / SQL validation failure, reconciliation mismatch |
@@ -2077,13 +2075,13 @@ IN_PROGRESS → FAILED   (one or more failed) → IN_PROGRESS (re-drive)
 **Approval:** `approval_flow_levels.approval_type` — 1 Pre-Run (setup), 2 Post-Run (result). `report_approval_details.approval_status` — 1 Approved, 2 Rejected (`remarks` required on Reject). `report_approvals.overall_status` — 0–4:
 ```
 0 Draft → 1 Pre Approval Pending       (submit setup)
-1 → 1                                   (a pre-level approves; advance current_level_order)
+1 → 1                                   (a pre-level approves → advance; OR a reject steps back one level)
 1 → 2 Pre Approved                      (final pre-level approves → runnable)
-1 → 0                                   (any pre-level rejects → back to Maker, comment required)
+1 → 0                                   (a reject at the FIRST pre-level → back to Maker, comment required)
 2 → 3 Post Approval Pending             (a Final run's results open the result approval)
-3 → 3                                   (a post-level approves; advance)
+3 → 3                                   (a post-level approves → advance; OR a reject steps back one POST level)
 3 → 4 Post Approved*                    (final post-level approves → disbursement armed)
-3 → (back to Maker, setup approval kept)(a post-level rejects → re-enter at status 3, never status 1 — 7.4.6)
+3 → back to Maker (setup approval kept) (a reject at the FIRST post-level → Maker re-runs; never drops to status 1 — 7.4.6)
 ```
 > The report-list **status label is DERIVED** from `current_level_order` + `report_approval_details` — not a stored column.
 
@@ -2110,7 +2108,7 @@ A cross-reference index of the platform's hard rules and where each is enforced 
 | A data source is never deleted, only deactivated; can't deactivate while in use | No DELETE route; `is_active=false`; in-use scan → `409 SOURCE_IN_USE` (5.4). |
 | Report name system-wide unique | App-enforced (recommend a UNIQUE index) → `409`; Clone forces a new name (6.4). |
 | Start date ≤ End date | Step-1 validation → `422` (6.4). |
-| Same user can't be Maker + Checker of the same report | Submit pre-check + decision check against `report_approval_details` (7.4). |
+| Reject steps back one level (not a full restart); the Maker may also be an approver | Reject → previous level (first-level reject → Maker, status 0); no maker/checker segregation (7.4). |
 | Approval sequential ascending | Only `current_level_order` is actionable; `STALE_LEVEL` / `NOT_CURRENT_LEVEL_APPROVER` (7.4). |
 | Reject requires a comment | `400 COMMENT_REQUIRED`; `remarks` populated (7.4.6). |
 | Disburse only after full approval | `disburse_status='PENDING'` only via `overall_status=4` (or recurrent =2); gate `409 NOT_APPROVED` (6.10, 10). |
