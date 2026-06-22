@@ -11,16 +11,16 @@
 | **Grounding** | This LLD is grounded in the **real implemented database schema** `salescomdbtst` (see §3). All table and column names, key types, and enum codes match that schema exactly. |
 | **Audience** | Frontend (Next.js/React/TS), Backend (.NET / ASP.NET Core, Dapper + EF Core), Calc-engine (Python), DBA, QA. |
 
-> **⚠️ §15 (Errata & Reconciliation) is authoritative.** A final consistency pass flagged a few cross-section gaps (phase-aware reject, `channel_code`→MSISDN for EV/SMS, and HTTP-code / enum / pagination drift). Where §1–§14 conflict with §15, **§15 wins** — apply §15 when writing the code.
+> **Consistency note.** A final consistency pass is **folded directly into the sections below** (phase-aware reject §7.4.6; EV recipient = `ev_msisdn` / `channel_code`; canonical HTTP codes; `int4` enums; one pagination envelope `{ items, page, pageSize, totalItems, totalPages }`). There is no separate errata section.
 
 ---
 
 ## Table of Contents
 
 - **§1 Introduction** — purpose, scope, audience, definitions
-- **§2 System Architecture** — layered overview, components, tech stack, common conventions
-- **§3 Database Schema** — authoritative `salescomdbtst` DDL (20 tables), relationships, compact reference
-- **§4 Authentication & Session** — Central Login SSO + OTP → JWT, RBAC, hourly sync
+- **§2 System Architecture** — layered overview, components, tech stack
+- **§3 Database Schema** — authoritative `salescomdbtst` DDL (21 tables), relationships, ERD
+- **§4 Authentication & Session** — Central Login SSO + OTP → JWT, RBAC, hourly POS sync
 - **§5 Data Source Management** — registry + supporting CSV → DB ingestion
 - **§6 Report Management** — the 5-step wizard, save/publish state machine, run lifecycle
 - **§7 Approval (Maker-Checker)** — flows, levels, sequential approval, reject→Maker
@@ -33,7 +33,8 @@
 - **§14 Getting Started / Dev Setup** — repo layout, env, wiring, build order
 - **Appendix A** — IR reference (points to `IR_Schema_and_MultiKPI_Join.md`)
 - **Appendix B** — Enum & State-Transition reference
-- **Appendix C** — Business Rules (BR1–BR9) + enforcement points
+- **Appendix C** — Key rules (consolidated) + enforcement points
+- **API Conventions** — global endpoint conventions
 
 ---
 
@@ -168,7 +169,7 @@ Everything is deployed in **Docker** except the production database (bare-metal 
 | Frontend | **TypeScript · React · Next.js** (App Router) | Type-safe UI; server + client components. The wizard is stateful and form-heavy — React fits. |
 | Backend API | **C# · .NET (ASP.NET Core)** | Strong typing, mature DI, first-class background-job and messaging ecosystem; 4-layer clean architecture isolates the IR / trusted-path logic from infrastructure. |
 | Data access | **Dapper + EF Core** | Dapper for fast hand-tuned reads (lists, dashboard, big joins); **EF Core for the ORM + migrations** (schema as code, owns the `salescomdbtst` DDL). |
-| Background jobs | **Hangfire** (PostgreSQL-backed) | Scheduling, retries, timed jobs (scheduler, disbursement, user sync) without a separate scheduler product. |
+| Background jobs | **Hangfire** (PostgreSQL-backed) | Scheduling, retries, timed jobs (report scheduler, disbursement timing, notification-outbox drain, stale-run sweep) without a separate scheduler product. |
 | Calc engine | **Python + SQLGlot + SQLAlchemy** | SQLGlot builds SQL as an **AST** (no string concatenation → no injection) and re-parses it to enforce a **read-only allowlist**. Python is the natural home for the dynamic IR→SQL compiler. |
 | Event bus | **RabbitMQ** | Priority queues give the locked single-run model (RunNow > Demo > Schedule) for free; decouples the thin API from heavy Python work. |
 | Database | **PostgreSQL (Percona 18, bare-metal)** | Window functions (`NTILE`, `PERCENT_RANK`) for Phase-3 ranking; JSONB for the IR; temp tables for stage outputs; `NUMERIC` for exact money. |
@@ -613,888 +614,462 @@ CREATE INDEX ix_audit_logs_entity ON salescomdbtst.audit_logs USING btree (entit
 ### 3.10 Entity Relationship Diagram
 
 For the full table-and-column visual reference, see the ERD file: **`commission_system_erd_5.drawio`** (Downloads folder). It covers all 21 tables, their columns, and FK relationships. The DDL in §3.2–§3.9 above is the authoritative source; the ERD is the visual companion.
+
 ---
 
 # §4 Authentication & Session
 
 ## 4.1 Overview
 
-SalesCom is an **internal-only** application. Every user signs in through Banglalink's **Central Login** — the company-wide Identity Provider at `blposapi.banglalink.net` — using a **username + password plus a One-Time Password (OTP)** second factor. SalesCom **never stores passwords** and **never renders its own OTP screen**: both the password check and the OTP challenge belong to Central Login. This is **integration point #1 of the 7 ICDs** (Central Login).
+SalesCom is internal-only. Sign-in is handled by Banglalink's **Central Login** (`blposapi.banglalink.net`) — username + password + **OTP**. SalesCom never stores passwords and never renders an OTP screen; it only mints its own **JWT** once Central Login confirms the user. Central Login is part of the **POS** system, which is the authoritative store of SalesCom users and their rights — synced into `users` / `user_rights` every hour (§4.5).
 
-The flow in one line: the web app posts credentials to the **SalesCom backend** → the backend (holding the secret application name/key) calls Central Login → Central Login returns an SSO redirect → the user completes OTP on Central Login's own page → Central Login bounces the browser back to a SalesCom **callback** carrying a single-use `authToken` → the backend verifies that token server-to-server, loads the user's profile and rights from the locally-synced `users` / `user_rights` tables, and mints its own **SalesCom JWT**. The browser holds only the SalesCom JWT and sends it on every request. **No Central Login token is ever exposed to the browser.**
+**Login flow (one line):** web app → backend (holds the secret app name/key) calls Central Login → SSO redirect → user does OTP on Central Login → browser bounced to the frontend callback page with a single-use `authToken` → backend verifies the token server-to-server and mints the SalesCom JWT. The browser only ever holds the SalesCom JWT.
 
-Two background mechanics keep the session honest:
+Two session mechanics: a **3-hour inactivity logout** (frontend drops the JWT) and the **hourly POS sync** (§4.5). The exact `authToken` format and verify contract are pinned in the Central Login ICD.
 
-- **3-hour inactivity logout** — the frontend drops the JWT after **3 hours** of no user activity; the user must sign in again from the start.
-- **Hourly provisioning sync** — an Airflow DAG runs every hour and pulls SalesCom users and their rights directly from the **POS system database** (via DB connection string — no API), dumps the data on the Airflow server, then upserts `users` and `user_rights` in SalesCom. Only users who exist in SalesCom are pulled. Role/right changes take effect within an hour.
-
-The exact `authToken` format, the verify-endpoint contract, and the redirect parameter set are pinned in the **Central Login ICD** (D4, contracts-first); this section specifies the SalesCom-side behavior that does not depend on those final details.
-
----
-
-## 4.2 User Interface
+## 4.2 Screens
 
 | Screen | Owner | Contents |
 |---|---|---|
-| **Login** | SalesCom web app | Username field, Password field (with show/hide toggle), **Remember-me** checkbox, **Sign In** button. The form posts to the **SalesCom backend**, never straight to Central Login. While the backend calls Central Login, the button shows a spinner. |
-| **OTP challenge** | Central Login | The browser is redirected to Central Login's own page, which renders the OTP input, the resend countdown, and the failed-attempt lockout. SalesCom has **no** OTP screen and cannot read the OTP. |
-| **Callback (transient)** | SalesCom web app | A brief "Signing you in…" interstitial while the backend verifies the `authToken` and issues the JWT, then forwards to the Dashboard. |
-| **Dashboard (post-login landing)** | SalesCom web app | Shows the user's **last successful sign-in** and **last refused sign-in** (read from the `login_log` table) plus the role-scoped KPI cards. |
-| **Session-expiry / inactivity** | SalesCom web app | On 3-hour inactivity or JWT expiry, a "Session expired — please sign in again" modal appears and routes back to Login. |
+| **Login** | SalesCom | Username, Password (show/hide), Remember-me, Sign In. Posts to the SalesCom backend, never straight to Central Login. |
+| **OTP challenge** | Central Login | Central Login's own page (OTP input, resend, lockout). SalesCom has no OTP screen. |
+| **Callback** | SalesCom | "Signing you in…" interstitial on `/login/callback` while the backend exchanges the `authToken` for a JWT. |
+| **Dashboard** | SalesCom | Post-login landing; shows last successful + last refused sign-in (from `login_log`) and role KPI cards. |
+| **Session expiry** | SalesCom | On 3-hour inactivity or JWT expiry → "Session expired" modal → Login. |
 
-**UI gate rule:** every authenticated page is gated by the presence of a valid JWT. If `GET /api/v1/auth/me` returns `401`, the app clears local state and routes to Login. The FE renders menus/controls from the **resolved role + permissions** returned by `/auth/me` (§4.6) — server-side enforcement is independent of that list.
+Every authenticated page is gated by a valid JWT; if `GET /auth/me` returns `401`, the app clears state and routes to Login.
 
----
+## 4.3 Tables
 
-## 4.3 Data Model
+Auth uses three tables from §3.2 (no new tables); all three are kept current by the hourly POS sync.
 
-Authentication reads and writes **three tables** from the canonical DDL (§3.2 Identity & Access) — **no new tables** are introduced here.
-
-| Table | Role in auth | Key columns used |
+| Table | Role | Key columns |
 |---|---|---|
-| `users` | Local cache of Central-Login identities, refreshed hourly. The login lookup and the JWT subject resolve against this table. | `id` (int8 PK — the JWT `sub`), `user_id` (varchar — the **external Central-Login id**, used to match the verified `authToken` profile), `user_name`, `full_name`, `mobile_no`, `email`, `department` |
-| `user_rights` | The user's role/permission rights, refreshed hourly. Resolved into a single SalesCom role at login and on every `/auth/me`. | `user_id` (int8 FK → `users.id`), `rights_code` (int4 — role code; semantics in §4.6) |
-| `login_log` | Audit row for **every** sign-in attempt, success or failure. Powers the Dashboard "Login Attempts" card. `user_name` is a snapshot (no FK) so attempts by unknown/disabled users are still recorded. | `user_name`, `full_name`, `login_time` (timestamptz), `status` (int4 — **1 = Success, 2 = Failed**), `remarks` |
+| `users` | Local cache of POS identities. | `id` (PK, = JWT `sub`), `user_id` (external POS id, matched at login), `full_name`, `mobile_no`, `email`, `department` |
+| `user_rights` | The user's rights; resolved to one role. | `user_id` (FK→`users.id`), `rights_code` (int4 — §4.7) |
+| `login_log` | Append-only log of every sign-in attempt. | `user_name`, `full_name`, `login_time`, `login_status` (1=Success, 2=Failed), `remarks` |
 
-**Schema notes (real schema, do not deviate):**
+Essentials: `users` has **no `is_active` flag** — deactivation = the sync deletes the user's `user_rights` rows (no rights → no role → refused). No password / OTP / Central-Login token is ever stored. The JWT is **stateless** (no server-side store; logout and inactivity just discard it on the client).
 
-- The **external Central-Login id** lives in `users.user_id` (varchar, unique index `ux_users_user_id`). It is **not** the PK and carries **no FK**; the JWT `sub` is the numeric `users.id`.
-- `user_rights.user_id` is **int8 → `users.id`** (a real FK), **not** the external text key. One row per `(user, right)`, enforced by `ux_user_rights_user_right (user_id, rights_code)`.
-- `users` in this real schema has **no `is_active` column** and **no soft-delete flag**. "Deactivation" is therefore modeled by **removing the user's `user_rights` rows** during the hourly sync: a user with **no active right resolves to no role and is refused login** (§4.6). The Central-Login profile's own status flag (consumed at verify) is the upstream source of truth; if the profile is inactive the backend writes a `FAILED` login row and refuses.
-- The `login_log` table in the real schema has **no FK and no audit columns** beyond those listed; it is a flat append-only attempt log.
-- **No password, OTP, or Central Login token is ever persisted.** The single-use `authToken` is held only in memory for the duration of the callback verify call.
-- The SalesCom JWT is **stateless** — not stored server-side. Logout and inactivity simply discard the token on the client (no revocation list in Phase 1).
+## 4.4 Login flow
 
----
+1. Web app → **`POST /api/v1/auth/login`** with `{ username, password, rememberMe }`.
+2. Backend attaches the secret app name/key (server-side config) and calls Central Login `POST /account/v1/login`, which returns an **SSO redirect URL**. Backend generates a `state` nonce and returns `{ redirectUrl, state }`. Wrong credentials → `login_status = 2` row + `401`.
+3. Browser goes to Central Login's OTP page (Central Login owns OTP entirely).
+4. On correct OTP, Central Login redirects the browser to the frontend callback page: `https://salcomtst.banglalink.net/login/callback?authToken=<<token>>`.
+5. The callback page reads `authToken` (+ the stored `state`) and calls **`POST /api/v1/auth/callback`** with `{ authToken, state }`. Backend checks `state`, then verifies the token via Central Login `POST /account/v1/verify-auth-token` and receives the user profile. Any token Central Login returns here is **ignored** — only the profile is used. `authToken` is single-use.
+6. Backend finds the user in `users` by external `user_id`, loads `user_rights`, resolves the role (§4.7), and mints the **JWT** — claims: `sub` (=`users.id`), `userName`, `role`, `iat`, `exp` (config), `iss`/`aud` = `salescom`, `jti`. Missing user / inactive / no rights → `login_status = 2` + `403`.
+7. JWT returned (httpOnly+Secure cookie and/or body); a `login_status = 1` row is written. The web app then calls **`GET /api/v1/auth/permissions`** for the encrypted permission blob (§4.7) and lands on the Dashboard.
 
-## 4.4 Process Logic
+## 4.5 Session, per-request check & sync
 
-### 4.4.1 Login & SSO redirect
+- **Per request:** backend verifies the JWT signature + `exp`/`iss`/`aud` (`401` on fail), reloads the user by `sub`, and confirms ≥1 `user_rights` row (`403` if none). For **every action endpoint** it reads the required right **live from `user_rights`** by `users.id` — the JWT `role` claim is never the authority (§4.7). Read / own-scope endpoints (dashboard, lists, `/auth/me`) skip the live lookup.
+- **Inactivity & logout:** after 3 hours of no activity the frontend discards the JWT and routes to Login. **`POST /api/v1/auth/logout`** clears the session on the client (stateless JWT → no server-side revocation in Phase 1).
+- **Hourly POS sync (Airflow DAG):** Airflow connects to the **POS database directly** (DB connection string — no API), dumps only SalesCom-relevant users on the Airflow server, then upserts:
+  - `users` — insert new; update `full_name` / `mobile_no` / `email` / `department` (matched on `user_id`).
+  - `user_rights` — replace each user's rows to mirror POS; a user removed/deactivated in POS has their rows deleted.
 
-1. The web app sends `{ username, password, rememberMe }` to **`POST /api/v1/auth/login`**.
-2. The backend attaches the **secret application name + key** (from server-side config / Docker secret — never sent to the browser) and calls Central Login at **`POST /account/v1/login`**.
-3. Because all SalesCom users are internal, Central Login responds with an **SSO redirect URL** (no token yet). The backend generates a `state` (anti-CSRF nonce) and tracks it for the callback.
-4. The backend returns `{ redirectUrl, state }`. The web app sends the browser to that URL (Central Login's OTP page).
+  Idempotent (keyed on `user_id`); a change takes effect within an hour and is then honored by the per-request live check. Writes an `audit_logs` row.
 
-The raw password is relayed to Central Login and **never stored** by SalesCom. If Central Login rejects the credentials, the backend writes a **`status = 2` (Failed)** row to `login_log` and returns `401`.
+## 4.6 API Endpoints
 
-### 4.4.2 OTP verification & callback
+All paths are under `/api/v1`. Central Login's own endpoints (`/account/v1/login`, `/account/v1/verify-auth-token` at `blposapi.banglalink.net`) are called **server-to-server only**, never by the browser.
 
-5. Central Login fully owns the OTP step (entry, countdown, resend, lockout). SalesCom is not involved.
-6. On a correct OTP, Central Login redirects the browser to **`GET /api/v1/auth/callback?authToken=...&state=...`** with a **single-use `authToken`**.
-7. The backend validates the echoed `state` (rejects on mismatch — CSRF/replay guard), then calls Central Login at **`POST /account/v1/verify-auth-token`** with the `authToken` to confirm the login and retrieve the **user profile** (`userId`, `userName`, status flags, etc.).
-8. Any login token Central Login may return at this step is **ignored** — SalesCom consumes only the profile. The `authToken` is single-use; a second callback with the same token is rejected (`401`).
+**`POST /auth/login`** — start login. *Anonymous.*
+Req: `{ "username": "rso.ops01", "password": "********", "rememberMe": true }`
+Res `200`: `{ "redirectUrl": "https://blposapi.../sso/authorize?...", "state": "8f1c..." }`
+`200` redirect · `400` blank username/password · `401` rejected (`login_status=2`) · `502` Central Login down.
 
-### 4.4.3 SalesCom JWT issuance
-
-9. The backend looks up the user in `users` by the **external `user_id`** from the verified profile (kept current by the hourly sync, §4.4.6) and loads that user's `user_rights` rows. If the user row is missing, the upstream profile is inactive, or the user has **no `user_rights`** → login is refused (`403`, **`status = 2`** row written to `login_log`).
-10. The backend **resolves the SalesCom role** (Maker / Checker / Admin) from `user_rights.rights_code` (§4.6) and mints a **SalesCom JWT**:
-    - **Claims:** `sub` = `users.id` (int8), `userName`, `role`, `iat`, `exp` (from config — see §4.1 note), `iss = salescom`, `aud = salescom`, `jti`. Signed with the backend secret.
-11. The JWT is returned to the web app (as an httpOnly + Secure cookie and/or response body per the FE transport choice). **No Central Login token reaches the browser.**
-12. A **`status = 1` (Success)** row is written to `login_log` (`user_name`, `full_name`, `login_time = now()`, `status = 1`, `remarks`). The web app forwards to the Dashboard.
-
-### 4.4.4 Per-request validation
-
-13. The web app sends the JWT on **every** non-public request. On each request the backend:
-    a. Verifies the JWT signature and `exp` / `iss` / `aud`. On failure → `401`.
-    b. Loads the user by `sub` and confirms they still exist with at least one `user_rights` row. A user whose rights were removed since their last sync is rejected → `403`.
-    c. For **sensitive actions** (approve, disburse, schedule, all config writes) re-checks the role **live** against `user_rights` in the DB — the JWT `role` claim alone is **not** trusted for money/approval paths (anti-stale-authorization). On role-check failure → `403`.
-14. Read / own-scope endpoints (Dashboard, listing, `/auth/me`) accept the JWT claim directly; only sensitive actions pay the live-check cost.
-
-### 4.4.5 3-hour inactivity logout
-
-15. The frontend maintains an inactivity timer reset by user interaction. After **3 hours** of no activity, the frontend **discards the JWT** (clears the cookie/store) and routes to Login. This is a client-side session control; the JWT itself remains valid until its `exp`, but the browser no longer holds it.
-16. **`POST /api/v1/auth/logout`** lets the user log out explicitly; it clears the SalesCom session/cookie on the client. (Stateless JWT → no server-side invalidation in Phase 1.)
-17. On JWT expiry or logout, the user signs in again from step 1.
-
-### 4.4.6 Hourly provisioning sync
-
-18. An **Airflow DAG runs every hour** to sync SalesCom users and rights from the **POS system**. The POS system is the authoritative user store — Central Login (also part of POS) handles authentication only and has no rights API. The sync works as follows:
-    - Airflow connects to the **POS database directly** (via a DB connection string configured on the Airflow server — no API call).
-    - It queries only the users who are relevant to SalesCom (not all POS users), dumps the result on the Airflow server, then **upserts into `users` and `user_rights`**:
-      - **`users`:** insert new users; update changed `full_name` / `mobile_no` / `email` / `department` on existing rows (matched by `users.user_id`, the external POS key).
-      - **`user_rights`:** replace each user's rows to mirror the POS rights assignment. A user removed or deactivated in POS has their `user_rights` rows **deleted** — this is how deactivation is expressed (no `is_active` flag in `users`).
-19. Effect: a role change or deactivation in the POS system takes effect in SalesCom **within one hour**, after which the per-request live check (§4.4.4c) immediately reflects it. The job is **idempotent** (upsert keyed on `users.user_id`) and writes an `audit_logs` row (`entity_name = 'users'`, `action_type` 1/2/3).
-
----
-
-## 4.5 API Endpoints
-
-Two endpoint sets: **Central Login's own service** (called only server-to-server by the backend, never by the browser) and **SalesCom's backend endpoints** (used by the web app). All SalesCom paths are under `/api/v1`.
-
-### Central Login service (backend-only, external)
-
-| Method | Path | Purpose |
-|---|---|---|
-| `POST` | `/account/v1/login` | Authenticate username/password (+ app name/key); for internal users returns the SSO redirect URL. |
-| `POST` | `/account/v1/verify-auth-token` | Validate the single-use SSO `authToken` and return the user profile. |
-
-These live at `blposapi.banglalink.net` and are governed by the Central Login ICD; their exact DTOs are pinned there.
-
-### SalesCom backend endpoints
-
-**`POST /api/v1/auth/login`** — start login; relay to Central Login, return the SSO redirect.
-**Role:** Anonymous (public).
-
-Request DTO:
+**`POST /auth/callback`** — exchange `authToken` for a JWT. *Anonymous (called by the `/login/callback` page).*
+Browser-facing callback URL registered with Central Login = the frontend page `https://salcomtst.banglalink.net/login/callback?authToken=<<token>>`.
+Req: `{ "authToken": "...", "state": "8f1c..." }`
+Res `200` (JWT also set as httpOnly+Secure cookie):
 ```json
-{ "username": "rso.ops01", "password": "********", "rememberMe": true }
-```
-Response `200 OK`:
-```json
-{ "redirectUrl": "https://blposapi.banglalink.net/sso/authorize?...&state=8f1c...", "state": "8f1c2a9e-..." }
-```
-Status codes: `200` redirect issued · `400` missing/blank username or password · `401` Central Login rejected credentials (`login.status = 2` written) · `502` Central Login unreachable/timeout.
-
----
-
-**`GET /api/v1/auth/callback`** — receive + verify the `authToken`, issue the SalesCom JWT.
-**Role:** Anonymous (entered via Central Login redirect).
-
-Request (query string): `authToken` (single-use), `state` (must match the value issued at `/auth/login`).
-Response `200 OK` (JWT also set as an httpOnly + Secure cookie):
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "expiresAt": "2026-06-17T09:32:00Z",
+{ "token": "eyJ...", "expiresAt": "2026-06-17T09:32:00Z",
   "user": { "id": 412, "userName": "rso.ops01", "fullName": "Tarikul Islam",
-            "email": "tarikul.islam@banglalink.net", "role": "MAKER" }
-}
+            "email": "tarikul.islam@banglalink.net", "role": "MAKER" } }
 ```
-> `expiresAt` is computed from the configured JWT lifetime (§4.1 note); the FE treats it as opaque and relies on `/auth/me` returning `401` for the authoritative expiry signal.
+`200` JWT issued (`login_status=1`) · `400` missing `authToken`/`state` · `401` invalid/used token or `state` mismatch · `403` user not found / inactive / no rights (`login_status=2`) · `502` verify failed.
 
-Status codes: `200` JWT issued (`login.status = 1` written) · `400` missing `authToken`/`state` · `401` invalid / expired / already-used `authToken`, or `state` mismatch · `403` user not found in `users`, profile inactive upstream, or no `user_rights` (`login.status = 2` written) · `502` Central Login verify call failed.
+**`POST /auth/logout`** — clear the session. *Authenticated.* Empty body → `204`; `401` if no token.
 
----
-
-**`POST /api/v1/auth/logout`** — clear the SalesCom session.
-**Role:** Any authenticated user.
-Request: empty body; JWT in cookie/header. Response `204 No Content`.
-Status codes: `204` cleared · `401` no/invalid token.
-
----
-
-**`GET /api/v1/auth/me`** — return the current user with the resolved role and effective permissions.
-**Role:** Any authenticated user.
-Response `200 OK`:
+**`GET /auth/me`** — current user + resolved role (no permissions here). *Authenticated.*
+Res `200`:
 ```json
-{
-  "id": 412,
-  "userId": "BL-CL-90231",
-  "userName": "rso.ops01",
-  "fullName": "Tarikul Islam",
-  "email": "tarikul.islam@banglalink.net",
-  "mobileNo": "+8801XXXXXXXXX",
-  "department": "Sales Commission",
-  "role": "MAKER",
-  "rightsCodes": [10],
-  "permissions": [
-    "report.create", "report.edit", "report.upload",
-    "report.run_demo", "report.run_final", "report.submit_approval",
-    "report.disburse", "schedule.manage"
-  ],
-  "lastLoginAt": "2026-06-16T09:32:00Z"
-}
+{ "id": 412, "userId": "BL-CL-90231", "userName": "rso.ops01", "fullName": "Tarikul Islam",
+  "email": "tarikul.islam@banglalink.net", "mobileNo": "+8801XXXXXXXXX",
+  "department": "Sales Commission", "role": "MAKER", "rightsCodes": [10],
+  "lastLoginAt": "2026-06-16T09:32:00Z", "lastFailedLoginAt": "2026-06-15T22:14:00Z" }
 ```
-Field mapping: `id` = `users.id`, `userId` = `users.user_id` (external), `rightsCodes` = the raw `user_rights.rights_code` list, `role` = the **resolved** role (§4.6), `permissions` = the role→action expansion the FE uses to show/hide controls, `lastLoginAt` = most recent `login.login_time` with `status = 1` for this `user_name`.
-Status codes: `200` profile returned · `401` no/invalid/expired token · `403` user has lost all `user_rights` since last sync (live check fails).
-> **Server-side enforcement does not rely on `permissions`** — it is a UI hint only.
+`lastLoginAt` = latest `login_status=1` time; `lastFailedLoginAt` = latest `login_status=2` time (feeds the dashboard "last successful + last refused" card). `200` · `401` no/expired token · `403` lost all rights.
 
----
+**`GET /auth/permissions`** — permission set as an **encrypted blob**. *Authenticated.*
+Res `200`: `{ "permissions": "ENC:9c0a4f...e21b" }`. `401` · `403` (no rights). Usage in §4.7.
 
-## 4.6 RBAC Model
+## 4.7 Roles & permissions
 
-### Roles
+**Three roles; each user resolves to exactly one** (highest `rights_code` wins: `30` > `20` > `10`; no rights → login refused).
 
-SalesCom has exactly **three roles**; each user has **exactly one** resolved role.
+| Role | `rights_code` | Capability |
+|---|---|---|
+| **Maker** (Business User) | `10` | Build/edit reports & the IR, upload files, run Demo & Final, submit for approval, manage schedule, trigger disbursement after full approval. Cannot approve. |
+| **Checker** (Approver) | `20` | Approve/reject at an assigned level (sequential), mandatory comment on reject; read reports/runs. Cannot create reports; cannot be maker + checker of the same report. |
+| **Administrator** | `30` | Everything Maker + Checker can do, plus data-source, channel-catalog, approval-flow, and user management. |
 
-| Role | `rights_code` | Who | Core capability |
+`rights_code` is int4 (codes in tens leave room for finer rights later). `user_rights.user_id` is the int8 FK to `users.id`, not the external key.
+
+**Two-layer permission enforcement:**
+
+1. **Frontend (UI gating only).** After login the app holds the encrypted blob from `/auth/permissions`. On page open it passes the blob to the **Next.js app's own server-side API (BFF)**, which holds the **decryption key**, decrypts it, and checks the required permission to show/hide the page or control.
+2. **Backend (real enforcement).** Every action call: the backend takes `users.id` from the JWT, reads `user_rights` **live**, and checks the right for that specific action. The DB table — never the JWT claim — is the authority. This is what protects money / approval / config paths.
+
+**Permission matrix** (✓ allowed · ✗ blocked · **L** = backend does the live `user_rights` check):
+
+| Action | Maker | Checker | Admin |
 |---|---|---|---|
-| **Maker** (Business User) | `10` | Builds commission reports | Create/edit reports & the IR wizard, upload supporting files, run Demo & Final, submit for approval, manage schedules (BR9), trigger disbursement after full approval (BR8). **Cannot approve.** |
-| **Checker** (Approver) | `20` | Approves/rejects | Review and **approve/reject** at an assigned approval level (sequential, ascending — BR6), mandatory comment on reject (BR7). Read access to reports/runs. **Cannot create reports**, and **cannot be maker + checker of the same run (BR5)**. |
-| **Administrator** | `30` | Super-user | Everything a Maker and Checker can do, **plus** data-source management (BR2), channel catalog, approval flow/level/user configuration, and user oversight. |
+| Login / Dashboard / `auth/me` | ✓ | ✓ | ✓ |
+| Data source / channel catalog manage | ✗ | ✗ | ✓ **L** |
+| Report create / edit IR / upload | ✓ | ✗ | ✓ |
+| Run Demo / Final, submit for approval | ✓ | ✗ | ✓ |
+| Approve / Reject (assigned level) | ✓\* **L** | ✓\* **L** | ✓\* **L** |
+| Disburse (after full approval) | ✓ **L** | ✗ | ✓ **L** |
+| Report Stop / schedule manage | ✓ | ✗ | ✓ **L** |
+| Approval flow / level / user config | ✗ | ✗ | ✓ **L** |
 
-**`rights_code` semantics (`user_rights.rights_code`, int4):**
+\* Approve/Reject only for the user assigned to that flow level; a report's own Maker can never approve it (no Admin override on the same report).
 
-- `user_rights.user_id` is **int8 → `users.id`** (real FK), **not** the external text key.
-- `rights_code` is an **int4 role code**: **`10 = MAKER`, `20 = CHECKER`, `30 = ADMIN`**. These are the seed values; the column is a plain int4 enum (app owns code→meaning, kept in sync with Appendix B), so additional codes can be added by migration. Values are **contiguous tens** to leave room for future fine-grained rights (e.g. `11`, `12`) without renumbering.
-- **Role resolution:** a user may have one or more `user_rights` rows. The resolved role is the **highest** code present — `30` (Admin) wins over `20`, which wins over `10`. If a user has **no `user_rights` row at all**, they have **no role** and login is refused (`403`). (Recall §4.3: removing a user's rights rows is exactly how the hourly sync expresses deactivation, since `users` has no `is_active` flag.)
+**Role → permission set** (delivered encrypted via `/auth/permissions`, decrypted by the BFF):
 
-### Permission matrix (action → role)
-
-Each API action is bound to a permission and enforced **server-side**. ✓ = allowed; ✗ = blocked; **L** = requires a **live DB role re-check** (not the JWT claim).
-
-| Action (endpoint-bound) | Maker | Checker | Admin | Note |
-|---|---|---|---|---|
-| Login / OTP / Dashboard (own-scope) / `auth/me` | ✓ | ✓ | ✓ | JWT claim sufficient |
-| Data Source create / edit / deactivate | ✗ | ✗ | ✓ **L** | BR2 (`data_sources.is_active`, never hard-delete) |
-| Channel catalog manage | ✗ | ✗ | ✓ **L** | |
-| Report create / edit IR / upload supporting file | ✓ | ✗ | ✓ | Maker = creator/last-editor |
-| Run Demo | ✓ | ✗ | ✓ | Demo skips pre-run checks |
-| Run Final / submit for approval | ✓ | ✗ | ✓ | |
-| **Approve / Reject** (assigned level) | ✓\* **L** | ✓\* **L** | ✓\* **L** | BR5 + BR6 + assigned-level check |
-| Disburse (after full approval) | ✓ **L** | ✗ | ✓ **L** | BR8 |
-| Report Stop / schedule manage | ✓ (Maker only) | ✗ | ✓ **L** | BR9 |
-| Approval flow / level / user config | ✗ | ✗ | ✓ **L** | |
-
-\* Approve/Reject is allowed only for the user **assigned to that flow's level** (`approval_flow_level_users.user_id` = the actor's `users.user_id`), and **BR5** bars the run's Maker (report creator/last-editor, resolved via `COALESCE(report_setups.updated_by, report_setups.created_by)`) from approving **any** level of that report — with **no Admin override** on the same report.
-
-### `/auth/me` resolved-role → permissions
-
-The FE calls `GET /api/v1/auth/me` once after login (and on app reload) to obtain the resolved `role` + `permissions`, then renders the menu/controls for that role:
-
-| Role | Permissions emitted |
+| Role | Permissions |
 |---|---|
 | `MAKER` | `report.create`, `report.edit`, `report.upload`, `report.run_demo`, `report.run_final`, `report.submit_approval`, `report.disburse`, `schedule.manage` |
 | `CHECKER` | `report.read`, `approval.act` |
-| `ADMIN` | all Maker + all Checker permissions, plus `datasource.manage`, `catalog.manage`, `approvalflow.manage`, `user.manage` |
+| `ADMIN` | all Maker + Checker, plus `datasource.manage`, `catalog.manage`, `approvalflow.manage`, `user.manage` |
 
----
-
-## 4.7 Validation & Business Rules
-
-| # | Rule | Where enforced |
-|---|---|---|
-| V1 | `username` and `password` required and non-blank on `/auth/login`. | API (`400`) |
-| V2 | Credential check, OTP entry/countdown/resend, and failed-attempt lockout + OTP expiry are owned entirely by **Central Login** — SalesCom does not implement them. | Central Login |
-| V3 | `authToken` is **single-use**: a second callback with the same token is rejected; `state` must match the value issued at `/auth/login` (CSRF/replay guard). | API (`401`) |
-| V4 | The Central Login token returned at verify is **ignored**; only the profile is consumed. No password/OTP/IdP token is ever persisted. | API |
-| V5 | Login is refused if the user is absent from `users`, the upstream profile is inactive, or the user has **no `user_rights` row**. | API (`403`) |
-| V6 | The SalesCom JWT carries `sub`, `userName`, `role`, `iat`, `exp`, `iss`, `aud`, `jti`; signed with the backend secret. **Expiry duration is config-driven and left unspecified in this spec** (Team LLD v2). | API / Config |
-| V7 | **Every** non-public request carries the JWT; signature + `exp` / `iss` / `aud` validated; user re-loaded and still-has-rights confirmed. | API (`401`/`403`) |
-| V8 | **Sensitive actions** (approve, disburse, schedule, all config writes) require a **live DB role re-check** — the JWT `role` claim is not trusted for these paths (BR1, anti-stale-authorization). | API (`403`) |
-| V9 | **3-hour inactivity** → frontend discards the JWT and routes to Login (client-side session control). | FE |
-| V10 | **Every** sign-in attempt — success or failure — is written to `login_log` (`user_name`, `full_name`, `login_time`, `status` **1 = Success / 2 = Failed**, `remarks`). | API |
-| V11 | The hourly provisioning sync (Airflow DAG → POS DB direct connection → dump → upsert) is **idempotent** (upsert keyed on `users.user_id`); deactivations are expressed by deleting `user_rights` rows; changes take effect within one hour and are then honored by V8. | Airflow DAG |
-| V12 | Resolved role = **highest** `rights_code` (`30` > `20` > `10`); used as the JWT `role` claim and the `/auth/me` `role`. No rights → no role → refused. | API |
-| V13 | Secret application name/key, JWT signing secret + lifetime, and Central Login endpoints live in server-side config / Docker secrets — never sent to the browser. | Config |
-
-**Reconciliation notes (deliberate divergences resolved):**
-- **Session model:** earlier SDD drafts described a short access token (15–30 min) + rotating refresh + server-side revocation list. This LLD follows the **Team LLD v2** model — a **single stateless JWT (config-driven expiry) + 3-hour frontend inactivity logout, no Phase-1 refresh/revocation list** — matching the `login_log`-table session model and the 20-table schema (no revocation table). Short-token + refresh rotation can be added later via an auxiliary `jwt_revocation(jti, expires_at)` table without touching the core schema.
-- **Inactivity window:** **3 hours** (Team LLD v2), superseding any earlier "4-hour" figure.
-- **Deactivation:** the real `users` table has **no `is_active` column**; deactivation is modeled by the hourly sync **removing `user_rights` rows** (→ no resolved role → refused), not by flipping a flag.
+Secrets (app name/key, JWT signing secret, Central Login endpoints) live in server-side config / Docker secrets — never sent to the browser.
 
 ---
 
 # §5 Data Source Management
 
-A **data source** is a registered, pre-loaded PostgreSQL table that a report's IR is allowed to read from. The ETL layer (Airflow) lands cleaned sales / recharge / lifting / vPeople data into physical source tables; an **Administrator** then **registers** the ones Business Users may build reports on. Registration is the gate between "a table exists in the database" and "the no-code wizard may select it as a `source`."
-
-Two things consume a registered data source:
-
-1. The **wizard** (Report Step-3 / Step-4) — a block's `source` / `combine.join_with` of `type: "data_source"` picks a registered source by its `source_table_name` (see Appendix A / `IR_Schema_and_MultiKPI_Join.md` §2–§3.2).
-2. The **SQL Generator** — at Final Save it resolves every `data_source` ref against the registry and emits the physical table name into the stage SQL; the execute-time allowlist (D2) only permits reads against registered source tables and the `salescom_upload` schema.
-
-This section also specifies the **Supporting CSV → DB table ingestion** mechanics (§5.7), because Report Step-2 turns user-uploaded CSVs into physical tables that the IR references with `source.type: "upload"`. Registered data sources and uploaded tables are the **only two physical-table inputs** an IR may read (the third input type, `block`, is just another block's in-run temp output).
-
-> **Schema note.** This section uses the real implemented tables from §3: **`data_sources`** (catalog) and **`report_supporting_uploads`** (Report module). The real `data_sources` table has **no `column_aliases` column** — it stores only `source_table_name`, `table_description`, `is_active`, and audit columns. Per-column friendly labels needed by the wizard are therefore **derived by live introspection** of the physical table at pick-time (§5.4 / endpoint #4), **not persisted**. This keeps generated SQL stable (the IR always references the physical column name) and avoids alias drift.
-
----
-
 ## 5.1 Overview
 
-| Aspect | Detail |
-|---|---|
-| Who manages it | **Administrator** only (register / edit / activate / deactivate). Business User and Approver have **read-only** access (they need the active list to build reports). |
-| What it is | One row in **`data_sources`** pointing at a physical table the ETL layer maintains, plus a human `table_description` and an `is_active` flag. Column metadata (names, types, friendly labels) is read live from the database, not stored. |
-| Lifecycle | Register → optionally edit `table_description` → activate / deactivate. **Never hard-deleted** (BR2) — only `is_active = false`. |
-| Key guard | A source **referenced by any non-archived report's IR** cannot be deactivated (§5.6, R5). |
-| Phase | Phase 1. The registry shape is final; later phases only register more tables. |
-| ETL coupling | The Final-run pre-check (§3 decision 7) verifies that every registered system source used by a report has its **ETL finished up to the report End Date** before a Scheduled / Run-Now FINAL run executes. That check reads the source table's latest data date; registration is what makes a table eligible to be checked. |
+A **data source** is a registered, pre-loaded PostgreSQL table that a report's IR may read from. ETL (Airflow) lands cleaned sales / recharge / lifting / vPeople data into physical tables; an **Administrator registers** the ones Business Users may build reports on — registration is the gate between "a table exists" and "the wizard may select it."
 
----
+Two consumers read the registry: the **wizard source-picker** (Report Step-3/4) and the **SQL Generator** (resolves each `data_source` ref to a physical table at Final Save). Generated SQL may only read from the **registered source schema(s) + the `salescom_upload` schema** (execute-time allowlist). An IR has exactly three input types: `data_source` (this registry), `upload` (a Step-2 CSV table, §5.6), and `block` (another block's in-run temp output).
 
-## 5.2 User Interface
+**Module rules:**
 
-**Data Source list** — `/admin/data-sources` (Administrator nav):
+- **Administrator only** manages (register / edit / activate / deactivate); everyone else is read-only (they need the active list to build reports).
+- A source is **never hard-deleted** — only `is_active = false`.
+- A source **referenced by any non-archived report's IR cannot be deactivated** (in-use guard, §5.4).
+- `source_table_name` is **immutable** once registered.
+- **Column metadata is not stored** — column names / types / labels are read **live** by introspection (`data_sources` has no alias column), so the IR always references the real physical column name (no alias drift).
+- **ETL pre-check:** before a Scheduled / Run-Now **Final** run, each system source used must have ETL data up to the report End Date (§6.10); Demo skips this.
 
-- **Columns:** SL · **Source Table Name** · **Description** · **#Columns** (live count from introspection) · **Status** (Active / Inactive toggle) · Updated On · Action menu.
-- **Toolbar:** search box (matches `source_table_name` + `table_description`), Status filter (All / Active / Inactive), **"Register Data Source"** button (top-right, Administrator only).
-- **Row actions:** **View**, **Edit**, **Activate / Deactivate** (the toggle is disabled with tooltip *"In use by N report(s)"* when the source is referenced — R5).
+## 5.2 Screens
 
-**Register / Edit drawer:**
+**List** — `/admin/data-sources`: columns SL · Source Table · Description · #Columns (live) · Status toggle · Updated On · Actions. Toolbar: search (table + description), Status filter, "Register" button (Admin). Row actions View / Edit / Activate-Deactivate (toggle disabled with *"In use by N report(s)"* when referenced).
 
-1. **Pick physical table** — dropdown populated by `GET /api/v1/data-sources/db-tables` (live introspection of candidate tables not yet registered). On **Edit** the table is fixed (read-only).
-2. On selection the system **introspects the table** and lists every column for reference: physical column name + detected PG type + suggested logical type + suggested friendly label (Title-Cased). These are **display-only previews** (not persisted) so the Admin can confirm the table is the right one.
-3. **Description** (table-level, → `table_description`) and **Status** (Active / Inactive, → `is_active`).
-4. Save.
+**Register / Edit drawer:** (1) pick a physical table from `GET …/db-tables` (unregistered candidates; fixed on Edit); (2) the system introspects and previews each column (physical name + PG type + suggested logical type + friendly label — display-only); (3) enter `table_description` + status; (4) save.
 
-**Read-only consumer view (Business User):** the wizard's source-picker (Report Step-3 / Step-4) lists only `is_active = true` sources by `source_table_name` + `table_description`; expanding one shows the live column list with friendly labels. Business Users never reach the Register / Edit drawer.
+**Consumer view (Business User):** the wizard picker lists only `is_active = true` sources; expanding one shows the live column list. Business Users never reach the Register drawer.
 
----
+## 5.3 Tables
 
-## 5.3 Data Model
+Primary: **`data_sources`** (DDL §3.3) — `id`, `source_table_name` (system-wide unique; = the IR's `data_source` ref), `table_description`, `is_active` (soft-delete flag), audit columns. **No column-metadata columns** — the column list / types / friendly labels are introspected live from `information_schema.columns` (logical types collapse to `text · integer · numeric · date · timestamp · boolean`, same mapping as upload inference §5.6.2).
 
-Primary table: **`data_sources`** (canonical DDL §3.3).
+Related (not redefined): `report_supporting_uploads` (§3.4, written by §5.6); `report_setups.definition` JSONB (holds the IR whose `source` refs are scanned for the in-use check). No new tables.
 
-| Column | Type | Role |
-|---|---|---|
-| `id` | int8 identity | PK |
-| `source_table_name` | varchar(200) | Physical table name (system-wide unique — `ux_data_sources_source_table`). The IR's `data_source` ref equals this value. |
-| `table_description` | varchar(1000) NULL | Admin-entered human description, searchable. |
-| `is_active` | bool | Active flag. `false` = deactivated (BR2 soft-delete). |
-| `created_at` / `updated_at` | timestamptz | Audit timestamps (UTC). |
-| `created_by` / `updated_by` | varchar(200) | Audit user_name. |
+## 5.4 Register / edit / deactivate
 
-**Column metadata is not stored.** When the wizard or the Register drawer needs the column list / types / friendly labels for a source, the BE introspects PostgreSQL `information_schema.columns` live (endpoint #4). The mapping from PG type → wizard-facing **logical type** is the same table used for upload inference (§5.7.2), collapsed to: `text · integer · numeric · date · timestamp · boolean`.
+**Register (Admin):** open drawer → `GET …/db-tables` (unregistered tables in the allowed schema) → pick one → `GET …/db-tables/{name}/columns` previews columns → enter description + status → **`POST /data-sources`** inserts one row + an `audit_logs` Create row.
 
-**Related tables (referenced, not redefined here):**
-- **`report_supporting_uploads`** (§3.4) — written by the Step-2 ingestion (§5.7).
-- **`report_setups.definition`** JSONB (§3.4) — holds the IR whose `source` refs point at `data_sources.source_table_name` or an upload table; the "in use" check (R5) is logical, resolved by scanning the IR JSONB.
+**Edit (`PUT /data-sources/{id}`):** only `table_description` / `is_active` change; `source_table_name` is ignored (immutable). Audited (Update + diff).
 
-No new tables are introduced by this module.
+**Activate / deactivate (`PATCH /data-sources/{id}/status`):**
 
----
+- Activate → `is_active = true` (always allowed).
+- Deactivate → **first the in-use check**: scan every non-archived `report_setups.definition` for a `data_source` ref equal to this table; any match → **`409 SOURCE_IN_USE`** (with offending report names); else set `is_active = false`. Audited.
+- **No DELETE route exists.**
 
-## 5.4 Process Logic — register / edit / deactivate
-
-**Register a data source (Administrator):**
-
-1. Admin opens the Register drawer; FE calls `GET /api/v1/data-sources/db-tables` → list of physical tables in the allowed source schema(s) that are **not already registered**.
-2. Admin selects a table. FE calls `GET /api/v1/data-sources/db-tables/{tableName}/columns` → BE introspects `information_schema.columns` and returns each column with its PG type, a **suggested logical type**, and a **suggested friendly label** (Title-Cased from the physical name). Display-only.
-3. Admin fills the table `table_description` and sets status (`is_active`).
-4. **`POST /api/v1/data-sources`** → BE validates (R1–R4), inserts one `data_sources` row (`source_table_name`, `table_description`, `is_active`, `created_at`, `created_by`), writes an `audit_logs` row (`action_type = 1` Create, `entity_name = 'data_sources'`, `entity_id = <id>`).
-
-**Edit:** `PUT /api/v1/data-sources/{id}` — only `table_description` and (rarely) `is_active` may change; **`source_table_name` is immutable** once registered (changing the physical table = register a new source). Audited (`action_type = 2` Update, with `changed_columns` + `old_values`/`new_values` JSONB).
-
-**Activate / deactivate:** `PATCH /api/v1/data-sources/{id}/status`.
-- **Activate** → set `is_active = true`. Always allowed.
-- **Deactivate** → **first run the in-use check (R5)**: scan every non-archived `report_setups.definition` for a `source` / `combine.join_with` of `type = 'data_source'` whose ref equals this `source_table_name`. If any match → reject `409 SOURCE_IN_USE` with the offending report names. Otherwise set `is_active = false`. Audited (`action_type = 2`, diff on `is_active`).
-- **Never delete.** There is no `DELETE` endpoint (BR2).
-
----
+Deactivating does **not** break already-compiled SQL — a saved report's `section_wise_report_sqls` (frozen at Final Save) and a run's `run_stages` snapshot are unaffected; it only blocks **new** edits / Final Saves that re-select the source.
 
 ## 5.5 API Endpoints
 
-All under `/api/v1`. JWT required on every call. Standard error envelope:
-```json
-{ "error": { "code": "STRING_CODE", "message": "human readable", "details": { } } }
-```
+All under `/api/v1`, JWT required. Endpoints 3–7 require **Administrator** (`403` otherwise); 1–2 open to any authenticated user. Standard error envelope `{ "error": { "code", "message", "details" } }`.
 
-| # | Method / Path | Purpose | Role | Success |
-|---|---|---|---|---|
-| 1 | `GET /data-sources` | List (search + paginate) | All authenticated | 200 |
-| 2 | `GET /data-sources/{id}` | Read one (+ live columns) | All authenticated | 200 |
-| 3 | `GET /data-sources/db-tables` | Candidate physical tables not yet registered | Administrator | 200 |
-| 4 | `GET /data-sources/db-tables/{tableName}/columns` | Introspect a physical table's columns | Administrator | 200 |
-| 5 | `POST /data-sources` | Register | Administrator | 201 |
-| 6 | `PUT /data-sources/{id}` | Edit description / status | Administrator | 200 |
-| 7 | `PATCH /data-sources/{id}/status` | Activate / deactivate | Administrator | 200 |
+| # | Method / Path | Purpose | Success |
+|---|---|---|---|
+| 1 | `GET /data-sources` | List (search + paginate) | 200 |
+| 2 | `GET /data-sources/{id}` | Read one + live columns | 200 |
+| 3 | `GET /data-sources/db-tables` | Unregistered candidate tables | 200 |
+| 4 | `GET /data-sources/db-tables/{tableName}/columns` | Introspect a table's columns | 200 |
+| 5 | `POST /data-sources` | Register | 201 |
+| 6 | `PUT /data-sources/{id}` | Edit description / status | 200 |
+| 7 | `PATCH /data-sources/{id}/status` | Activate / deactivate | 200 |
 
-**1) `GET /data-sources`** — Query: `search`, `status` (`active|inactive|all`, default `active`), `page` (default 1), `pageSize` (default 20, max 100).
-Response `200`:
-```json
-{ "items": [
-    { "id": 12, "sourceTableName": "ev_lifting_daily_com", "tableDescription": "Daily EV lifting",
-      "columnCount": 14, "isActive": true, "updatedOn": "2026-06-10T09:12:00Z" } ],
-  "page": 1, "pageSize": 20, "total": 37 }
-```
-> `columnCount` is computed via introspection at read time (or cached); it is not a stored column.
+**1) `GET /data-sources`** — query `search`, `status` (`active|inactive|all`, default `active`), `page` (1), `pageSize` (20, max 100). Returns `{ items: [{ id, sourceTableName, tableDescription, columnCount, isActive, updatedOn }], page, pageSize, totalItems, totalPages }`. `columnCount` is introspected, not stored.
 
-**2) `GET /data-sources/{id}`** → `200`:
-```json
-{ "id": 12, "sourceTableName": "ev_lifting_daily_com", "tableDescription": "Daily EV lifting", "isActive": true,
-  "columns": [
-    { "column": "rso_code",    "pgType": "text",    "logicalType": "text",    "label": "Rso Code" },
-    { "column": "send_amount", "pgType": "numeric", "logicalType": "numeric", "label": "Send Amount" } ],
-  "createdOn": "2026-05-01T06:00:00Z", "createdBy": "admin01",
-  "updatedOn": "2026-06-10T09:12:00Z", "updatedBy": "admin01" }
-```
-`columns` is filled by live introspection. `404 NOT_FOUND` if the row is missing.
+**2) `GET /data-sources/{id}`** — same object plus live `columns: [{ column, pgType, logicalType, label }]` and audit fields. `404` if missing.
 
-**3) `GET /data-sources/db-tables`** → `200`:
-```json
-{ "tables": [ { "tableName": "ev_lifting_daily_com", "schema": "salescom_src", "estimatedRowCount": 4200000 } ] }
-```
-Returns only allowlisted source schema(s); excludes already-registered tables and SalesCom's own operational tables (`salescomdbtst.*`, `salescom_upload.*`).
+**3) `GET …/db-tables`** → `{ tables: [{ tableName, schema, estimatedRowCount }] }` — allowlisted source schema(s) only; excludes already-registered tables and SalesCom's own tables (`salescomdbtst.*`, `salescom_upload.*`).
 
-**4) `GET /data-sources/db-tables/{tableName}/columns`** → `200`:
-```json
-{ "tableName": "ev_lifting_daily_com", "schema": "salescom_src",
-  "columns": [
-    { "column": "rso_code",    "pgType": "text",                     "logicalType": "text",      "suggestedLabel": "Rso Code" },
-    { "column": "send_amount", "pgType": "numeric",                  "logicalType": "numeric",   "suggestedLabel": "Send Amount" },
-    { "column": "fcd",         "pgType": "timestamp with time zone", "logicalType": "timestamp", "suggestedLabel": "Fcd" } ] }
-```
-`404 NOT_FOUND` if the table doesn't exist in an allowed schema.
+**4) `GET …/db-tables/{tableName}/columns`** → `{ tableName, schema, columns: [{ column, pgType, logicalType, suggestedLabel }] }`. `404` if not in an allowed schema.
 
-**5) `POST /data-sources`** — Request:
-```json
-{ "sourceTableName": "ev_lifting_daily_com", "tableDescription": "Daily EV lifting", "isActive": true }
-```
-Response `201`: full object (as endpoint #2). Errors: `400 VALIDATION_ERROR`, `409 DUPLICATE_SOURCE`, `422 TABLE_NOT_FOUND`.
+**5) `POST /data-sources`** — req `{ sourceTableName, tableDescription, isActive }` → `201` (full object). Errors `400 VALIDATION_ERROR`, `409 DUPLICATE_SOURCE`, `422 TABLE_NOT_FOUND`.
 
-**6) `PUT /data-sources/{id}`** — Request (`sourceTableName` ignored / immutable):
-```json
-{ "tableDescription": "Daily EV lifting (DWH)", "isActive": true }
-```
-Response `200` (full object). Errors: `400`, `404`.
+**6) `PUT /data-sources/{id}`** — req `{ tableDescription, isActive }` (`sourceTableName` ignored) → `200`. Errors `400`, `404`.
 
-**7) `PATCH /data-sources/{id}/status`** — Request `{ "isActive": false }`. Response `200`:
-```json
-{ "id": 12, "isActive": false }
-```
-Errors: `404`; **`409 SOURCE_IN_USE`** on deactivate while referenced:
+**7) `PATCH /data-sources/{id}/status`** — req `{ isActive: false }` → `200 { id, isActive }`. Errors `404`; **`409 SOURCE_IN_USE`** on deactivate while referenced:
 ```json
 { "error": { "code": "SOURCE_IN_USE",
   "message": "Data source is used by active reports and cannot be deactivated.",
   "details": { "reports": ["RSO Campaign GA Recharge LSO Apr26", "Deno Lifting May26"] } } }
 ```
 
-**Role enforcement:** endpoints 3–7 require the **Administrator** right (`user_rights.rights_code` per Appendix B RBAC matrix); a Business User / Approver calling them gets `403 FORBIDDEN`. Endpoints 1–2 are open to any authenticated user.
+**Key rules:** `sourceTableName` must match a real physical table in an allowed schema (`422 TABLE_NOT_FOUND`) and be system-wide unique (`409 DUPLICATE_SOURCE`); never deleted; an in-use source cannot be deactivated (`409 SOURCE_IN_USE`); the wizard and the SQL Generator only see / resolve `is_active = true` sources.
 
----
+## 5.6 Supporting CSV → DB ingestion (Report Step-2)
 
-## 5.6 Validation & Business Rules
+Report Step-2 lets the Maker attach CSV files (external B2C target / config files, slab tables, agent / exclusion lists, prior-commission outputs for priority de-dup). Each CSV is loaded into a **physical table** the IR references with `source.type: "upload"`. The **BE owns** this pipeline (not the Python engine) and writes **one `report_supporting_uploads` row per file**.
 
-| ID | Rule | Enforcement |
+### 5.6.1 Naming
+
+Schema `salescom_upload` (separate from source data + operational tables; readable by generated SQL via the allowlist). Table `up_<reportId>_<slug>` (`<slug>` = sanitised file name, lowercased, ≤ 40 chars, `_<n>` suffix on collision). E.g. report 812, `RSO Agent Target (Apr).csv` → `salescom_upload.up_812_rso_agent_target_apr`. Columns are sanitised from the header (§5.6.3); the IR / `combine.match_on` references the sanitised name.
+
+### 5.6.2 Type inference
+
+The ingester samples up to **10,000 rows/column** and picks the **narrowest type that fits** (any misfit falls back to the next wider, ultimately `TEXT`):
+
+| Detected (in order) | Test | PG type |
 |---|---|---|
-| R1 | `sourceTableName` required, non-empty, must match a real physical table in an allowed source schema. | App check → `422 TABLE_NOT_FOUND` |
-| R2 | `sourceTableName` system-wide unique. | `ux_data_sources_source_table` + `409 DUPLICATE_SOURCE` |
-| R3 | `tableDescription` ≤ 1000 chars; trimmed. | App `400 VALIDATION_ERROR` |
-| R4 | Only **Administrator** may register / edit / activate / deactivate (BR1). Business User / Approver read-only. | JWT role check → `403` |
-| R5 | A source **referenced by any non-archived report's IR** cannot be deactivated (BR2 spirit). | App scan of `report_setups.definition` → `409 SOURCE_IN_USE` |
-| R6 | A source is **never deleted**; deactivate only. No DELETE route exists (BR2). | API surface |
-| R7 | `source_table_name` is **immutable** after registration. | App ignores it on `PUT` |
-| R8 | The wizard source-picker and the SQL Generator only see / resolve `is_active = true` sources. Deactivating a source does not break a saved IR's already-frozen `section_wise_report_sqls` (already compiled at Final Save) or a frozen `run_stages` snapshot, but it blocks **new** edits / Final Saves that re-select it. | Query filter + Final-Save resolution |
-| R9 | A registered source used by a report is subject to the **Final-run ETL pre-check** (§3 decision 7): its latest data date must be ≥ the report End Date, else the Scheduled / Run-Now FINAL run is blocked (Demo skips). | Run-trigger pre-check (§6.10) |
+| boolean | all ∈ {true,false,t,f,0,1,yes,no,y,n} (case-insensitive) | `BOOLEAN` |
+| integer | all match `^-?\d{1,18}$` | `BIGINT` |
+| numeric | all match a decimal / scientific number | `NUMERIC(38,10)` |
+| date | all parse as `YYYY-MM-DD` (or configured `DD-MMM-YYYY`) | `DATE` |
+| timestamp | all parse as ISO-8601 datetime | `TIMESTAMPTZ` |
+| fallback | mixed / empty | `TEXT` |
 
----
+Null-tokens (`""`, `NULL`, `N/A`) → SQL `NULL`, ignored for inference; a fully-null column → `TEXT`. **Leading-zero strings (MSISDN, codes) stay `TEXT`** so join keys aren't silently turned into integers. The Maker may override a column **only to `TEXT`** (widen only, never narrow).
 
-## 5.7 Supporting CSV → DB table ingestion (Report Step-2)
+### 5.6.3 Column-name sanitisation
 
-Report Step-2 ("Supporting Uploads") lets the Maker attach CSV files — external B2C target / config files, slab tables, agent lists, exclusion lists, and prior-commission outputs for priority de-dup (see `Commission_Logic_Catalog.md`). Each CSV is loaded into a **physical table** so the IR can reference it with `source.type: "upload"` / `combine.join_with.type: "upload"`. This subsection is the contract for that pipeline; the **BE owns it** (not the Python engine), and it writes **one `report_supporting_uploads` row per file**.
+Per header cell, in order: trim + lowercase → replace each non-`[a-z0-9_]` run with `_` (strip leading / trailing) → empty ⇒ `col_<index>` → leading digit ⇒ prefix `c_` → PG reserved word ⇒ suffix `_col` (`order` → `order_col`) → duplicates ⇒ `_2`, `_3`… → truncate to 59 chars. The original → sanitised map is returned to the FE.
 
-### 5.7.1 Target schema, table & column naming
+### 5.6.4 Limits (checked before COPY)
 
-- **Schema:** all upload tables live in a dedicated schema **`salescom_upload`** (kept separate from registered source data and from SalesCom operational tables; the execute-time allowlist permits reads from `salescom_upload` + the registered-source schema only).
-- **Table name:** `up_<reportId>_<slug>` where `<reportId>` = `report_setups.id`, `<slug>` = sanitised base file name (lowercased, non-alphanumerics → `_`, collapsed, trimmed to 40 chars), with a `_<n>` suffix on collision within the same report.
-  Example: report `812`, file `RSO Agent Target (Apr).csv` → `up_812_rso_agent_target_apr`. The physical reference stored on the registry row is `db_schema = 'salescom_upload'`, `db_table_name = 'up_812_rso_agent_target_apr'`; the IR's `upload` ref is `salescom_upload.up_812_rso_agent_target_apr`.
-- **Column names:** sanitised from the CSV header (§5.7.3). The IR / `combine.match_on` references the **sanitised** column name.
+≤ **30 columns** (`422 TOO_MANY_COLUMNS`) · ≤ **500 MB** (`413 FILE_TOO_LARGE`) · `.csv` UTF-8, comma-delimited, first row = header (`415 UNSUPPORTED_FORMAT`) · non-empty header + ≥ 1 data row (`422 EMPTY_OR_BAD_HEADER`) · per-report file cap default 10 (`422 TOO_MANY_FILES`).
 
-### 5.7.2 Detected-type → PostgreSQL type mapping
+### 5.6.5 Load mechanics (COPY-based, transactional, idempotent per (report, schema, table))
 
-The ingester samples up to the first **10,000 rows** per column to infer a type, then creates the table with that type. Inference is **narrowest-that-fits**, in this priority order; any value that doesn't fit falls back to the next wider type, ultimately `TEXT`:
+1. **Stage** the raw CSV in SeaweedFS (`object_bucket` / `object_key`) — survives retries, is the audit copy.
+2. **Parse + sanitise** the header; enforce limits.
+3. **Infer types** (sample 10k rows).
+4. **DDL** — `DROP TABLE IF EXISTS` then `CREATE TABLE salescom_upload.up_…` with the inferred columns (all nullable) + an internal `_row_no BIGINT` (load order, for fan-out debugging).
+5. **Bulk load** — `COPY … FROM STDIN (FORMAT csv, HEADER true, NULL '', QUOTE '"', ESCAPE '"')` streamed via the Npgsql binary COPY API — **one transaction**; any malformed row → full rollback + `422 LOAD_FAILED` with the line number (no half-loaded table).
+6. **Index** — none here (join keys unknown yet); the SQL Generator adds `CREATE INDEX` on the `match_on` columns at Final Save.
+7. **Registry row** — upsert one `report_supporting_uploads` row (`report_setup_id`, `db_schema`, `db_table_name`, `object_bucket` / `object_key`, `file_name`, `row_count`, `uploaded_at`, `uploaded_by`). Re-upload of the same file **updates in place** (drop + reload, no duplicate row). *Recommended:* add UNIQUE `ux_report_supporting_uploads_setup_table (report_setup_id, db_schema, db_table_name)` as the idempotency guard; else the BE enforces the same in-transaction.
+8. **Audit** — `audit_logs` row (Create on first upload / Update on re-upload).
 
-| Detected (in order) | Test | PG column type |
-|---|---|---|
-| boolean | every value ∈ {`true,false,t,f,0,1,yes,no,y,n`} (case-insensitive) | `BOOLEAN` |
-| integer | every value matches `^-?\d{1,18}$` | `BIGINT` |
-| numeric | every value matches a decimal / scientific number | `NUMERIC(38,10)` |
-| date | every value parses as ISO date `YYYY-MM-DD` (or configured `DD-MMM-YYYY`) | `DATE` |
-| timestamp | every value parses as ISO-8601 datetime | `TIMESTAMPTZ` |
-| (fallback) | anything else / mixed / empty column | `TEXT` |
-
-**Rules:** empty string / configured null-tokens (`""`, `NULL`, `N/A`) → SQL `NULL` and are ignored for inference. A fully-null column → `TEXT`. **Leading-zero strings** (MSISDN, codes) stay `TEXT` when any value has a significant leading zero, so join keys aren't silently turned into integers. Monetary columns infer as `NUMERIC(38,10)` (wide; the engine narrows at calc time). The wizard preview surfaces the inferred type; the Maker may override a column to `TEXT` (only widening to TEXT is allowed — never narrowing).
-
-### 5.7.3 Column-name sanitisation
-
-Applied to every CSV header cell, in order:
-
-1. Trim, lowercase.
-2. Replace any run of non-`[a-z0-9_]` (spaces, punctuation, BOM, etc.) with a single `_`; strip leading / trailing `_`.
-3. If empty after step 2 → `col_<index>` (1-based).
-4. If it starts with a digit → prefix `c_`.
-5. **Reserved word** (PG keyword: `order`, `user`, `select`, `from`, `group`, `table`, …) → suffix `_col` (`order` → `order_col`).
-6. **Duplicate** sanitised names → suffix `_2`, `_3`, … in header order.
-7. Truncate to 59 chars (PG identifier limit is 63; leaves room for the dedupe suffix).
-
-The original → sanitised header map is returned to the FE so the wizard can show *"Original CSV column → loaded column."*
-
-### 5.7.4 Limits & pre-load validation
-
-| Limit | Value | On breach |
-|---|---|---|
-| Max columns | **30** | reject `422 TOO_MANY_COLUMNS` |
-| Max file size | **500 MB** | reject `413 FILE_TOO_LARGE` |
-| Format | `.csv` (UTF-8 / UTF-8-BOM), comma-delimited, first row = header | reject `415 UNSUPPORTED_FORMAT` |
-| Header | every header cell non-empty after sanitisation; ≥ 1 data row | reject `422 EMPTY_OR_BAD_HEADER` |
-| Per-report file cap | configurable (default 10 files) | reject `422 TOO_MANY_FILES` |
-
-Limits are checked **before** the COPY: the column count from the parsed header, the size from the multipart / SeaweedFS object metadata.
-
-### 5.7.5 Load mechanics (COPY-based)
-
-The ingester is transactional and idempotent per `(report_setup_id, db_schema, db_table_name)`:
-
-1. **Stage the object** — the raw CSV is first stored in SeaweedFS (→ `object_bucket`, `object_key`) so it survives retries and is the audit copy.
-2. **Parse header** → sanitise (§5.7.3); enforce limits (§5.7.4).
-3. **Infer types** — stream-sample up to 10k rows (§5.7.2).
-4. **DDL** — `CREATE TABLE salescom_upload.up_<reportId>_<slug> (...)` with the inferred columns (all `NULL`-able) plus an internal `_row_no BIGINT` (load order; helps fan-out / guardrail debugging). `DROP TABLE IF EXISTS` first (re-upload replaces).
-5. **Bulk load** — server-side `COPY salescom_upload.up_... FROM STDIN WITH (FORMAT csv, HEADER true, NULL '', QUOTE '"', ESCAPE '"')` streamed from the staged object via the Npgsql binary `COPY` API. Null-tokens normalised to SQL `NULL`. The whole COPY is **one transaction** — on any malformed row the load **rolls back** and returns `422 LOAD_FAILED` with the offending line number (no half-loaded table).
-6. **Index** — Step-2 indexes nothing by default (join keys aren't known until the IR is built); the **SQL Generator** issues `CREATE INDEX` on the upload table's `match_on` columns at Final Save (cheap — table is already physical). (Indexing strategy: index join keys, filter-early-then-join.)
-7. **Write the registry row** — one `report_supporting_uploads` row:
-   - `report_setup_id` = the report,
-   - `db_schema = 'salescom_upload'`, `db_table_name = 'up_<reportId>_<slug>'`,
-   - `object_bucket`, `object_key` (SeaweedFS location from step 1),
-   - `file_name` = original upload name,
-   - `row_count` = rows loaded,
-   - `uploaded_at` = now (UTC), `uploaded_by` = caller user_name.
-   On re-upload of the same file, the existing row for that `(report_setup_id, db_schema, db_table_name)` is **updated in place** (drop + reload + update `row_count`/`object_key`/`uploaded_at`), so no duplicate registry row is created.
-   > The real schema (§3.4) has only `ix_report_supporting_uploads_report_setup`. To make the in-place upsert deterministic, add a **UNIQUE index `ux_report_supporting_uploads_setup_table ON report_supporting_uploads (report_setup_id, db_schema, db_table_name)`** (idempotency guard for re-upload). If not added at DB level, the BE must enforce the same uniqueness in the upload transaction.
-8. **Audit** — `audit_logs` row (`action_type = 1` Create on first upload / `2` Update on re-upload, `entity_name = 'report_supporting_uploads'`, `entity_id = <id>`).
-
-### 5.7.6 Upload API endpoints
+### 5.6.6 Upload endpoints & rules
 
 | Method / Path | Purpose | Role | Success |
 |---|---|---|---|
-| `POST /api/v1/reports/{reportId}/uploads` | Upload + ingest one CSV (multipart) | Maker (report owner) / Administrator | 201 |
-| `GET /api/v1/reports/{reportId}/uploads` | List a report's uploaded tables | Maker / Approver / Administrator | 200 |
-| `DELETE /api/v1/reports/{reportId}/uploads/{uploadId}` | Remove an upload (drops the table + row) — only while the report setup is not yet approval-locked and not referenced by a frozen run | Maker / Administrator | 204 |
+| `POST /reports/{reportId}/uploads` | Upload + ingest one CSV (multipart `file`) | Maker (owner) / Admin | 201 |
+| `GET /reports/{reportId}/uploads` | List a report's upload tables | Maker / Approver / Admin | 200 |
+| `DELETE /reports/{reportId}/uploads/{uploadId}` | Drop the table + row (pre-lock only) | Maker / Admin | 204 |
 
-**`POST … /uploads`** request = `multipart/form-data` with field `file`. Response `201`:
-```json
-{ "id": 5501, "reportSetupId": 812,
-  "dbSchema": "salescom_upload", "dbTableName": "up_812_rso_agent_target_apr",
-  "fileName": "RSO Agent Target (Apr).csv", "rowCount": 1834,
-  "columns": [
-    { "original": "RSO Code",        "loaded": "rso_code",        "type": "text" },
-    { "original": "Recharge Target", "loaded": "recharge_target", "type": "numeric" },
-    { "original": "Order",           "loaded": "order_col",       "type": "integer" } ],
-  "uploadedAt": "2026-06-16T11:20:00Z", "uploadedBy": "maker01" }
-```
-Errors: `413 FILE_TOO_LARGE`, `415 UNSUPPORTED_FORMAT`, `422 TOO_MANY_COLUMNS | EMPTY_OR_BAD_HEADER | LOAD_FAILED | TOO_MANY_FILES`, `403 FORBIDDEN`, `409 REPORT_LOCKED` (the report setup is already in / past approval — uploads frozen).
+`POST` → `201` returns `{ id, reportSetupId, dbSchema, dbTableName, fileName, rowCount, columns: [{ original, loaded, type }], uploadedAt, uploadedBy }`. Errors `413`, `415`, `422 (TOO_MANY_COLUMNS | EMPTY_OR_BAD_HEADER | LOAD_FAILED | TOO_MANY_FILES)`, `403`, `409 REPORT_LOCKED` (setup at / past approval — uploads frozen).
+`DELETE` → `204`; errors `403`, `404`, `409 REPORT_LOCKED` / `409 UPLOAD_IN_USE` (referenced by the current IR — remove the ref first).
 
-**`GET … /uploads`** → `200`:
-```json
-{ "items": [
-    { "id": 5501, "dbSchema": "salescom_upload", "dbTableName": "up_812_rso_agent_target_apr",
-      "fileName": "RSO Agent Target (Apr).csv", "rowCount": 1834,
-      "uploadedAt": "2026-06-16T11:20:00Z", "uploadedBy": "maker01" } ] }
-```
-
-**`DELETE … /uploads/{uploadId}`** → `204`. Errors: `403 FORBIDDEN`, `404 NOT_FOUND`, `409 REPORT_LOCKED` (cannot delete once the report is approval-locked) / `409 UPLOAD_IN_USE` (referenced by the current IR — remove the IR ref first).
-
-### 5.7.7 Ingestion validation & rules
-
-| ID | Rule |
-|---|---|
-| U1 | Only the report's **Maker** (owner) or an Administrator may upload to / delete uploads for a report (BR1). Ownership resolved per the single-Maker rule (`COALESCE(updated_by, created_by)` on `report_setups`). |
-| U2 | Uploads / deletes allowed only while the report setup is **not yet approval-locked** (i.e. its `report_approvals.overall_status` is still `0` Draft, or no approval instance exists / it was sent back for edit). Once the setup enters Pre-Approval and beyond, the upload set is **frozen** → `409 REPORT_LOCKED`. |
-| U3 | ≤ 30 columns, ≤ 500 MB, `.csv` only (§5.7.4). |
-| U4 | Column names always sanitised (§5.7.3); the IR references the **sanitised** name. |
-| U5 | Type inference is narrowest-that-fits with `TEXT` fallback; leading-zero / code columns stay `TEXT` to protect join keys (§5.7.2). Maker override may only widen to `TEXT`. |
-| U6 | Load is **all-or-nothing** (single-transaction COPY); a bad row rolls the whole file back (no half-loaded table). |
-| U7 | Upload tables live in `salescom_upload`; only that schema + the registered-source schema are readable by generated SQL (D2 allowlist). The trusted `final_commissions` write path never reads from generated SQL. |
-| U8 | Re-upload of the same generated table name **replaces** the table in place (drop + reload) and updates the same `report_supporting_uploads` row (idempotent via `ux_report_supporting_uploads_setup_table` — §5.7.5 step 7). |
-| U9 | An upload table is **dropped** when its `report_supporting_uploads` row is deleted (only allowed pre-lock) and on report archival; never left orphaned in `salescom_upload`. |
+**Rules:** only the report's Maker (owner = `COALESCE(updated_by, created_by)`) or an Admin may upload / delete. Uploads / deletes are allowed only while the setup is **not yet approval-locked** (`report_approvals.overall_status = 0` Draft, no instance, or sent-back) — otherwise frozen (`409 REPORT_LOCKED`). An upload table is **dropped** when its row is deleted (pre-lock) or on report archival — never left orphaned in `salescom_upload`.
 
 ---
 
 # §6 Report Management (Core)
 
-> **Scope.** This section specifies the heart of SalesCom: the **5-step no-code wizard**, the **report Save/Publish state machine**, and the **run execution lifecycle**. It covers the tables `report_setups`, `report_supporting_uploads`, `section_wise_report_sqls`, `report_runs`, `run_stages`, and `final_commissions` (all defined in §3). The **achievement / incentive configuration the wizard collects *is* the IR** (`report_setups.definition` JSONB); this section summarises the IR shape and the multi-KPI grain-join rule, then **references `IR_Schema_and_MultiKPI_Join.md`** (Appendix A) for the full contract — it does not duplicate it.
+> **Scope.** The heart of SalesCom: the **5-step no-code wizard**, the **Save/Publish state machine**, and the **run execution lifecycle**. Tables: `report_setups`, `report_supporting_uploads`, `section_wise_report_sqls`, `report_runs`, `run_stages`, `final_commissions` (all §3). The wizard's achievement/incentive configuration **is** the IR (`report_setups.definition` JSONB) — this section says which IR part each step writes; the full IR contract is in `IR_Schema_and_MultiKPI_Join.md` (Appendix A).
 
 ---
 
 ## 6.1 Overview
 
-Report Management is where a **Business User (Maker)** turns commission logic into an automated, repeatable report — with no SQL. Through a **five-step wizard** the Maker defines the report's basics, uploads any supporting config files, builds the **achievement** blocks (performance figures) and **incentive** blocks (payout logic), and reviews the result. The wizard's entire output is one row in **`report_setups`**, whose **`definition` (JSONB)** column holds the **IR** (Intermediate Representation).
+A **Maker** turns commission logic into an automated report with no SQL, through a 5-step wizard. The wizard's whole output is one `report_setups` row whose `definition` (JSONB) holds the IR.
 
-The lifecycle of a report:
+**Lifecycle:**
 
-1. **Draft Save** — the wizard persists partial work into `report_setups` (`is_setup_complete = false`); no SQL, no demo, no approval yet.
-2. **Final Save** — the full IR is validated, then the Python **SQL Generator** compiles it into per-stage SQL stored in **`section_wise_report_sqls`** (`is_setup_complete = true`). The report is now Demo-runnable and approval-eligible.
-3. **Approval** — the report walks its bound approval flow (§7). It stays **editable while approval is pending** (any edit re-validates and regenerates the SQL); once **fully approved it is LOCKED**.
-4. **Run** — a trigger (Run-Now / scheduled / demo) creates a **`report_runs`** row, snapshots `section_wise_report_sqls` into **`run_stages`**, executes each stage into temp tables, writes per-recipient **`final_commissions`**, and (for an approved FINAL run) hands off to **EV** or **POS** disbursement.
+1. **Draft Save** — partial work persisted (`"IsSetupComplete" = false`); no SQL, demo, or approval yet.
+2. **Final Save** — the IR is validated, then the Python **SQL Generator** compiles it to per-stage SQL in `section_wise_report_sqls` (`"IsSetupComplete" = true`). Now Demo-runnable and approval-eligible.
+3. **Approval** — the report walks its bound flow (§7). It stays **editable while approval is pending** (any edit re-validates + regenerates SQL); once **fully approved it is LOCKED**.
+4. **Run** — a trigger (Run-Now / scheduled / demo) creates a `report_runs` row, snapshots the SQL into `run_stages`, executes each stage into temp tables, writes per-recipient `final_commissions`, and (for an approved Final run) hands off to **EV** or **POS**.
 
-**Roles in this module:**
-- **Business User (Maker)** — creates, edits, demo-runs, submits for approval, runs-now (after approval), schedules, clones, and stops/starts reports they own.
-- **Approver (Checker)** — does not build reports; acts only in the Approval module (§7) but may view report detail.
-- **Administrator** — may do anything a Maker can, across all reports.
+**Roles:** **Maker** creates/edits/demo-runs/submits/runs-now/schedules/clones/stops reports they own · **Checker** only acts in Approval (§7) but may view detail · **Administrator** may do anything a Maker can, on any report.
 
-> **IR reference.** The block structure, the operation set (`filter` / `combine` / `summarize` / `calculate` / `modify` / `rank`), the multi-KPI grain-join rule, the guardrails (G1–G4), and the formal JSON Schema are specified in full in **`IR_Schema_and_MultiKPI_Join.md`** (Appendix A). §6.4 below states **which part of the IR each wizard step writes** and summarises the rules, but the authoritative IR contract is that annex.
+## 6.2 Screens
 
----
+**Report List** (`/reports`) — paginated table: serial, report name, channel (type), start/end date, recurrence, EV flag, POS flag, a **derived status label**, Action menu. Filters: date range, status, channel; search by name. "Create a New Report" opens the wizard at Step 1.
 
-## 6.2 User Interface
+The **status label is derived** from approval progress (not stored), computed from `report_approvals.current_level_order` + `report_approval_details` (§7). Examples: `"Draft"` (`"IsSetupComplete" = false`) · `"Approved by L1, now Pending at L2"` · `"Rejected by L2, now Pending at L1"` · `"Rejected by L1, now pending for edit & resend"` · `"Pre Approved"` / `"Post Approved"`.
 
-**Report List** (`/reports`) — a paginated table: serial no., **report name**, **channel** (the channel TYPE), **start / end date**, **recurrence**, **EV** flag, **POS** flag, a **derived status label**, and an **Action** menu. Filters: date range, status, channel; free-text search by name. A **Create a New Report** button (top-right) opens the wizard at Step 1.
+Per-row actions (shown by state): **View** (always) · **Edit** (not LOCKED) · **Clone** (always) · **Demo Run** (IR compiled) · **Approval History** (a `report_approvals` row exists) · **Run Now** (fully approved AND not stopped) · **Stop/Start** (approved + scheduled — toggles `is_report_stop`).
 
-The **status label is DERIVED** from approval progress, not a stored string (2026-06-16 decision). It is computed from `report_approvals.current_level_order` + `report_approval_details` rows (see §7). Examples shown in the list:
-- `"Draft"` — `is_setup_complete = false` (wizard not finished).
-- `"Approved by L1, now Pending at L2"`.
-- `"Rejected by L2, now Pending at L1"`.
-- `"Rejected by L1, now pending for edit & resend"`.
-- `"Pre Approved"` / `"Post Approved"` — fully approved phase complete.
+**Wizard** (one route, 5 panels + stepper): `Step 1 Basic → Step 2 Uploads → Step 3 Achievements → Step 4 Incentives → Step 5 Review/Run/Schedule`. Footer: **Save as Draft** (always) + **Next** (1–4) / **Final Save** (5). Keyed by the draft id from Step 1; every later step PUTs into that same row.
 
-Per-row actions (shown conditionally by report state):
+**Report Detail** (`/reports/{id}`) — read-only tabs: Basic, Supporting Uploads, Achievements, Incentives, Run Log, and one Disbursement tab (EV *or* POS). Run Log lists each `report_runs` row newest-first with per-stage file downloads + Download All.
 
-| Action | Visible when |
+## 6.3 Tables
+
+Six tables (§3):
+
+| Table | Role |
 |---|---|
-| **View** | always |
-| **Edit** | not LOCKED (report not yet fully/post-approved) |
-| **Clone** | always |
-| **Demo Run** | IR compiled (`is_setup_complete = true`, i.e. `section_wise_report_sqls` rows exist) |
-| **Approval History** | a `report_approvals` row exists for the report |
-| **Run Now** | report fully approved AND `report_setups.status` is active |
-| **Report Stop / Start** | approved + scheduled report (toggles `report_setups.status`) |
+| **`report_setups`** | One row per report. `definition` (JSONB) = IR. Holds basics (`report_name`, `report_type`, `channel_type_id`, `commission_cycle`, `start_date`, `end_date`), recurrence (`is_recurrent`, `recurrent_type`), disbursement flags (`is_ev_disbursement`, `ev_disbursement_time`, `is_pos_disbursement`, `sms_content`), run window (`run_start_date`, `run_end_date`), `is_report_stop` (true = stopped), `"IsSetupComplete"` (wizard done + compiled), `approval_flow_id`. |
+| **`report_supporting_uploads`** | One row per Step-2 CSV turned into a real table (`db_schema`.`db_table_name`) with SeaweedFS location, `file_name`, `row_count`. |
+| **`section_wise_report_sqls`** | Compiled per-stage SQL, frozen at Final Save: `(report_setup_id, stage_order, sql_text)`; UNIQUE `(report_setup_id, stage_order)`. |
+| **`report_runs`** | One execution. `run_type` (1=Demo, 2=Final), `triggered_by` (user_name; NULL when system/schedule), `run_status int4` (0=Pending, 1=Running, 2=Completed, 3=Failed), `disburse_status varchar` (NONE/PENDING/IN_PROGRESS/DONE/FAILED), `started_at`/`ended_at`. |
+| **`run_stages`** | Per-run snapshot of each `section_wise_report_sqls` row (`sql_text` copied at run start) + result: `run_status int4` (0–3), `sort_order`, `output_table_name`, export fields (`document_type`, `bucket`, `object_url`, `file_name`, `file_generated_at`), `cleanup_status int4`. |
+| **`final_commissions`** | Per-recipient output: `(report_run_id, channel_id, channel_code, "Msisdn", commission_amount)`; UNIQUE `(report_run_id, channel_code)`. Written by the **trusted backend path**, never by generated SQL. |
 
-**Five-step wizard** (one route, five panels with a stepper):
-`Step 1 Basic → Step 2 Supporting Uploads → Step 3 Achievements → Step 4 Incentives → Step 5 Review / Run / Schedule`.
-A persistent footer shows **Save as Draft** (always) and **Next** (Steps 1–4) / **Final Save** (Step 5). The wizard is keyed by the **draft report id** returned from Step 1; every later step PUTs into that same `report_setups` row.
+**Channel model.** `channels` is a channel-TYPE lookup (Distributor / RSO / Retailer). A report has one type via `report_setups.channel_type_id`. On `final_commissions`/`ev_disburse`, `channel_id` carries that constant type while **`channel_code`** is the per-recipient payee key produced by the IR `final_mapping`. (`channels` has no `channel_code` column — the executor writes the report's `channel_id` literally + the recipient code from the final block.)
 
-**Report Detail** (`/reports/{id}`) — read-only tabs: **Basic**, **Supporting Uploads**, **Achievements**, **Incentives**, **Run Log**, and a single **Disbursement** tab (EV *or* POS, shown only when one is enabled). The **Run Log** lists each `report_runs` row (Demo or Final), newest first, with per-stage file downloads and a **Download All**.
-
----
-
-## 6.3 Data Model
-
-Report Management owns six tables from the canonical schema (§3). Exact physical names and columns:
-
-| Table | Role in this module |
-|---|---|
-| **`report_setups`** | The wizard output — one row per report. `definition` (JSONB) = the IR. Holds basics (`report_name`, `report_type`, `channel_type_id`, `commission_cycle`, `start_date`, `end_date`), recurrence (`is_recurrent`, `recurrent_type`), disbursement flags (`is_ev_disbursement`, `ev_disbursement_time`, `is_pos_disbursement`, `sms_content`), the run window (`run_start_date`, `run_end_date`), `status` (varchar, ON/STOP), the **`is_setup_complete`** flag (wizard fully completed), and the `approval_flow_id` binding. `ux_report_setups_report_name` enforces BR3. |
-| **`report_supporting_uploads`** | One row per Step-2 CSV that was turned into a real DB table (`db_schema`.`db_table_name`), with its SeaweedFS location (`object_bucket`, `object_key`), `file_name`, and `row_count`. |
-| **`section_wise_report_sqls`** *(was `stages`)* | The compiled per-section SQL, one row per stage, frozen at Final Save: `(report_setup_id, stage_order, sql_text)`. `ux_section_wise_report_sqls_setup_order` = UNIQUE(report_setup_id, stage_order). |
-| **`report_runs`** | One execution. `run_type int4` (1=Demo, 2=Final), `triggered_by` (user_name; NULL when system/schedule-triggered), `run_status` (varchar: QUEUED/RUNNING/SUCCEEDED/FAILED), `disburse_status` (varchar: NONE/PENDING/DONE/FAILED), `started_at`/`ended_at`. |
-| **`run_stages`** | Per-run snapshot of each `section_wise_report_sqls` row (`sql_text` copied at run start), plus execution result: `run_status int4` (0=Pending,1=Running,2=Succeeded,3=Failed), `output_table_name`, the exported-file fields (`document_type`, `bucket`, `object_url`, `file_name`, `file_generated_at`), and `cleanup_status int4` (0=Not Cleaned,1=Cleaned). `ux_run_stages_run_order` = UNIQUE(run_id, sort_order). |
-| **`final_commissions`** | Per-recipient output of a run: `(report_run_id, channel_id, channel_code, commission_amount NUMERIC(18,4))`. **`channel_id`** = the report's channel TYPE (constant per report, FK→`channels.id`); **`channel_code`** = the individual recipient/payee code from the IR `final_mapping`. `ux_final_commissions_run_code` = UNIQUE(report_run_id, channel_code). Written by the **trusted backend path**, never by generated SQL. |
-
-Supporting lookups read by the module: **`channels`** (`report_setups.channel_type_id` → `channels.id` — the report's channel TYPE), **`data_sources`** (referenced logically inside the IR), and **`approval_flows`** (`report_setups.approval_flow_id` → `approval_flows.id`).
-
-**Channel model (important).** `channels` is a channel-TYPE lookup (Distributor / RSO / Retailer). A report has exactly one type via `report_setups.channel_type_id`. On `final_commissions` / `ev_disburse`, `channel_id` carries that constant type, while `channel_code` is the per-recipient key produced by the IR. There is **no `channel_code` column on `channels`** and **no special channel resolution** — the executor writes the report's `channel_id` literally and the recipient code from the final block.
-
-**Key relationships (this module):**
-`report_setups` (1) → `report_supporting_uploads` (N), `section_wise_report_sqls` (N), `report_runs` (N).
-`report_runs` (1) → `run_stages` (N, snapshot of `section_wise_report_sqls`) → `final_commissions` (N, one per recipient) → then EV (`ev_disburse`, N) **or** POS (`pos_disbursement`, 1).
-EV/POS are mutually exclusive at report level (app-enforced: `is_ev_disbursement` and `is_pos_disbursement` are never both true).
-
----
+**Relationships:** `report_setups` (1)→ uploads/SQLs/runs (N). `report_runs` (1)→ `run_stages` (N)→ `final_commissions` (N, one per recipient)→ then EV (`ev_disburse`, N) **or** POS (`pos_disbursement`, 1). **EV and POS are mutually exclusive per report** (app-enforced: `is_ev_disbursement` and `is_pos_disbursement` never both true).
 
 ## 6.4 The Five-Step Wizard
 
-Steps 1–2 set up the report shell and its data; **Steps 3–4 build the IR** (`report_setups.definition`); Step 5 reviews, compiles, and (optionally) schedules. Each step has its own save endpoint so the wizard can be left and resumed from a draft.
+Steps 1–2 set up the shell + data; **Steps 3–4 build the IR**; Step 5 reviews, compiles, schedules. Each step has its own save endpoint (resume from draft).
 
-### 6.4.1 Step 1 — Basic Details
+**Step 1 — Basic Details.** Creates the draft `report_setups` row and returns its `id` (keys the rest of the wizard). Fields: Report Name (unique system-wide), Report Type, Commission Cycle, Channel (type), Start/End Date; **Recurrent** switch → `is_recurrent` + `recurrent_type` (1=Daily, 2=Weekly, 3=Monthly, 4=Quarterly, 5=Yearly); **Disbursement** radio EV *or* POS (EV → pick `ev_disbursement_time` + `sms_content`); **Approval Flow** (`approval_flow_id`). First save sets `"IsSetupComplete" = false`, `is_report_stop = false`, and an IR skeleton (`definition.report` = name/channel/cycle/dates). **Validation:** report name unique → **409**; `end_date ≥ start_date` → **422**; EV XOR POS → **422** if both; recurrent ON needs a type → **422**; channel must exist → **422**.
 
-**Overview.** Creates the draft `report_setups` row and returns its `id`; that id keys the rest of the wizard.
+**Step 2 — Supporting Uploads.** Maker uploads CSVs (targets, slab tables, agent/exclusion lists, prior-run outputs for de-dup); each becomes a real DB table Steps 3–4 read as a `source` (the engine's #1 capability — external-config join). Drag-drop CSV, type preview with optional override. Mechanics + rules: **§5.6**. Removing an upload before lock drops the registry row + the physical table.
 
-**UI.** Fields: **Report Name** (unique, system-wide), **Report Type**, **Commission Cycle** (e.g. "Apr 2026"), **Channel** (dropdown of `channels` rows — the channel TYPE), **Start Date**, **End Date**. Two switches:
-- **Recurrent** — when ON, choose a frequency → sets `is_recurrent = true` and `recurrent_type int4` (1=Daily, 2=Weekly, 3=Monthly, 4=Quarterly, 5=Yearly).
-- **Disbursement** — choose **EV** or **POS** (radio, mutually exclusive). When **EV**: pick **EV Disbursement Time** (`ev_disbursement_time`) and enter **SMS Content** (`sms_content`). When **POS**: `is_pos_disbursement = true`.
+**Step 3 — Achievements (writes `definition.achievements[]`).** Builds one or more **Achievement blocks** (`ACH1`, `ACH2`…), each computing a per-recipient performance figure (Recharge %, GA %…). Each block picks a **source** (a `data_source`, a Step-2 `upload`, or another block) and is a pipeline of cards that map 1:1 to IR ops:
 
-The Maker also picks the **Approval Flow** (`approval_flow_id`, dropdown of `approval_flows`).
+- **Filter** (`filter`) — Column, Operator (Is one of / Equals / Not equals / >, <, ≥, ≤ / Between / Is null / Not null), Value(s); AND/OR; optional negate.
+- **Combine Data** (`combine`) — get-data-from (source/upload/block), join condition, how (inner/left/right/full), columns to bring.
+- **Summarize** (`summarize`) — group-by column(s), result name, calc (Count / Count Distinct / Sum / Avg / Min / Max). **Sets the block's grain.**
+- **Calculate** (`calculate`, mode `formula`/`ifcase`/`map`) — math formula, IF/CASE (slab/category/tier), or rounding/map.
+- **Modify** (`modify`) — cast / rename.
 
-**Data model.** Writes `report_setups`: `report_name`, `report_type`, `channel_type_id`, `commission_cycle`, `start_date`, `end_date`, `is_recurrent`, `recurrent_type`, `is_ev_disbursement`, `is_pos_disbursement`, `ev_disbursement_time`, `sms_content`, `approval_flow_id`. On first save the row is created with `is_setup_complete = false`, `status = 'ON'`, and an **IR skeleton** in `definition` (the `report` block only — name/channel/cycle/dates).
+Blocks can only be removed from the end. **Save** (`PUT …/achievements`) merges into `definition.achievements` (still `false`, no SQL yet). **Rules:** every block's last stage must be a `summarize` (grain = its group-by); block-to-block joins must match on the grain key (guardrail G1 at run time); all referenced columns must resolve (else **422** with `{blockId, stageIndex, message}`); ≥1 achievement block required before Final Save.
 
-**Process logic.**
-1. **Create draft** — `POST /reports` (basics only) inserts the row and returns **`{ id }`**, used by every later PUT.
-2. **Edit basics** — `PUT /reports/{id}/basics` updates the same row. The `report.*` portion of the IR (name / channel / cycle / dates) is mirrored into `definition.report` so the IR stays self-describing.
+**Step 4 — Incentives (writes `definition.incentives[]` + `final_mapping`).** Builds **Incentive blocks** (`INC1`…) turning achievements into a payout, then the **Final mapping** producing `final_commissions`. Same 5 cards. Typical shape: `combine` ACH1↔ACH2 on grain key → `ifcase` Category → `ifcase` Amount. **Final mapping** card → `definition.final_mapping` (`from_block`, `channel_code_column` = per-recipient payee key, `commission_amount_column`, `channel_scope`). At run time the engine groups `from_block` by `channel_code_column` and writes one `final_commissions` row per recipient (`channel_code` = grouped key, `channel_id` = the report's `channel_type_id`). **Save** (`PUT …/incentives`). **Rules:** `from_block` must exist; the two mapped columns must exist in its outputs (else **422**); `channel_code_column` must be **unique per row** (one commission per recipient — guardrail G1); incentive blocks also end in `summarize`.
 
-**Validation / business rules.**
-- **BR3** report name unique system-wide → `ux_report_setups_report_name` → **409** on duplicate.
-- **BR4** `end_date >= start_date` → **422**.
-- **EV/POS mutually exclusive** (`is_ev_disbursement` XOR `is_pos_disbursement`) → **422** if both set.
-- **Recurrent ON requires** a valid `recurrent_type` → **422** if missing.
-- **Channel must exist** in `channels` → else **422**.
+**Step 5 — Review / Run / Schedule.** Read-only summary + final-block outputs. **Final Save** runs the Draft→Final transition (§6.5: validate IR → compile to `section_wise_report_sqls` → `"IsSetupComplete" = true`). Then **Demo Run**, **Submit for Approval**, or **Schedule** (§6.9, §6.6).
 
-### 6.4.2 Step 2 — Supporting Uploads
+## 6.5 Save / Publish State Machine
 
-**Overview.** The Maker uploads CSV files (targets, slab tables, agent lists, exclusion lists, prior-run outputs for de-dup). Each confirmed file becomes a **real DB table** that Steps 3–4 can read as a `source` — the engine's #1 capability (external-config join). Ingestion mechanics are specified in §5.7 (CSV→DB ingestion).
+Driven by `"IsSetupComplete"`, the presence of `section_wise_report_sqls` rows, and approval progress (`report_approvals.overall_status`, §7). The list status label is derived (§6.2).
 
-**UI.** Drag-drop or browse CSV (first row = headers). Multiple files allowed, each listed with serial no., file name, generated source name, and **Remove** (before save). A preview shows the first rows with **auto-detected column types**; the Maker may override a type, and any value not matching its type is flagged as a warning (does not block).
+| State | Flag / approval | Allowed |
+|---|---|---|
+| **DRAFT** | `"IsSetupComplete" = false`, no SQL | Edit any step; Save as Draft; soft-delete. No SQL/demo/approval. |
+| **FINAL-SAVED** | `true`, SQL populated, no `report_approvals` | Edit (→ re-validate + regenerate SQL); Demo Run; Submit for Approval. |
+| **APPROVAL PENDING** | `overall_status` = 1 (Pre) or 3 (Post) | Editable — any IR edit re-validates, **regenerates** SQL, and voids the in-flight approval (→ 0). |
+| **APPROVED (LOCKED)** | `overall_status` = 2 (Pre Approved) / 4 (Post Approved) | **No IR edits.** Run Now / Schedule / Demo / Clone / Stop-Start only. |
+| **REJECTED / DRAFT-FOR-EDIT** | `overall_status` = 0 | Approver rejected (comment required); Maker edits + resubmits → restarts the pending phase. |
 
-**Data model.** On confirm, one **`report_supporting_uploads`** row per file: `report_setup_id`, `db_schema`, `db_table_name`, `object_bucket`, `object_key`, `file_name`, `row_count`, `uploaded_at`, `uploaded_by`. `ix_report_supporting_uploads_report_setup` indexes the FK; the ingestion routine ensures the generated table name is unique within the report.
+**Transitions:** Draft Save persists fragments (no validate/compile). **Final Save** (`POST …/final-save`): (a) validate IR against the annex schema + semantics (every block ends in `summarize`; columns resolve; `final_mapping` targets exist; grain-join) → **422** on failure (nothing compiled); (b) publish `report.saved` → SQL Generator builds SQL per stage with **SQLGlot (AST, no string concat)** and replaces `section_wise_report_sqls` transactionally; (c) set `"IsSetupComplete" = true`. **Submit** (`POST …/submit`) needs `true` + a bound flow → opens one `report_approvals` row (`overall_status = 1`, first level). **Edit while pending** regenerates SQL + voids approval (→ 0). **Final approval → LOCKED** (event from §7): `overall_status` → 2 or 4; wizard PUTs + `final-save` then return **409**. **Reject** (from §7): `overall_status = 0`; Maker edits + resubmits.
 
-**Process logic.**
-1. `POST /reports/{id}/uploads` (multipart) → BE stages the object in SeaweedFS (`object_bucket`/`object_key`), sanitises identifiers, infers types, creates a physical table (`db_schema`.`db_table_name`), bulk-loads it via `COPY`, records `row_count`, and writes the `report_supporting_uploads` row (§5.7.5).
-2. The new table is now selectable as a `source` of type `upload` in Steps 3–4 (referenced by `db_table_name`).
-
-**Validation / business rules.** Per §5.7 ingestion rules. Removing an upload before the report is locked deletes the registry row and the physical table.
-
-### 6.4.3 Step 3 — Achievements (builds the IR `achievements[]`)
-
-**Overview.** The Maker builds one or more **Achievement blocks** (`ACH1`, `ACH2`, …), each computing a performance figure per recipient (e.g. Recharge %, GA %). **This step writes `definition.achievements[]` of the IR.**
-
-**UI.** For each block: pick a **source** (a registered `data_source`, a Step-2 `upload`, or another existing achievement block). The block is a pipeline of expandable cards in order:
-- **Filter** — Column, Operator (Is one of / Equals / Not equals / Greater than / Less than / ≥ / ≤ / Between / Is null / Not null), Value(s); AND/OR combine; optional negate.
-- **Combine Data** — Get-Data-From (data source / upload / existing block); join condition (current column = other column); how (inner / left / right / full); columns to bring.
-- **Summarize** — group-by column(s), result column name, calculation (Count / Count Distinct / Sum / Avg / Min / Max). **This sets the block's grain.**
-- **Calculate** — Math Formula, IF/CASE (slab / category / tier), or rounding/map.
-- **Modify** — cast / rename a column.
-
-The block's **Outputs panel** lists the columns it produces. Blocks can only be removed **from the end**.
-
-**Data model / IR mapping.** Each card maps **directly** to an IR stage op: Filter→`filter`, Combine Data→`combine`, Summarize→`summarize`, Calculate→`calculate` (mode `formula`/`ifcase`/`map`), Modify→`modify`. The block object (`block_id`, `source`, `stages[]`, `output_grain`, `outputs[]`) is the annex Block (`IR_Schema_and_MultiKPI_Join.md` §2–§3). The Maker's blocks are persisted into `report_setups.definition.achievements[]`.
-
-**Process logic.**
-1. The FE builds each block's `stages[]` as the Maker adds cards.
-2. **Save Step 3** — `PUT /reports/{id}/achievements` with `{ achievements: [...blocks] }`; the backend merges this into `definition.achievements` and persists (still `is_setup_complete = false`, **no SQL yet**).
-3. **Reference-resolution check** (on save and again at Final Save): every column a stage refers to must exist in the prior stage's output or in a joined block/source; **the last stage of every block must be a `summarize`** (grain rule). Failures ⇒ **422** with a per-block, per-stage message.
-
-**Validation / business rules.** Each block ends in `summarize` → `output_grain` = its `group_by`. A block-to-block join must match on the grain key; guardrail **G1** (pre-join uniqueness) runs at execute time. All referenced columns must resolve; unknown column ⇒ 422. At least one achievement block is required before Final Save.
-
-### 6.4.4 Step 4 — Incentives (builds the IR `incentives[]` + `final_mapping`)
-
-**Overview.** The Maker builds one or more **Incentive blocks** (`INC1`, …) that turn achievement(s) into a payout per recipient, then defines the **Final mapping** that produces `final_commissions`. **This step writes `definition.incentives[]` and `definition.final_mapping`.**
-
-**UI.** The same five cards as Step 3. An incentive block reads one or more **achievement** blocks (or a data source / upload); an existing incentive can feed another. Typical shape: `combine` ACH1↔ACH2 on the grain key → `calculate/ifcase` Category → `calculate/ifcase` Amount. The **Final mapping** card maps the chosen block's columns onto the commission output: **Channel Code column** (the per-recipient payee key) and **Commission Amount column**, grouped per recipient.
-
-**Data model / IR mapping.** Incentive blocks → `definition.incentives[]`. The Final mapping → `definition.final_mapping` (`from_block`, `channel_code_column`, `commission_amount_column`, `channel_scope`). At run time the engine groups `from_block` by `channel_code_column` and writes one `final_commissions` row per recipient — `channel_code` = that grouped key, `channel_id` = the report's `channel_type_id`.
-
-**Process logic.**
-1. **Save Step 4** — `PUT /reports/{id}/incentives` with `{ incentives: [...blocks], final_mapping: {...} }`; backend merges into `definition.incentives` + `definition.final_mapping` (still `is_setup_complete = false`).
-2. Same reference-resolution and grain checks as Step 3.
-
-**Validation / business rules.** `final_mapping.from_block` must reference an existing block; the two mapped columns must exist in that block's outputs ⇒ else 422. `final_mapping.channel_code_column` must be **unique per row** in `from_block` (one commission per recipient) — verified by guardrail **G1**. Incentive blocks obey the same grain rule (end in `summarize`).
-
-### 6.4.5 Step 5 — Review / Run / Schedule (Success)
-
-**Overview.** Review the whole setup, perform the **Final Save** (validate the IR + compile to SQL), then choose: go back to Reports, **Demo Run**, **submit for Approval**, or **Schedule**.
-
-**UI.** Read-only summary of Steps 1–4 + the Outputs of the final block. Buttons: **Final Save**, then (after a successful Final Save) **Demo Run**, **Submit for Approval**, and **Schedule for Later**. A **Success** confirmation screen offers **Back to Reports** / **Schedule for Later**.
-
-**Process logic.** Final Save triggers the Draft→Final transition in §6.5 (validate IR → SQL Generator compiles into `section_wise_report_sqls` → `is_setup_complete = true`). Scheduling and Run-Now are detailed in §6.9 and §6.6.
-
----
-
-## 6.5 Report Save / Publish State Machine
-
-The lifecycle is driven by three things: the **`is_setup_complete`** flag (wizard finished + SQL compiled), the presence of **`section_wise_report_sqls`** rows, and the **approval progress** in `report_approvals` / `report_approval_details` (§7). The report-list status label is **derived** from approval progress (§6.2); there is no separate stored status string for the approval phase beyond `report_approvals.overall_status`.
-
-| State | Flag / approval | Meaning | What's allowed |
-|---|---|---|---|
-| **DRAFT** | `is_setup_complete = false`, no `section_wise_report_sqls` | Saved, IR may be incomplete. **No SQL, no demo, no approval.** | Edit any step; Save as Draft; soft-delete. |
-| **FINAL-SAVED** | `is_setup_complete = true`, `section_wise_report_sqls` populated, no `report_approvals` yet | IR validated and compiled. | Edit (→ re-validate + regenerate SQL); **Demo Run**; **Submit for Approval**. |
-| **APPROVAL PENDING** | `report_approvals.overall_status` = 1 (Pre Approval Pending) or 3 (Post Approval Pending) | Submitted; walking the flow levels. | **Editable** — any IR edit re-validates and **regenerates** `section_wise_report_sqls`, and voids the in-flight approval (back to status 0). |
-| **APPROVED (LOCKED)** | `overall_status` = 2 (Pre Approved) / 4 (Post Approved) | Final approval done. | **No IR edits.** Run Now, Schedule, Demo, Clone, Stop/Start only. |
-| **REJECTED / DRAFT-FOR-EDIT** | `overall_status` = 0 (Pending for Editing & Resubmission) | An approver rejected (BR7 comment required); bounced back to the Maker. | Maker edits and resubmits → restarts the pending phase. |
-
-**Transition logic:**
-
-1. **Draft Save** (`POST /reports`, `PUT /reports/{id}/{step}`) — persists basics / IR fragments. Does **not** validate the full IR and does **not** generate SQL. Keeps `is_setup_complete = false`.
-2. **Final Save** (`POST /reports/{id}/final-save`):
-   - **(a) Validate IR** against the annex JSON Schema + semantic checks (every block ends in `summarize`; all column references resolve; `final_mapping` targets exist; grain-join rule). On failure ⇒ **422**; nothing is compiled, `is_setup_complete` stays false.
-   - **(b) Compile** — publish `report.saved`; the Python **SQL Generator** builds SQL per stage with **SQLGlot (AST, no string concatenation)** and writes `section_wise_report_sqls` rows, replacing any prior compile transactionally (delete-then-insert under `ux_section_wise_report_sqls_setup_order`).
-   - **(c)** Set **`is_setup_complete = true`**. The report is now FINAL-SAVED: Demo-runnable and approval-eligible.
-3. **Submit for Approval** (`POST /reports/{id}/submit`) — requires `is_setup_complete = true` and a bound `approval_flow_id`. Opens one `report_approvals` row (`overall_status = 1` Pre Approval Pending, `current_level_order` = first level) — see §7. BR5 enforced when resolving level actors.
-4. **Edit while pending** — allowed; any IR change forces re-validation + SQL regeneration into `section_wise_report_sqls`, and voids the in-flight `report_approvals` (reset to `overall_status = 0`).
-5. **Final Approval → LOCKED** (event from §7) — `overall_status` advances to 2 (Pre Approved) or 4 (Post Approved). The report is LOCKED: wizard PUTs and `final-save` return **409**. Only Run Now / Schedule / Demo / Clone / Stop-Start remain.
-6. **Reject** (event from §7) — `overall_status = 0`; Maker notified, edits, resubmits.
-
-> **SQL freeze vs. setup edits.** `section_wise_report_sqls` holds the *current* compiled SQL. A **run** does not read it live — §6.6 step 4 **snapshots** it into `run_stages`, so editing the setup after a run starts never affects a run already in flight (decision D2).
-
----
+> **SQL freeze:** a run does not read `section_wise_report_sqls` live — §6.6 step 4 snapshots it into `run_stages`, so editing the setup after a run starts never affects a run in flight (D2).
 
 ## 6.6 Run Execution Lifecycle
 
-Connects `report_setups` → `section_wise_report_sqls` → `report_runs` → `run_stages` → `final_commissions` → EV/POS. Runs are **single-at-a-time** with a priority queue (decision D1): **Run Now = high, Demo = mid, Schedule = low**. (Full async/worker mechanics are in §11.)
+Runs are **single-at-a-time** with a priority queue (D1): **Run Now = high, Demo = mid, Schedule = low**. (Worker mechanics in §11.)
 
-| # | Step | What happens | Tables touched |
+| # | Step | What happens | Tables |
 |---|---|---|---|
-| 1 | **Trigger** | Run Now (after full approval), Demo Run, or the Scheduler fires. Sets `run_type` (1=Demo / 2=Final) and `triggered_by` (`user_name`, or **NULL** for system/schedule). | — |
-| 2 | **Queue** | Publish `run.requested` to a priority queue (high / mid / low). The Executor processes **one run at a time** platform-wide (single advisory lock); others wait. | — |
-| 3 | **Create run** | Insert `report_runs` (`run_status = 'QUEUED'` → `'RUNNING'`, `started_at = now()`, `disburse_status = 'NONE'`). | `report_runs` |
-| 4 | **Snapshot section SQL** | Copy every `section_wise_report_sqls` row into `run_stages` (`sql_text` copied, `sort_order` from `stage_order`, `run_status = 0` Pending). **Freezes the SQL for this run.** | `run_stages` |
-| 5 | **Execute each stage** | Run each `run_stages.sql_text` sequentially under a **least-privilege** role, after an **execute-time allowlist re-parse** (D2: only SELECT/WITH/JOIN/aggregate/CASE + CREATE/DROP TEMP TABLE, bound literals, identifier whitelist). Each stage materialises a temp/output table → `output_table_name`. `run_status` walks 0→1→2/3. Guardrails G1 (pre-join uniqueness) / G2 (post-join fan-out). | `run_stages` |
-| 6 | **Export outputs** | Each succeeded stage is written as CSV to SeaweedFS; record `bucket`, `object_url`, `file_name`, `file_generated_at`, `document_type`. (Demo: powers per-stage row-count visibility, G3.) | `run_stages` |
-| 7 | **Write final commissions** | The **trusted backend path** (not generated SQL) reads the final block's output, groups by `final_mapping.channel_code_column`, and inserts one `final_commissions` row per recipient — `channel_id` = the report's `channel_type_id` (constant), `channel_code` = the grouped recipient key, `commission_amount` rounded. Idempotent: `INSERT … ON CONFLICT DO NOTHING` on `ux_final_commissions_run_code (report_run_id, channel_code)`. G4 reconciliation (disbursed total == sum of block outputs). | `final_commissions` |
-| 8 | **Cleanup** | Drop all temp tables; set each `run_stages.cleanup_status = 1` (Cleaned). Set `report_runs.run_status = 'SUCCEEDED'` (`ended_at`), or `'FAILED'`. | `run_stages`, `report_runs` |
-| 9 | **Disbursement** (FINAL + fully approved only) | EV: enqueue payout → `ev_disburse` per recipient + SMS. POS: build CSV → `pos_disbursement`. `report_runs.disburse_status` walks `NONE → PENDING → DONE/FAILED`. EV/POS mutually exclusive. (Full chain in §10.) | `ev_disburse` **or** `pos_disbursement`, `report_runs` |
+| 1 | **Trigger** | Run Now (after full approval), Demo, or Scheduler fires. Sets `run_type` (1=Demo/2=Final), `triggered_by` (user_name or NULL for system). | — |
+| 2 | **Queue** | Publish `run.requested` to a priority queue. The Executor runs **one at a time** platform-wide (single advisory lock); others wait. | — |
+| 3 | **Create run** | Insert `report_runs` (`run_status` 0→1, `started_at`, `disburse_status = 'NONE'`). | `report_runs` |
+| 4 | **Snapshot SQL** | Copy every `section_wise_report_sqls` row into `run_stages` (`sql_text` copied, `sort_order` from `stage_order`, `run_status = 0`). **Freezes SQL for this run.** | `run_stages` |
+| 5 | **Execute stages** | Run each `sql_text` sequentially under a **least-privilege** role after an **execute-time allowlist re-parse** (D2: only SELECT/WITH/JOIN/aggregate/CASE + CREATE/DROP TEMP TABLE, bound literals, identifier whitelist). Each stage materialises a temp/output table → `output_table_name`; `run_status` 0→1→2/3. Guardrails G1 (pre-join uniqueness) / G2 (post-join fan-out). | `run_stages` |
+| 6 | **Export outputs** | Each succeeded stage → CSV in SeaweedFS (`bucket`, `object_url`, `file_name`, `file_generated_at`, `document_type`). (Demo: powers per-stage row-count visibility, G3.) | `run_stages` |
+| 7 | **Write final commissions** | The **trusted backend path** (not generated SQL) reads the final block's output, groups by `final_mapping.channel_code_column`, inserts one `final_commissions` row per recipient (`channel_id` = constant type, `channel_code` = grouped key, `commission_amount` rounded). Idempotent: `INSERT … ON CONFLICT DO NOTHING` on UNIQUE `(report_run_id, channel_code)`. G4 reconciliation (disbursed total == sum of block outputs). | `final_commissions` |
+| 8 | **Cleanup** | Drop temp tables; set each `run_stages.cleanup_status`; set `report_runs.run_status` = 2 (Completed) + `ended_at`, or 3 (Failed). | `run_stages`, `report_runs` |
+| 9 | **Disbursement** (Final + fully approved only) | EV: enqueue payout → `ev_disburse` per recipient + SMS. POS: build CSV → `pos_disbursement`. `disburse_status` walks NONE → PENDING → DONE/FAILED. (Chain in §10.) | `ev_disburse` **or** `pos_disbursement` |
 
-**Failure / recovery.** A failed stage sets `run_stages.run_status = 3` (Failed), aborts the run, sets `report_runs.run_status = 'FAILED'`, and **still runs cleanup**. **No `final_commissions` is written on failure** (no partial payout). **Stale-run recovery:** because only one run executes at a time, a `report_runs` row left `RUNNING` after an Executor crash is detected (no active lease), marked `FAILED`, its temp tables dropped, and the queue resumes. Re-running creates a **new** `report_runs` row (runs are never resumed mid-way).
-
-**Idempotency of disbursement.** Step 9 is guarded by `ux_ev_disburse_run_code (report_run_id, channel_code)` on `ev_disburse` and `ux_pos_disbursement_run (report_run_id)` on `pos_disbursement`, all written `ON CONFLICT DO NOTHING` (at-most-once payout per recipient per run; see §6.11 and §10).
-
----
+**Failure / recovery.** A failed stage sets `run_stages.run_status = 3`, aborts the run, sets `report_runs.run_status = 3`, and **still runs cleanup**. **No `final_commissions` on failure** (no partial payout). **Stale run:** a row left Running (1) after an Executor crash is detected (no active lease), marked Failed, temp tables dropped, queue resumes. Re-running creates a **new** `report_runs` row (runs are never resumed mid-way).
 
 ## 6.7 Demo Run
 
-A Demo Run exercises the full compile→execute pipeline **without approval and without disbursement** — so the Maker can verify numbers and catch fan-out before submitting.
+Exercises the full compile→execute pipeline **without approval and without disbursement**, so the Maker can verify numbers and catch fan-out before submitting.
 
-- Requires **FINAL-SAVED** (`is_setup_complete = true`, `section_wise_report_sqls` rows exist). Available in any state from FINAL-SAVED onward (including LOCKED).
-- `run_type = 1` (Demo); `triggered_by` = the Maker's `user_name`; never disburses; `report_runs.disburse_status` stays `'NONE'`.
-- A Demo writes `final_commissions` for the demo run id (so the Maker sees per-recipient results) but **never** triggers Step 9.
-- **Demo SKIPS all pre-run checks** (see §6.10) — it does not require approval, a past end date, or completed ETL. It is a sandbox preview.
-- **G3 visibility:** the Demo run surfaces `run_stages.output_table_name` row counts after every stage in the Run Log, so unexpected row multiplication is visible **before** any real run.
-
----
+- Requires FINAL-SAVED; available in any state from there (incl. LOCKED). `run_type = 1`; `triggered_by` = the Maker; `disburse_status` stays `'NONE'`; **never** triggers Step 9.
+- Writes `final_commissions` for the demo run id (Maker sees results) but **skips all pre-run checks** (§6.10) — no approval / period / ETL needed.
+- **G3:** per-stage `output_table_name` row counts show in the Run Log, so unexpected row multiplication is visible before any real run.
 
 ## 6.8 Clone
 
-Clone copies a whole report setup into a **new draft**.
-- **Copies:** basics, the full `definition` IR (all blocks/references), EV/POS settings, recurrence, and the `approval_flow_id` binding.
-- **Does NOT copy:** uploaded files (`report_supporting_uploads`), `section_wise_report_sqls`, past runs, approvals, or disbursements.
-- The new report starts in **DRAFT** (`is_setup_complete = false`) with a **new, unique `report_name`** (the Maker must supply/confirm a non-colliding name; BR3).
-- Because uploads are not copied, any IR `source` of type `upload` is flagged in the new draft as "needs re-upload" until re-added in Step 2.
+Copies a whole setup into a **new draft**.
 
-**Endpoint:** `POST /reports/{id}/clone` → returns the new draft `{ id }` (201).
-
----
+- **Copies:** basics, the full `definition` IR, EV/POS settings, recurrence, `approval_flow_id`.
+- **Does NOT copy:** uploads, `section_wise_report_sqls`, past runs, approvals, disbursements.
+- Starts in DRAFT with a **new unique `report_name`** (Maker confirms a non-colliding name). Any IR `upload` source is flagged "needs re-upload" until re-added in Step 2.
+- `POST /reports/{id}/clone` → new draft `{ id }` (201).
 
 ## 6.9 Schedule
 
-Only the **Maker (owner)** or **Administrator** can create / edit / cancel a schedule, and **every change is audited** (BR9 → an `audit_logs` row per call).
+Only the **Maker (owner)** or **Administrator** can create/edit/cancel a schedule, and **every change is audited** (an `audit_logs` row per call).
 
-- A schedule requires the report to be **fully approved** (LOCKED).
-- **Non-recurrent** report: runs **once** at a single scheduled date/time. **Recurrent** report: runs repeatedly on its `recurrent_type` frequency between `run_start_date` and `run_end_date`.
-- Scheduled runs enter the queue at **low** priority and set **`triggered_by = NULL`** (system-triggered).
-- **Report Stop/Start** toggles `report_setups.status` (`ON`/`STOP`); a `STOP` report's scheduled runs do not fire. Toggling is audited.
-
-**SCHEDULE VALIDATION (2026-06-16 decision):** the **schedule run date must be ≥ the report `end_date`**. A commission report can only be run after its measurement period has ended, so any schedule date earlier than `end_date` is rejected with **422**. This is checked on `POST /reports/{id}/schedules` for both the single date (non-recurrent) and the `run_start_date` (recurrent).
-
-**Endpoint:** `POST /reports/{id}/schedules` (create / edit / cancel) — Maker/Admin only; writes `run_start_date`/`run_end_date`, registers the Hangfire job, and writes an `audit_logs` row.
-
----
+- Requires the report **fully approved (LOCKED)**.
+- **Non-recurrent** → runs once at one date/time. **Recurrent** → runs on its `recurrent_type` frequency between `run_start_date` and `run_end_date`.
+- Scheduled runs enter the queue at **low** priority with **`triggered_by = NULL`**.
+- **Stop/Start** toggles `is_report_stop` (true = stopped → scheduled runs don't fire). Audited.
+- **Schedule date ≥ report `end_date`** (a report can only run after its measurement period ends) — checked on `POST …/schedules` for the single date and the recurrent `run_start_date`; else **422**.
 
 ## 6.10 Pre-Run Checks (Final runs only)
 
-Before a **Scheduled** or **Run-Now FINAL** run is allowed to enqueue, **all** of the following must pass; otherwise the trigger is rejected (403/409/422) and **no `report_runs` row is created**. A **Demo run SKIPS every one of these checks** (§6.7).
+Before a **Scheduled** or **Run-Now FINAL** run enqueues, all must pass, else the trigger is rejected and **no `report_runs` row is created**. A **Demo run skips every check**.
 
-1. **Report period ended** — `report_setups.end_date <= today`. A FINAL run cannot start before the measurement window closes. Else **422**.
-2. **Setup approval fully done** — the report is fully approved (`report_approvals.overall_status` = 2 Pre Approved or 4 Post Approved as applicable to its flow). Else **403** (precursor to BR8 — money only moves after full approval).
-3. **Source ETL complete** — every **system data source** used in the IR (every `source.type = "data_source"`) has its ETL finished **up to the report `end_date`** (the prepared source tables are loaded through the report period). Else **422** ("source `<table>` not loaded through `<end_date>`").
+1. **Period ended** — `end_date ≤ today`. Else **422**.
+2. **Fully approved** — `overall_status` = 2 or 4 (money only moves after full approval). Else **409 NOT_APPROVED** (an illegal-transition precondition; `403` is reserved for role denials).
+3. **Source ETL complete** — every `data_source` used has ETL loaded up to `end_date`. Else **422**.
+4. **Active** — `is_report_stop = false`. Else **409**.
+5. **Compiled** — `section_wise_report_sqls` rows exist. Else **409**.
+6. **Uploads present** — every IR `upload` source has a `report_supporting_uploads` row. Else **422**.
+7. **Single-run guard** — no run for this report already Pending/Running (duplicate click) → **409**.
 
-Additional structural gates also apply to any FINAL run:
-4. **Active** — `report_setups.status = 'ON'`. Else **409**.
-5. **Compiled** — `section_wise_report_sqls` rows exist (`is_setup_complete = true`). Else **409**.
-6. **Sources present** — every IR `upload` source has a `report_supporting_uploads` row. Missing upload ⇒ **422**.
-7. **Single-run guard** — no run for this report is already `QUEUED`/`RUNNING` (duplicate Run-Now click ⇒ **409**).
-
-> A **Demo** run requires only the structural gates 5–6 and is subject to no period/approval/ETL checks.
-
----
+> A Demo run needs only gates 5–6.
 
 ## 6.11 Idempotency
 
-| Concern | Constraint / mechanism |
+| Concern | Mechanism |
 |---|---|
-| **Run creation** | Not auto-deduplicated, but the single-run priority queue (D1) + Executor lease means only one run per report executes at a time; a duplicate Run-Now while a run is `QUEUED`/`RUNNING` ⇒ **409**. |
-| **Per-stage snapshot** | `ux_run_stages_run_order` = UNIQUE(`run_id`, `sort_order`) on `run_stages`. |
-| **Final commission output** | `ux_final_commissions_run_code` = UNIQUE(`report_run_id`, `channel_code`); written `ON CONFLICT DO NOTHING`. The recipient key is **`channel_code`**, not `channel_id` (which is the constant report channel TYPE). |
-| **EV disbursement** | `ux_ev_disburse_run_code` = UNIQUE(`report_run_id`, `channel_code`); `ON CONFLICT DO NOTHING`. |
-| **POS disbursement** | `ux_pos_disbursement_run` = UNIQUE(`report_run_id`) — one CSV handoff per run; `ON CONFLICT DO NOTHING`. |
-| **Compile** | Re-running Final Save rebuilds `section_wise_report_sqls` transactionally (delete-then-insert under `ux_section_wise_report_sqls_setup_order`). |
+| Run creation | Single-run queue + Executor lease → one run/report at a time; duplicate Run-Now while Pending/Running → **409**. |
+| Final commission output | UNIQUE `(report_run_id, channel_code)`, `ON CONFLICT DO NOTHING`. Recipient key is `channel_code` (not `channel_id`, the constant type). |
+| EV disbursement | UNIQUE `(report_run_id, channel_code)`, `ON CONFLICT DO NOTHING`. |
+| POS disbursement | UNIQUE `(report_run_id)` — one CSV handoff per run, `ON CONFLICT DO NOTHING`. |
+| Compile | Final Save rebuilds `section_wise_report_sqls` transactionally (UNIQUE `(report_setup_id, stage_order)`). |
 
-Together with BR8 (disburse only after full approval), these constraints guarantee **at-most-once payout per recipient per run**.
+Together with "disburse only after full approval", these guarantee **at-most-once payout per recipient per run**.
 
----
+> The EV/POS/run-stage UNIQUE constraints are the idempotency design; the real schema (§3) ships the `section_wise_report_sqls` and `final_commissions` ones — add the EV/POS ones as DB UNIQUE indexes, or the trusted write path enforces the same.
 
 ## 6.12 API Endpoints
 
-All paths under **`/api/v1`**. JWT on every request. Standard error envelope and HTTP codes. Role column: **M** = Maker (owner), **A** = Administrator, **C** = Checker.
+All under `/api/v1`, JWT required. Role: **M** = Maker (owner), **A** = Admin, **C** = Checker.
 
 | Method | Path | Purpose | Role | Success |
 |---|---|---|---|---|
-| GET | `/reports` | List with status / period / channel filter + search + paging | M/A/C | 200 |
-| POST | `/reports` | **Create draft (Step 1 basics)** → returns draft id | M/A | 201 |
-| GET | `/reports/{id}` | Read full report + IR + derived status | M/A/C | 200 |
+| GET | `/reports` | List (filter + search + page) | M/A/C | 200 |
+| POST | `/reports` | Create draft (Step 1) → draft id | M/A | 201 |
+| GET | `/reports/{id}` | Read report + IR + derived status | M/A/C | 200 |
 | PUT | `/reports/{id}/basics` | Save Step 1 | M/A | 200 |
-| POST | `/reports/{id}/uploads` | Register + ingest a supporting CSV | M/A | 201 |
-| DELETE | `/reports/{id}/uploads/{uploadId}` | Remove a supporting upload (before lock) | M/A | 204 |
-| PUT | `/reports/{id}/achievements` | **Save Step 3 (writes IR `achievements[]`)** | M/A | 200 |
-| PUT | `/reports/{id}/incentives` | **Save Step 4 (writes IR `incentives[]` + `final_mapping`)** | M/A | 200 |
-| POST | `/reports/{id}/final-save` | **Validate IR → compile SQL → populate `section_wise_report_sqls`, set `is_setup_complete=true`** | M/A | 200 |
-| POST | `/reports/{id}/submit` | Submit for approval (FINAL-SAVED → Pre Approval Pending) | M/A | 200 |
+| POST | `/reports/{id}/uploads` | Ingest a supporting CSV | M/A | 201 |
+| DELETE | `/reports/{id}/uploads/{uploadId}` | Remove an upload (pre-lock) | M/A | 204 |
+| PUT | `/reports/{id}/achievements` | Save Step 3 (IR `achievements[]`) | M/A | 200 |
+| PUT | `/reports/{id}/incentives` | Save Step 4 (IR `incentives[]` + `final_mapping`) | M/A | 200 |
+| POST | `/reports/{id}/final-save` | Validate IR → compile SQL → `"IsSetupComplete"=true` | M/A | 200 |
+| POST | `/reports/{id}/submit` | Submit for approval (alias of `/submit-approval`, §7.5) | M/A | 201 |
 | POST | `/reports/{id}/clone` | Clone to a new draft | M/A | 201 |
-| POST | `/reports/{id}/runs` | Run Now (FINAL) or Demo Run (DEMO) | M/A | 202 |
-| POST | `/reports/{id}/schedules` | Create / edit / cancel a schedule | M/A | 200 |
-| PATCH | `/reports/{id}/status` | Stop / Start (`status` ON/STOP) | M/A | 200 |
-| GET | `/runs/{id}` | Read a run with all `run_stages` rows | M/A/C | 200 |
-| GET | `/runs/{id}/stages/{stageId}/output` | Download a stage output (CSV) | M/A/C | 200 |
+| POST | `/reports/{id}/runs` | Run Now (Final) or Demo | M/A | 202 |
+| POST | `/reports/{id}/schedules` | Create / edit / cancel schedule | M/A | 200 |
+| PATCH | `/reports/{id}/status` | Stop / Start (`is_report_stop`) | M/A | 200 |
+| GET | `/runs/{id}` | Read a run + its `run_stages` | M/A/C | 200 |
+| GET | `/runs/{id}/stages/{stageId}/output` | Download a stage output CSV | M/A/C | 200 |
 
-**`POST /reports`** — create draft (Step 1).
+**`POST /reports`** (Step 1):
 ```json
 // Request
 { "reportName": "RSO Campaign GA Recharge LSO Apr26", "reportType": "COMMISSION",
@@ -1502,99 +1077,30 @@ All paths under **`/api/v1`**. JWT on every request. Standard error envelope and
   "startDate": "2026-04-01", "endDate": "2026-04-30",
   "isRecurrent": false, "recurrentType": null,
   "disbursement": "EV", "evDisbursementTime": "18:00:00",
-  "smsContent": "Apnar commission {amount} BDT credit kora hoyeche.",
-  "approvalFlowId": 3 }
+  "smsContent": "Apnar commission {amount} BDT credit kora hoyeche.", "approvalFlowId": 3 }
 // Response 201
-{ "id": 1187, "isSetupComplete": false, "status": "ON", "derivedStatus": "Draft" }
+{ "id": 1187, "isSetupComplete": false, "isReportStop": false, "derivedStatus": "Draft" }
 ```
-Errors: **409** (duplicate `reportName`), **422** (end<start; both EV+POS; recurrent without type; unknown channel), **403**.
+Errors: **409** (duplicate name), **422** (end<start; EV+POS both; recurrent without type; unknown channel), **403**.
 
-**`PUT /reports/{id}/achievements`** — Step 3 (carries the IR achievements).
-```json
-// Request
-{ "achievements": [ /* annex Block objects: ACH1, ACH2, ... */ ] }
-// Response 200
-{ "id": 1187, "blockCount": 2, "valid": true, "issues": [] }
-```
-Errors: **422** (`{ blockId, stageIndex, message }` — column reference unresolved, block does not end in `summarize`, schema-invalid block), **409** (report LOCKED).
+**`PUT /reports/{id}/achievements`** — `{ "achievements": [ /* annex Block objects */ ] }` → `200 { id, blockCount, valid, issues }`. Errors **422** (`{blockId, stageIndex, message}` — unresolved column, block not ending in `summarize`, schema-invalid), **409** (LOCKED).
 
-**`PUT /reports/{id}/incentives`** — Step 4 (IR incentives + final mapping).
-```json
-// Request
-{ "incentives": [ /* INC1, ... */ ],
-  "finalMapping": { "fromBlock": "INC1", "channelCodeColumn": "RSO_CODE",
-    "commissionAmountColumn": "Incentive", "channelScope": "RSO" } }
-// Response 200
-{ "id": 1187, "incentiveCount": 1, "finalMappingValid": true, "issues": [] }
-```
-Errors: **422** (`fromBlock`/columns not found; grain-join violation), **409** (LOCKED).
+**`PUT /reports/{id}/incentives`** — `{ "incentives": [...], "finalMapping": { "fromBlock": "INC1", "channelCodeColumn": "RSO_CODE", "commissionAmountColumn": "Incentive", "channelScope": "RSO" } }` → `200`. Errors **422** (`fromBlock`/columns not found; grain-join violation), **409** (LOCKED).
 
-**`POST /reports/{id}/final-save`** — validate + compile.
-```json
-// Request: {}
-// Response 200
-{ "id": 1187, "irValid": true, "stagesGenerated": 7,
-  "isSetupComplete": true, "demoRunnable": true }
-// Response 422 (nothing compiled, is_setup_complete stays false)
-{ "irValid": false, "issues": [
-    { "path": "achievements[1].stages[2]", "code": "COLUMN_NOT_FOUND",
-      "message": "TARGET not produced by ACH2" } ] }
-```
-Errors: **422** (IR invalid), **409** (LOCKED).
+**`POST /reports/{id}/final-save`** — body `{}` → `200 { id, irValid: true, stagesGenerated, isSetupComplete: true, demoRunnable: true }`. On invalid IR → **422** `{ irValid: false, issues: [{ path, code, message }] }` (nothing compiled). **409** (LOCKED).
 
-**`POST /reports/{id}/runs`** — Run Now / Demo.
-```json
-// Request
-{ "runType": "FINAL" }   // "FINAL" (run_type=2) | "DEMO" (run_type=1)
-// Response 202 (queued)
-{ "runId": 90412, "runType": "FINAL", "runStatus": "QUEUED", "queuePriority": "high" }
-```
-Errors (FINAL, from §6.10 pre-run checks): **403** (not fully approved), **422** (end_date>today, source ETL incomplete, missing upload), **409** (report STOP, not compiled, run already active). DEMO skips period/approval/ETL checks.
+**`POST /reports/{id}/runs`** — `{ "runType": "FINAL" | "DEMO" }` → `202 { runId, runType, runStatus, queuePriority }`. Errors (Final, §6.10): **403** (not approved), **422** (end>today / ETL incomplete / missing upload), **409** (stopped / not compiled / run active). Demo skips period/approval/ETL.
 
-**`POST /reports/{id}/schedules`** — schedule (Maker/Admin, audited).
-```json
-// Request
-{ "action": "CREATE",
-  "runStartDate": "2026-05-01T18:00:00Z", "runEndDate": "2026-05-31T18:00:00Z" }
-// Response 200
-{ "id": 1187, "scheduled": true,
-  "runStartDate": "2026-05-01T18:00:00Z", "runEndDate": "2026-05-31T18:00:00Z" }
-```
-Errors: **403** (not Maker/Admin), **409** (report not fully approved), **422** (schedule date < report `end_date`).
+**`POST /reports/{id}/schedules`** — `{ "action": "CREATE", "runStartDate": "...", "runEndDate": "..." }` → `200`. Errors **403** (not Maker/Admin), **409** (not fully approved), **422** (date < `end_date`).
 
-**`GET /runs/{id}`** — run detail.
+**`GET /runs/{id}`** → `200`:
 ```json
-// Response 200
-{ "runId": 90412, "reportId": 1187, "runType": "FINAL", "runStatus": "SUCCEEDED",
-  "disburseStatus": "DONE", "triggeredBy": "muntakim.r",
-  "startedAt": "2026-05-01T18:00:03Z", "endedAt": "2026-05-01T18:01:11Z",
-  "stages": [
-    { "sortOrder": 1, "runStatus": 2, "outputTableName": "tmp_ach1_filter_90412",
-      "fileName": "stage_1.csv", "objectUrl": "s3://salescom/runs/90412/stage_1.csv",
-      "cleanupStatus": 1 } ],
+{ "runId": 90412, "reportId": 1187, "runType": "FINAL", "runStatus": 2, "disburseStatus": "DONE",
+  "triggeredBy": "muntakim.r", "startedAt": "...", "endedAt": "...",
+  "stages": [ { "sortOrder": 1, "runStatus": 2, "outputTableName": "tmp_ach1_filter_90412",
+    "fileName": "stage_1.csv", "objectUrl": "s3://salescom/runs/90412/stage_1.csv", "cleanupStatus": 1 } ],
   "finalCommissionRowCount": 318 }
 ```
-
----
-
-## 6.13 Validation and Business Rules (summary)
-
-| Rule | Where enforced |
-|---|---|
-| **BR3** report name unique system-wide | `ux_report_setups_report_name` → **409** at Step-1 create; Clone forces a new unique name |
-| **BR4** `start_date <= end_date` | Step-1 validation → **422** |
-| **EV/POS mutually exclusive** | App guard (`is_ev_disbursement` XOR `is_pos_disbursement`) → **422** + pre-run |
-| **Recurrent needs a type** | App validation → **422** |
-| **IR must be schema-valid + grain-correct** | Final Save validation → **422** |
-| **Every block ends in `summarize`; block-joins on grain key** | Final Save + run guardrails G1–G2 |
-| **Schedule date ≥ report `end_date`** | Schedule endpoint check → **422** |
-| **Pre-run checks (FINAL only; Demo skips)**: end_date ≤ today; fully approved; source ETL complete to end_date | §6.10 → 403/409/422 |
-| **Run-Now only after full approval (BR8 precursor)** | Pre-run check 2 → **403** |
-| **Edit locked once fully/post-approved** | LOCKED state → wizard PUTs / final-save return **409** |
-| **Only Maker/Admin manages schedule; all changes audited (BR9)** | Schedule endpoint role check → **403** + `audit_logs` row |
-| **BR5** same user can't be maker + checker of a run | Enforced at submit/approval (§7) |
-| **No double-pay** | UNIQUE(report_run_id, channel_code) on `final_commissions` / `ev_disburse`; UNIQUE(report_run_id) on `pos_disbursement`; all `ON CONFLICT DO NOTHING` |
-| **No partial disbursement** | `final_commissions` written atomically by the trusted path; null / duplicate / unmapped `channel_code` = hard run failure |
 
 ---
 
@@ -1602,275 +1108,176 @@ Errors: **403** (not Maker/Admin), **409** (report not fully approved), **422** 
 
 ## 7.1 Overview
 
-Every commission report passes through a **maker-checker approval** before its money can move. The **Maker** (the Business User who created or last edited the report) builds and submits it; one or more **Checkers** (Approvers) review it **level by level** in strict order. Only after the last required level approves does the report become runnable (setup / pre-run approval) and, for non-recurrent reports, its run results become disbursable (result / post-run approval).
+Every commission report passes a **maker-checker approval** before its money can move. The **Maker** (creator / last editor) submits; one or more **Checkers** review **level by level** in strict order. Only after the last required level approves does the report become runnable (setup approval) and, for non-recurrent reports, its run results become disbursable (result approval).
 
-The approval engine is **flow-driven and reusable**. An Administrator defines a small library of named **Approval Flows** (`approval_flows`); each flow is an ordered list of **Levels** (`approval_flow_levels`); each level is staffed by one or more eligible **Users** (`approval_flow_level_users`) and carries an **`approval_type`** `int4` code that encodes *when in the lifecycle* the level acts:
+The engine is **flow-driven and reusable**: an Administrator defines named **Approval Flows** (`approval_flows`); each is an ordered list of **Levels** (`approval_flow_levels`); each level is staffed by **Users** (`approval_flow_level_users`) and carries a phase code **`approval_type`**:
 
-- **PRE_RUN** (`approval_type = 1`) — approve the **setup** (the wizard / IR configuration) **before** the report is allowed to run.
-- **POST_RUN** (`approval_type = 2`) — approve the **results** of a specific Final run **after** it produces `final_commissions`, and **before** disbursement.
+- **PRE_RUN** (`1`) — approve the **setup** (IR configuration) **before** the report may run.
+- **POST_RUN** (`2`) — approve the **results** of one specific Final run **after** it produces `final_commissions` and **before** disbursement.
 
-A report is bound to exactly one flow at creation/edit time (`report_setups.approval_flow_id`). When the report is submitted, the system opens **one** `report_approvals` row and walks it up the levels in ascending `level_order`. Each individual decision is permanently recorded in `report_approval_details`.
+A report binds exactly one flow (`report_setups.approval_flow_id`). On submit, the system opens **one** `report_approvals` row and walks it up the levels in ascending `level_order`; each decision is recorded in `report_approval_details`. (Phase is an int enum on `approval_flow_levels.approval_type`, no lookup table.)
 
-> **No `approval_type` lookup table.** Phase is an `int4` enum stored directly on `approval_flow_levels.approval_type` (`1 = PRE_RUN`, `2 = POST_RUN`). The app owns the code→meaning mapping (Appendix B).
-
-**`report_approvals.overall_status` (int4) is the single lifecycle driver** (2026-06-16 decision):
+**`report_approvals.overall_status` (int4) is the single lifecycle driver:**
 
 | Code | Meaning | When |
 |---|---|---|
-| **0** | Pending for Editing & Resubmission (Draft) | After a reject, or while the Maker is editing — the report is back with the Maker. |
+| **0** | Pending for Edit & Resubmission | After a reject, or while the Maker edits — back with the Maker. |
 | **1** | Pre Approval Pending | A PRE_RUN setup request is walking its levels. |
-| **2** | Pre Approved | All PRE_RUN levels passed; the report is runnable. |
+| **2** | Pre Approved | All PRE_RUN levels passed → report runnable. |
 | **3** | Post Approval Pending | A POST_RUN result request (for one Final run) is walking its levels. |
-| **4** | Post Approved | All POST_RUN levels passed; the run is cleared for disbursement. |
+| **4** | Post Approved | All POST_RUN levels passed → run cleared for disbursement. |
 
-Key locked behaviours (these resolve the contradictions in the earlier SRS/LLD):
+**Locked behaviours:**
 
 | Topic | Decision |
 |---|---|
-| **Reject destination** | A reject at **any** level returns the request to the **Maker** — *not* to the previous level. `overall_status` is set to **0** (Pending for Edit & Resubmission). |
-| **Resubmit** | The Maker fixes the report and resubmits; approval **restarts from level 1** with **full re-validation**. No "resume from where it failed." |
-| **Edit while pending** | Any edit to a report with a live pending request **voids** the in-flight progress and forces a restart from level 1 (status back to 0). A fully Pre-Approved setup is not editable (Edit hidden). |
-| **POST_RUN target** | A POST_RUN approval is tied to **one specific Final run**. (The `report_approvals` row's `overall_status` moves 2 → 3 → 4 for that run; identity of the run is carried on `report_runs`/the event.) |
-| **Recurrent reports** | Must use a **PRE_RUN-only** flow. Setup is approved once (status reaches 2); every later scheduled run executes and pays out automatically with no per-run approval. |
-| **Non-recurrent reports** | May use PRE_RUN and/or POST_RUN levels. After a Final run, the POST_RUN levels approve the **results** (status 3 → 4) before disbursement. |
-| **Demo run** | **Never** needs approval and **never** disburses. The orchestrator skips all approval logic for `run_type = 1` (Demo). |
-| **Segregation (BR5)** | The Maker = `COALESCE(report_setups.updated_by, report_setups.created_by)` can never be a Checker on the same report; one user occupies at most one level per request; no self-approval. |
-
----
+| **Reject destination** | A reject at **any** level returns the request to the **Maker** (not the previous level); `overall_status = 0`. |
+| **Resubmit** | Maker fixes + resubmits → approval **restarts from level 1** with full re-validation (no resume). |
+| **Edit while pending** | Any edit to a pending report **voids** the in-flight progress → restart from level 1 (status → 0). A Pre-Approved setup is not editable. |
+| **POST_RUN target** | A POST_RUN approval is tied to **one specific Final run** (carried on `report_runs`/the event). |
+| **Recurrent report** | Must use a **PRE_RUN-only** flow. Setup approved once (status 2); every later scheduled run pays out automatically. |
+| **Non-recurrent report** | May use PRE_RUN and/or POST_RUN. After a Final run, POST_RUN approves the results (3 → 4) before disbursement. |
+| **Demo run** | **Never** needs approval, **never** disburses; the orchestrator skips approval for `run_type = 1`. |
+| **Segregation** | The Maker (`COALESCE(report_setups.updated_by, created_by)`) can never be a Checker on the same report; one user occupies at most one level per request; no self-approval. |
 
 ## 7.2 UI
 
-Four screens under the **Approvals** area. The first three are **Administrator-only** flow setup; the fourth is the day-to-day **Approver** workspace.
+Four screens. The first three are **Administrator-only** flow setup; the fourth is the **Approver** workspace.
 
-**(a) Approval Flow list** — serial, flow name, description, row actions (Edit, Manage Levels, Deactivate). The **"Add a New Flow"** dialog asks for a **unique flow name** and a description. Backed by `approval_flows`.
+- **(a) Approval Flow list** — flow name, description, actions (Edit, Manage Levels, Deactivate). "Add Flow" asks a unique name + description (`approval_flows`).
+- **(b) Approval Level list** (inside a flow) — level name, **order** (unique whole number within the flow), **phase** (PRE_RUN / POST_RUN). "Add Level" asks name, order, phase; rendered sorted by `level_order` (`approval_flow_levels`).
+- **(c) Approval Level Users** (inside a level) — assigned approvers (full name, username, email), Add/Remove. Users come from synced `users`; the assignment stores `users.id` in `approval_flow_level_users.user_id` (`approval_flow_level_users`).
+- **(d) Approver queue** — the signed-in user's pending approvals: one card per `report_approvals` row sitting at a level they staff. Shows report name, Maker, **phase badge** (Setup / Result), submitted-at, **level X of N**, and for POST_RUN a results summary (recipient count, total, link to run detail + G3 row counts). Buttons **Approve** / **Reject** (comment **mandatory** on Reject). An **Approval History** view lists every decision.
 
-**(b) Approval Level list** (inside a flow) — serial, flow, level name, **order** (a unique whole number within the flow), the level's **phase** (PRE_RUN / POST_RUN, from `approval_flow_levels.approval_type`), actions (Edit, Manage Users, Remove). **"Add Level"** asks for level name, **order** (unique within the flow), and the phase. Levels render sorted by `level_order` ascending. Backed by `approval_flow_levels`.
-
-**(c) Approval Level User list** (inside a level) — serial, flow, level, and the assigned approver (full name, username, email), with Add/Remove. Users are looked up from the synced company directory (`users`); the assignment stores the **external** `users.user_id` (varchar) in `approval_flow_level_users.user_id`. Backed by `approval_flow_level_users`.
-
-**(d) Approver queue** — the signed-in user's **pending approvals**: one card per `report_approvals` row currently sitting at a level they staff. Each card shows report name, Maker, **phase badge** (Setup / Result, derived from the current level's `approval_type`), submitted-at, **level X of N**, and — for POST_RUN — a results summary (recipient count, total amount, link to the run detail and its per-stage row counts / G3 output). Buttons: **Approve**, **Reject**. A **comment box is mandatory** on Reject (BR7). An **Approval History** view lists every `report_approval_details` row.
-
-The Maker sees status on the **Report list / detail** as a **derived label** (§7.4.8) computed from `report_approvals.current_level_order` + `report_approval_details` (e.g. *"Approved by L1, now Pending at L2"*). **Edit is hidden once a setup is Pre-Approved** (`overall_status >= 2`); **Run Now / schedule activation** are enabled only after Pre Approval (status 2); **Disburse** runs only after Post Approval (status 4), or immediately for recurrent PRE_RUN-only reports.
-
----
+The Maker sees a **derived status label** on the report list/detail (§7.4.8). **Edit is hidden once Pre-Approved** (`overall_status ≥ 2`); **Run Now / schedule** enabled after Pre Approval (2); **Disburse** only after Post Approval (4), or immediately for recurrent PRE_RUN-only reports.
 
 ## 7.3 Data Model
 
-All tables are defined in the canonical DDL (§3.6). The approval module uses six tables (no `approval_type` lookup table — phase is an int enum):
+Six tables (§3.6):
 
-| Table | Role in approval |
+| Table | Role |
 |---|---|
-| **`approval_flows`** | A reusable named flow. `flow_name`, `description`. Bound to a report via `report_setups.approval_flow_id`. |
-| **`approval_flow_levels`** | One ordered level in a flow. `level_order` (sequential ascending, unique per flow via `ux_approval_flow_levels_flow_order`), `level_name`, and **`approval_type` (int4 phase: 1=PRE_RUN, 2=POST_RUN)**. A single flow can mix PRE_RUN and POST_RUN levels. |
-| **`approval_flow_level_users`** | Eligible approvers per level. `user_id` is the **external** `users.user_id` (varchar — stored by value, **not** a FK to `users.id`). UNIQUE(`approval_flow_level_id`, `user_id`). |
-| **`report_approvals`** | The **one live approval instance** per report. Holds `report_setup_id`, `approval_flow_id`, `current_level_order`, **`overall_status` (int4 0–4)**, `initiated_by`, `initiated_at`. |
-| **`report_approval_details`** | One row per decision: `approval_request_id` (→ `report_approvals.id`), `level_order`, **`approval_status` (int4: 1=Approved, 2=Rejected)**, `comments` (required on reject — BR7), `approval_by`, `approval_at`. The permanent audit trail and the source of the derived status label. |
+| **`approval_flows`** | A reusable named flow (`flow_name`, `description`); bound via `report_setups.approval_flow_id`. |
+| **`approval_flow_levels`** | One ordered level. `level_order` (unique per flow), `level_name`, **`approval_type` (1=PRE_RUN, 2=POST_RUN)**. A flow may mix both phases. |
+| **`approval_flow_level_users`** | Eligible approvers per level. **`user_id int8` FK → `users.id`**; UNIQUE `(approval_flow_level_id, user_id)`. |
+| **`report_approvals`** | The **one live instance** per report: `report_setup_id`, `approval_flow_id`, `current_level_order`, **`overall_status` (0–4)**, `initiated_by`, `initiated_at`. |
+| **`report_approval_details`** | One row per decision: `approval_request_id` (→ `report_approvals.id`), `level_order`, **`approval_status` (1=Approved, 2=Rejected)**, `remarks` (required on reject), `approval_by`, `approval_at`. The audit trail + source of the derived label. |
 
-> **Naming note.** The FK column on `report_approval_details` keeps its physical name **`approval_request_id`** even though it now references the renamed `report_approvals.id`. Only the table name (`approval_requests` → `report_approvals`, `approval_decisions` → `report_approval_details`) and the three decision columns (`decision` → `approval_status`, `decided_by` → `approval_by`, `decided_at` → `approval_at`) changed in the 2026-06-16 decision.
+**Phase resolution.** For a live row, the **active phase = the `approval_type` of the level at `current_level_order`**. The engine never assumes phase from anything else (this lets one flow mix phases): `overall_status = 1` ⇒ current level is PRE_RUN; `= 3` ⇒ POST_RUN.
 
-**Phase resolution rule.** For a live `report_approvals` row, the **active phase = the `approval_type` of the `approval_flow_levels` row at `current_level_order`** (looked up via `approval_flow_id` + `current_level_order`). The engine never assumes phase from anything else — this is what lets one flow mix PRE_RUN and POST_RUN levels. Equivalently: `overall_status = 1` means the current level is a PRE_RUN level; `overall_status = 3` means it is a POST_RUN level.
+**Flow well-formedness** (checked at flow-save and at report Final-Save / binding): all PRE_RUN levels order strictly before all POST_RUN levels; each in-use level has ≥1 active user; a flow bound to a **recurrent** report must be **PRE_RUN-only**.
 
-**Flow well-formedness** (validated at flow-save and re-checked at report Final-Save / binding):
-- Within a flow, **all PRE_RUN levels (`approval_type=1`) must order strictly before all POST_RUN levels (`approval_type=2`)**.
-- Each in-use level must have **≥1 active user**.
-- A flow bound to a **recurrent** report (`report_setups.is_recurrent = true`) must be **PRE_RUN-only**.
-
-**One live instance.** A report has at most one `report_approvals` row in flight. A non-recurrent report with both phases uses **one row across its lifetime**: it walks PRE_RUN levels (status 1) → reaches Pre Approved (status 2); then after a Final run, the same row is advanced into the POST_RUN block (status 3) → Post Approved (status 4). The setup-vs-result distinction is the `overall_status` value and the phase of `current_level_order`.
-
----
+**One live instance.** A non-recurrent report with both phases uses **one row across its lifetime**: walks PRE_RUN (1) → Pre Approved (2); then after a Final run the same row advances into POST_RUN (3) → Post Approved (4).
 
 ## 7.4 Process Logic
 
-### 7.4.1 Flow setup (Administrator)
-1. Admin creates an `approval_flows` row (unique `flow_name`, description).
-2. Admin adds `approval_flow_levels` rows (`level_order` 1..N unique within the flow; each row's `approval_type` = 1 PRE_RUN or 2 POST_RUN).
-3. Admin assigns `approval_flow_level_users` rows per level (≥1 active user per level before the flow can be used); `user_id` = the external `users.user_id`.
-4. On save, the system runs **flow well-formedness** checks: all PRE_RUN levels precede all POST_RUN levels; each level has ≥1 user.
+**7.4.1 Flow setup (Admin).** Create an `approval_flows` row → add `approval_flow_levels` (order 1..N, each with a phase) → assign `approval_flow_level_users` (≥1 user per level, by `users.id`). On save, run well-formedness checks.
 
-### 7.4.2 Binding a flow to a report
-At report creation/edit the Maker picks `report_setups.approval_flow_id`. At **Final Save** (`is_setup_complete = true`): if `is_recurrent = true`, the bound flow **must be PRE_RUN-only** (else hard validation error `FLOW_NOT_WELLFORMED`). A flow with POST_RUN levels is only meaningful for non-recurrent reports.
+**7.4.2 Bind a flow.** The Maker picks `approval_flow_id` at create/edit. At Final Save, a recurrent report's flow must be **PRE_RUN-only** (else `FLOW_NOT_WELLFORMED`).
 
-### 7.4.3 Submit for approval (open the PRE_RUN setup request)
-Trigger: Maker clicks **Submit for Approval** on a report whose wizard is complete (`is_setup_complete = true`) and which has no live `report_approvals` row (or whose last one is `overall_status = 0`).
-1. **Segregation pre-check (BR5):** resolve the report's Maker = `COALESCE(report_setups.updated_by, report_setups.created_by)`. For **every** level of the bound flow, ensure the Maker is **not the only** eligible user (a Maker-only level would deadlock). If any level is Maker-only → reject submit `409 MAKER_IS_SOLE_APPROVER`.
-2. **Validate** IR shape (`definition`), flow well-formedness, BR4 dates, and EV/POS mutual exclusion.
-3. Open / reset the `report_approvals` row: `report_setup_id` = the report; `approval_flow_id` = bound flow; `current_level_order` = the **lowest** `level_order`; `overall_status = 1` (Pre Approval Pending); `initiated_by` = Maker `user_name`; `initiated_at = now()`. (If a row already exists at status 0, advance it back to status 1 and reset `current_level_order`; otherwise insert a new one.)
-4. Set `report_setups.status` to a "Pending Approval" value.
-5. Publish `approval.requested` → email level-1 users. Write `audit_logs` (`action_type = 2 Update`, `entity_name = 'report_approvals'`).
+**7.4.3 Submit (open the PRE_RUN setup request).** Maker clicks Submit on a completed report (`"IsSetupComplete" = true`) with no live instance (or one at status 0):
+1. **Segregation pre-check:** resolve the Maker; ensure no level is Maker-only (would deadlock) → else `409 MAKER_IS_SOLE_APPROVER`.
+2. **Validate** IR shape, flow well-formedness, dates, EV/POS exclusivity.
+3. Open/reset the `report_approvals` row: `current_level_order` = lowest, `overall_status = 1`, `initiated_by`/`initiated_at`. (Reuse an existing status-0 row, else insert.)
+4. Publish `approval.requested` → email level-1 users; write `audit_logs`.
 
-### 7.4.4 Acting on a request — Approve
-Trigger: an eligible user of the **current** level calls the decision endpoint with Approve.
-1. **Authorize:** caller must be listed in `approval_flow_level_users` for the level at `report_approvals.current_level_order` (matched by `users.user_id`). Else `403 NOT_CURRENT_LEVEL_APPROVER`.
-2. **Segregation (BR5):** caller ≠ Maker (`COALESCE(updated_by, created_by)`); caller must **not** already appear in `report_approval_details` for any earlier level of this instance. Else `409 SELF_OR_DUPLICATE_APPROVER`.
-3. **Sequential guard (BR6):** the request must be sitting at this level (`current_level_order` matches, under `SELECT … FOR UPDATE`); a higher level cannot pre-act. Else `409 STALE_LEVEL`.
-4. Insert `report_approval_details`: `approval_request_id` = the `report_approvals.id`, `level_order` = current, `approval_status = 1` (Approved), `comments` optional, `approval_by` = caller `user_name`, `approval_at = now()`.
+**7.4.4 Approve.** An eligible user of the **current** level calls the decision endpoint with Approve:
+1. **Authorize:** caller's `users.id` must be in `approval_flow_level_users` for the level at `current_level_order` → else `403 NOT_CURRENT_LEVEL_APPROVER`.
+2. **Segregation:** caller ≠ Maker; caller must not already appear in `report_approval_details` for an earlier level → else `409 SELF_OR_DUPLICATE_APPROVER`.
+3. **Sequential guard:** request must sit at this level (under `SELECT … FOR UPDATE`) → else `409 STALE_LEVEL`.
+4. Insert `report_approval_details` (`approval_status = 1`, `approval_by`, `approval_at`).
 5. **Advance:**
-   - **If a next higher level exists within the current phase** (next `approval_flow_levels` row with same `approval_type`): set `current_level_order` = next order; `overall_status` stays 1 (PRE_RUN) or 3 (POST_RUN). Publish `approval.level.advanced` → email next-level users.
-   - **If this was the last PRE_RUN level:** set `overall_status = 2` (Pre Approved). The report is now **runnable**. Publish `approval.completed` (phase=2). (Recurrent report → done; each scheduled Final run pays out automatically.)
-   - **If this was the last POST_RUN level:** set `overall_status = 4` (Post Approved). The run is cleared for payout. Publish **`approval.completed`** (phase=4) carrying the `report_run_id` → the **DisbursementWorker** consumes it (gated by `is_ev_disbursement` / `is_pos_disbursement` and `ev_disbursement_time`), and the API sets `report_runs.disburse_status = 'PENDING'` (canonical chain, §10).
-6. Write `audit_logs` (`action_type = 2`, `entity_name = 'report_approvals'`).
+   - Next level in the same phase → set `current_level_order` = next; `overall_status` stays 1 or 3; publish `approval.level.advanced` → email next-level users.
+   - Last **PRE_RUN** level → `overall_status = 2` (Pre Approved); report runnable; publish `approval.completed` (phase 2). (Recurrent → done.)
+   - Last **POST_RUN** level → `overall_status = 4` (Post Approved); publish `approval.completed` (phase 4) carrying `report_run_id` → the **DisbursementWorker** consumes it; the API sets `report_runs.disburse_status = 'PENDING'` (§10).
+6. Write `audit_logs`.
 
-### 7.4.5 Triggering the POST_RUN (result) request
-For a **non-recurrent** report whose flow has POST_RUN levels, after a **Final** `report_runs` row finishes (`run_status = 'SUCCEEDED'`, `final_commissions` written):
-1. The Run Orchestrator advances the report's `report_approvals` row from `overall_status = 2` (Pre Approved) to **`3`** (Post Approval Pending), sets `current_level_order` = the flow's **first POST_RUN level** (`approval_type = 2`) order, and records the run being approved (`report_run_id` on the event / on `report_runs`).
-2. `report_runs.disburse_status` stays `'NONE'` until POST_RUN fully approves.
-3. Publish `approval.requested` (result phase) → email first POST_RUN level users.
-4. The request advances via §7.4.4 until its final POST_RUN level publishes `approval.completed`.
+**7.4.5 Trigger the POST_RUN (result) request.** For a non-recurrent report with POST_RUN levels, after a Final run finishes (`run_status = 2`, `final_commissions` written): the orchestrator advances the row from `overall_status = 2` to **3**, sets `current_level_order` = the first POST_RUN level, records the run being approved, keeps `disburse_status = 'NONE'`, and publishes `approval.requested` (result phase). It then advances via 7.4.4. *(Recurrent reports have no POST_RUN block — on each Final run the orchestrator sets `disburse_status = 'PENDING'` directly, still gated on `overall_status = 2`.)*
 
-> For a **recurrent** report (PRE_RUN-only flow), no POST_RUN block exists; on each scheduled Final run completion the orchestrator sets `report_runs.disburse_status = 'PENDING'` directly (still BR8-gated on the report being Pre Approved, `overall_status = 2`).
+**7.4.6 Reject (→ Maker). Phase-aware — a result-reject never voids the setup approval.** An eligible current-level user calls Reject **with a non-empty comment**:
+1. Authorize + segregation as in 7.4.4.
+2. Insert `report_approval_details` (`approval_status = 2`, `remarks` required); publish `approval.rejected` → email the Maker; `audit_logs`.
+3. **Return to the Maker, depending on the phase:**
+   - **PRE_RUN reject** (was status 1) → `overall_status = 0`, `current_level_order` back to the first level. The setup becomes editable. On resubmit, re-enter at **status 1** with full re-validation (restart from level 1).
+   - **POST_RUN reject** (was status 3) → the **setup approval (status 2) is kept** — it is **never** dropped to status 1/PRE. Record the reject, set `current_level_order` back to the **first POST_RUN level**, and `disburse_status = 'NONE'` (no disbursement). The Maker fixes the issue and re-runs a new Final run (or edits), which re-opens the POST block at **status 3** — setup approval is never re-required.
 
-### 7.4.6 Reject (→ Maker, restart from level 1)
-Trigger: an eligible current-level user calls the decision endpoint with Reject **and a non-empty comment** (BR7).
-1. Authorize + segregation as in §7.4.4 (steps 1–3).
-2. Insert `report_approval_details`: `approval_status = 2` (Rejected), `comments` **required** (non-empty), `approval_by`, `approval_at`.
-3. **Return the whole instance to the Maker:** set `report_approvals.overall_status = 0` (Pending for Editing & Resubmission) and `current_level_order` back to the lowest level order. The instance does **not** drop to the previous level.
-   - Reject in the **PRE_RUN** block (was status 1) → the setup becomes editable again; `report_setups.status` reflects "Rejected — pending edit".
-   - Reject in the **POST_RUN** block (was status 3) → `report_runs.disburse_status = 'NONE'`; **no disbursement**. The Maker may re-run (new Final run) or edit the setup.
-4. Publish `approval.rejected` → email the Maker (level, decider, comment). Write `audit_logs` (`action_type = 2`).
-5. **Resubmit = restart from level 1 with full re-validation.** When the Maker resubmits (§7.4.3), the instance is reset to `overall_status = 1` at the lowest level; the system re-runs **all** validations (IR validity, flow well-formedness, segregation, BR4 dates, EV/POS flags) before reopening. No partial-approval state is carried forward — only the `report_approval_details` audit history persists.
+**7.4.7 Edit-while-pending (void + restart).** Editing a not-yet-Pre-Approved report (`overall_status < 2`; Edit hidden once ≥ 2) voids the in-flight progress: set `overall_status = 0`, append a system reject detail (`approval_by = 'SYSTEM'`, `remarks = 'Voided: setup edited while pending'`), reset `current_level_order`. The Maker must Submit again (restart at level 1). *(Editing a report with a POST_RUN-pending run, status 3, voids that result approval the same way and returns `disburse_status` to `'NONE'`.)*
 
-### 7.4.7 Edit-while-pending (void + restart)
-If the Maker (or Admin) edits a report while its `report_approvals` row is in a PRE_RUN-pending state (`overall_status = 1`):
-1. The edit is allowed only while not yet Pre-Approved (`overall_status < 2`; Edit hidden once `>= 2`).
-2. On save, the in-flight progress is **voided**: set `overall_status = 0`, append a system `report_approval_details` row (`approval_status = 2`, `approval_by = 'SYSTEM'`, `comments = 'Voided: setup edited while pending'`), reset `current_level_order` to the lowest level.
-3. The Maker must **Submit for Approval again**, restarting from level 1 (§7.4.3) with full re-validation. This guarantees no one ever approves a stale configuration.
+**7.4.8 Derived status label.** Computed (not stored) from `report_approvals.current_level_order` + `report_approval_details` (newest decision per level), using `overall_status` + the level's phase:
 
-> Editing the setup of a non-recurrent report that already has a POST_RUN-pending run (`overall_status = 3`) also invalidates that pending result approval — the orchestrator voids it the same way (back to status 0) and the run's `disburse_status` returns to `'NONE'`.
-
-### 7.4.8 Derived report-list status label
-The Report list/detail status shown to the Maker is **computed, not stored**. It is derived from `report_approvals.current_level_order` + the `report_approval_details` rows (newest decision per level), using `overall_status` and the level's `approval_type`. Examples:
-
-| Situation | Derived label |
+| Situation | Label |
 |---|---|
-| Status 1, L1 approved, now at L2 | **"Approved by L1, now Pending at L2"** |
-| Status 3 (post-run), L2 rejected, returned to L1 | **"Rejected by L2, now Pending at L1"** |
-| Status 0, L1 rejected | **"Rejected by L1, now pending for edit & resend"** |
-| Status 1, no decisions yet | **"Pending at L1"** |
-| Status 2 | **"Pre Approved"** |
-| Status 4 | **"Post Approved"** |
+| Status 1, L1 approved, now at L2 | "Approved by L1, now Pending at L2" |
+| Status 3, L2 rejected, returned to L1 | "Rejected by L2, now Pending at L1" |
+| Status 0, L1 rejected | "Rejected by L1, now pending for edit & resend" |
+| Status 1, no decisions | "Pending at L1" |
+| Status 2 / 4 | "Pre Approved" / "Post Approved" |
 
-Algorithm: take `current_level_order` = N; the highest level with an Approved `report_approval_details` row = K (if any). If the latest decision was a Reject (`approval_status = 2`) → `"Rejected by L{rejectLevel}, now Pending at L{N}"` (or `"…, now pending for edit & resend"` when `overall_status = 0`). Else if K exists → `"Approved by L{K}, now Pending at L{N}"`. Else → `"Pending at L{N}"`. Terminal labels map directly from `overall_status` (2 = Pre Approved, 4 = Post Approved). The FE may render this from the `GET /approvals/{id}` payload or a precomputed `statusLabel` field on the report-list DTO.
+The FE may render this from `GET /approvals/{id}` or a precomputed `statusLabel` on the report-list DTO.
 
-### 7.4.9 Demo runs
-A `run_type = 1` (Demo) run **never** touches `report_approvals` and **never** disburses. The Run Orchestrator skips all approval logic for Demo. Demo also skips the pre-run checks; a Final run requires the report to be **Pre Approved** (`overall_status >= 2`).
-
----
+**7.4.9 Demo runs.** A Demo (`run_type = 1`) never touches `report_approvals` and never disburses. A Final run requires the report Pre Approved (`overall_status ≥ 2`).
 
 ## 7.5 API Endpoints
 
-Base path `/api/v1`. All require a valid JWT (3-hour inactivity logout); role enforced per endpoint. Standard error envelope. Money fields are `numeric(18,4)` BDT, serialized as strings.
+Base `/api/v1`, JWT required, role enforced per endpoint. Money fields are `numeric(18,4)` BDT (serialized as strings).
 
-### Flow / level / user administration (Administrator only)
+### Flow / level / user administration (Administrator)
 
-**`GET /approval-flows`** — list flows. Query: `?isActive=true`, `?page=`, `?pageSize=`. Response `200`:
+**`GET /approval-flows`** — list (`?isActive`, paging) → `{ items:[{ id, flowName, levelCount, phases:["PRE_RUN","POST_RUN"], description }], totalItems, totalPages }`.
+
+**`POST /approval-flows`** — `{ flowName, description }` → `201 { id, flowName }`. `409 DUPLICATE_FLOW_NAME`, `422 VALIDATION_ERROR`.
+
+**`GET /approval-flows/{id}`** — flow + levels + users:
 ```json
-{ "items": [ { "id": 4, "flowName": "EV Standard 2-Level",
-  "levelCount": 2, "phases": ["PRE_RUN","POST_RUN"], "description": "Setup + result for EV reports" } ], "total": 7 }
-```
-Roles: Administrator. Status: `200`.
-
-**`POST /approval-flows`** — create. Request:
-```json
-{ "flowName": "EV Standard 2-Level", "description": "Setup + result for EV reports" }
-```
-Response `201`: `{ "id": 4, "flowName": "EV Standard 2-Level" }`. Roles: Administrator. Status: `201`; `409 DUPLICATE_FLOW_NAME`; `422 VALIDATION_ERROR`.
-
-**`GET /approval-flows/{id}`** — flow detail with levels + users. Response `200`:
-```json
-{ "id": 4, "flowName": "EV Standard 2-Level", "description": "Setup + result for EV reports",
+{ "id": 4, "flowName": "EV Standard 2-Level", "description": "...",
   "levels": [
     { "id": 11, "levelOrder": 1, "levelName": "Setup Review", "approvalType": 1, "phase": "PRE_RUN",
-      "users": [ { "userId": "rahim.u", "fullName": "Rahim Uddin", "email": "rahim@bl.net" } ] },
+      "users": [ { "userId": 41, "userName": "rahim.u", "fullName": "Rahim Uddin", "email": "rahim@bl.net" } ] },
     { "id": 12, "levelOrder": 2, "levelName": "Result Sign-off", "approvalType": 2, "phase": "POST_RUN",
-      "users": [ { "userId": "karim.h", "fullName": "Karim Hasan", "email": "karim@bl.net" } ] } ] }
+      "users": [ { "userId": 52, "userName": "karim.h", "fullName": "Karim Hasan", "email": "karim@bl.net" } ] } ] }
 ```
-Roles: Administrator. Status: `200`; `404 FLOW_NOT_FOUND`.
+`404 FLOW_NOT_FOUND`.
 
-**`POST /approval-flows/{id}/levels`** — add a level. Request:
-```json
-{ "levelName": "Result Sign-off", "levelOrder": 2, "approvalType": 2 }
-```
-`approvalType` ∈ `1` (PRE_RUN) | `2` (POST_RUN). Response `201`: `{ "id": 12, "levelOrder": 2 }`. Roles: Administrator. Status: `201`; `409 DUPLICATE_LEVEL_ORDER`; `422 PHASE_ORDER_VIOLATION` (a PRE_RUN level ordered after a POST_RUN level).
+**`POST /approval-flows/{id}/levels`** — `{ levelName, levelOrder, approvalType }` (`approvalType` 1|2) → `201 { id, levelOrder }`. `409 DUPLICATE_LEVEL_ORDER`, `422 PHASE_ORDER_VIOLATION` (a PRE_RUN level ordered after a POST_RUN level).
 
-**`PUT /approval-flows/{flowId}/levels/{levelId}`** — edit level name / order / approvalType. Request `{ "levelName": "...", "levelOrder": 2, "approvalType": 2 }`. Response `200`. Status: `200`; `409 DUPLICATE_LEVEL_ORDER`; `422 PHASE_ORDER_VIOLATION`; `404`.
+**`PUT /approval-flows/{flowId}/levels/{levelId}`** — edit name/order/type → `200`. Same `409`/`422`, `404`.
 
-**`DELETE /approval-flows/{flowId}/levels/{levelId}`** — remove a level. Response `204`. Status: `204`; `409 LEVEL_IN_USE` (a live `report_approvals` row sits on it or a report binds the flow); `404`.
+**`DELETE /approval-flows/{flowId}/levels/{levelId}`** → `204`. `409 LEVEL_IN_USE`, `404`.
 
-**`POST /approval-flows/{flowId}/levels/{levelId}/users`** — assign approvers. Request:
-```json
-{ "userIds": ["rahim.u", "karim.h"] }
-```
-(`userIds` are external `users.user_id` values.) Response `200`: `{ "added": 2 }`. Status: `200`; `422 UNKNOWN_OR_INACTIVE_USER`; `409 DUPLICATE_USER_ON_LEVEL`.
+**`POST /approval-flows/{flowId}/levels/{levelId}/users`** — `{ "userIds": [41, 52] }` (values = `users.id`) → `200 { added }`. `422 UNKNOWN_OR_INACTIVE_USER`, `409 DUPLICATE_USER_ON_LEVEL`.
 
-**`DELETE /approval-flows/{flowId}/levels/{levelId}/users/{userId}`** — unassign. Response `204`. Status: `204`; `409 LAST_USER_ON_LEVEL` (would leave 0 active users while the flow is in use); `404`.
+**`DELETE /approval-flows/{flowId}/levels/{levelId}/users/{userId}`** → `204`. `409 LAST_USER_ON_LEVEL`, `404`.
 
 ### Submission, queue & decisions (Maker / Approver)
 
-**`POST /reports/{reportId}/submit-approval`** — Maker submits a completed report's setup (§7.4.3). Request `{}`. Response `201`:
+**`POST /reports/{reportId}/submit-approval`** — Maker submits a completed report's setup (7.4.3). Body `{}` → `201 { approvalId, reportSetupId, phase:"PRE_RUN", currentLevelOrder:1, overallStatus:1 }`. `409 ALREADY_PENDING`, `409 MAKER_IS_SOLE_APPROVER`, `422 FLOW_NOT_WELLFORMED | IR_INVALID | SETUP_INCOMPLETE`, `404`.
+> §6.12's `POST /reports/{id}/submit` is the same handler — implement once, alias the route.
+
+**`GET /approvals/queue`** — the signed-in user's pending cards (`?phase`, paging):
 ```json
-{ "approvalId": 88, "reportSetupId": 17, "phase": "PRE_RUN", "currentLevelOrder": 1, "overallStatus": 1 }
+{ "items": [ { "approvalId": 88, "reportSetupId": 17, "reportName": "EV Recharge June",
+  "phase": "POST_RUN", "overallStatus": 3, "reportRunId": 540, "levelOrder": 2, "levelCount": 2,
+  "maker": "rahim.u", "submittedAt": "...",
+  "resultSummary": { "recipientCount": 312, "totalAmount": "1875400.0000", "currency": "BDT" } } ],
+  "totalItems": 3, "totalPages": 1 }
 ```
-Roles: Maker (the report's Maker), Administrator. Status: `201`; `409 ALREADY_PENDING` (a row already at status 1/3); `409 MAKER_IS_SOLE_APPROVER`; `422 FLOW_NOT_WELLFORMED` / `IR_INVALID` / `SETUP_INCOMPLETE` (`is_setup_complete = false`); `404`.
+Membership matched on the caller's `users.id`.
 
-> **Note:** §6.12 exposes the same submission action as `POST /reports/{id}/submit`. Both routes map to the single Submit-for-Approval handler (§7.4.3); `submit-approval` is the canonical name used by the Approvals module. Implement one handler, alias the route.
-
-**`GET /approvals/queue`** — the signed-in user's pending approvals (one card per `report_approvals` row at a level they staff). Query: `?phase=PRE_RUN|POST_RUN`, `?page=`, `?pageSize=`. Response `200`:
+**`GET /approvals/{approvalId}`** — header + decision trail + derived label:
 ```json
-{ "items": [
-  { "approvalId": 88, "reportSetupId": 17, "reportName": "EV Recharge June",
-    "phase": "POST_RUN", "overallStatus": 3, "reportRunId": 540, "levelOrder": 2, "levelCount": 2,
-    "maker": "rahim.u", "submittedAt": "2026-06-16T09:12:00Z",
-    "resultSummary": { "recipientCount": 312, "totalAmount": "1875400.0000", "currency": "BDT" } } ], "total": 3 }
+{ "approvalId": 88, "reportSetupId": 17, "reportName": "EV Recharge June", "approvalFlowId": 4,
+  "currentLevelOrder": 2, "overallStatus": 3, "phase": "POST_RUN", "reportRunId": 540, "maker": "rahim.u",
+  "initiatedAt": "...", "statusLabel": "Approved by L1, now Pending at L2",
+  "decisions": [ { "levelOrder": 1, "approvalStatus": 1, "approvalBy": "salim.k", "approvalAt": "...", "remarks": null } ] }
 ```
-Roles: Approver, Administrator. (Membership matched on `users.user_id`. A Maker calling this sees only rows where they are a staffed approver.) Status: `200`.
+Roles: any party (Maker, staffed Approver, Admin). `404`.
 
-**`GET /approvals/{approvalId}`** — full request header + decision trail + derived label. Response `200`:
-```json
-{ "approvalId": 88, "reportSetupId": 17, "reportName": "EV Recharge June",
-  "approvalFlowId": 4, "currentLevelOrder": 2, "overallStatus": 3, "phase": "POST_RUN",
-  "reportRunId": 540, "maker": "rahim.u", "initiatedAt": "2026-06-16T09:12:00Z",
-  "statusLabel": "Approved by L1, now Pending at L2",
-  "decisions": [
-    { "levelOrder": 1, "approvalStatus": 1, "approvalBy": "salim.k", "approvalAt": "2026-06-16T10:01:00Z", "comments": null } ] }
-```
-Roles: any party to the request (Maker, any staffed Approver, Administrator). Status: `200`; `404`.
+**`POST /approvals/{approvalId}/decisions`** — Approve or Reject (7.4.4 / 7.4.6). `{ "approvalStatus": 2, "comments": "Cluster GA target wrong for North." }` (`approvalStatus` 1|2; `comments` **required** when 2). Response (approve, not final): `{ approvalId, approvalStatus:1, newOverallStatus:3, currentLevelOrder:2, phase, completed:false }`; final-level approve → `newOverallStatus` 2 or 4 + `completed:true`; reject → `newOverallStatus:0, returnedToMaker:true`. Errors `400 COMMENT_REQUIRED`, `403 NOT_CURRENT_LEVEL_APPROVER`, `409 SELF_OR_DUPLICATE_APPROVER`, `409 REQUEST_NOT_IN_PROGRESS`, `409 STALE_LEVEL`, `404`.
+> **Concurrency:** the decision handler re-reads the row `FOR UPDATE` and re-checks `current_level_order` + `overall_status`; if either changed (another approver acted, or an edit-void fired) → `409 STALE_LEVEL` / `REQUEST_NOT_IN_PROGRESS`. Prevents double-advancing.
 
-**`POST /approvals/{approvalId}/decisions`** — Approve or Reject (§7.4.4 / §7.4.6). Request:
-```json
-{ "approvalStatus": 2, "comments": "Cluster GA target wrong for North." }
-```
-`approvalStatus` ∈ `1` (Approve) | `2` (Reject). `comments` **required and non-empty** when `approvalStatus = 2` (BR7). Response `200` (approve, not final level):
-```json
-{ "approvalId": 88, "approvalStatus": 1, "newOverallStatus": 3, "currentLevelOrder": 2, "phase": "POST_RUN", "completed": false }
-```
-On final-level approve: `"newOverallStatus": 4, "completed": true` (POST_RUN) or `"newOverallStatus": 2, "completed": true` (PRE_RUN). On reject: `"newOverallStatus": 0, "completed": false, "returnedToMaker": true`.
-Roles: Approver (must staff the current level), Administrator. Status: `200`; `400 COMMENT_REQUIRED`; `403 NOT_CURRENT_LEVEL_APPROVER`; `409 SELF_OR_DUPLICATE_APPROVER` (BR5); `409 REQUEST_NOT_IN_PROGRESS` (status not 1/3); `409 STALE_LEVEL`; `404`.
+**`GET /reports/{reportId}/approval-history`** — every decision across the report's lifetime (setup + result), newest first → `{ items:[{ levelOrder, approvalStatus, approvalBy, approvalAt, remarks, phase }], totalItems, totalPages }`. `404`.
 
-**`GET /reports/{reportId}/approval-history`** — every `report_approval_details` row across the report's approval lifetime (setup + result decisions), newest first. Response `200`: `{ "items": [ { "levelOrder", "approvalStatus", "approvalBy", "approvalAt", "comments", "phase" } ], "total": N }`. Roles: Maker (own report), Approver (if a party), Administrator. Status: `200`; `404`.
-
-> **Optimistic concurrency.** The decision endpoint must be transactional: re-read the `report_approvals` row `FOR UPDATE` and re-check `current_level_order` + `overall_status`. If either changed since the caller loaded the card (another current-level user acted, or an edit-void fired), return `409 STALE_LEVEL` / `409 REQUEST_NOT_IN_PROGRESS`. This prevents double-advancing.
-
----
-
-## 7.6 Validation / Business Rules
-
-| ID | Rule | Where enforced |
-|---|---|---|
-| **BR5** | Maker (`COALESCE(report_setups.updated_by, report_setups.created_by)`) ≠ Checker on the same report; one user acts at most one level per request; no self-approval. | App: submit pre-check (`MAKER_IS_SOLE_APPROVER`) + decision check (`SELF_OR_DUPLICATE_APPROVER`) against `report_approval_details`. |
-| **BR6** | Approval is **sequential ascending** (`level_order`); a higher level cannot act before lower levels approved. | App: request exposes only `current_level_order`; `STALE_LEVEL` / `NOT_CURRENT_LEVEL_APPROVER` otherwise. `ux_approval_flow_levels_flow_order` guarantees unique order. |
-| **BR7** | Reject requires a non-empty comment. | App `400 COMMENT_REQUIRED`; `report_approval_details.comments` populated on every `approval_status = 2`. |
-| **BR8** | Disburse only after full approval. | DisbursementWorker consumes `approval.completed` only; `report_runs.disburse_status` reaches `'PENDING'` solely via the final POST_RUN approve (`overall_status = 4`) or the recurrent Pre-Approved (`overall_status = 2`) path. |
-| **BR9** | Only the Maker manages schedule; all approval / schedule / payout actions audited. | App role check + `audit_logs` row on every submit / approve / reject / void. |
-| Flow well-formed | All PRE_RUN levels (`approval_type=1`) precede all POST_RUN levels (`approval_type=2`); each in-use level has ≥1 active user; recurrent report ⇒ PRE_RUN-only flow. | Flow-save validation + report Final-Save binding check (`FLOW_NOT_WELLFORMED` / `PHASE_ORDER_VIOLATION`). |
-| One live instance | At most one live `report_approvals` row (status 1 or 3) per report. | App invariant; the orchestrator reuses the single row across PRE_RUN → POST_RUN. |
-| Reject → Maker | Reject sets `overall_status = 0` and returns to the Maker — **not** to the previous level. Resubmit restarts at level 1 with full re-validation. | App (§7.4.6); resolves the SRS §7.4 contradiction. |
-| Edit voids approval | Editing a not-yet-Pre-Approved report (`overall_status < 2`) voids the in-flight approval (`overall_status = 0`, system Reject detail row) → restart at level 1. A Pre-Approved setup (`>= 2`) is not editable. | App (§7.4.7). |
-| POST_RUN ⇄ run | A result approval (status 3 → 4) is bound to the specific Final run being approved; a run is disbursable only when its POST_RUN block reaches `overall_status = 4`. | App orchestrator + `approval.completed` carrying `report_run_id`. |
-| Demo exempt | Demo runs (`run_type = 1`) never open/advance an approval and never disburse. | Run Orchestrator skips approval for Demo. |
-| Phase from current level | Active phase = `approval_type` of the level at `current_level_order` (never assumed elsewhere). | App phase-resolution rule (§7.3). |
-| Derived status label | Report-list status is computed from `report_approvals.current_level_order` + `report_approval_details` (§7.4.8), not stored. | App (`statusLabel` in the report-list / approval-detail DTO). |
-
-**Cross-references:** approval tables and constraints — §3.6. Events `approval.requested` / `approval.level.advanced` / `approval.completed` / `approval.rejected` are the RabbitMQ contracts (§11), consumed by the Notification path and the **DisbursementWorker** (`approval.completed` → §10, gated by `report_setups.is_ev_disbursement` / `is_pos_disbursement` and `ev_disbursement_time`). Run lifecycle and the disbursement chain — §6 / §10.
+**Cross-references:** approval tables/constraints — §3.6. Events `approval.requested` / `.level.advanced` / `.completed` / `.rejected` are RabbitMQ contracts (§11), consumed by Notification and the **DisbursementWorker** (`approval.completed` → §10, gated by `is_ev_disbursement` / `is_pos_disbursement` + `ev_disbursement_time`).
 
 ---
 
@@ -1878,125 +1285,86 @@ Roles: Approver (must staff the current level), Administrator. Status: `200`; `4
 
 ## 8.1 Overview
 
-The **Dashboard** is the read-only landing screen after login. It gives each role a single, at-a-glance view of system activity: how many reports and runs exist and in what state, how much commission has been computed and disbursed, who logged in (and who failed), and short trends over time. It is **purely a read model** — it issues no writes and triggers no business action. Every figure it shows is derived from operational tables that other modules own:
-
-- `report_runs`, `run_stages` — run volume, success/failure, in-flight runs.
-- `final_commissions`, `ev_disburse`, `pos_disbursement` — money computed vs money paid.
-- `report_approvals`, `report_approval_details` — approval backlog (pending at each level).
-- `login_log` — sign-in success/failure (security card).
-- `audit_logs` — recent activity feed.
-
-Because it only reads, the Dashboard is **role-scoped** rather than role-gated: every role can open it, but each role sees a different slice of the same queries (§8.4).
+The **Dashboard** is the read-only landing screen after login. It gives each role an at-a-glance view: how many reports and runs exist and in what state, how much commission was computed vs disbursed, who logged in (and who failed), and short trends. It is **purely a read model** — no writes, no business action. Every figure derives from operational tables other modules own (`report_runs`, `run_stages`, `final_commissions`, `ev_disburse`, `pos_disbursement`, `report_approvals`, `report_approval_details`, `login_log`, `audit_logs`). Because it only reads, it is **role-scoped, not role-gated**: every role can open it but sees a different slice of the same queries (§8.4).
 
 ## 8.2 UI
 
-A single responsive page, three bands top to bottom:
+One responsive page, three bands:
 
-1. **KPI cards (top row)** — compact number tiles, each clickable to drill into the underlying list (filtered):
-   - **My Reports / Total Reports** — count of `report_setups` the user owns (Maker) or all (Admin), with a sub-count of `is_setup_complete = true`.
+1. **KPI cards** (clickable to drill into the filtered list):
+   - **My / Total Reports** — `report_setups` owned (Maker) or all (Admin), with a `"IsSetupComplete" = true` sub-count.
    - **Runs Today** — `report_runs` with `run_date::date = today`, split Demo (`run_type=1`) / Final (`run_type=2`).
-   - **Pending Approvals** — for an Approver, the count of `report_approvals` whose current level the user is eligible to act on; for Maker/Admin, total in-flight (`overall_status IN (1,3)`).
+   - **Pending Approvals** — Approver: count of `report_approvals` at a level they can act on; Maker/Admin: total in-flight (`overall_status IN (1,3)`).
    - **Commission This Cycle** — `SUM(final_commissions.commission_amount)` for the current `commission_cycle`.
-   - **Disbursed vs Pending** — paid (`ev_disburse.status='SUCCESS'` + POS `HANDED_OFF`) against `report_runs.disburse_status='PENDING'`.
-   - **Failed Runs (7d)** — `report_runs.run_status='FAILED'` in the last 7 days (red tile, links to the failures list).
-2. **Login-attempt card (security)** — a small panel sourced from `login_log`: today's **Success** (`status=1`) and **Failed** (`status=2`) attempt counts, plus the last 5 attempts (`user_name`, `login_time`, `status`, `remarks`). For Admin only it shows all users; for non-Admin it shows that user's own attempts.
-3. **Trend charts (bottom band)** — three time-series, default last 30 days, selectable 7/30/90 days:
-   - **Runs trend** — daily Final vs Demo run counts (stacked bars) with a success/failure overlay line.
-   - **Commission trend** — daily `SUM(final_commissions.commission_amount)` (line), to spot spikes.
-   - **Disbursement trend** — daily disbursed amount (EV `SUCCESS` + POS handed-off), overlaid on commission computed, so the gap = outstanding.
-4. **Recent activity feed (side panel)** — latest ~20 `audit_logs` rows (`action_type`, `entity_name`, `changed_by`, `changed_at`) scoped to the role.
+   - **Disbursed vs Pending** — paid (`ev_disburse.disburse_status = 2` Success + `pos_disbursement.dump_status = 1` Dumped) against `report_runs.disburse_status = 'PENDING'`.
+   - **Failed Runs (7d)** — `report_runs.run_status = 3` (Failed) in the last 7 days (red tile → failures list).
+2. **Login-attempt card (security)** — from `login_log`: today's Success (`login_status=1`) / Failed (`login_status=2`) counts + last 5 attempts. Admin sees all users; non-Admin only their own.
+3. **Trend charts** (default 30 days, selectable 7/30/90): **Runs** (daily Final vs Demo, success/failure overlay), **Commission** (daily `SUM(commission_amount)`), **Disbursement** (daily disbursed vs computed — the gap = outstanding).
+4. **Recent activity feed** — latest ~20 `audit_logs` rows (`action_type`, `entity_name`, `changed_by`, `changed_at`), role-scoped.
 
-All money is rendered as a BDT string with two-decimal display; counts are integers; empty states show "No data for this period."
+Money renders as a BDT string (2 decimals); counts are integers; empty states show "No data for this period."
 
-## 8.3 Data Model (reference §3)
+## 8.3 Data Model
 
-The Dashboard defines **no new tables**. It reads:
+No new tables. Reads:
 
-| Card / chart | Source table(s) | Key columns used |
+| Card / chart | Source | Key columns |
 |---|---|---|
-| Reports KPIs | `report_setups` | `created_by`, `status`, `is_setup_complete`, `commission_cycle` |
-| Runs KPIs / trend | `report_runs` | `run_date`, `run_type`, `run_status`, `disburse_status`, `triggered_by` |
-| Stage health (drill-in) | `run_stages` | `run_status`, `ended_at` |
-| Commission KPIs / trend | `final_commissions` | `commission_amount`, `report_run_id` |
-| Disbursement KPIs / trend | `ev_disburse`, `pos_disbursement` | `amount`, `status`, `dump_status`, `disburse_at` |
+| Reports | `report_setups` | `created_by`, `"IsSetupComplete"`, `commission_cycle` |
+| Runs | `report_runs` | `run_date`, `run_type`, `run_status`, `disburse_status`, `triggered_by` |
+| Commission | `final_commissions` | `commission_amount`, `report_run_id` |
+| Disbursement | `ev_disburse`, `pos_disbursement` | `amount`, `disburse_status`, `dump_status`, `disburse_at` |
 | Approval backlog | `report_approvals`, `report_approval_details` | `overall_status`, `current_level_order`, `approval_status` |
-| Login-attempt card | `login_log` | `user_name`, `login_time`, `status`, `remarks` |
+| Login card | `login_log` | `user_name`, `login_time`, `login_status`, `remarks` |
 | Activity feed | `audit_logs` | `action_type`, `entity_name`, `changed_by`, `changed_at` |
 
-> **Performance note.** These are read-only aggregations. Keep them cheap with the indexes from §3 (`ix_report_runs_report_setup`, `ix_final_commissions_report_run`, `ix_ev_disburse_report_run`) plus a partial index on `report_runs(run_date)` for the date-bucketed trends. Trend queries `GROUP BY run_date::date`. At the real scale (~200 runs/month) no materialized view is needed; if needed later, a nightly summary table is the upgrade path — not required for Phase 1.
+> **Performance.** Read-only aggregations; keep cheap with the §3 indexes (`ix_report_runs_report_setup`, `ix_final_commissions_channel`, `ix_ev_disburse_report_run`) plus an index on `report_runs(run_date)` for the date-bucketed trends (`GROUP BY run_date::date`). At ~200 runs/month no materialized view is needed; a nightly summary table is the later upgrade path.
 
 ## 8.4 Process Logic (role scoping)
 
-The same SQL templates run for every role; a **scope predicate** is injected from the JWT identity and `user_rights`:
+The same SQL templates run for every role; a **scope predicate** is injected from the JWT identity + `user_rights`:
 
-1. Resolve caller from JWT → `users.id`, `users.user_name`, and `rights_code` set from `user_rights`.
+1. Resolve caller from JWT → `users.id`, `user_name`, rights.
 2. Build the scope filter:
-   - **Administrator** — no owner filter: sees all reports, runs, commissions, all `login_log` rows, full activity feed.
-   - **Business User (Maker)** — owner filter `report_setups.created_by = :userName` cascaded into runs/commissions (join through `report_runs.report_setup_id`); login card shows only their own `login_log` rows.
-   - **Approver (Checker)** — sees reports/runs they participate in (their `users.user_id` appears in an `approval_flow_level_users` row for that report's flow) **and** the Pending-Approvals card counts only levels they can act on (`report_approvals.current_level_order` matches a level whose `approval_flow_level_users.user_id = :externalUserId`).
-3. Run KPI queries (single round-trip each, parameterised); run trend queries with the chosen window.
-4. Assemble a single `DashboardDto` and return. No caching is required, but a short server-side cache (30–60s) per (role, window) is acceptable.
+   - **Administrator** — no owner filter (all reports/runs/commissions, all `login_log`, full feed).
+   - **Maker** — `report_setups.created_by = :userName`, cascaded into runs/commissions; login card shows only their own rows.
+   - **Checker** — reports/runs they participate in (their `users.id` appears in an `approval_flow_level_users` row for that report's flow); the Pending-Approvals card counts only levels they can act on.
+3. Run KPI + trend queries (parameterised) and assemble one `DashboardDto`.
+
+**Rules:** every query is filtered server-side by the caller's role — never trust a client-supplied scope; the Dashboard issues `SELECT` only (never writes/disburses/advances approvals); `days` is bounded to `{7,30,90}` (else `422`); only Admin sees system-wide login totals. A short server-side cache (30–60s per role+window) is acceptable.
 
 ## 8.5 API Endpoints
 
-All under `/api/v1`, JWT required on every call, standard error envelope. Money fields are BDT decimal strings.
+All under `/api/v1`, JWT required. Money fields are BDT decimal strings.
 
 | Method | Path | Purpose | Role | Success |
 |---|---|---|---|---|
 | GET | `/dashboard/summary` | All KPI cards in one payload | M/A/C | 200 |
-| GET | `/dashboard/logins?days=7` | Login-attempt card (counts + last N) | M/A/C | 200 |
+| GET | `/dashboard/logins?days=7` | Login-attempt card | M/A/C | 200 |
 | GET | `/dashboard/trends?metric=runs\|commission\|disbursement&days=30` | One trend series | M/A/C | 200 |
-| GET | `/dashboard/activity?limit=20` | Recent `audit_logs` feed (role-scoped) | M/A/C | 200 |
+| GET | `/dashboard/activity?limit=20` | Recent `audit_logs` feed | M/A/C | 200 |
 
-**`GET /dashboard/summary`** — Response `200`:
+**`GET /dashboard/summary`** →
 ```json
-{
-  "scope": "MAKER",
-  "reports":    { "total": 41, "complete": 33 },
-  "runsToday":  { "demo": 6, "final": 2 },
-  "pendingApprovals": 3,
+{ "scope": "MAKER", "reports": { "total": 41, "complete": 33 },
+  "runsToday": { "demo": 6, "final": 2 }, "pendingApprovals": 3,
   "commissionThisCycle": "1245000.0000",
-  "disbursement": { "disbursed": "1180500.00", "pending": "64500.0000" },
-  "failedRuns7d": 1
-}
+  "disbursement": { "disbursed": "1180500.0000", "pending": "64500.0000" }, "failedRuns7d": 1 }
 ```
 
-**`GET /dashboard/logins?days=7`** — Response `200`:
+**`GET /dashboard/logins?days=7`** →
 ```json
-{ "windowDays": 7,
-  "today": { "success": 18, "failed": 2 },
-  "recent": [
-    { "userName": "tarik.h", "loginTime": "2026-06-17T03:11:09Z", "status": 1, "remarks": "OTP verified" },
-    { "userName": "rajib.m", "loginTime": "2026-06-17T03:02:44Z", "status": 2, "remarks": "OTP expired" } ] }
+{ "windowDays": 7, "today": { "success": 18, "failed": 2 },
+  "recent": [ { "userName": "tarik.h", "loginTime": "...", "loginStatus": 1, "remarks": "OTP verified" },
+    { "userName": "rajib.m", "loginTime": "...", "loginStatus": 2, "remarks": "OTP expired" } ] }
 ```
-(`status`: 1=Success, 2=Failed — `login_log` enum.)
+(`loginStatus`: 1=Success, 2=Failed.)
 
-**`GET /dashboard/trends?metric=runs&days=30`** — Response `200`:
-```json
-{ "metric": "runs", "windowDays": 30,
-  "points": [
-    { "date": "2026-06-15", "final": 1, "demo": 4, "succeeded": 4, "failed": 1 },
-    { "date": "2026-06-16", "final": 2, "demo": 3, "succeeded": 5, "failed": 0 } ] }
-```
-For `metric=commission`: points carry `{ "date", "amount" }`. For `metric=disbursement`: `{ "date", "computed", "disbursed" }`.
+**`GET /dashboard/trends?metric=runs&days=30`** → `{ metric, windowDays, points:[{ date, final, demo, succeeded, failed }] }`. For `metric=commission`: `{ date, amount }`; for `disbursement`: `{ date, computed, disbursed }`.
 
-**`GET /dashboard/activity?limit=20`** — Response `200`:
-```json
-{ "items": [
-  { "actionType": 2, "entityName": "report_setups", "entityId": "1187",
-    "changedBy": "tarik.h", "changedAt": "2026-06-17T02:55:01Z" } ] }
-```
-(`actionType`: 1=Create, 2=Update, 3=Delete — `audit_logs` enum.)
+**`GET /dashboard/activity?limit=20`** → `{ items:[{ actionType, entityName, entityId, changedBy, changedAt }] }` (`actionType`: 1=Create, 2=Update, 3=Delete).
 
-Errors across all: `401` (no/expired JWT), `403` (only if a non-Admin requests an Admin-only widened scope via query override), `422` (bad `metric`/`days`).
-
-## 8.6 Validation / Business Rules
-
-- **BR1 (role scoping):** every query is filtered by the caller's role/rights; a Maker cannot widen scope to other Makers' data, an Approver only sees flows they belong to. Enforced server-side from the JWT — never trust a client-supplied scope.
-- **Read-only:** the Dashboard issues `SELECT` only; it never writes, never disburses, never advances approvals.
-- **`days` is bounded** to `{7,30,90}`; any other value → `422`.
-- **Login card visibility:** non-Admin sees only their own `login_log` rows (BR1); only Admin sees the system-wide success/failure totals.
-- **No money mutation:** commission and disbursement figures are aggregations of existing rows; the Dashboard cannot trigger a run or a payout.
+Errors: `401` (no/expired JWT), `403` (non-Admin requesting a widened scope), `422` (bad `metric`/`days`).
 
 ---
 
@@ -2004,95 +1372,76 @@ Errors across all: `401` (no/expired JWT), `403` (only if a non-Admin requests a
 
 ## 9.1 Overview
 
-SalesCom sends two kinds of outbound messages — **SMS** and **Email** — through a single internal **Notification path** owned by the Web API (there is no separate Notification Worker; the API enqueues and a Hangfire job drains the outbox). Every message is persisted in **`notification_logs`** before and after sending, so delivery is auditable and retryable.
+SalesCom sends two kinds of outbound messages through one internal **Notification path** owned by the Web API (no separate worker — the API enqueues, a Hangfire job drains). The two channels live in **two separate tables** (§3.8): **`email_notifications`** and **`sms_notifications`**. Every message is persisted before and after sending, so delivery is auditable and retryable.
 
-**When notifications fire:**
+**Scope:**
+- **Email** — **approval events only** (to internal staff).
+- **SMS** — **EV payout** (recipient-facing) + **ETL status** (ops) + optional approval SMS.
 
-| Event | Channel | Recipient | Trigger point |
+| Event | Channel | Recipient | Trigger |
 |---|---|---|---|
-| **Approval requested** | Email | the eligible approver(s) at the now-current level | a report is submitted / advances to a new level (§7) |
-| **Approval rejected** | Email | the Maker (report owner) | an approver rejects a level (`report_approval_details.approval_status=2`) |
-| **Approval completed** | Email | the Maker | final level approves (`report_approvals.overall_status` reaches 2 or 4) |
-| **Run failed** | Email | the Maker + ops | `report_runs.run_status='FAILED'` |
-| **Disbursement complete** | Email | the Maker + ops | reconciliation passes, `disburse_status='DONE'` (§10.5) |
-| **EV payout (per recipient)** | SMS | the paid channel recipient | each `ev_disburse` row reaches `status='SUCCESS'` (§10.4) |
+| **Approval requested** | Email | current-level approver(s) | report submitted / advances a level (§7) |
+| **Approval rejected** | Email | the Maker | an approver rejects (`approval_status = 2`) |
+| **Approval completed** | Email | the Maker | final level approves (`overall_status` reaches 2 or 4) |
+| **EV payout (per recipient)** | SMS | the paid channel recipient | each `ev_disburse` row reaches `disburse_status = 2` Success (§10) |
+| **ETL status** | SMS | ops | an Airflow ETL job finishes / fails |
 
-The **EV-payout SMS** is the only recipient-facing message; all others are internal-staff emails. SMS content is taken from the report's `report_setups.sms_content` template (recipient-facing), email content from server-side templates keyed by `notification_logs.template_code`.
+The **EV-payout SMS** is the only recipient-facing message; its text comes from the report's `report_setups.sms_content` template. Email bodies come from server-side templates (chosen in code, not stored as a column).
 
 ## 9.2 UI
 
-Notification has a light UI footprint:
+- **SMS template field** in the wizard (Step 1 / disbursement settings) → `report_setups.sms_content`. Supports placeholders `{amount}`, `{channel_code}`, `{cycle}` resolved at send time, with a live preview.
+- **Notification log viewer (Admin)** — a filterable table over `email_notifications` + `sms_notifications` (`type`, `status`, date range) showing the recipient (`to_address` / `phone_number`), `status`, `attempt_count`, `error_message`, `sent_at`. Failed rows expose **Retry** (Admin only).
+- Optional in-app toast/badge for in-product events; not part of the persisted notification path.
 
-- **SMS template field** in the wizard (Step 1 / disbursement settings) → persisted to `report_setups.sms_content`. Supports placeholders like `{amount}`, `{channel_code}`, `{cycle}` resolved at send time. A live preview shows a sample rendering.
-- **Notification log viewer (Admin)** — a filterable table over `notification_logs` (`channel`, `status`, `template_code`, date range) showing `to_address`/`phone_number`, `status`, `attempt_count`, `error_message`, `sent_at`. Failed rows expose a **Retry** action (Admin only).
-- In-app toast/badge for the in-product events (approval requested, run failed) is optional and out of the notification persistence path.
+## 9.3 Data Model
 
-## 9.3 Data Model (reference §3)
+Two tables (§3.8), each with `status int4` (**0=Pending, 1=Sent, 2=Failed**), `attempt_count`, `error_message`, `sent_at`, `created_at`:
 
-All notifications are recorded in **`notification_logs`** (§3.8). Key columns and their **int4 enums**:
+- **`email_notifications`** — `to_address`, `cc`, `bcc`, `subject`, `body`, `from_address`.
+- **`sms_notifications`** — `phone_number`, `messages` (the rendered SMS text).
 
-- `channel int4` — **1 = Email, 2 = SMS**.
-- `status int4` — **0 = Pending, 1 = Sent, 2 = Failed**.
-- `template_code` — identifies the template (e.g. `APPROVAL_REQUESTED`, `APPROVAL_REJECTED`, `APPROVAL_COMPLETED`, `RUN_FAILED`, `DISBURSE_COMPLETE`, `EV_PAID`).
-- `phone_number` — MSISDN (SMS); `to_address` / `cc` / `bcc` — email; `subject` / `body` / `from_address`.
-- `attempt_count int4`, `error_message`, `scheduled_at`, `sent_at`, `created_at`.
-
-No FK to `users`: recipients are stored denormalised (`to_address`, `phone_number`) so a later user rename/deactivation never rewrites delivery history.
+There is **no `channel` column** (the two tables separate the channels), **no `template_code` / `scheduled_at` column**, and **no FK to `users`** — recipients are stored denormalised so a later user rename/deactivation never rewrites delivery history.
 
 ## 9.4 Process Logic
 
-**Enqueue (synchronous, fast):** when a business event occurs, the Web API renders the template and **inserts one `notification_logs` row** with `status=0` (Pending), `attempt_count=0`, `created_at=now()`, `scheduled_at=now()` (or a future time for batched sends). This insert is part of the originating transaction's after-commit step so a rolled-back business action never emits a message.
+**Enqueue (fast):** when a business event occurs, the Web API renders the message and **inserts one row** (`status = 0`, `attempt_count = 0`, `created_at = now()`) into the matching table — as an after-commit step, so a rolled-back business action never emits a message.
 
-**Send (Hangfire drain job):** a recurring Hangfire job picks Pending rows ordered by `scheduled_at`:
+**Send (Hangfire drain job):** a recurring job picks Pending rows (`WHERE status = 0` ordered by `created_at`, small batch) and routes:
+- **`sms_notifications`** → SMS gateway (`172.16.7.210:13082`) with `phone_number` + `messages`.
+- **`email_notifications`** → SMTP with `to_address`/`cc`/`bcc`/`subject`/`body`/`from_address`.
 
-1. Select rows `WHERE status=0 AND scheduled_at <= now()` (indexed scan), small batch.
-2. For each row, route by `channel`:
-   - `channel=2` (SMS) → call the **SMS gateway** (`172.16.7.210:13082`) with `phone_number` + `body`.
-   - `channel=1` (Email) → send via **SMTP** with `to_address`/`cc`/`bcc`/`subject`/`body`/`from_address`.
-3. On success → `status=1` (Sent), `sent_at=now()`.
-4. On failure → `status=2` (Failed), increment `attempt_count`, store `error_message`. Eligible for retry while `attempt_count < MAX_ATTEMPTS` (config, e.g. 3), with backoff via `scheduled_at` advanced forward; a row that exhausts attempts stays `status=2` and surfaces in the log viewer for manual Retry.
+On success → `status = 1`, `sent_at = now()`. On failure → `status = 2`, `attempt_count++`, store `error_message`; eligible for retry while `attempt_count < MAX_ATTEMPTS` (config, e.g. 3) with backoff; an exhausted row stays `status = 2` and surfaces in the log viewer for manual Retry.
 
-**EV-payout SMS specifics (§10 cross-link):** after an `ev_disburse` row reaches `status='SUCCESS'`, the disburser enqueues one SMS row using `report_setups.sms_content` as the template with `{amount}` bound to the paid amount and `{channel_code}` to the recipient. **SMS delivery is a side-channel:** a failed SMS is logged (`status=2`) but never changes money state or `disburse_status` — the payout already succeeded.
-
-**Idempotency:** the enqueue step is part of the event handler; to avoid duplicate sends on handler retry, the EV path enqueues SMS keyed off the already-idempotent `ev_disburse` row (one SMS per successful payee), and approval/run emails are enqueued once per state transition (the transition itself is idempotent in §7/§10).
+**EV-payout SMS (cross-link §10):** after an `ev_disburse` row reaches `disburse_status = 2` Success, the disburser enqueues one `sms_notifications` row using `report_setups.sms_content` with `{amount}` and `{channel_code}` bound. **SMS is a side-channel:** a failed SMS is logged but never changes money state or `disburse_status` — the payout already succeeded. One SMS per successful payee (keyed off the idempotent `ev_disburse` row); approval emails are enqueued once per state transition.
 
 ## 9.5 API Endpoints
 
-All under `/api/v1`, JWT required, standard error envelope.
+All under `/api/v1`, JWT required.
 
 | Method | Path | Purpose | Role | Success |
 |---|---|---|---|---|
-| GET | `/notifications?channel=&status=&template=&from=&to=&page=` | List/filter notification log | A (M own-report scoped) | 200 |
-| GET | `/notifications/{id}` | Read one notification row | A | 200 |
-| POST | `/notifications/{id}/retry` | Re-queue a failed notification | A | 202 |
+| GET | `/notifications?type=email\|sms&status=&from=&to=&page=` | List/filter the notification log | A (Maker: own-report scoped) | 200 |
+| GET | `/notifications/{type}/{id}` | Read one row | A | 200 |
+| POST | `/notifications/{type}/{id}/retry` | Re-queue a failed row | A | 202 |
 | POST | `/reports/{id}/sms-preview` | Render `sms_content` against sample values | M/A | 200 |
 
-**`GET /notifications`** — Response `200` (paged):
+**`GET /notifications`** → paged:
 ```json
-{ "page": 1, "pageSize": 25, "total": 312,
+{ "page": 1, "pageSize": 25, "totalItems": 312, "totalPages": 13,
   "items": [
-    { "id": 88120, "templateCode": "EV_PAID", "channel": 2, "status": 1,
-      "phoneNumber": "8801XXXXXXXXX", "toAddress": "", "attemptCount": 1,
-      "sentAt": "2026-06-17T12:00:11Z", "errorMessage": null },
-    { "id": 88121, "templateCode": "APPROVAL_REQUESTED", "channel": 1, "status": 2,
-      "toAddress": "checker@banglalink.net", "subject": "Approval needed: RSO Apr26",
-      "attemptCount": 3, "errorMessage": "SMTP 451 greylisted" } ] }
+    { "type": "sms", "id": 88120, "status": 1, "phoneNumber": "8801XXXXXXXXX",
+      "attemptCount": 1, "sentAt": "...", "errorMessage": null },
+    { "type": "email", "id": 4410, "status": 2, "toAddress": "checker@banglalink.net",
+      "subject": "Approval needed: RSO Apr26", "attemptCount": 3, "errorMessage": "SMTP 451 greylisted" } ] }
 ```
-(`channel`: 1=Email, 2=SMS; `status`: 0=Pending, 1=Sent, 2=Failed.)
+(`status`: 0=Pending, 1=Sent, 2=Failed.)
 
-**`POST /notifications/{id}/retry`** — Admin only. Valid only when `status=2`. Sets `status=0`, `scheduled_at=now()` (does **not** reset `attempt_count`). Responses: `202`; `409 NOT_RETRYABLE` (row not Failed); `404`.
+**`POST /notifications/{type}/{id}/retry`** — Admin; valid only when `status = 2`. Sets `status = 0` (does **not** reset `attempt_count`). `202`; `409 NOT_RETRYABLE`; `404`. Recorded in `audit_logs`.
 
-**`POST /reports/{id}/sms-preview`** — Request `{ "sample": { "amount": "500.00", "channel_code": "RSO-10231", "cycle": "Apr 2026" } }`; Response `200` `{ "rendered": "Apnar commission 500.00 BDT credit kora hoyeche." }`. Errors: `422` (unknown placeholder in `sms_content`).
+**`POST /reports/{id}/sms-preview`** — `{ "sample": { "amount": "500.00", "channel_code": "RSO-10231", "cycle": "Apr 2026" } }` → `200 { "rendered": "Apnar commission 500.00 BDT credit kora hoyeche." }`. `422` (unknown placeholder).
 
-## 9.6 Validation / Business Rules
-
-- **Channel/status are int4 enums** (`channel` 1/2, `status` 0/1/2) — the app owns the code→meaning map (Appendix B); reject any other value at write time.
-- **Email requires a subject/recipient; SMS requires a phone number** — validated before insert; a row missing the channel-required fields is rejected, not silently dropped.
-- **Persist-before-send:** every message is written to `notification_logs` (`status=0`) before any gateway call, so nothing is sent without an audit row.
-- **Retry is bounded** (`attempt_count < MAX_ATTEMPTS`) with backoff; exhausted rows require manual Admin Retry.
-- **SMS never gates money (BR8 unaffected):** EV-payout SMS failure is logged but never reverses or blocks a successful disbursement.
-- **No recipient FK:** delivery targets are stored as denormalised values so history survives user changes.
-- **BR9:** the notification log itself is the audit of what was sent; Admin Retry actions are recorded in `audit_logs`.
+**Rules:** every message is persisted (`status = 0`) before any gateway call (persist-before-send); email requires subject + recipient, SMS requires a phone number (validated before insert); retry is bounded with backoff; an EV-payout SMS failure never reverses or blocks a successful disbursement; delivery targets are stored denormalised.
 
 ---
 
@@ -2100,323 +1449,232 @@ All under `/api/v1`, JWT required, standard error envelope.
 
 ## 10.1 Overview
 
-Disbursement is the **final, money-moving step**: after a Final run's results are fully approved, SalesCom pays each recipient the amount computed in **`final_commissions`**. Two mutually exclusive routes exist per report:
+Disbursement is the **final, money-moving step**: after a Final run's results are fully approved, SalesCom pays each recipient the amount in **`final_commissions`**. Two mutually exclusive routes per report:
 
-- **EV** — automatic per-recipient electronic payout via the EV API, followed by a confirmation **SMS** to each recipient.
-- **POS** — a single **CSV** built from `final_commissions` and handed off to the POS system (no automated payment from SalesCom).
+- **EV** — automatic per-recipient electronic payout via the EV API, then a confirmation **SMS** to each recipient. Event-driven (RabbitMQ + Hangfire).
+- **POS** — a **CSV** built from `final_commissions` and dumped to the POS location by a **nightly Airflow job** (no automated payment from SalesCom).
 
-The hard rule is **BR8: disburse only after full approval.** Disbursement is **never** part of the run; it is a separate, gated, idempotent step triggered only after the post-run approval completes. Amounts are read from `final_commissions` (the trusted-path output), and the disbursement tables (`ev_disburse`, `pos_disbursement`) are written by a **trusted backend path under a least-privilege role — never by generated SQL.**
+The hard rule: **disburse only after full approval.** Disbursement is **never** part of the run — it is a separate, gated, idempotent step. Amounts come from `final_commissions` (trusted-path output); `ev_disburse` / `pos_disbursement` are written by a **trusted backend path under a least-privilege role — never by generated SQL**.
 
 ## 10.2 EV vs POS
 
 | Aspect | EV | POS |
 |---|---|---|
-| Setup flag | `report_setups.is_ev_disbursement = true` | `report_setups.is_pos_disbursement = true` |
-| Action | Automatic EV API call per recipient | Build one CSV, hand off |
-| Timing | At `report_setups.ev_disbursement_time`, fired by Hangfire | After approval; CSV `PENDING→GENERATED→HANDED_OFF` |
+| Setup flag | `is_ev_disbursement = true` | `is_pos_disbursement = true` |
+| Driver | Hangfire DisbursementWorker → RabbitMQ `q.ev-disburse` → EV Worker | **Nightly Airflow job** (no RabbitMQ) |
+| Timing | At `ev_disbursement_time` after post-approval | Nightly scan |
+| Action | EV API call per recipient | Build one CSV, dump to POS location |
 | Output table | `ev_disburse` (one row per `channel_code`) | `pos_disbursement` (one row per run) |
-| Idempotency key | `UNIQUE(report_run_id, channel_code)` | `UNIQUE(report_run_id)` |
-| External call | EV API `10.13.2.7:9898` | none (CSV handoff) |
+| Idempotency key | UNIQUE `(report_run_id, channel_code)` | UNIQUE `(report_run_id)` |
+| External | EV API `10.13.2.7:9898` | CSV dump to POS location |
 | Recipient notify | SMS per recipient after success (§9) | none |
 
-**Mutual exclusion:** exactly one of `is_ev_disbursement` / `is_pos_disbursement` is true per report (app-enforced at wizard save and re-checked by the disburser; neither-set is a `DISBURSE_MODE_CONFLICT` config error).
+**Mutual exclusion:** exactly one of `is_ev_disbursement` / `is_pos_disbursement` is true per report (app-enforced at wizard save, re-checked by the disburser; neither-set = `DISBURSE_MODE_CONFLICT`).
 
-## 10.3 Data Model (reference §3)
+## 10.3 Data Model
 
-- **`final_commissions`** — source of truth for amounts owed. `report_run_id`, `channel_id` (the report's channel TYPE constant), `channel_code` (the individual payee key from IR `final_mapping`), `commission_amount numeric(18,4)`. Idempotency: `ux_final_commissions_run_code UNIQUE(report_run_id, channel_code)`. Written by the trusted path, read by the disburser.
-- **`ev_disburse`** — `report_run_id` (FK→`report_runs.id`), `channel_id` (FK→`channels.id`, the report TYPE), `channel_code` (payee), `amount numeric(18,4)` (= `final_commissions.commission_amount`), `status` (`PENDING|SENT|SUCCESS|FAILED`), `message`, `disburse_at`. Idempotency: `ux_ev_disburse_run_code UNIQUE(report_run_id, channel_code)`.
-- **`pos_disbursement`** — `report_run_id` (FK→`report_runs.id`), `object_url` (CSV in SeaweedFS), `dump_status` (`PENDING|GENERATED|HANDED_OFF|FAILED`), `disburse_at`. Idempotency: `ux_pos_disbursement_run UNIQUE(report_run_id)` (one CSV per run).
-- **`report_runs.disburse_status`** (`NONE|PENDING|DONE|FAILED`, with an internal `IN_PROGRESS` working state) tracks the run's overall disbursement lifecycle.
+- **`final_commissions`** — source of truth for amounts owed: `report_run_id`, `channel_id` (the report's channel TYPE constant), `channel_code` (the individual payee key), `"Msisdn"` (recipient phone), `commission_amount`. UNIQUE `(report_run_id, channel_code)`.
+- **`ev_disburse`** — `report_run_id`, `channel_code` (payee), **`ev_msisdn varchar(15)`** (recipient phone for the EV API call + payout SMS), `amount`, **`disburse_status int4`** (0=Pending, 1=Sent, 2=Success, 3=Failed, 4=Retry), `disburse_at`. (No `channel_id` column.)
+- **`pos_disbursement`** — `report_run_id`, **`dump_status int4`** (0=Pending, 1=Dumped, 2=Failed), `disburse_at`. (The CSV is written to the agreed POS location; the table only tracks the dump.)
+- **`report_runs.disburse_status varchar`** — NONE / PENDING / IN_PROGRESS / DONE / FAILED — the run's overall disbursement lifecycle.
 
-> **Recipient key = `channel_code`, not `channel_id`.** `channel_id` is the report's channel TYPE (Distributor/RSO/Retailer) and is constant for every row of one report; the individual payee is `channel_code`. The idempotency UNIQUEs are therefore on `(report_run_id, channel_code)` — using `channel_id` would collapse all payees into one row.
+> **Recipient key = `channel_code`, not `channel_id`.** `channel_id` is the report's channel TYPE (constant per report); the individual payee is `channel_code`. Idempotency UNIQUEs are on `(report_run_id, channel_code)` — using `channel_id` would collapse all payees into one row. The EV payout phone is `ev_msisdn` (seeded from `final_commissions."Msisdn"`).
 
-## 10.4 Process Logic — the canonical disbursement chain
+## 10.4 EV path (event-driven)
 
-Disbursement follows a single **canonical event chain** (Errata E3), so the trigger is unambiguous:
-
+**Canonical chain:**
 ```
-post-run approval completes (report_approvals.overall_status = 4 Post Approved)
-   → API sets report_runs.disburse_status = PENDING   (BR8 gate satisfied; no payout yet)
-   → Hangfire DisbursementWorker, at report_setups.ev_disbursement_time, publishes:
-         ev.disburse   (if is_ev_disbursement)   →  q.ev-disburse  → EV Worker
-         pos.disburse  (if is_pos_disbursement)  →  q.pos-disburse → POS Worker
-   → worker executes the payout idempotently and runs reconciliation
+post-run approval completes (report_approvals.overall_status = 4)
+   → API sets report_runs.disburse_status = PENDING        (gate satisfied; no payout yet)
+   → Hangfire DisbursementWorker, at report_setups.ev_disbursement_time, publishes ev.disburse → q.ev-disburse
+   → EV Worker pays each recipient idempotently, sends SMS, reconciles
 ```
 
-**Precondition gate (both routes, BR8):** the disburser proceeds only when the run is `run_type=2` (Final) **and** `run_status='SUCCEEDED'`, the report's post-run approval is complete (`report_approvals.overall_status=4`), and `disburse_status IN ('PENDING')` (or `IN_PROGRESS` on retry). **Demo runs (`run_type=1`) can never disburse** (`disburse_status` stays `NONE`). If the gate fails → no rows written, skip / `409`.
+**Gate (precondition):** proceed only when the run is Final (`run_type = 2`) + `run_status = 2` (Completed), post-run approval complete (`overall_status = 4`), and `disburse_status = 'PENDING'` (or `IN_PROGRESS` on retry). **Demo runs never disburse** (`disburse_status` stays `NONE`). Gate fail → no rows written.
 
-### EV path (EV Worker, consumes `ev.disburse`)
-
-1. Set `report_runs.disburse_status='IN_PROGRESS'`.
-2. **Seed `ev_disburse` idempotently** — one PENDING row per `channel_code`:
+**EV Worker steps:**
+1. Set `disburse_status = 'IN_PROGRESS'`.
+2. **Seed `ev_disburse` idempotently** — one Pending row per `channel_code`:
    ```sql
-   INSERT INTO salescomdbtst.ev_disburse
-       (report_run_id, channel_id, channel_code, amount, status)
-   SELECT fc.report_run_id, fc.channel_id, fc.channel_code, fc.commission_amount, 'PENDING'
+   INSERT INTO salescomdbtst.ev_disburse (report_run_id, channel_code, ev_msisdn, amount, disburse_status)
+   SELECT fc.report_run_id, fc.channel_code, fc."Msisdn", fc.commission_amount, 0
    FROM salescomdbtst.final_commissions fc
    WHERE fc.report_run_id = :runId
-   ON CONFLICT (report_run_id, channel_code) DO NOTHING;   -- ux_ev_disburse_run_code
+   ON CONFLICT (report_run_id, channel_code) DO NOTHING;
    ```
-3. For each PENDING `ev_disburse` row, call the **EV API** (`10.13.2.7:9898`) with the recipient + `amount`. On submit → `status='SENT'`; on confirmed payment → `status='SUCCESS'`, `disburse_at=now()`. On failure → `status='FAILED'` with `message`; a bounded retry sweep re-attempts only that same `(report_run_id, channel_code)` row — **never** a new row, so no double-pay.
-4. For each `status='SUCCESS'` row, enqueue an **EV-payout SMS** (§9) from `report_setups.sms_content`. SMS failure does not affect money state.
-5. After all recipients resolve, run **reconciliation** (§10.5). On pass → `disburse_status='DONE'` and a `DISBURSE_COMPLETE` email; on mismatch → hard-block (§10.5).
+3. For each Pending row, call the **EV API** (`10.13.2.7:9898`) with `ev_msisdn` + `amount`. On submit → `disburse_status = 1` (Sent); on confirmed payment → `2` (Success), `disburse_at = now()`; on failure → `3` (Failed). A bounded retry sweep re-attempts only that same `(report_run_id, channel_code)` row (status `4` Retry) — **never** a new row, so no double-pay.
+4. For each Success row, enqueue an **EV-payout SMS** (§9) to `ev_msisdn` from `report_setups.sms_content`. SMS failure never affects money state.
+5. After all recipients resolve, run **reconciliation** (§10.6). Pass → `disburse_status = 'DONE'` + a completion email; mismatch → hard-block.
 
-### POS path (POS Worker, consumes `pos.disburse`)
+## 10.5 POS path (nightly Airflow job — D6)
 
-1. Set `disburse_status='IN_PROGRESS'` and insert one `pos_disbursement` row idempotently:
-   ```sql
-   INSERT INTO salescomdbtst.pos_disbursement (report_run_id, object_url, dump_status)
-   VALUES (:runId, '', 'PENDING')
-   ON CONFLICT (report_run_id) DO NOTHING;                 -- ux_pos_disbursement_run
-   ```
-2. Build the CSV from `final_commissions` for that run — one line per `channel_code`: `channel_code, commission_amount (2-dp), commission_cycle, report_name`.
-3. Upload to SeaweedFS; store the URL in `object_url`; set `dump_status='GENERATED'`.
-4. Hand off to POS (pickup / SFTP / shared bucket per ICD); on confirmed handoff → `dump_status='HANDED_OFF'`, `disburse_at=now()`.
-5. Run **reconciliation** (CSV total vs `final_commissions` sum); on pass → `disburse_status='DONE'`; on mismatch → hard-block.
+POS disbursement is **not** event-driven. A **nightly Airflow job** scans for reports needing a POS dump and checks **three conditions**:
 
-## 10.5 Reconciliation
+1. `report_setups.is_pos_disbursement = true`,
+2. the report is fully approved (`report_approvals.overall_status = 4`),
+3. `report_runs.disburse_status != 'DONE'`.
 
-Reconciliation runs at the **end of the disbursement step** (worker-enforced, not a nightly job). Per `report_run` the invariant is:
+If all three pass → build the CSV from `final_commissions` for that run (one line per `channel_code`: `channel_code, commission_amount (2-dp), commission_cycle, report_name`) → **dump it to the POS location** → upsert one `pos_disbursement` row (`dump_status = 1` Dumped, `disburse_at = now()`), reconcile (CSV total + row count vs `final_commissions`), and set `report_runs.disburse_status = 'DONE'`. Idempotent on `(report_run_id)` — a run already `DONE` is skipped. No Hangfire / RabbitMQ involvement.
 
-```
-SUM(final_commissions.commission_amount)  ==  money actually disbursed
-```
+## 10.6 Reconciliation
 
-- **EV:** `SUM(final_commissions.commission_amount WHERE report_run_id=:r)` must equal `SUM(ev_disburse.amount WHERE report_run_id=:r AND status IN ('SENT','SUCCESS'))`.
-- **POS:** `SUM(final_commissions.commission_amount WHERE report_run_id=:r)` must equal the **CSV total**, and the CSV row count must equal `COUNT(*)` of `final_commissions` for the run.
+Runs at the **end of the disbursement step** (worker / job enforced). Invariant per run: `SUM(final_commissions.commission_amount) == money actually disbursed`.
 
-**On match:** `disburse_status='DONE'`, `DISBURSE_COMPLETE` notification (§9).
-**On mismatch (hard block):** do **not** mark DONE, do **not** auto-retry; set `disburse_status='FAILED'`, write an `audit_logs` row (`action_type=2`, entity `report_runs`, with a `RECONCILE_FAILED` note in `changed_columns`/`new_values`), and raise an **alert email** to ops + the Maker. A human must investigate before any further disbursement on that run.
+- **EV:** `SUM(final_commissions.commission_amount WHERE report_run_id = :r)` == `SUM(ev_disburse.amount WHERE report_run_id = :r AND disburse_status IN (1, 2))`.
+- **POS:** the same sum == the CSV total, and the CSV row count == `COUNT(*)` of `final_commissions` for the run.
 
-## 10.6 API Endpoints
+**Match** → `disburse_status = 'DONE'` + completion email. **Mismatch (hard block)** → do not mark DONE, do not auto-retry; set `disburse_status = 'FAILED'`, write an `audit_logs` row (entity `report_runs`, `RECONCILE_FAILED`), and alert ops + the Maker. A human must investigate before any further disbursement on that run.
 
-All under `/api/v1`, JWT required, standard error envelope. Disbursement is mostly system-triggered (EV by Hangfire at `ev_disbursement_time`); these endpoints expose status, an Admin manual trigger, EV retry, and the POS download.
+## 10.7 API Endpoints
+
+All under `/api/v1`, JWT required. EV is mostly system-triggered (Hangfire at `ev_disbursement_time`); POS is Airflow-driven. These endpoints expose status, an Admin manual EV trigger/retry, and the POS file.
 
 | Method | Path | Purpose | Role | Success |
 |---|---|---|---|---|
 | GET | `/runs/{runId}/disbursement` | Disbursement status + reconciliation | M(own)/A/C | 200 |
-| POST | `/runs/{runId}/disburse` | Manually trigger (gated, idempotent) | A (M own per config) | 202 |
+| POST | `/runs/{runId}/disburse` | Manually trigger EV (gated, idempotent) | A (M own per config) | 202 |
 | POST | `/runs/{runId}/ev/{channelCode}/retry` | Retry one failed EV recipient | A | 202 |
-| GET | `/runs/{runId}/pos-file` | Download/redirect to POS CSV | A, M(own) | 200/302 |
-| POST | `/runs/{runId}/pos/confirm-handoff` | Mark POS batch handed off + reconcile | A | 200 |
+| GET | `/runs/{runId}/pos-file` | Download the dumped POS CSV | A, M(own) | 200/302 |
 
-**`GET /runs/{runId}/disbursement`** — Response `200` (EV run):
+**`GET /runs/{runId}/disbursement`** → (EV run):
 ```json
 { "reportRunId": 9921, "mode": "EV", "disburseStatus": "DONE",
   "reconciliation": { "status": "MATCHED", "commissionTotal": "1245000.0000", "disbursedTotal": "1245000.0000" },
   "ev": { "recipients": 1820, "success": 1816, "failed": 4, "pending": 0 }, "pos": null }
 ```
-For POS: `"mode":"POS"`, `"ev":null`, `"pos":{ "dumpStatus":"HANDED_OFF", "objectUrl":"s3://salescom/pos/9921.csv", "disburseAt":"…" }`.
+POS: `"mode":"POS"`, `"ev":null`, `"pos":{ "dumpStatus": 1, "disburseAt": "..." }`.
 
-**`POST /runs/{runId}/disburse`** — manual trigger (Admin; Maker for own report per config). Request `{ "mode": "EV" }` (optional; defaults to the report's configured mode). Enforces the BR8 gate + EV/POS mutual exclusion; idempotent (re-fills only unpaid recipients). Responses: `202 Accepted`; `409 NOT_APPROVED`; `409 ALREADY_DISBURSED`; `409 DISBURSE_MODE_CONFLICT`; `403`.
+**`POST /runs/{runId}/disburse`** — manual EV trigger (Admin; Maker for own per config). `{ "mode": "EV" }` optional. Enforces the approval gate + mutual exclusion; idempotent (only re-fills unpaid recipients). `202`; `409 NOT_APPROVED | ALREADY_DISBURSED | DISBURSE_MODE_CONFLICT`; `403`.
 
-**`POST /runs/{runId}/ev/{channelCode}/retry`** — retry one failed EV recipient (Admin). Valid only when that `ev_disburse` row `status='FAILED'`. Re-uses the same `(report_run_id, channel_code)` row → no double pay. Responses: `202`; `409 NOT_RETRYABLE`; `404`.
+**`POST /runs/{runId}/ev/{channelCode}/retry`** — retry one failed EV recipient (Admin); valid only when that `ev_disburse` row is `disburse_status = 3`. Re-uses the same `(report_run_id, channel_code)` row → no double pay. `202`; `409 NOT_RETRYABLE`; `404`.
 
-**`GET /runs/{runId}/pos-file`** — download/redirect to the POS CSV (Admin, Maker own). Returns a `302` redirect to the SeaweedFS `object_url` (signed) or `404` if no `pos_disbursement` row / not yet `GENERATED`.
+**`GET /runs/{runId}/pos-file`** — download the dumped POS CSV (Admin, Maker own) → `302` to the file location, or `404` if not yet dumped.
 
-**`POST /runs/{runId}/pos/confirm-handoff`** — mark POS batch handed off (Admin). Sets `dump_status='HANDED_OFF'`, `disburse_at=now()`, runs reconciliation. Responses: `200`; `409` if `dump_status` not `GENERATED`; `404`.
+**Rules:** disburse only after full approval (`overall_status = 4`, Final run, `run_status = 2`); Demo never disburses; EV/POS mutually exclusive; idempotent via the `(report_run_id, channel_code)` / `(report_run_id)` UNIQUEs + `ON CONFLICT DO NOTHING` (recipient key = `channel_code`); money tables written only by the trusted path; reconciliation is a hard gate; an EV-payout SMS failure never reverses a payout; all disbursement actions are audited.
 
-## 10.7 Validation / Business Rules
-
-- **BR8 — disburse only after full approval:** `report_approvals.overall_status=4` (Post Approved) **and** the run is Final (`run_type=2`) + `run_status='SUCCEEDED'`. Demo runs never disburse (`disburse_status` stays `NONE`).
-- **EV/POS mutually exclusive:** exactly one of `is_ev_disbursement` / `is_pos_disbursement` true; the disburser rejects neither-set as `DISBURSE_MODE_CONFLICT`.
-- **Idempotent / no double-pay:** `ux_ev_disburse_run_code` (`report_run_id, channel_code`) + `ON CONFLICT DO NOTHING` on EV; `ux_pos_disbursement_run` (`report_run_id`) on POS. Re-running disbursement only fills unpaid recipients. The recipient key is **`channel_code`**, not `channel_id`.
-- **Trusted path only:** `final_commissions`, `ev_disburse`, `pos_disbursement` are written by the backend disburser under a least-privilege role — **never** by generated SQL.
-- **Reconciliation is a hard gate:** a mismatch → `disburse_status='FAILED'`, no auto-retry, alert + `audit_logs`; manual investigation required before any further payout on the run.
-- **SMS is a side-channel:** an EV-payout SMS failure is logged in `notification_logs` (`status=2`) but never fails or reverses the disbursement.
-- **BR9 (audit):** all disbursement actions (manual trigger, EV retry, POS handoff confirm, reconcile-failed) are written to `audit_logs` with the actor `changed_by` snapshot.
+> The EV/POS idempotency UNIQUE indexes are the design; the real schema (§3) ships indexes on `report_run_id` — add the `(report_run_id, channel_code)` / `(report_run_id)` UNIQUEs, or the trusted write path enforces the same.
 
 ---
 
 # §11 Asynchronous Services & Events
 
-SalesCom is **event-driven** for everything slow, retriable, or that must survive a process restart: IR→SQL generation, run execution, EV/POS disbursement, and notifications. The .NET Web API never blocks on these — it writes a row, publishes a message to **RabbitMQ**, and returns (`202 Accepted` for async actions). Background workers consume the messages. **Hangfire** is used only as a *trigger* (cron schedules, disbursement-timing, retry/stale sweeps, user-sync); it never executes heavy SQL and never makes a routing decision — at the right moment it just enqueues a RabbitMQ message or runs a short DB sweep.
+SalesCom is **event-driven** for everything slow, retriable, or that must survive a restart: IR→SQL generation, run execution, and EV disbursement. The Web API never blocks — it writes a row, publishes a **RabbitMQ** message, and returns `202`. Background workers consume. **Hangfire** is only a *trigger* (cron schedules, disbursement timing, the notification-outbox drain, stale-run sweeps); it never runs heavy SQL. **POS disbursement and user-sync are Airflow jobs, not RabbitMQ** (§10.5, §4.5). **Notifications are a DB outbox** drained by Hangfire (§9), not a queue.
 
-This section is **normative** for the broker: any producer or consumer must match these exact exchange names, routing keys, queue names, and JSON contracts.
+This section is **normative** for the broker: producers/consumers must match these exact names and JSON contracts.
 
 ## 11.1 Broker topology
 
-One **durable direct exchange per domain**. Messages are `delivery_mode=2` (persistent); consumers use **manual ack** (ack only after the unit of work commits to PostgreSQL). Every work queue declares `x-dead-letter-exchange` and has a paired **dead-letter queue (DLQ)**.
+One **durable direct exchange per domain**. Messages are persistent (`delivery_mode=2`); consumers use **manual ack** (ack only after the work commits to PostgreSQL). Every work queue declares a dead-letter exchange + paired DLQ.
 
-| Exchange (direct, durable) | Routing key | Queue (durable) | Consumer service | Server |
+| Exchange (direct, durable) | Routing key | Queue | Consumer | Server |
 |---|---|---|---|---|
 | `salescom.report` | `report.saved` | `q.sql-generate` | SQL Generator (Python) | AI01 |
-| `salescom.run` | `run.runnow` | `q.run.high` | SQL Executor (Python) | AI01 |
-| `salescom.run` | `run.demo` | `q.run.mid` | SQL Executor (Python) | AI01 |
-| `salescom.run` | `run.schedule` | `q.run.low` | SQL Executor (Python) | AI01 |
+| `salescom.run` | `run.runnow` / `run.demo` / `run.schedule` | `q.run.high` / `q.run.mid` / `q.run.low` | SQL Executor (Python) | AI01 |
 | `salescom.run` | `run.completed` | `q.run-completed` | Web API | APP01/02 |
-| `salescom.approval` | `approval.requested`, `approval.level.advanced`, `approval.rejected`, `approval.completed` | `q.notification` (binds `requested`/`rejected`/`completed`) | Notification consumer (Web API host) | APP01/02 |
-| `salescom.approval` | `approval.completed` | `q.approval-completed` | Web API **disbursement-arming** consumer (E3) | APP01/02 |
+| `salescom.approval` | `approval.completed` | `q.approval-completed` | Web API (disbursement-arming) | APP01/02 |
 | `salescom.disburse` | `ev.disburse` | `q.ev-disburse` | EV Worker (Python) | AI01 |
-| `salescom.disburse` | `pos.disburse` | `q.pos-disburse` | POS Worker (.NET) | AI01 |
-| `salescom.notify` | `notify.sms`, `notify.email` | `q.notify` | Notification consumer (Web API host) | APP01/02 |
-| (dead-letter, fanout) | — | `q.<name>.dlq` (one per work queue) | Ops / manual replay | AI02 |
+| (dead-letter) | — | `q.<name>.dlq` (one per work queue) | Ops / manual replay | AI02 |
 
-**Why three run lanes, not one priority field (D1).** D1 = one run executes at a time, ordered RunNow > Demo > Schedule. The Executor implements that by draining `q.run.high` first, then `q.run.mid`, then `q.run.low` (a **weighted drain** so Schedule never starves). There is no broker-level concurrency: a single Executor consumer holds **one PostgreSQL advisory lock** (§11.7), so only one run is ever in flight platform-wide. `eventType` is the constant `"run.requested"` for **all three** lanes — the lane is carried only in the **routing key** (`run.runnow | run.demo | run.schedule`) and `payload.lane`; consumers route by **queue binding**, never by reading `eventType`.
+> **Not queues:** POS disbursement is a nightly Airflow job (§10.5); approval emails + EV SMS are written to the `email_notifications` / `sms_notifications` outbox by the Web API / EV Worker and drained by Hangfire (§9); user-sync is an Airflow DAG (§4.5).
 
-## 11.2 Common message envelope
+**Three run lanes, not one priority field (D1).** One run executes at a time, ordered RunNow > Demo > Schedule. The Executor drains `q.run.high` → `q.run.mid` → `q.run.low` (a **weighted drain** so Schedule never starves) while holding **one PostgreSQL advisory lock** (§11.7) — only one run is ever in flight platform-wide. `eventType` is the constant `"run.requested"` for all three lanes; the lane is carried only in the routing key + `payload.lane`.
 
-Every message body is JSON with this envelope; `payload` is event-specific.
+## 11.2 Message envelope
 
 ```json
-{
-  "messageId":   "b1d3...-uuid",          // unique per publish; a redelivery REUSES it
-  "eventType":   "report.saved",          // constant per logical event
-  "occurredAt":  "2026-06-17T09:00:00Z",  // ISO-8601 UTC
-  "correlationId":"c0ff...-uuid",         // ties back to the originating HTTP request (Serilog/Loki)
-  "actor":       "rahman.m",              // user_name snapshot, or "SYSTEM"
-  "payload":     { /* per-contract below */ }
-}
+{ "messageId": "uuid",            // unique per publish; a redelivery REUSES it
+  "eventType": "report.saved",    // constant per logical event
+  "occurredAt": "2026-06-17T09:00:00Z",
+  "correlationId": "uuid",        // ties back to the originating HTTP request (Loki)
+  "actor": "rahman.m",            // user_name snapshot, or "SYSTEM"
+  "payload": { /* per-contract */ } }
 ```
 
-## 11.3 Event message contracts
+## 11.3 Event contracts
 
-**`report.saved`** — published by the Web API at **Final Save**, after `report_setups.definition` (the IR) is persisted and `is_setup_complete` is being finalized. Triggers IR→SQL generation into `section_wise_report_sqls`.
-```json
-{ "eventType": "report.saved",
-  "payload": { "reportSetupId": 4012, "irVersion": "1.0", "regenerate": true } }
-```
+**`report.saved`** — Web API at Final Save, after the IR is persisted. Triggers IR→SQL generation.
+`payload: { reportSetupId, irVersion, regenerate }`
 
-**`run.requested`** (lanes `run.runnow` / `run.demo` / `run.schedule`) — published when a run is requested. The Web API has already inserted the `report_runs` row (`run_status = 'QUEUED'`). `runType` matches `report_runs.run_type` (`1=Demo`, `2=Final`); `lane` ∈ `high|mid|low`.
-```json
-{ "eventType": "run.requested",
-  "payload": { "reportRunId": 88231, "reportSetupId": 4012, "runType": 2,
-               "lane": "high", "triggeredBy": "rahman.m" } }
-```
+**`run.requested`** (lanes `run.runnow`/`run.demo`/`run.schedule`) — the Web API has already inserted the `report_runs` row (`run_status = 0`). `runType` 1=Demo/2=Final; `lane` high|mid|low.
+`payload: { reportRunId, reportSetupId, runType, lane, triggeredBy }`
 
-**`run.completed`** — published by the Executor on run completion; consumed by the Web API (`q.run-completed`) to surface status and, for a POST_RUN result flow, open the result `report_approvals` instance.
-```json
-{ "eventType": "run.completed",
-  "payload": { "reportRunId": 88231, "status": "SUCCEEDED",
-               "lastStageTable": "run_88231.stage_7_out", "rowCount": 318 } }
-```
+**`run.completed`** — Executor → Web API (`q.run-completed`) to surface status and, for a POST_RUN result flow, open the result approval.
+`payload: { reportRunId, status: 2, lastStageTable, rowCount }`  *(status = `report_runs.run_status` int4)*
 
-**`approval.completed`** — published by the Web API when a `report_approvals` instance reaches a fully-approved terminal state (`overall_status = 2 Pre Approved` for a PRE_RUN setup flow, or `4 Post Approved` for a POST_RUN result flow). Consumed by **both** `q.notification` (notify the Maker) and `q.approval-completed` (arm disbursement, E3). `reportRunId` is null for a PRE_RUN-only setup approval.
-```json
-{ "eventType": "approval.completed",
-  "payload": { "reportSetupId": 4012, "reportRunId": 88231,
-               "approvalRequestId": 5501, "phase": 4 } }
-```
+**`approval.completed`** — Web API when a `report_approvals` instance reaches a terminal state (`overall_status = 2` PRE_RUN setup, or `4` POST_RUN result). Consumed by `q.approval-completed` (arm disbursement). `reportRunId` is null for a PRE_RUN-only setup approval.
+`payload: { reportSetupId, reportRunId, approvalRequestId, phase: 4 }`
 
-**`approval.requested` / `approval.level.advanced` / `approval.rejected`** — published on open, on each level advance, and on a reject. Consumed by `q.notification` only (the approval state machine itself is synchronous in the Web API, §7). `levelOrder` = `report_approvals.current_level_order`.
-```json
-{ "eventType": "approval.rejected",
-  "payload": { "approvalRequestId": 5501, "reportSetupId": 4012, "levelOrder": 2,
-               "rejectedBy": "karim.a", "comment": "Slab table outdated." } }
-```
+**`ev.disburse`** — Hangfire `DisbursementWorker` once a Final run is approved, EV-mode, and `ev_disbursement_time <= now()`. One message per run; the worker fans out per recipient.
+`payload: { reportRunId, reportSetupId }`
 
-**`ev.disburse`** — published by the Hangfire `DisbursementWorker` (E3) once a Final run is approved, EV-mode, and `ev_disbursement_time <= now()`. One message per run; the worker fans out per recipient internally.
-```json
-{ "eventType": "ev.disburse",
-  "payload": { "reportRunId": 88231, "reportSetupId": 4012,
-               "smsContent": "Your commission of {amount} BDT is paid." } }
-```
-
-**`pos.disburse`** — published by the Hangfire `DisbursementWorker` once a Final run is approved and POS-mode.
-```json
-{ "eventType": "pos.disburse", "payload": { "reportRunId": 88231, "reportSetupId": 4012 } }
-```
-
-**`notify.sms` / `notify.email`** — consumed by the notification consumer, which writes a `notification_logs` row and calls the SMS gateway / SMTP. `channel` matches `notification_logs.channel` (`1=Email`, `2=SMS`).
-```json
-{ "eventType": "notify.sms",
-  "payload": { "templateCode": "EV_PAID", "channel": 2, "phoneNumber": "8801XXXXXXXXX",
-               "body": "Your commission of 1500 BDT is paid.", "refType": "report_run", "refId": 88231 } }
-```
+*(Approval emails — requested / rejected / completed — are written directly to the `email_notifications` outbox by the Web API state machine, §9; they need no RabbitMQ hop.)*
 
 ## 11.4 At-least-once delivery & idempotency
 
-RabbitMQ guarantees **at-least-once**, so any message can be redelivered. Every consumer is **idempotent**, enforced two ways:
+RabbitMQ is **at-least-once**, so any message can be redelivered. Every consumer is idempotent, two ways:
 
-1. **DB unique constraints make a replayed write a no-op** (from §3):
-   - `ux_section_wise_report_sqls_setup_order (report_setup_id, stage_order)` — regenerating SQL is an upsert.
-   - `ux_run_stages_run_order (run_id, sort_order)` — re-snapshotting stages is safe.
-   - `ux_final_commissions_run_code (report_run_id, channel_code)` — recipient key is **`channel_code`** (NOT `channel_id`, which is the constant report TYPE). Writes use `INSERT … ON CONFLICT DO NOTHING`.
-   - `ux_ev_disburse_run_code (report_run_id, channel_code)` — same recipient key; `INSERT … ON CONFLICT DO NOTHING`.
-   - `ux_pos_disbursement_run (report_run_id)` — one CSV handoff per run.
-2. **State guards.** A consumer re-reads the row and skips work a previous delivery already finished (e.g. `report_runs.run_status` already `SUCCEEDED`; `ev_disburse.status` already `SUCCESS`). Each message carries a `messageId` (GUID) for log correlation; the DB constraints are the source of truth.
+1. **DB unique constraints make a replayed write a no-op** — `(report_setup_id, stage_order)` on `section_wise_report_sqls`; `(report_run_id, channel_code)` on `final_commissions` and `ev_disburse`; `(report_run_id)` on `pos_disbursement`. Recipient key is **`channel_code`** (not `channel_id`). Writes use `INSERT … ON CONFLICT DO NOTHING`.
+2. **State guards** — a consumer re-reads the row and skips work a previous delivery finished (e.g. `report_runs.run_status` already 2; `ev_disburse.disburse_status` already 2 Success). `messageId` is for log correlation; the DB constraints are the source of truth.
 
 ## 11.5 Retry & dead-lettering
 
-- **Transient failures** (DB deadlock, broker blip, EV gateway timeout): the consumer **nacks (`requeue=false`)** after incrementing an attempt count, and a **delayed retry** is applied. Per-domain caps:
-  - **run** = 1 attempt then DLQ — a failed run is a *business event*: it lands `report_runs.run_status = 'FAILED'` and is surfaced to the Maker.
-  - **sql-generate** = 3.
-  - **EV per recipient** = 3 (tracked via `ev_disburse.status = 'RETRY'`).
-  - **notification** = 3 (`notification_logs.attempt_count`, `status = 2 Failed` at cap).
-- **Backoff:** exponential with jitter (≈ 30 s → 2 min → 10 min), via a RabbitMQ delayed-message setup (or a `q.<name>.retry` with per-message TTL that dead-letters back to the work queue).
-- **DLQ:** after the cap, the message routes to `q.<name>.dlq` (each work queue declares `x-dead-letter-exchange`). DLQ messages are **never auto-replayed** — an operator inspects and replays manually after fixing the root cause. The originating DB row already reflects the failure, so the system is never left ambiguous.
-- **Poison-message protection:** a message that throws on *parse* goes straight to DLQ — never requeued.
+- **Transient failures** (DB deadlock, broker blip, EV timeout): nack (`requeue=false`) with an attempt count + delayed retry. Caps: **run** = 1 then DLQ (a failed run is a business event → `report_runs.run_status = 3` surfaced to the Maker); **sql-generate** = 3; **EV per recipient** = 3 (via `ev_disburse.disburse_status = 4` Retry).
+- **Backoff:** exponential with jitter (≈ 30 s → 2 min → 10 min) via a delayed-message setup.
+- **DLQ:** after the cap → `q.<name>.dlq`. DLQ messages are **never auto-replayed** — an operator inspects + replays after fixing the root cause; the DB row already reflects the failure.
+- **Poison message:** anything that throws on parse goes straight to DLQ.
 
 ## 11.6 SQL Generator service (Python, AI01)
 
-**Purpose.** Compile the IR (`report_setups.definition`) into per-stage SQL and persist it into **`section_wise_report_sqls`** (frozen at Final Save). Consumes `q.sql-generate`.
+Compiles the IR into per-stage SQL and persists `section_wise_report_sqls` (frozen at Final Save). Consumes `q.sql-generate`.
 
-**Process logic.**
-1. Read `report_setups` by `reportSetupId`; load `definition` (IR) and the `report_supporting_uploads` rows (to resolve IR `source.type = "upload"` references → their `db_schema` / `db_table_name`).
-2. **Validate the IR** against the JSON Schema (see `IR_Schema_and_MultiKPI_Join.md` — referenced, not duplicated). On schema error → publish a failure notification, write `audit_logs`, stop.
-3. **Build SQL with the SQLGlot AST — never string concatenation (D2).** Each IR block compiles to an ordered list of stages; each stage becomes one statement that materializes a temp output table (`output_table_name`). Every block ends in a `summarize` that fixes its grain; block-to-block joins are emitted **only on the grain key**, and the generator emits the **G1 pre-join uniqueness** guard.
-4. **Re-parse safety pass (D2 allowlist).** Re-parse every generated statement and assert it contains **only** allowed node types: `SELECT / WITH / JOIN / GROUP BY / aggregates / CASE / window functions`, plus `CREATE TEMP TABLE` / `DROP TABLE` for stage materialization. Block any DML/DDL outside that set, any function not on the allowlist, and any non-whitelisted identifier — **only** registered `data_sources` tables + this report's `report_supporting_uploads` tables are reachable. **All literals are bound parameters.**
-5. Write one `section_wise_report_sqls` row per stage `(report_setup_id, stage_order, sql_text)`; `ux_section_wise_report_sqls_setup_order` makes regeneration idempotent (upsert by `(report_setup_id, stage_order)`, delete orphaned higher orders).
-6. Emit `audit_logs` (`action_type = 2 Update`, `entity_name = 'section_wise_report_sqls'`) and a success notification. The Web API may set `report_setups.is_setup_complete = true` once generation succeeds.
+1. Read `report_setups.definition` (IR) + `report_supporting_uploads` (to resolve `upload` sources → their `db_schema`/`db_table_name`).
+2. **Validate the IR** against the JSON Schema (`IR_Schema_and_MultiKPI_Join.md`). Schema error → failure notification + `audit_logs`, stop.
+3. **Build SQL with the SQLGlot AST — never string concatenation (D2).** Each block compiles to ordered stages, each materialising a temp `output_table_name`; every block ends in a `summarize` fixing its grain; block-to-block joins emit only on the grain key + the **G1** pre-join uniqueness guard.
+4. **Re-parse safety pass (D2 allowlist).** Re-parse each statement and assert only allowed nodes: `SELECT/WITH/JOIN/GROUP BY/aggregates/CASE/window functions` + `CREATE TEMP TABLE`/`DROP TABLE`. Block any other DML/DDL, non-allowlisted functions, and non-whitelisted identifiers — only registered `data_sources` + this report's upload tables are reachable. **All literals are bound parameters.**
+5. Write one `section_wise_report_sqls` row per stage; UNIQUE `(report_setup_id, stage_order)` makes regeneration an idempotent upsert (delete orphaned higher orders).
+6. Emit `audit_logs` + a success notification; the Web API may set `"IsSetupComplete" = true`.
 
-> **`final_commissions` is never produced by generated SQL.** The last stage produces the final per-recipient projection table; the **trusted Executor path** (§11.7) reads it and writes `final_commissions` itself (D2).
+> **`final_commissions` is never produced by generated SQL.** The last stage produces the final per-recipient projection; the trusted Executor path (§11.7) reads it and writes `final_commissions` itself (D2).
 
 ## 11.7 SQL Executor service (Python, AI01)
 
-**Purpose.** Run a report end-to-end: snapshot the frozen SQL, execute stage-by-stage in an isolated temp namespace, write per-recipient `final_commissions`, clean up. Consumes the three `q.run.*` lanes (high → mid → low weighted drain).
+Runs a report end-to-end: snapshot the frozen SQL, execute stage-by-stage in an isolated temp namespace, write `final_commissions`, clean up. Consumes the three `q.run.*` lanes (weighted drain).
 
-**Single-active-run lock (D1).** Before executing, the Executor takes a **PostgreSQL session advisory lock** for "the one global run slot":
-```sql
-SELECT pg_try_advisory_lock(hashtext('salescom:global-run-slot'));
-```
-If `false`, another run holds the slot → the consumer **nacks with requeue** (the message returns to its lane) and is retried when the slot frees. This guarantees exactly one run executes at a time platform-wide. The lock is released (`pg_advisory_unlock`) in a `finally` block and auto-releases if the Executor's DB session dies (crash safety).
+**Single-active-run lock (D1).** Before executing, take a PostgreSQL session advisory lock `pg_try_advisory_lock(hashtext('salescom:global-run-slot'))`. If `false`, another run holds the slot → nack with requeue (retried when the slot frees). Released in `finally` and auto-released if the session dies (crash safety).
 
-**Pre-run checks (Scheduled / Run-Now FINAL only — Demo SKIPS all; 2026-06-16 decision 7).** A FINAL run is admitted only if:
-- `report_setups.end_date <= today`,
-- the report-setup approval is fully done (the report's `report_approvals.overall_status` has reached `2 Pre Approved`), and
-- every **system** `data_sources` table used by the report has its Airflow ETL finished **up to the report End Date**.
-A **Demo** run skips every pre-run check (it is a sandbox preview). If a check fails on a FINAL run, the Executor marks the run `FAILED` with the reason and releases the slot.
+**Pre-run checks (Scheduled / Run-Now FINAL only — Demo skips all):** `end_date <= today`; the report's setup approval done (`overall_status` reached 2); every system `data_sources` table has ETL finished up to the report End Date. Fail on a FINAL run → mark `FAILED`, release the slot.
 
-**Run lifecycle.**
-1. **Dedupe / claim.** Re-read `report_runs`. If `run_status` is already `SUCCEEDED`/`FAILED`, ack and stop (redelivery). Otherwise transition `QUEUED → RUNNING`, set `started_at = now()`.
-2. **Snapshot SQL.** Copy each `section_wise_report_sqls` row into `run_stages` (`run_id`, `sort_order`, `sql_text`, `run_status = 0 Pending`, `cleanup_status = 0 Not Cleaned`, `file_generated_at = now()`). `ux_run_stages_run_order` makes this idempotent. This **freezes** the SQL so editing the setup later cannot affect a run already underway.
-3. **Per-run temp namespace.** Create a dedicated temp schema `run_<reportRunId>` (or session-temp tables). Every stage's `output_table_name` lives here → collisions impossible; cleanup is a single `DROP SCHEMA … CASCADE`.
-4. **Execute stages in `sort_order`.** For each `run_stages` row: `0 Pending → 1 Running` (`started_at`), execute the bound-parameter SQL under a **least-privilege DB role** (read-only on source/upload schemas, write only inside the temp namespace, **no access to `final_commissions` / `ev_disburse` / `pos_disbursement`**), record `output_table_name`, run the **G1/G2 guardrails** (pre-join uniqueness, post-join fan-out / row-count), set `2 Succeeded` (`ended_at`). On error → `3 Failed` and abort the run.
-5. **Write `final_commissions` (trusted path).** Read the final projection table; for each recipient `INSERT (report_run_id, channel_id, channel_code, commission_amount) ON CONFLICT (report_run_id, channel_code) DO NOTHING`. `channel_id` = the report's channel TYPE (`report_setups.channel_type_id`, constant for the report); `channel_code` = the per-recipient code from the IR `final_mapping`. Null / unmapped / duplicate `channel_code` = hard error → run fails (no partial output).
-6. **Demo vs Final.** A **Demo** run (`run_type = 1`) writes `final_commissions` for preview and exposes per-stage row counts (**guardrail G3**) but **never** touches approval or disbursement. **Demo cap:** ≤ 5 demo runs per report (`COUNT(*) WHERE run_type = 1` while holding the run slot) → `429` at the API if exceeded.
-7. **Complete.** `report_runs.run_status = 'SUCCEEDED'`, `ended_at = now()`. For a FINAL run, leave `disburse_status = 'NONE'` (disbursement is armed later on approval, §11.8 / E3). Publish `run.completed`.
-8. **Cleanup.** `DROP SCHEMA run_<id> CASCADE`; set each `run_stages.cleanup_status = 1 Cleaned`. On cleanup failure → leave `cleanup_status = 0 Not Cleaned` for the sweeper. Then `pg_advisory_unlock`, ack the message.
+**Run lifecycle:**
+1. **Claim.** Re-read `report_runs`; if already `run_status` 2/3, ack + stop (redelivery). Else 0 → 1 (Running), `started_at`.
+2. **Snapshot SQL.** Copy each `section_wise_report_sqls` row into `run_stages` (`sql_text`, `sort_order`, `run_status = 0`, `cleanup_status = 0`). **Freezes** the SQL for this run.
+3. **Temp namespace.** Create `run_<reportRunId>` schema (or session temps); every `output_table_name` lives here → no collisions; cleanup is one `DROP SCHEMA … CASCADE`.
+4. **Execute in `sort_order`.** Per stage: 0 → 1, run the bound-parameter SQL under a **least-privilege role** (read-only on source/upload schemas, write only in the temp namespace, **no access to money tables**), record `output_table_name`, run **G1/G2** guardrails, set 2 (or 3 + abort on error).
+5. **Write `final_commissions` (trusted path).** Read the final projection; per recipient `INSERT (report_run_id, channel_id, channel_code, "Msisdn", commission_amount) ON CONFLICT (report_run_id, channel_code) DO NOTHING`. `channel_id` = the report's constant type; `channel_code` = the IR `final_mapping` recipient key. Null/unmapped/duplicate `channel_code` = hard error → run fails (no partial output).
+6. **Demo vs Final.** A Demo (`run_type = 1`) writes `final_commissions` for preview + per-stage row counts (**G3**) but never touches approval/disbursement. **Demo cap:** ≤ 5 demo runs per report → `429` at the API.
+7. **Complete.** `run_status = 2`, `ended_at`. For a FINAL run leave `disburse_status = 'NONE'` (disbursement armed later on approval, §11.8). Publish `run.completed`.
+8. **Cleanup.** `DROP SCHEMA run_<id> CASCADE`; set each `run_stages.cleanup_status`. Then unlock + ack.
 
-**Crash / stale-run recovery.** If the Executor dies mid-run, the advisory lock auto-releases and the never-acked message is redelivered. A **Hangfire stale-run sweeper** (every 5 min) finds `report_runs` stuck `RUNNING` whose `started_at` is older than a threshold (≈ 30 min) with no live heartbeat, marks them `FAILED`; any orphan `run_<id>` temp schema and any `run_stages.cleanup_status = 0` left behind is dropped/retried. Because all writes are idempotent (step 1 + the UNIQUE keys), a redelivered-but-finished run is detected and skipped.
+**Crash / stale-run recovery.** If the Executor dies, the advisory lock auto-releases and the un-acked message redelivers. A **Hangfire stale-run sweeper** (every 5 min) finds runs stuck Running past a threshold (≈ 30 min) with no heartbeat, marks them `FAILED`, drops orphan temp schemas + uncleaned stages. All writes being idempotent, a redelivered-but-finished run is detected + skipped.
 
-## 11.8 Disbursement arming & EV / POS workers (E3 canonical chain)
+## 11.8 Disbursement arming & EV worker (canonical chain)
 
-**RabbitMQ arms it → Hangfire enforces timing & publishes → workers execute.** A Hangfire timer must *not* also consume a broker event; the one true chain:
+**RabbitMQ arms it → Hangfire enforces timing & publishes → the EV worker executes** (POS is the separate Airflow job, §10.5):
 
-1. **`approval.completed`** (RabbitMQ) → **Web API `q.approval-completed` consumer** sets `report_runs.disburse_status = 'PENDING'` on the relevant Final run (for a recurrent PRE_RUN-only setup, each scheduled Final run is created already disburse-eligible).
-2. **Hangfire `DisbursementWorker`** (~every 5 min) selects runs where `disburse_status = 'PENDING'` AND (EV: `report_setups.ev_disbursement_time <= now()`; POS: immediately), publishes `ev.disburse` / `pos.disburse`, and sets `disburse_status = 'IN_PROGRESS'`.
-3. **EV / POS worker** executes; on full success → `disburse_status = 'DONE'`, else `'FAILED'`.
+1. **`approval.completed`** (RabbitMQ) → Web API `q.approval-completed` consumer sets `report_runs.disburse_status = 'PENDING'` on the Final run (for a recurrent PRE_RUN-only setup, each scheduled Final run is created disburse-eligible).
+2. **Hangfire `DisbursementWorker`** (~5 min) selects runs with `disburse_status = 'PENDING'` AND `ev_disbursement_time <= now()`, publishes `ev.disburse`, sets `disburse_status = 'IN_PROGRESS'`.
+3. **EV Worker** executes; full success → `'DONE'`, else `'FAILED'`.
 
-### EV disbursement worker (Python, AI01)
+**EV disbursement worker (Python, AI01)** — consumes `q.ev-disburse`; gated on full approval + EV-mode:
+1. Re-read `report_runs`; require `run_status = 2`, `disburse_status = 'IN_PROGRESS'`, report fully approved.
+2. Seed `ev_disburse` from `final_commissions`: `INSERT (report_run_id, channel_code, ev_msisdn, amount, disburse_status) SELECT report_run_id, channel_code, "Msisdn", commission_amount, 0 … ON CONFLICT (report_run_id, channel_code) DO NOTHING`.
+3. For each Pending/Retry row: call the EV API with `ev_msisdn` + amount. Success → `disburse_status = 2`, `disburse_at`, then enqueue the EV-payout SMS (`sms_notifications`, body from `sms_content`). Failure → 3 (Failed) / 4 (Retry).
+4. **Reconciliation (G4):** `SUM(ev_disburse.amount WHERE disburse_status IN (1,2)) == SUM(final_commissions.commission_amount)`. All recipients paid → `report_runs.disburse_status = 'DONE'`, else `'FAILED'`.
+5. **Idempotency:** a redelivered message re-reads statuses and re-attempts only rows not already Success.
 
-**Purpose.** Pay each recipient via the EV API (`10.13.2.7:9898`) and send the SMS. Consumes `q.ev-disburse`. Gated on full approval (BR8) and EV-mode (`is_ev_disbursement = true`, mutually exclusive with POS).
-1. Re-read `report_runs`; require `run_status = 'SUCCEEDED'`, `disburse_status = 'IN_PROGRESS'`, and the run's report fully approved.
-2. Materialize per-recipient rows in `ev_disburse` from `final_commissions`: `INSERT (report_run_id, channel_id, channel_code, amount, status) … ON CONFLICT (report_run_id, channel_code) DO NOTHING`, `status = 'PENDING'`.
-3. For each `PENDING`/`RETRY` row: call the EV API with the BDT amount. On success → `status = 'SUCCESS'`, store `message`, `disburse_at`, then publish `notify.sms` (`templateCode = 'EV_PAID'`, body from `report_setups.sms_content`). On failure → `status = 'FAILED'`/`'RETRY'`, store `message`.
-4. **Reconciliation (G4):** assert `SUM(ev_disburse.amount WHERE status='SUCCESS') == SUM(final_commissions.commission_amount)` (within rounding). Set `report_runs.disburse_status = 'DONE'` if all recipients succeeded, else `'FAILED'`.
-5. **Idempotency:** a redelivered message re-reads statuses and only re-attempts rows not already `SUCCESS`.
+## 11.9 Scheduled / background jobs summary
 
-### POS disbursement worker (.NET, AI01)
-
-**Purpose.** Produce one CSV per run and hand it off to POS. Consumes `q.pos-disburse`. POS-mode only (`is_pos_disbursement = true`).
-1. Re-read `report_runs`; require `SUCCEEDED` + fully approved + POS-mode. Upsert one `pos_disbursement` row (`ux_pos_disbursement_run` ⇒ one batch per run), `dump_status = 'PENDING'`.
-2. Build the CSV from `final_commissions` (`channel_code`, `commission_amount`, run metadata); upload to SeaweedFS; store `object_url`. Set `dump_status = 'GENERATED'`.
-3. Hand off to POS. On success → `dump_status = 'HANDED_OFF'`, `disburse_at = now()`, `report_runs.disburse_status = 'DONE'`; on failure → `dump_status = 'FAILED'`.
-4. **Reconciliation (G4):** CSV record count and amount-sum must equal the `final_commissions` count/sum for the run.
-
-## 11.9 Hourly user-sync (Hangfire recurring, APP01)
-
-**Purpose.** Keep the local `users` cache aligned with Central Login. Every hour: pull the active user list from Central Login and **upsert** into `users` keyed on the external `user_id` (TEXT, `ux_users_user_id`) — updating `user_name`, `full_name`, `email`, `mobile_no`, `department`. Users no longer returned are **soft-handled**: their `user_rights` rows are removed (deactivation in this schema, §4.3), never hard-deleting the `users` row, so `approval_flow_level_users.user_id` references (by value) and audit history stay intact. Each change writes an `audit_logs` row (`action_type = 2 Update`, `entity_name = 'users'`). The sync is read-only against the IdP and idempotent.
+- **Hangfire (APP01):** report scheduler (publishes `run.requested` for due reports); disbursement-arming timer + EV publish (§11.8); notification-outbox drain (§9); stale-run sweeper (§11.7).
+- **Airflow (shared):** hourly **user-sync** from the POS database (§4.5); nightly **POS disbursement** (§10.5); the monthly **RSO/Retailer commission dump** to the RSO App; source-data ETL (DWH / In-house / vPeople / POSDMSDB) into the `data_sources` tables.
 
 ---
 
@@ -2424,157 +1682,128 @@ A **Demo** run skips every pre-run check (it is a sandbox preview). If a check f
 
 ## 12.1 Audit log (`audit_logs`) — append-only
 
-- **Append-only.** The application performs `INSERT` only — there is **no** UPDATE/DELETE code path for `audit_logs`. The Executor and worker DB roles are granted `INSERT` only on this table. This is the primary tamper-evidence control at this scale; an optional hash-chain can be added later without a schema change.
-- **Actor is a snapshot.** `changed_by` (a `user_name`) is an immutable snapshot with **no FK** — a later rename or deactivation never rewrites or breaks history. **Note:** `audit_logs.changed_by_user_id` is **`uuid`** (the external identity), while every internal PK/FK in the schema is `bigint` — this is intentional and is the one deliberate type exception in §3; it is **not** a FK to `users.id`.
-- **Coverage (BR9 — all changes audited).** One `audit_logs` row for every: config create / update / soft-delete (`report_setups`, `data_sources`, `channels`, the approval-flow tables, `users` / `user_rights`); IR Final Save and SQL generation; run trigger / completion / failure / cancellation; each approval decision (in addition to the `report_approval_details` row); each disbursement (EV per recipient, POS batch); schedule changes. Login events are captured separately in the `login_log` table.
-- **Shape (§3.8).** `application_name`, `entity_name`, `entity_id`, `action_type` (int enum), `changed_columns`, `old_values` / `new_values` (JSONB), `changed_by`, `changed_at`. The Web API writes the audit row in the **same DB transaction** as the change, so an action and its audit row commit atomically.
+- **Append-only.** The app does `INSERT` only — no UPDATE/DELETE path; worker DB roles get `INSERT`-only on this table. (An optional hash-chain can be added later without a schema change.)
+- **Actor is a snapshot.** `changed_by` (a `user_name`) is immutable with **no FK** — a later rename/deactivation never breaks history. `changed_by_user_id` is **`uuid`** (the external identity, not a FK to `users.id`) — the one deliberate type exception in §3.
+- **Coverage (all changes audited).** One row for every: config create/update/soft-delete (`report_setups`, `data_sources`, `channels`, approval-flow tables, `users`/`user_rights`); IR Final Save + SQL generation; run trigger/completion/failure; each approval decision (in addition to the `report_approval_details` row); each disbursement (EV per recipient, POS batch); schedule change. Login events live separately in `login_log`.
+- **Shape (§3.8).** `application_name`, `entity_name`, `entity_id`, `action_type` (1=Create, 2=Update, 3=Delete), `changed_columns`, `old_values`/`new_values` (JSONB), `changed_by`, `changed_at`. The audit row is written in the **same DB transaction** as the change (atomic commit).
 
 ## 12.2 Error handling
 
-All non-2xx API responses use a single **standard error envelope** with the matching HTTP status. `correlationId` echoes the request's correlation id (also logged to Serilog/Loki).
+All non-2xx responses use one **standard error envelope** with the matching HTTP status; `correlationId` echoes the request id (also logged to Loki).
 
 ```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "One or more fields are invalid.",
-    "correlationId": "c0ff...-uuid",
-    "fieldErrors": [
-      { "field": "endDate", "message": "endDate must be on or after startDate." },
-      { "field": "reportName", "message": "A report with this name already exists." }
-    ]
-  }
-}
+{ "error": {
+    "code": "VALIDATION_ERROR", "message": "One or more fields are invalid.", "correlationId": "uuid",
+    "fieldErrors": [ { "field": "endDate", "message": "endDate must be on or after startDate." } ] } }
 ```
-`fieldErrors` is present only for 400/422 validation failures; `[]` or omitted otherwise.
+`fieldErrors` appears only for 400/422; omitted otherwise.
 
-**HTTP status code table.**
-
-| Status | `error.code` (example) | When |
+| Status | `error.code` | When |
 |---|---|---|
-| 200 OK | — | Successful GET / action with body |
-| 201 Created | — | Resource created (returns new `id`) |
-| 202 Accepted | — | Async accepted (run requested, disbursement queued, Final Save) |
-| 204 No Content | — | Successful action with no body (soft-delete, ack) |
-| 400 Bad Request | `VALIDATION_ERROR` | Malformed body / bad params / business-rule violation (BR3/BR4, schedule date < End Date) |
-| 401 Unauthorized | `UNAUTHENTICATED` | Missing / expired / invalid JWT (incl. 3-hour inactivity logout) |
-| 403 Forbidden | `FORBIDDEN` | Authenticated but role/right lacks permission (BR1); maker == checker (BR5) |
-| 404 Not Found | `NOT_FOUND` | Unknown id |
-| 409 Conflict | `CONFLICT` | Duplicate unique key, illegal state transition, a run already active |
-| 422 Unprocessable | `UNPROCESSABLE_ENTITY` | IR / SQL validation failure, reconciliation mismatch |
-| 429 Too Many Requests | `RATE_LIMITED` | Throttle (demo-run cap, OTP retries) |
-| 500 Internal | `INTERNAL_ERROR` | Unhandled server fault (no internal details leaked; `correlationId` only) |
-| 502 / 503 | `UPSTREAM_ERROR` / `SERVICE_UNAVAILABLE` | EV / SMS / Central Login / SMTP upstream failure |
+| 200 / 201 / 202 / 204 | — | OK / Created / Async accepted / No content |
+| 400 | `VALIDATION_ERROR` | Malformed body / bad params / business-rule violation |
+| 401 | `UNAUTHENTICATED` | Missing / expired / invalid JWT (incl. 3-hour inactivity) |
+| 403 | `FORBIDDEN` | Authenticated but lacks the right; or maker == checker |
+| 404 | `NOT_FOUND` | Unknown id |
+| 409 | `CONFLICT` | Duplicate unique key, illegal state transition, run already active |
+| 422 | `UNPROCESSABLE_ENTITY` | IR / SQL validation failure, reconciliation mismatch |
+| 429 | `RATE_LIMITED` | Throttle (demo-run cap, OTP retries) |
+| 500 | `INTERNAL_ERROR` | Unhandled fault (no internals leaked; `correlationId` only) |
+| 502 / 503 | `UPSTREAM_ERROR` / `SERVICE_UNAVAILABLE` | EV / SMS / Central Login / SMTP failure |
 
-Canonical `error.code` values: `VALIDATION_ERROR, UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, CONFLICT, UNPROCESSABLE_ENTITY, RATE_LIMITED, INTERNAL_ERROR, UPSTREAM_ERROR, SERVICE_UNAVAILABLE`.
+Canonical codes: `VALIDATION_ERROR, UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, CONFLICT, UNPROCESSABLE_ENTITY, RATE_LIMITED, INTERNAL_ERROR, UPSTREAM_ERROR, SERVICE_UNAVAILABLE`.
 
 ## 12.3 Pagination, filtering & sorting
 
 All list endpoints share one model.
 
-**Request (query string):** `?page=1&pageSize=25&sort=createdAt:desc&filter[status]=ON&filter[search]=campaign`
+**Request:** `?page=1&pageSize=25&sort=createdAt:desc&filter[status]=ON&filter[search]=campaign`
 - `page` (1-based, default 1), `pageSize` (default 25, max 100).
-- `sort` = `field:asc|desc`, comma-separated for multi-sort; only **whitelisted** sortable fields per endpoint.
-- `filter[<field>]` = equality; `filter[search]` = free-text over the endpoint's searchable columns; date ranges via `filter[from]` / `filter[to]`.
+- `sort` = `field:asc|desc` (comma-separated for multi-sort); only **whitelisted** sortable fields per endpoint.
+- `filter[<field>]` = equality; `filter[search]` = free-text over searchable columns; date ranges via `filter[from]`/`filter[to]`.
 
-**Response envelope:**
-```json
-{ "items": [ /* DTOs */ ], "page": 1, "pageSize": 25, "totalItems": 134, "totalPages": 6, "sort": "createdAt:desc" }
-```
-Filtering and sorting are always applied **server-side with parameterized queries** (never string-built), and the sort/filter field names are mapped through a per-endpoint allowlist to the real columns.
+**Response envelope:** `{ "items": [...], "page": 1, "pageSize": 25, "totalItems": 134, "totalPages": 6, "sort": "createdAt:desc" }`
+
+Filtering/sorting are always server-side with parameterized queries (never string-built); field names map through a per-endpoint allowlist to real columns.
 
 ## 12.4 Data retention
 
-- **Hot window — 3 months.** Source / operational data needed for runs is kept in the **active (hot)** source tables; data older than 3 months is moved to **archive** tables/schema by the Airflow ETL. Reports needing >3-month history (cohort M1–M12) read pre-computed archive/DWH tables, not the hot tables.
-- **Object purge — 30 days.** Transient run artifacts in SeaweedFS — `run_stages` stage outputs and Demo-run exports (`run_stages.object_url` / `bucket`) — are purged after **30 days** by a Hangfire sweeper. **Disbursement artifacts are excluded:** POS handoff CSVs (`pos_disbursement.object_url`) are retained per finance policy.
-- **DB rows are kept (soft-delete, never hard-delete)** for `report_setups`, `final_commissions`, `ev_disburse`, `pos_disbursement`, the `approval_*` / `report_approval*` tables, `audit_logs`, `login_log`, `email_notifications`, and `sms_notifications` — these are the financial / audit record. `is_active = false` hides config rows (`data_sources`) from pick-lists without losing history (BR2).
-- **Temp namespaces** (`run_<id>` schemas) are dropped at end-of-run; the stale-run sweeper drops any orphans within minutes.
+- **Hot window — 3 months.** Source/operational data for runs stays in the active (hot) source tables; older data is moved to archive by the Airflow ETL. Reports needing >3-month history (cohort M1–M12) read pre-computed archive/DWH tables.
+- **Object purge — 30 days.** Transient run artifacts in SeaweedFS (`run_stages` outputs, Demo exports) are purged after 30 days by a Hangfire sweeper. **Disbursement artifacts are excluded:** the POS dump CSVs (at the POS location) are retained per finance policy.
+- **DB rows retained (never hard-deleted)** for `report_setups`, `final_commissions`, `ev_disburse`, `pos_disbursement`, the approval tables, `audit_logs`, `login_log`, `email_notifications`, `sms_notifications` — the financial/audit record. `data_sources.is_active = false` hides config rows from pick-lists without losing history.
+- **Temp namespaces** (`run_<id>`) are dropped at end-of-run; the stale-run sweeper drops any orphans within minutes.
 
 ---
 
 # §13 Module & Service Architecture
 
-## 13.1 Backend Layering (.NET 4-layer)
+## 13.1 Backend Layering (.NET 4-layer, Clean Architecture)
 
-The backend is **Clean Architecture**: each layer depends only on the one below it, and the inner layers (Domain, Application) have **no infrastructure dependencies**. This keeps the IR handling, the approval state machine, and the trusted-path money writes testable and isolated from PostgreSQL/RabbitMQ/SeaweedFS specifics.
+Each layer depends only on the one below; the inner layers (Domain, Application) have **no infrastructure dependencies** — keeping IR handling, the approval state machine, and the trusted-path money writes testable and isolated.
 
-| Layer | Project | Responsibility | Concrete contents |
-|---|---|---|---|
-| **Presentation** | `SalesCom.Api` | HTTP surface | ASP.NET Core controllers (one per feature), request/response DTOs, model binding, JWT auth + RBAC middleware, exception → error-envelope filter, DI composition root, Hangfire server registration, Swagger. |
-| **Use-case** | `SalesCom.Application` | Orchestration & rules | Command/query handlers (one per use case), DTOs, FluentValidation validators, and the **ports** (interfaces) the inner layers call: `IReportRepository`, `IRunRepository`, `IApprovalService`, `IEventPublisher`, `IObjectStore`, `ICentralLoginClient`, `INotificationGateway`, `IIrValidator`. Publishes events; enforces BR1–BR9. |
-| **Core model** | `SalesCom.Domain` | Pure business model | Entities (`ReportSetup`, `SectionSql`, `ReportRun`, `RunStage`, `FinalCommission`, `ApprovalFlow`, `ReportApproval`, `ReportApprovalDetail`, `EvDisburse`, `PosDisbursement`), value objects (`Money`, `GrainKey`), and **int enums** (`RunType`, `RunStatus`, `OverallStatus`, `ApprovalStatus`, `ApprovalType`, `RecurrentType`). No external dependencies. |
-| **Adapters** | `SalesCom.Infrastructure` | Integrations | Implementations of the Application ports: PostgreSQL access (**Dapper** for reads, **EF Core** `SalesComDbContext` + migrations for writes/schema against `salescomdbtst`), SeaweedFS S3 client, RabbitMQ publisher + consumers, Central Login client, SMS + SMTP gateways, Hangfire job definitions. |
-
-**Dependency direction:** `Api → Application → Domain` and `Infrastructure → Application/Domain` (Infrastructure implements the ports declared in Application). The API composes everything via DI at startup.
-
-### One controller per feature
-
-| Controller | Base route | Owns endpoints for |
+| Layer | Project | Responsibility |
 |---|---|---|
-| `AuthController` | `/api/v1/auth` | login, SSO callback, logout, `/me` |
-| `DataSourcesController` | `/api/v1/data-sources` | register / list / read / update / activate-deactivate |
-| `ReportsController` | `/api/v1/reports` | wizard draft + steps, supporting uploads, Final Save, clone, list/details |
-| `RunsController` | `/api/v1/runs` | demo run, run-now, schedule on/off, run status, run-stage outputs, disbursement status |
-| `ApprovalsController` | `/api/v1/approvals` | flow config, pending queue, approve/reject decisions, approval history |
-| `DisbursementsController` | `/api/v1/disbursements` (+ `/runs/{id}/disburse`) | EV/POS status, retry, POS CSV download |
-| `DashboardController` | `/api/v1/dashboard` | login attempts, run summary, approval/disbursement widgets |
-| `NotificationsController` | `/api/v1/notifications` | template management, send log, retry, DLR callback |
+| **Presentation** | `SalesCom.Api` | Controllers (one per feature), DTOs, JWT + RBAC middleware, exception → error-envelope filter, DI root, Hangfire server, Swagger. |
+| **Use-case** | `SalesCom.Application` | Command/query handlers, validators, and the **ports** (interfaces): `IReportRepository`, `IRunRepository`, `IApprovalService`, `IEventPublisher`, `IObjectStore`, `ICentralLoginClient`, `INotificationGateway`, `IIrValidator`. Publishes events; enforces the business rules. |
+| **Core model** | `SalesCom.Domain` | Pure entities (`ReportSetup`, `SectionSql`, `ReportRun`, `RunStage`, `FinalCommission`, `ApprovalFlow`, `ReportApproval`, `ReportApprovalDetail`, `EvDisburse`, `PosDisbursement`), value objects (`Money`, `GrainKey`), int enums (`RunType`, `RunStatus`, `OverallStatus`, `ApprovalStatus`, `ApprovalType`, `RecurrentType`). No external deps. |
+| **Adapters** | `SalesCom.Infrastructure` | Port implementations: PostgreSQL (**Dapper** reads, **EF Core** `SalesComDbContext` + migrations against `salescomdbtst`), SeaweedFS S3, RabbitMQ publisher/consumers, Central Login client, SMS + SMTP gateways, Hangfire jobs. |
 
-Each controller is **thin**: bind DTO → dispatch a command/query handler in `Application` → map the result to a response DTO. No business logic in controllers.
+**Dependency direction:** `Api → Application → Domain`; `Infrastructure → Application/Domain` (implements the ports). The API composes everything via DI at startup.
+
+**One thin controller per feature** (bind DTO → dispatch handler → map response; no business logic in controllers):
+
+| Controller | Base route | Owns |
+|---|---|---|
+| `AuthController` | `/api/v1/auth` | login, SSO callback, logout, `/me`, `/permissions` |
+| `DataSourcesController` | `/api/v1/data-sources` | register / list / read / update / activate-deactivate |
+| `ReportsController` | `/api/v1/reports` | wizard steps, uploads, Final Save, clone, list/details |
+| `RunsController` | `/api/v1/runs` | demo / run-now, schedule, run status, stage outputs, disbursement status |
+| `ApprovalsController` | `/api/v1/approvals` | flow config, queue, approve/reject, history |
+| `DisbursementsController` | `/api/v1/disbursements` (+ `/runs/{id}/disburse`) | EV status, retry, POS CSV download |
+| `DashboardController` | `/api/v1/dashboard` | summary, logins, trends, activity |
+| `NotificationsController` | `/api/v1/notifications` | log, retry, SMS preview |
 
 ## 13.2 Background Workers (Hangfire)
 
-Hangfire runs **inside the .NET app** (PostgreSQL-backed storage). Workers are timed/triggered, publish events, or drive integrations — they never run the calc SQL (that's the Python Executor).
+Hangfire runs **inside the .NET app** (PostgreSQL-backed). Workers are timed/triggered; they never run the calc SQL (that's the Python Executor). **User-sync and POS disbursement are Airflow, not Hangfire** (§4.5, §10.5).
 
 | Worker | Trigger | Owns | Publishes / calls |
 |---|---|---|---|
-| **SchedulerWorker** | Cron (per recurrent report) | For each due, approved, scheduled report, run the **pre-run checks** (report `end_date <= today`; setup approval fully done; every used `data_sources` ETL finished up to `end_date`; the schedule date `>= end_date`), then create a `report_runs` row (`run_type=2` Final, `triggered_by=NULL` = system) and enqueue it. | Publishes `run.requested` → `q.run.low`. |
-| **DisbursementWorker** | Approval completed (**`report_approvals.overall_status=4`** Post Approved, arming `disburse_status=PENDING`) **+** `report_setups.ev_disbursement_time` reached | For an approved FINAL run with payout on: EV path drives per-recipient `ev_disburse` (trusted-path, keyed on `channel_code`) + SMS; POS path builds the CSV → `pos_disbursement`. Honors EV/POS mutual exclusion. | Publishes `ev.disburse` → `q.ev-disburse` / `pos.disburse` → `q.pos-disburse`; writes POS CSV to SeaweedFS. |
-| **UserSyncWorker** | Hourly cron | Pull users + rights from Central Login → upsert `users` and `user_rights`. | Calls `ICentralLoginClient`. |
-| **NotificationWorker** | On enqueue / retry timer | Drain `notification_logs` rows in `status=0` (Pending), send via SMS or SMTP, update `status`/`attempt_count`/`error_message`/`sent_at`. | Calls SMS + SMTP gateways. |
+| **SchedulerWorker** | Cron (per recurrent report) | For each due, approved, scheduled report: run the pre-run checks, then create a `report_runs` row (`run_type=2`, `triggered_by=NULL`) and enqueue it. | `run.requested` → `q.run.low` |
+| **DisbursementWorker** | Approval completed (`overall_status=4`, arming `disburse_status=PENDING`) + `ev_disbursement_time` reached | For an approved EV Final run: publish to the EV worker (per-recipient `ev_disburse` keyed on `channel_code` + SMS). (POS is the separate Airflow job.) | `ev.disburse` → `q.ev-disburse` |
+| **NotificationWorker** | Enqueue / retry timer | Drain `email_notifications` + `sms_notifications` rows in `status=0`, send via SMTP / SMS, update `status` / `attempt_count` / `error_message` / `sent_at`. | SMS + SMTP gateways |
+| **StaleRunSweeper** | Every 5 min | Mark runs stuck Running past threshold as Failed; drop orphan temp schemas + uncleaned stages (§11.7). | — |
 
-
-> The two **Python services** (SQL Generator, SQL Executor) are **separate processes**, not Hangfire workers — they are RabbitMQ consumers. The .NET side only *publishes* `report.saved` and `run.requested`, and *consumes* `run.completed`.
+> The two **Python services** (SQL Generator, SQL Executor) are separate RabbitMQ-consumer processes, not Hangfire workers. The .NET side only *publishes* `report.saved` / `run.requested` and *consumes* `run.completed` / `approval.completed`.
 
 ## 13.3 Frontend Module Map (Next.js, App Router)
 
 ```
 salescom-web/
 ├─ app/
-│  ├─ (auth)/
-│  │  ├─ login/page.tsx               # username/password → SSO + OTP → POST /auth/login
-│  │  └─ callback/page.tsx            # SSO return → exchanges authToken, stores JWT
-│  ├─ (app)/                          # authenticated shell (sidebar, JWT guard, 3h inactivity)
+│  ├─ (auth)/login/page.tsx            # username/password → POST /auth/login
+│  ├─ (auth)/login/callback/page.tsx   # SSO return → exchanges authToken via POST /auth/callback, stores JWT
+│  ├─ (app)/                           # authenticated shell (JWT guard, 3h inactivity)
 │  │  ├─ dashboard/page.tsx
-│  │  ├─ data-sources/                # list + add/edit (Admin)
+│  │  ├─ data-sources/                 # list + add/edit (Admin)
 │  │  ├─ reports/
-│  │  │  ├─ page.tsx                  # report list (DERIVED status label, filters, row actions)
-│  │  │  ├─ new/                      # the 5-step wizard
-│  │  │  │  ├─ step-1-basic/          # report_setups basics + channel_type_id
-│  │  │  │  ├─ step-2-uploads/        # report_supporting_uploads
-│  │  │  │  ├─ step-3-achievements/   # achievement blocks (IR)
-│  │  │  │  ├─ step-4-incentives/     # incentive blocks + final_mapping (IR)
-│  │  │  │  └─ step-5-review/         # Final Save / Demo / Schedule
-│  │  │  └─ [id]/                     # read-only details tabs + run history
-│  │  ├─ approvals/                   # pending queue + decision + history
-│  │  └─ disbursements/               # EV/POS status, POS CSV download
-│  └─ api/                            # Next route handlers (server-side proxy to backend)
+│  │  │  ├─ page.tsx                   # list (DERIVED status label, filters, row actions)
+│  │  │  ├─ new/step-1..5/             # the 5-step wizard (basics, uploads, achievements, incentives, review)
+│  │  │  └─ [id]/                      # read-only detail tabs + run history
+│  │  ├─ approvals/                    # queue + decision + history
+│  │  └─ disbursements/                # EV/POS status, POS CSV download
+│  └─ api/                             # Next route handlers (BFF: holds the permission decryption key)
 ├─ src/
-│  ├─ features/                       # one module per feature
-│  │  ├─ wizard/                      # IR builder UI, stage editors, live preview, guardrail warnings
-│  │  ├─ approvals/  ├─ data-sources/  ├─ runs/  └─ dashboard/
-│  ├─ lib/
-│  │  ├─ apiClient.ts                 # typed fetch wrapper, attaches JWT, error-envelope parsing
-│  │  ├─ ir/                          # IR TypeScript types (mirror IR_Schema), client-side validation
-│  │  └─ auth/                        # JWT storage, 3-hour inactivity logout
-│  └─ components/                     # shared UI (tables, paginator, form controls)
-└─ ...
+│  ├─ features/{wizard, approvals, data-sources, runs, dashboard}/
+│  ├─ lib/apiClient.ts                 # typed fetch, attaches JWT, parses error envelope
+│  ├─ lib/ir/                          # IR TS types (mirror IR_Schema), client-side validation
+│  └─ lib/auth/                        # JWT storage, 3h inactivity logout, permission-blob handling
 ```
 
-- **`(auth)`** routes are unauthenticated; everything in **`(app)`** is guarded by the JWT (3-hour frontend inactivity → token cleared → re-login).
-- The **wizard** module is the heart of the FE: it builds the **IR object** client-side (typed from Appendix A / `IR_Schema_and_MultiKPI_Join.md`), validates shape locally, shows the Demo preview and **guardrail warnings (G1–G3)**, and posts the IR to the backend at each step / Final Save.
-- The **report list status is a DERIVED label** computed by the FE from the API response (`report_approvals.current_level_order` + `report_approval_details` rows), e.g. "Approved by L1, now Pending at L2" / "Rejected by L2, now Pending at L1" / "Rejected by L1, now pending for edit & resend". It is **not** a stored column.
-- `src/lib/ir/` types **must stay in sync** with the IR schema and the canonical `salescomdbtst` column names in §3.
+- `(auth)` routes are unauthenticated; `(app)` is JWT-guarded (3h inactivity → token cleared → re-login). The Next `api/` BFF holds the **permission decryption key** (§4.6).
+- The **wizard** builds the **IR object** client-side (typed from Appendix A), validates shape locally, shows the Demo preview + guardrail warnings (G1–G3), and posts the IR per step / Final Save.
+- The report-list **status is a DERIVED label** computed from `report_approvals.current_level_order` + `report_approval_details` — not a stored column.
+- `src/lib/ir/` types must stay in sync with the IR schema and the `salescomdbtst` column names (§3).
 
 ---
 
@@ -2582,87 +1811,72 @@ salescom-web/
 
 ## 14.1 Repository Layout
 
-A **polyrepo** (or one mono-repo with these top-level folders) — three deployables + shared contracts:
+Three deployables + shared contracts (polyrepo, or one mono-repo with these folders):
 
 ```
 salescom/
-├─ salescom-web/            # Next.js frontend (see §13.3)
-├─ salescom-api/            # .NET solution
-│  ├─ SalesCom.Api/
-│  ├─ SalesCom.Application/
-│  ├─ SalesCom.Domain/
-│  ├─ SalesCom.Infrastructure/
-│  └─ SalesCom.sln
+├─ salescom-web/            # Next.js frontend (§13.3)
+├─ salescom-api/            # .NET: SalesCom.Api / .Application / .Domain / .Infrastructure + SalesCom.sln
 ├─ salescom-calc/           # Python calc engine
-│  ├─ generator/            # IR → SQL (SQLGlot), writes section_wise_report_sqls
-│  ├─ executor/             # runs run_stages, temp tables, → final_commissions handoff
-│  ├─ common/               # IR models, allowlist validator, DB session (SQLAlchemy)
-│  ├─ pyproject.toml
-│  └─ requirements.txt
-├─ contracts/               # source of truth shared by all three
-│  ├─ ir_schema.json        # JSON Schema for report_setups.definition (from IR_Schema doc)
+│  ├─ generator/            # IR → SQL (SQLGlot) → section_wise_report_sqls
+│  ├─ executor/             # runs run_stages, temp tables → final_commissions handoff
+│  └─ common/               # IR models, allowlist validator, SQLAlchemy session
+├─ contracts/               # shared source of truth
+│  ├─ ir_schema.json        # JSON Schema for report_setups.definition
 │  ├─ openapi.yaml          # /api/v1 contract (DTOs, error envelope)
-│  ├─ events/               # RabbitMQ message schemas (report.saved, run.requested, run.completed, ...)
+│  ├─ events/               # RabbitMQ message schemas
 │  └─ ddl/                  # canonical salescomdbtst DDL (§3) + seed scripts
-├─ infra/
-│  └─ docker-compose.yml    # local stack: postgres, rabbitmq, seaweedfs, api, web, calc
+├─ infra/docker-compose.yml # local: postgres, rabbitmq, seaweedfs, api, web, calc
 └─ docs/                    # this LLD, IR_Schema, Commission_Logic_Catalog, SDD
 ```
 
-> **Everything runs in Docker except the production DB** (bare-metal Percona PostgreSQL 18). Locally, Postgres runs in the compose stack for convenience.
+> **Everything runs in Docker except the production DB** (bare-metal Percona PostgreSQL 18). Locally Postgres runs in the compose stack.
 
 ## 14.2 Environment Variables
 
-Set these per service (`.env` locally; secrets via the platform secret store in prod). Names are illustrative but stable.
+Per service (`.env` locally; secret store in prod). Names illustrative but stable.
 
 **`salescom-api` (.NET)**
 ```
-ASPNETCORE_ENVIRONMENT=Development
-DB__ConnectionString=Host=postgres;Port=5432;Database=salescom;Username=salescom_app;Password=...;SearchPath=salescomdbtst
-DB__ExecutorRole=salescom_exec          # least-privilege role the Python Executor uses
+DB__ConnectionString=Host=postgres;Database=salescom;Username=salescom_app;Password=...;SearchPath=salescomdbtst
+DB__ExecutorRole=salescom_exec          # least-privilege role for the Python Executor
 RABBITMQ__Uri=amqp://guest:guest@rabbitmq:5672/
-S3__Endpoint=http://seaweedfs:8333
-S3__AccessKey=...    S3__SecretKey=...
-S3__Buckets__Uploads=salescom-uploads
-S3__Buckets__StageOut=salescom-stageout
-S3__Buckets__PosCsv=salescom-pos
-JWT__Issuer=salescom    JWT__SigningKey=...    JWT__InactivityLogoutHours=3
-CENTRAL_LOGIN__BaseUrl=https://blposapi.banglalink.net
-CENTRAL_LOGIN__AppName=...    CENTRAL_LOGIN__AppKey=...
+S3__Endpoint=http://seaweedfs:8333   S3__AccessKey=...   S3__SecretKey=...
+S3__Buckets__Uploads=salescom-uploads   S3__Buckets__StageOut=salescom-stageout
+JWT__Issuer=salescom   JWT__SigningKey=...   JWT__InactivityLogoutHours=3
+CENTRAL_LOGIN__BaseUrl=https://blposapi.banglalink.net   CENTRAL_LOGIN__AppName=...   CENTRAL_LOGIN__AppKey=...
 EV_API__BaseUrl=http://10.13.2.7:9898
 SMS__Host=172.16.7.210   SMS__Port=13082
 SMTP__Host=...   SMTP__Port=587   SMTP__From=salescom@banglalink.net
-HANGFIRE__DashboardEnabled=true
 ```
 
 **`salescom-calc` (Python)**
 ```
 DB_DSN=postgresql+psycopg://salescom_exec:...@postgres:5432/salescom   # least-privilege
-DB_SCHEMA=salescomdbtst
-RABBITMQ_URI=amqp://guest:guest@rabbitmq:5672/
+DB_SCHEMA=salescomdbtst   RABBITMQ_URI=amqp://guest:guest@rabbitmq:5672/
 S3_ENDPOINT=http://seaweedfs:8333   S3_ACCESS_KEY=...   S3_SECRET_KEY=...
-STAGE_TEMP_SCHEMA=run_temp          # schema for per-run temp/output tables
-SQL_ALLOWLIST_STRICT=true           # reject anything outside the read-only allowlist
-PYTHONUTF8=1
+STAGE_TEMP_SCHEMA=run_temp   SQL_ALLOWLIST_STRICT=true   PYTHONUTF8=1
 ```
 
 **`salescom-web` (Next.js)**
 ```
-NEXT_PUBLIC_API_BASE=https://localhost:5001/api/v1
-NEXT_PUBLIC_INACTIVITY_LOGOUT_MINUTES=180
+NEXT_PUBLIC_API_BASE=https://localhost:5001/api/v1   NEXT_PUBLIC_INACTIVITY_LOGOUT_MINUTES=180
+PERMISSION_DECRYPT_KEY=...   # server-side only (BFF) — decrypts the /auth/permissions blob
 ```
 
-## 14.3 Local Wiring (.NET ↔ Python ↔ RabbitMQ ↔ Postgres ↔ SeaweedFS)
+*(User-sync and POS disbursement run on Airflow with its own POS-DB connection string — separate infra, not in these services.)*
 
-Bring the whole stack up with `infra/docker-compose.yml`:
+## 14.3 Local Wiring
 
-1. **Postgres** starts first; an init job creates schema `salescomdbtst` and applies `contracts/ddl/` (schema + seed). Two DB roles are created: `salescom_app` (full DML on the 20 tables) and **`salescom_exec`** (least-privilege: `SELECT` on source/upload tables, `CREATE/DROP` only in `run_temp`, **no write** on the money tables `final_commissions` / `ev_disburse` — enforces D2).
-2. **RabbitMQ** starts; queues declared on first connect: `q.sql-generate`, `q.run.high`, `q.run.mid`, `q.run.low`, `q.ev-disburse`, `q.pos-disburse`, `q.notify`, plus `q.run-completed`, `q.approval-completed`, `q.notification`, and each `q.<name>.dlq`.
-3. **SeaweedFS** starts; buckets `salescom-uploads`, `salescom-stageout`, `salescom-pos` are created.
-4. **salescom-api** connects to Postgres (both roles configured), RabbitMQ, SeaweedFS; runs EF Core migrations on startup in dev; starts the Hangfire server (Scheduler, EV Disbursement, Notification).
-5. **salescom-calc** starts **two consumers**:
-   - *Generator* binds `q.sql-generate` ← `report.saved`. On message: load `report_setups.definition`, compile IR → SQL via SQLGlot, write `section_wise_report_sqls` (one row per `stage_order`).
-   - *Executor* binds `q.run.high/mid/low` (priority order) ← `run.requested`. On message: snapshot `section_wise_report_sqls` → `run_stages` (frozen `sql_text`), re-parse each SQL through the allowlist, execute stage-by-stage in `run_temp` (writing `run_stages.output_table_name`), record per-stage row counts, then publish `run.completed` (the API consumes it for the trusted-path `final_commissions` write and the post-run approval trigger).
+Bring the stack up with `infra/docker-compose.yml`:
+
+1. **Postgres** first; an init job creates schema `salescomdbtst`, applies `contracts/ddl/` (schema + seed), and creates two roles: `salescom_app` (full DML on the 21 tables) and **`salescom_exec`** (least-privilege: `SELECT` on source/upload tables, `CREATE/DROP` only in `run_temp`, **no write** on the money tables — enforces D2).
+2. **RabbitMQ**; queues declared on first connect: `q.sql-generate`, `q.run.high`, `q.run.mid`, `q.run.low`, `q.ev-disburse`, `q.run-completed`, `q.approval-completed`, and each `q.<name>.dlq`. *(No POS or notify queue — POS is Airflow, notifications are the Hangfire outbox.)*
+3. **SeaweedFS**; buckets `salescom-uploads`, `salescom-stageout`.
+4. **salescom-api** connects to Postgres (both roles), RabbitMQ, SeaweedFS; runs EF Core migrations on startup in dev; starts the Hangfire server (Scheduler, DisbursementWorker, Notification drain, StaleRunSweeper).
+5. **salescom-calc** starts two consumers:
+   - *Generator* binds `q.sql-generate` ← `report.saved`: compile IR → SQL → `section_wise_report_sqls`.
+   - *Executor* binds `q.run.high/mid/low` ← `run.requested`: snapshot → `run_stages`, allowlist re-parse, execute in `run_temp`, record row counts, publish `run.completed` (the API does the trusted-path `final_commissions` write + post-run approval trigger).
 6. **salescom-web** points at the API base URL.
 
 **Message contracts** (`contracts/events/`):
@@ -2670,84 +1884,73 @@ Bring the whole stack up with `infra/docker-compose.yml`:
 | Event | Queue(s) | Payload (minimal) | Producer → Consumer |
 |---|---|---|---|
 | `report.saved` | `q.sql-generate` | `{ reportSetupId, irVersion }` | Reports API → SQL Generator |
-| `run.requested` | `q.run.high` (RunNow) · `q.run.mid` (Demo) · `q.run.low` (Schedule) | `{ runId, reportSetupId, runType }` | Runs API / Scheduler → SQL Executor |
-| `run.completed` | `q.run-completed` | `{ runId, status, lastStageTable, rowCount }` | Executor → Runs API (trusted-path `final_commissions`) |
-| `approval.completed` | `q.approval-completed`, `q.notification` | `{ reportSetupId, reportRunId, phase }` | Approval API → DisbursementWorker / Notification |
+| `run.requested` | `q.run.high` / `.mid` / `.low` | `{ runId, reportSetupId, runType }` | Runs API / Scheduler → Executor |
+| `run.completed` | `q.run-completed` | `{ runId, status, lastStageTable, rowCount }` | Executor → Runs API |
+| `approval.completed` | `q.approval-completed` | `{ reportSetupId, reportRunId, phase }` | Approval API → DisbursementWorker |
 | `ev.disburse` | `q.ev-disburse` | `{ runId }` | DisbursementWorker → EV Worker |
-| `pos.disburse` | `q.pos-disburse` | `{ runId }` | DisbursementWorker → POS Worker |
-| `notify.sms` / `notify.email` | `q.notify` | `{ templateCode, recipient, body, ... }` | any → Notification consumer |
 
-The **single-run model** is realized by the Executor processing one `run.requested` at a time (advisory lock §11.7), draining high before mid before low.
+The **single-run model** = the Executor processes one `run.requested` at a time (advisory lock §11.7), draining high before mid before low.
 
 ## 14.4 EF Core Migration Command
 
-Schema is owned by EF Core migrations in `SalesCom.Infrastructure` (`SalesComDbContext`, default schema `salescomdbtst`). The canonical DDL in §3 is the **target**; the initial migration must reproduce it exactly: `int8 GENERATED BY DEFAULT AS IDENTITY` PKs, `int8` FKs, the `int4` enum columns, and the idempotency UNIQUE indexes (`final_commissions(report_run_id, channel_code)`, `ev_disburse(report_run_id, channel_code)`, `pos_disbursement(report_run_id)`, `run_stages(run_id, sort_order)`, `section_wise_report_sqls(report_setup_id, stage_order)`, `report_setups(report_name)`).
+Schema is owned by EF Core migrations in `SalesCom.Infrastructure` (`SalesComDbContext`, default schema `salescomdbtst`). The §3 DDL is the **target**: `int8 GENERATED BY DEFAULT AS IDENTITY` PKs, `int8` FKs, `int4` enum columns, the mixed-case `"IsSetupComplete"` / `"Msisdn"`, and the §3 UNIQUE indexes.
 
 ```bash
 # from salescom-api/
-dotnet ef migrations add InitialSchema \
-  --project SalesCom.Infrastructure \
-  --startup-project SalesCom.Api \
-  --context SalesComDbContext
-
-dotnet ef database update \
-  --project SalesCom.Infrastructure \
-  --startup-project SalesCom.Api \
-  --context SalesComDbContext
+dotnet ef migrations add InitialSchema --project SalesCom.Infrastructure --startup-project SalesCom.Api --context SalesComDbContext
+dotnet ef database update          --project SalesCom.Infrastructure --startup-project SalesCom.Api --context SalesComDbContext
 ```
 
-After migrating, run the **seed script** (`contracts/ddl/seed.sql`) to load lookups and config: `channels` (Distributor / RSO / Retailer), default `approval_flows` + `approval_flow_levels` (with `approval_type` 1=Pre-Run / 2=Post-Run) + `approval_flow_level_users`, notification templates (for `notification_logs.template_code`), and the `user_rights.rights_code` → role mapping (Business User=10 / Approver=20 / Administrator=30 — Appendix B / §4.6 RBAC matrix).
+> **Idempotency indexes.** §3 ships UNIQUE on `section_wise_report_sqls(report_setup_id, stage_order)` and `final_commissions(report_run_id, channel_code)`. **Add** as part of InitialSchema (the no-double-pay guard): UNIQUE on `ev_disburse(report_run_id, channel_code)`, `pos_disbursement(report_run_id)`, `run_stages(run_id, sort_order)`, and `report_setups(report_name)`.
+
+After migrating, run the **seed script** (`contracts/ddl/seed.sql`): `channels` (Distributor / RSO / Retailer), default `approval_flows` + `approval_flow_levels` (`approval_type` 1=Pre-Run / 2=Post-Run) + `approval_flow_level_users`, and the `user_rights.rights_code` → role mapping (Maker=10 / Checker=20 / Admin=30). (Email/SMS templates live in code, not a DB column.)
 
 ## 14.5 Recommended Build Order
 
-Build features in dependency order so each is testable before the next depends on it. The architecture supports the whole system now; this is the **construction sequence**, not a scope cut.
+Construction sequence (the architecture supports the whole system now; this is build order, not a scope cut):
 
-| # | Module | Why this order | Done when |
-|---|---|---|---|
-| **1** | **Auth & session** | Nothing else works without identity/RBAC. Central Login SSO+OTP → JWT, `/auth/me`, hourly UserSync (`users`/`user_rights`), `login_log` logging. | A user can sign in, get a JWT, and `/me` returns the resolved role; failed/successful attempts land in `login_log`. |
-| **2** | **Seed / lookup** | Reports, flows, channels all FK into lookups. Load `channels`, default `approval_flows`/`approval_flow_levels`/`approval_flow_level_users`, notification templates, `user_rights.rights_code`→role. | All FK targets exist; seed script idempotent. |
-| **3** | **Data Source management** | The wizard's sources come from here (BR2: never delete; can't deactivate if in use). | Admin can register/activate a `data_sources` row; a business user lists only active ones. |
-| **4** | **Supporting upload** | The wizard joins uploaded files as tables; needed before the wizard's `combine` / external-config join works. | File → SeaweedFS → `report_supporting_uploads` row → ingested DB table (`db_schema.db_table_name`). |
-| **5** | **Wizard / IR** | Produces `report_setups.definition`. Validate the IR shape against `ir_schema.json` on save; persist draft + steps; **Final Save sets `is_setup_complete=true`**, initiates `report_approvals`, and publishes `report.saved`. | A complete IR is saved and validated; `report.saved` is published; `is_setup_complete=true`. |
-| **6** | **SQL Generator (Python)** | Consumes `report.saved`; compiles IR → SQL → `section_wise_report_sqls`. Build Phase-1 ops first (`filter/combine/summarize/calculate/modify`), then add ops in later phases. | For a worked IR (e.g. the RSO GA+Recharge example), `section_wise_report_sqls` holds correct per-stage SQL. |
-| **7** | **Run Executor (Python)** | Consumes `run.requested`; snapshots `section_wise_report_sqls`→`run_stages`, allowlist re-parse, stage-by-stage temp tables, row-count guardrails, demo cap, `run.completed`. Then the .NET trusted path writes `final_commissions` (`ON CONFLICT (report_run_id, channel_code) DO NOTHING`). Pre-run checks run for Final/Scheduled only; Demo **skips** them. | A FINAL run produces correct per-recipient `final_commissions`; a DEMO run previews row counts and is never disbursable. |
-| **8** | **Approval** | Gates disbursement (BR8). Configurable flow/levels/users; one `report_approvals` instance per report; sequential ascending (BR6); reject needs `comments` (BR7); maker≠checker (BR5). `overall_status` walks 0→1→2→3→4; each decision is a `report_approval_details` row. | A report walks its flow to Post Approved (4) or back to Draft (0) with a full `report_approval_details` trail. |
-| **9** | **Disbursement** | Only after full approval (`overall_status=4`, BR8). EV (auto + SMS, `ev_disburse`) or POS (CSV → `pos_disbursement`), mutually exclusive; idempotent per `(report_run_id, channel_code)` / per run. | Approved run pays out via the chosen channel exactly once; SMS/CSV produced. |
-| **10** | **Dashboard & Notification** | Cross-cuts everything above; built last because it reads all prior tables. Login attempts, run/approval/disbursement summaries; SMS + email send + `notification_logs`. | Dashboard widgets render real data; notifications logged and delivered. |
+| # | Module | Done when |
+|---|---|---|
+| **1** | **Auth & session** — Central Login SSO+OTP → JWT, `/auth/me` + `/auth/permissions`, hourly Airflow user-sync (`users`/`user_rights`), `login_log`. | A user signs in, gets a JWT, `/me` returns the resolved role; attempts land in `login_log`. |
+| **2** | **Seed / lookup** — `channels`, default approval flow/levels/users, `rights_code`→role. | All FK targets exist; seed idempotent. |
+| **3** | **Data Source management** — never delete; can't deactivate if in use. | Admin registers/activates a `data_sources` row; a business user lists only active ones. |
+| **4** | **Supporting upload** — file → SeaweedFS → `report_supporting_uploads` → ingested DB table. | Upload produces a real `salescom_upload` table the wizard can join. |
+| **5** | **Wizard / IR** — validate IR against `ir_schema.json`; Final Save sets `"IsSetupComplete"=true`, publishes `report.saved`. | A complete IR is saved + validated; `report.saved` published. |
+| **6** | **SQL Generator (Python)** — `report.saved` → IR → SQL → `section_wise_report_sqls` (Phase-1 ops first). | A worked IR compiles to correct per-stage SQL. |
+| **7** | **Run Executor (Python)** — snapshot → `run_stages`, allowlist re-parse, temp tables, guardrails, demo cap, `run.completed`; trusted path writes `final_commissions`. Pre-run checks Final/Scheduled only; Demo skips. | A Final run produces correct per-recipient `final_commissions`; Demo previews + never disburses. |
+| **8** | **Approval** — configurable flow/levels/users; one instance per report; sequential ascending; reject needs a comment; maker≠checker; `overall_status` 0→1→2→3→4. | A report walks to Post Approved (4) or back to Draft (0) with a full decision trail. |
+| **9** | **Disbursement** — only after full approval (`overall_status=4`); EV (auto + SMS) or POS (Airflow CSV dump), mutually exclusive, idempotent. | An approved run pays out via the chosen channel exactly once. |
+| **10** | **Dashboard & Notification** — reads all prior tables; SMS + email via `email_notifications` / `sms_notifications`. | Widgets render real data; notifications logged + delivered. |
 
-**Cross-cutting** (audit log `audit_logs`, error envelope, pagination, RBAC middleware) is built **alongside step 1** and used by every later module.
+**Cross-cutting** (audit log, error envelope, pagination, RBAC middleware) is built **alongside step 1** and used by every later module.
 
 ---
 
 # Appendix A — IR Reference
 
-> **Authority.** The full, authoritative IR contract — the `report_setups.definition` JSONB shape, the formal JSON Schema (draft 2020-12), every enum value list, the operation-type catalogue, the multi-KPI section-join rule, and a complete worked example — lives in **`IR_Schema_and_MultiKPI_Join.md`** (the LLD annex). This appendix **summarises** the shape so the LLD is self-navigable; it does **not** duplicate the annex. Where this appendix and the annex differ, **the annex wins**.
+> **Authority.** The full IR contract — the `report_setups.definition` shape, the formal JSON Schema (draft 2020-12), every enum list, the operation catalogue, the multi-KPI join rule, and a complete worked example — lives in **`IR_Schema_and_MultiKPI_Join.md`**. This appendix only **summarises** the shape; where they differ, the annex wins.
 
-## A.1 IR top-level shape
+## A.1 Top-level shape
 
-The IR is stored in `report_setups.definition` (JSONB). At the top level it is:
-
+Stored in `report_setups.definition` (JSONB):
 ```jsonc
 {
   "report":      { "name": "...", "channel": "RSO", "cycle": "Apr 2026",
-                   "start_date": "2026-04-01", "end_date": "2026-04-30" },   // mirrors Step-1 basics
-  "achievements": [ /* Block, Block, ... */ ],   // Step-3: performance figures
-  "incentives":   [ /* Block, Block, ... */ ],   // Step-4: payout logic
-  "final_mapping": {                              // Step-4: how the last block becomes final_commissions
+                   "start_date": "2026-04-01", "end_date": "2026-04-30" },   // mirrors Step-1
+  "achievements": [ /* Block, ... */ ],   // Step-3: performance figures
+  "incentives":   [ /* Block, ... */ ],   // Step-4: payout logic
+  "final_mapping": {                       // Step-4: how the last block becomes final_commissions
     "from_block": "INC1",
-    "channel_code_column": "RSO_CODE",            // → final_commissions.channel_code (per-recipient payee key)
-    "commission_amount_column": "Incentive",      // → final_commissions.commission_amount
-    "channel_scope": "RSO"
-  }
+    "channel_code_column": "RSO_CODE",     // → final_commissions.channel_code (per-recipient payee key)
+    "commission_amount_column": "Incentive",
+    "channel_scope": "RSO" }
 }
 ```
-
-The report's **channel TYPE** comes from `report_setups.channel_type_id` (a `channels` row), and is written to `final_commissions.channel_id` (constant for the report). The **per-recipient code** is `final_mapping.channel_code_column`, written to `final_commissions.channel_code`. (See §6.3 channel model.)
+The report's **channel TYPE** comes from `report_setups.channel_type_id` → `final_commissions.channel_id` (constant). The **per-recipient code** is `final_mapping.channel_code_column` → `final_commissions.channel_code` (§6.3).
 
 ## A.2 Block shape
 
-A **Block** is the same shape for an achievement and an incentive — a `source` plus an ordered list of `stages`, ending in a `summarize` that fixes the block's **grain**:
-
+A Block (same shape for achievement & incentive) — a `source` plus ordered `stages`, ending in a `summarize` that fixes the **grain**:
 ```jsonc
 {
   "block_id": "ACH1",
@@ -2763,243 +1966,115 @@ A **Block** is the same shape for an achievement and an incentive — a `source`
   "outputs": [ "RSO_CODE", "Recharge", "RechargePct" ]
 }
 ```
+**Operation types** (Phase 1): `filter`, `combine`, `summarize`, `calculate` (`formula`/`ifcase`/`map`), `modify`; **Phase 3 adds** `rank` (window functions `NTILE`, `PERCENT_RANK`). The IR *shape* is final now; only the op-list grows.
 
-**Operation types** (Phase 1 → grows in later phases): `filter`, `combine`, `summarize`, `calculate` (`formula` / `ifcase` / `map`), `modify`; **Phase 3 adds** `rank` (window functions: `NTILE`, `PERCENT_RANK`). The IR *shape* is final now; only the op-list grows (Phase 1→3).
+## A.3 Multi-KPI join rule
 
-## A.3 Multi-KPI section-join rule
-
-The core safety contract for multi-KPI commissions:
-
-- **Every block ends in a `summarize`** that fixes its grain (e.g. "1 row per RSO"). `output_grain` = that `summarize`'s `group_by`.
-- **Block-to-block joins must be on the grain key** (1:1). A block reading two achievement blocks (`source.type: "block"` + a `combine`) joins them on the shared grain key, never on a finer column.
+- **Every block ends in a `summarize`** fixing its grain (e.g. "1 row per RSO"); `output_grain` = that group_by.
+- **Block-to-block joins must be on the grain key** (1:1), never a finer column.
 
 This guarantees no accidental row multiplication (fan-out) when combining KPIs.
 
 ## A.4 Guardrails (G1–G4)
 
-| Guard | What it checks | When |
+| Guard | Checks | When |
 |---|---|---|
-| **G1** | **Pre-join uniqueness** — the join key is unique in each side before a grain-key join. | Generated into the SQL; checked at execute time. |
-| **G2** | **Post-join fan-out** — output row count did not exceed the expected grain cardinality. | Execute time, per stage. |
-| **G3** | **Demo-run per-stage row counts** — every stage's `output_table_name` row count is surfaced in the Demo Run Log so the Maker catches fan-out before a real run. | Demo runs (§6.7). |
-| **G4** | **Reconciliation** — disbursed total == sum of the final block's outputs (`SUM(final_commissions.commission_amount)`). | End of disbursement (§10.5). |
+| **G1** | Pre-join uniqueness of the join key on each side | Generated into the SQL; checked at execute time |
+| **G2** | Post-join fan-out didn't exceed the expected grain cardinality | Execute time, per stage |
+| **G3** | Demo per-stage `output_table_name` row counts surfaced in the Run Log | Demo runs (§6.7) |
+| **G4** | Reconciliation — disbursed total == `SUM(final_commissions.commission_amount)` | End of disbursement (§10.6) |
 
-## A.5 IR → schema column mapping
+## A.5 IR → schema mapping
 
 | IR element | Lands in |
 |---|---|
-| `report.*` (name/channel/cycle/dates) | `report_setups` basics (mirror of Step-1) |
+| `report.*` | `report_setups` basics (mirror of Step-1) |
 | `achievements[]`, `incentives[]`, `final_mapping` | `report_setups.definition` (JSONB) |
-| each block stage (compiled) | one `section_wise_report_sqls` row (`stage_order`, `sql_text`) |
+| each compiled stage | one `section_wise_report_sqls` row (`stage_order`, `sql_text`) |
 | `final_mapping.channel_code_column` | `final_commissions.channel_code` (per-recipient) |
 | `final_mapping.commission_amount_column` | `final_commissions.commission_amount` |
-| (report's) `channel_type_id` | `final_commissions.channel_id` (constant TYPE) |
-
-> For the full JSON Schema, enum lists, operation catalogue and the complete worked RSO GA+Recharge example, see **`IR_Schema_and_MultiKPI_Join.md`**.
+| report's `channel_type_id` | `final_commissions.channel_id` (constant TYPE) |
 
 ---
 
-# Appendix B — Enum & State-Transition Reference
+# Appendix B — Enum & State Reference
 
-Every `int4` enum column in §3 is listed here with its **code → meaning** map. The application owns code→meaning; these lists are authoritative and must stay in sync with §3 comments. `*` = terminal state. Transitions not listed are illegal and rejected with **409 Conflict**.
+All `int4` enum columns from §3, **code → meaning**. The app owns the mapping; keep in sync with §3. `*` = terminal.
 
-> **Note on mixed types.** Run-level lifecycle columns `report_runs.run_status` and `report_runs.disburse_status` are `varchar(50)` in the real schema (string codes), as are the disbursement `status` / `dump_status`. The columns below typed `int4` use **numeric codes**. Both are documented here so writers use the correct literal type.
+**Identity:** `login_log.login_status` — 1 Success, 2 Failed. `user_rights.rights_code` — 10 Maker, 20 Checker, 30 Admin (resolved role = highest active).
 
-## B.1 `login.status` (int4)
-| Code | Meaning |
-|---|---|
-| 1 | Success |
-| 2 | Failed |
+**Report:** `report_setups.recurrent_type` — 1 Daily, 2 Weekly, 3 Monthly, 4 Quarterly, 5 Yearly (only when `is_recurrent`). `report_setups.is_report_stop` — **bool** (true = stopped; replaces the old ON/STOP status column).
 
-## B.2 `report_runs.run_type` (int4)
-| Code | Meaning |
-|---|---|
-| 1 | Demo |
-| 2 | Final |
+**Run:** `report_runs.run_type` — 1 Demo, 2 Final. `report_runs.run_status` — 0 Pending, 1 Running, 2 Completed, 3 Failed. `run_stages.run_status` — same 0–3. `run_stages.cleanup_status` — 0 Pending, 1 Done, 2 Skipped.
 
-## B.3 `run_stages.run_status` (int4)
-| Code | Meaning |
-|---|---|
-| 0 | Pending |
-| 1 | Running |
-| 2 | Succeeded |
-| 3 | Failed |
+`report_runs.disburse_status` (**varchar**) — NONE / PENDING / IN_PROGRESS / DONE / FAILED:
 ```
-0 Pending → 1 Running → 2 Succeeded*
-1 Running → 3 Failed*     (aborts the parent run)
+NONE → PENDING        (approval.completed arms the Final run)
+PENDING → IN_PROGRESS (DisbursementWorker publishes ev.disburse)
+IN_PROGRESS → DONE*    (all recipients Success + reconciled)
+IN_PROGRESS → FAILED   (one or more failed) → IN_PROGRESS (re-drive)
 ```
+(NONE is also the resting state for Demo runs, which never disburse.)
 
-## B.4 `run_stages.cleanup_status` (int4)
-| Code | Meaning |
-|---|---|
-| 0 | Not Cleaned |
-| 1 | Cleaned |
+**Approval:** `approval_flow_levels.approval_type` — 1 Pre-Run (setup), 2 Post-Run (result). `report_approval_details.approval_status` — 1 Approved, 2 Rejected (`remarks` required on Reject). `report_approvals.overall_status` — 0–4:
 ```
-0 Not Cleaned → 1 Cleaned*     (temp output dropped)
-0 Not Cleaned → 0 Not Cleaned  (drop failed; sweeper retries until 1)
+0 Draft → 1 Pre Approval Pending       (submit setup)
+1 → 1                                   (a pre-level approves; advance current_level_order)
+1 → 2 Pre Approved                      (final pre-level approves → runnable)
+1 → 0                                   (any pre-level rejects → back to Maker, comment required)
+2 → 3 Post Approval Pending             (a Final run's results open the result approval)
+3 → 3                                   (a post-level approves; advance)
+3 → 4 Post Approved*                    (final post-level approves → disbursement armed)
+3 → (back to Maker, setup approval kept)(a post-level rejects → re-enter at status 3, never status 1 — §7.4.6)
 ```
+> The report-list **status label is DERIVED** from `current_level_order` + `report_approval_details` — not a stored column.
 
-## B.5 `approval_flow_levels.approval_type` (int4) — approval **phase**
-| Code | Meaning |
-|---|---|
-| 1 | Pre-Run (setup approval) |
-| 2 | Post-Run (result approval) |
-
-## B.6 `report_approvals.overall_status` (int4) — 2026-06-16 lifecycle
-| Code | Meaning |
-|---|---|
-| 0 | Pending for Editing & Resubmission (Draft) |
-| 1 | Pre Approval Pending |
-| 2 | Pre Approved |
-| 3 | Post Approval Pending |
-| 4 | Post Approved |
+**Disbursement:** `ev_disburse.disburse_status` — 0 Pending, 1 Sent, 2 Success, 3 Failed, 4 Retry:
 ```
-0 Draft               → 1 Pre Approval Pending     (Maker submits setup for pre-approval)
-1 Pre Approval Pending→ 1 Pre Approval Pending     (a pre-level approves; advance current_level_order — BR6)
-1 Pre Approval Pending→ 2 Pre Approved             (final pre-level approves → report runnable)
-1 Pre Approval Pending→ 0 Draft                    (any pre-level rejects → back to Maker for edit & resend, BR7 comment)
-2 Pre Approved        → 3 Post Approval Pending     (Final run produced results; result approval opens)
-3 Post Approval Pending→3 Post Approval Pending     (a post-level approves; advance current_level_order)
-3 Post Approval Pending→4 Post Approved*            (final post-level approves → disbursement armed)
-3 Post Approval Pending→0 Draft                     (a post-level rejects → back to Maker, BR7 comment)
+0 → 1 (EV API call issued) → 2 Success*
+1 → 3 Failed → 4 Retry → 1 (attempts remain) ;  4 → 3 Failed* (exhausted)
 ```
-> The report-list **status label is DERIVED** (2026-06-16 decision 5) from `current_level_order` + the `report_approval_details` rows — e.g. *"Approved by L1, now Pending at L2"*, *"Rejected by L2, now Pending at L1"*, *"Rejected by L1, now pending for edit & resend"*. It is **not** a stored column.
+`pos_disbursement.dump_status` — 0 Pending, 1 Dumped, 2 Failed (set by the nightly Airflow job, §10.5).
 
-## B.7 `report_approval_details.approval_status` (int4)
-| Code | Meaning |
-|---|---|
-| 1 | Approved |
-| 2 | Rejected |
+**Notification:** `email_notifications.status` / `sms_notifications.status` — 0 Pending, 1 Sent, 2 Failed (`0 → 1*` sent; `0 → 2 → 0` retry to cap; `2*` at cap).
 
-`2 Rejected` requires a non-empty `comments` (BR7). One row per level action (append-only decision record).
-
-## B.8 `notification_logs.channel` (int4)
-| Code | Meaning |
-|---|---|
-| 1 | Email |
-| 2 | SMS |
-
-## B.9 `notification_logs.status` (int4)
-| Code | Meaning |
-|---|---|
-| 0 | Pending |
-| 1 | Sent |
-| 2 | Failed |
-```
-0 Pending → 1 Sent*               (gateway / SMTP accepted)
-0 Pending → 2 Failed → 0 Pending  (retry up to cap; attempt_count++)
-2 Failed  → 2 Failed*             (cap reached)
-```
-
-## B.10 `audit_logs.action_type` (int4)
-| Code | Meaning |
-|---|---|
-| 1 | Create |
-| 2 | Update |
-| 3 | Delete |
-
-## B.11 String-coded run / disbursement states (varchar in §3, for completeness)
-- **`report_runs.run_status`** — `QUEUED, RUNNING, SUCCEEDED, FAILED`
-  ```
-  QUEUED  → RUNNING        (executor claims the global run slot)
-  QUEUED  → FAILED*        (pre-run check fails: not approved / End Date / ETL not done)
-  RUNNING → SUCCEEDED*     (all stages 2 Succeeded + final_commissions written)
-  RUNNING → FAILED*        (a stage failed / mapping error / stale-run reclaim)
-  ```
-- **`report_runs.disburse_status`** — `NONE, PENDING, IN_PROGRESS, DONE, FAILED`
-  ```
-  NONE        → PENDING       (approval.completed arms the Final run — E3 step 1)
-  PENDING     → IN_PROGRESS   (DisbursementWorker publishes ev/pos.disburse — E3 step 2)
-  IN_PROGRESS → DONE*         (all recipients SUCCESS / POS HANDED_OFF + G4 reconciled)
-  IN_PROGRESS → FAILED        (one or more failed) → IN_PROGRESS (re-drive)
-  ```
-  (`NONE` is also the resting state for Demo runs, which never disburse.)
-- **`ev_disburse.status`** — `PENDING, SENT, SUCCESS, FAILED, RETRY`
-  ```
-  PENDING → SENT     (EV API call issued)
-  SENT    → SUCCESS* (gateway confirmed)
-  SENT    → FAILED   (gateway error) → RETRY (attempts remain) → SENT
-  RETRY   → FAILED*  (attempts exhausted)
-  ```
-- **`pos_disbursement.dump_status`** — `PENDING, GENERATED, HANDED_OFF, FAILED`
-  ```
-  PENDING   → GENERATED    (CSV built + uploaded to SeaweedFS)
-  GENERATED → HANDED_OFF*  (delivered to POS)
-  PENDING/GENERATED → FAILED → PENDING  (retry)
-  ```
-
-## B.12 Other fixed enums (for reference)
-- **`report_setups.recurrent_type`** (int4): `1=Daily, 2=Weekly, 3=Monthly, 4=Quarterly, 5=Yearly` (used only when `is_recurrent = true`).
-- **`user_rights.rights_code`** (int4): role code — `10=MAKER (Business User)`, `20=CHECKER (Approver)`, `30=ADMIN (Administrator)`. Resolved role = highest active code (§4.6).
-- **`report_setups.status`** (varchar): `ON` / `STOP` (whether the report is runnable / schedulable).
+**Audit:** `audit_logs.action_type` — 1 Create, 2 Update, 3 Delete.
 
 ---
 
-# Appendix C — Business Rules (BR1–BR9) + Enforcement
+# Appendix C — Key Rules (consolidated)
 
-| BR | Rule | Primary enforcement point |
-|---|---|---|
-| **BR1** | Access by assigned role/right. | JWT + RBAC middleware; per-endpoint role check; sensitive actions live-re-check `user_rights` (§4.4.4c, §4.6). |
-| **BR2** | A data source is never deleted, only deactivated; cannot deactivate while in use. | No DELETE route; `data_sources.is_active=false`; in-use scan of `report_setups.definition` → `409 SOURCE_IN_USE` (§5.4, §5.6 R5/R6). |
-| **BR3** | Report name system-wide unique. | `ux_report_setups_report_name` → `409` at Step-1 create; Clone forces a new unique name (§6.4.1, §6.8). |
-| **BR4** | Start date ≤ End date. | Step-1 validation → `422` (§6.4.1). |
-| **BR5** | Same user can't be Maker + Checker of the same report/run. | Maker = `COALESCE(report_setups.updated_by, report_setups.created_by)`; submit pre-check `MAKER_IS_SOLE_APPROVER`; decision check `SELF_OR_DUPLICATE_APPROVER` (§7.4.3–7.4.4, §7.6). |
-| **BR6** | Approval sequential ascending (`level_order`). | Request exposes only `current_level_order`; `STALE_LEVEL` / `NOT_CURRENT_LEVEL_APPROVER`; `ux_approval_flow_levels_flow_order` (§7.4.4, §7.6). |
-| **BR7** | Reject requires a comment. | `400 COMMENT_REQUIRED`; `report_approval_details.comments` populated on every `approval_status=2` (§7.4.6, §7.5). |
-| **BR8** | Disburse only after full approval. | DisbursementWorker consumes `approval.completed`; `disburse_status='PENDING'` only via `overall_status=4` (post) or `=2` (recurrent pre); precondition gate in §10.4; pre-run check 2 in §6.10. |
-| **BR9** | Only Maker manages schedule; all changes audited. | Schedule endpoint role check → `403`; every config/approval/schedule/payout action writes an `audit_logs` row in the same transaction (§6.9, §12.1). |
+A cross-reference index of the platform's hard rules and where each is enforced (each is also stated inline in its section).
+
+| Rule | Enforcement |
+|---|---|
+| Access by assigned role/right | JWT + RBAC; per-endpoint role check; sensitive actions re-check `user_rights` live (§4). |
+| A data source is never deleted, only deactivated; can't deactivate while in use | No DELETE route; `is_active=false`; in-use scan → `409 SOURCE_IN_USE` (§5.4). |
+| Report name system-wide unique | App-enforced (recommend a UNIQUE index) → `409`; Clone forces a new name (§6.4). |
+| Start date ≤ End date | Step-1 validation → `422` (§6.4). |
+| Same user can't be Maker + Checker of the same report | Submit pre-check + decision check against `report_approval_details` (§7.4). |
+| Approval sequential ascending | Only `current_level_order` is actionable; `STALE_LEVEL` / `NOT_CURRENT_LEVEL_APPROVER` (§7.4). |
+| Reject requires a comment | `400 COMMENT_REQUIRED`; `remarks` populated (§7.4.6). |
+| Disburse only after full approval | `disburse_status='PENDING'` only via `overall_status=4` (or recurrent =2); gate `409 NOT_APPROVED` (§6.10, §10). |
+| Only Maker manages schedule; all changes audited | Schedule role check → `403`; every config/approval/schedule/payout writes `audit_logs` (§6.9, §12.1). |
+
+*(The current SRS dropped the BR1–BR9 numbering; the rules themselves are unchanged and enforced as above.)*
 
 ---
 
 # API Conventions
 
-These conventions apply to **every** endpoint in this LLD; per-feature sections do not repeat them.
+These apply to **every** endpoint; per-feature sections do not repeat them.
 
-- **Versioning & base path.** All endpoints are under **`/api/v1`** (e.g. `/api/v1/reports`). Breaking changes bump the path segment (`/api/v2`).
-- **Authentication.** Every call (except the login/callback handshake) requires a SalesCom **JWT** in `Authorization: Bearer <token>`. Missing/expired/invalid → `401 UNAUTHENTICATED`. **Inactivity logout = 3 hours** (sliding); the explicit absolute token expiry is configured at deployment (left unspecified here). **Sensitive actions** (approve, disburse, schedule, all config writes) additionally re-check the role **live** against `user_rights` in the DB — the JWT `role` claim alone is not trusted for money/approval paths (anti-stale-authorization) → `403` on failure.
-- **Correlation.** Each request gets a `correlationId` (from an inbound `X-Correlation-Id` header or generated); it is returned in error envelopes, propagated onto every published RabbitMQ message, and logged to Serilog/Loki.
-- **Async actions** return **`202 Accepted`** with the created/affected resource id and the new state (e.g. a run returns `reportRunId` + `run_status: "QUEUED"`); the client polls the status endpoint or reacts to a notification.
-- **Pagination / filtering / sorting** on all list endpoints use the shared model in §12.3 (`page`, `pageSize`, `sort=field:dir`, `filter[...]`) and the shared response envelope.
-- **Errors** always use the standard envelope and status table in §12.2.
-- **Money** is `numeric(18,4)` BDT and is serialized as a string in JSON to avoid float drift.
-- **Timestamps** are ISO-8601 UTC (`timestamptz` stored UTC); the client localizes for display.
-- **Idempotency on writes** to money/run/disbursement paths is backstopped by the §3 UNIQUE keys (`report_run_id, channel_code` etc.); safe to retry.
-
----
-
-## §15 — Errata & Reconciliation (final critic pass)
-
-> **Authority:** resolves the cross-section gaps a final consistency review found. Where §1–§14 disagree with the below, **§15 is canonical.** Apply when writing the code.
-
-### High
-
-**E1 — Reject is phase-aware; a result-reject never voids setup approval (§7.4.6).**
-- **PRE_RUN reject** → `report_approvals.overall_status = 0` (back to Maker for edit), `current_level_order` → first PRE_RUN level; on resubmit, re-enter at status **1** (Pre Approval Pending).
-- **POST_RUN reject** → does **NOT** touch the (already Pre-Approved) setup. The reject is recorded in `report_approval_details`; `current_level_order` resets to the **first POST_RUN level**; on resubmit (Maker re-runs a new Final run or edits) the POST block re-enters at status **3** (Post Approval Pending), **never** at status 1/PRE. Setup (PRE) approval is never re-required by a result-reject.
-
-**E2 — `channel_code` is the recipient identifier for EV (resolves the EV-SMS/MSISDN gap).** For an EV-disbursing report, the IR `final_mapping.channel_code_column` is set to the recipient's **MSISDN / EV-account number**, so `ev_disburse.channel_code` **is** the dialable recipient id. The EV API call and the payout SMS (`notification_logs.phone_number`) both use `ev_disburse.channel_code` directly — no extra lookup, no new column. (A report whose channel_code is a non-dialable code cannot use EV — it must use POS.) Document this in §9.4 and §11.8.
-
-### Medium
-
-**E3 — Validation HTTP code = `422` everywhere.** BR4 (start ≤ end) and schedule-date ≥ end-date both return **422 UNPROCESSABLE_ENTITY** (fix the §12.2 table row that said 400). All field-level business validation = 422; only duplicate report/flow name (BR3) = 409.
-
-**E4 — Submit = `201 Created`, one canonical path.** `POST /reports/{id}/submit-approval` is canonical (it creates a new `report_approvals` row → 201). `POST /reports/{id}/submit` is an alias of the same handler. Fix §6.12 success code 200 → 201.
-
-**E5 — `ev_disburse.status` enum = `PENDING | SENT | SUCCESS | FAILED | RETRY`** (add `RETRY` in §10.2/§10.3 to match Appendix B.11 / §11.5 / §11.8).
-
-**E6 — Add the `GET /reports` list-item DTO (§6.12):** `{ id, reportName, channelTypeId, channelName, startDate, endDate, recurrence, isEv, isPos, statusLabel (derived, §7.4.8), isSetupComplete }`, wrapped in the §12.3 pagination envelope.
-
-**E7 — One canonical pagination envelope everywhere:** `{ items, page, pageSize, totalItems, totalPages }`. Rename `total` → `totalItems` and add `totalPages` in the §5.5 / §7.5 / §9.5 / §6.12 examples.
-
-**E8 — `report_setups.status` holds ONLY `ON` / `STOP`** (the run/schedule toggle) — it never stores an approval phase. The "Pending Approval / Rejected" wording in §7.4.3/§7.4.6 means the **derived status label** (§7.4.8), not this column. Approval state lives in `report_approvals.overall_status` (0–4).
-
-### Low
-
-**E9 — `report_runs.disburse_status` enum = `NONE | PENDING | IN_PROGRESS | DONE | FAILED`** (add `IN_PROGRESS` to the §3.5 comment).
-
-**E10 — BR8 approval-gate returns `409 NOT_APPROVED` everywhere** (an illegal-transition precondition). Align §6.10 / §10.6 / §12.2. `403` is reserved for RBAC/role denials and the BR5 maker==checker block.
-
-**E11 — `/auth/me` returns both `lastLoginAt` and `lastFailedLoginAt`** (add the latter) so the dashboard "last successful + last refused sign-in" card (§4.2/§8.2) is satisfied from one DTO.
+- **Base path:** all endpoints under **`/api/v1`**; breaking changes bump the segment (`/api/v2`).
+- **Auth:** every call (except the login/callback handshake) carries a SalesCom **JWT** in `Authorization: Bearer`. Missing/expired/invalid → `401`. **Inactivity logout = 3 hours**; absolute token expiry is config-driven. **Sensitive actions** re-check the right **live** from `user_rights` — the JWT claim alone is not trusted (§4) → `403` on failure.
+- **Correlation:** each request gets a `correlationId` (inbound header or generated), returned in error envelopes, propagated onto every RabbitMQ message, and logged to Loki.
+- **Async actions** return **`202 Accepted`** with the affected id + new state; the client polls the status endpoint or reacts to a notification.
+- **Pagination / filter / sort** on lists use the shared model + envelope in §12.3 (`{ items, page, pageSize, totalItems, totalPages }`).
+- **Errors** always use the standard envelope + status table in §12.2.
+- **Money** is `numeric(18,4)` BDT, serialized as a string (no float drift).
+- **Timestamps** are ISO-8601 UTC (`timestamptz`); the client localizes. (Exception: user-entered date/time fields like report start/end dates are stored as entered — §3.)
+- **Idempotency** on money/run/disbursement writes is backstopped by the §3 UNIQUE keys (`report_run_id, channel_code` etc.); safe to retry.
 
 ---
 
