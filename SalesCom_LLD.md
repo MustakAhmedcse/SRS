@@ -1,19 +1,55 @@
-# SalesCom — Low-Level Design (LLD)
+<!-- ===================== PAGE 1 — TITLE ===================== -->
 
-**Banglalink Sales Commission Automation Platform**
+<div align="center">
+
+<br/><br/>
+
+<img src="BL_logo.svg" alt="Banglalink" width="240" />
+
+<br/><br/><br/><br/>
+
+# Low-Level Design
+
+**(LLD)**
+
+<br/>
+
+**For**
+
+<br/>
+
+# Sales Commission Automation 2026
+
+<br/><br/><br/>
+
+Banglalink — Sales Commission Automation Platform
+
+</div>
+
+<!-- PAGE BREAK -->
+<!-- ===================== PAGE 2 — DOCUMENT HISTORY ===================== -->
+
+## Document History
+
+| SL | Date | Version | Description | Created / Modified by | Reviewed by |
+|---|---|---|---|---|---|
+| 01 | 17-Jun-2026 | 1.0 | Initial draft | | |
+| 02 | 22-Jun-2026 | 2.0 | Final — grounded in the real `salescomdbtst` schema; consistency pass folded in | | |
+
+**Document Information**
 
 | | |
 |---|---|
 | **Document** | Low-Level Design (LLD) |
-| **Version** | 2.0 — FINAL |
-| **Date** | 17 June 2026 |
+| **Version** | 2.0 — Final |
 | **Status** | Build-ready |
-| **Grounding** | This LLD is grounded in the **real implemented database schema** `salescomdbtst` (see 3). All table and column names, key types, and enum codes match that schema exactly. |
-| **Audience** | Frontend (Next.js/React/TS), Backend (.NET / ASP.NET Core, Dapper + EF Core), Calc-engine (Python), DBA, QA. |
+| **Grounding** | Grounded in the real implemented database schema `salescomdbtst` (Section 3) — all table/column names, key types, and enum codes match it exactly. |
+| **Audience** | Frontend (Next.js / React / TS), Backend (.NET / ASP.NET Core, Dapper + EF Core), Calc-engine (Python), DBA, QA. |
 
-> **Consistency note.** A final consistency pass is **folded directly into the sections below** (phase-aware reject 7.4.6; EV recipient = `ev_msisdn` / `channel_code`; canonical HTTP codes; `int4` enums; one pagination envelope `{ items, page, pageSize, totalItems, totalPages }`). There is no separate errata section.
+> **Consistency note.** A final consistency pass is folded directly into the sections below (phase-aware reject 7.4.6; EV recipient = `ev_msisdn` / `channel_code`; canonical HTTP codes; `int4` enums; one pagination envelope `{ items, page, pageSize, totalItems, totalPages }`). There is no separate errata section.
 
----
+<!-- PAGE BREAK -->
+<!-- ===================== PAGE 3 — TABLE OF CONTENTS ===================== -->
 
 ## Table of Contents
 
@@ -36,7 +72,8 @@
 - **Appendix C** — Key rules (consolidated) + enforcement points
 - **API Conventions** — global endpoint conventions
 
----
+<!-- PAGE BREAK -->
+<!-- ===================== PAGE 4+ — BODY ===================== -->
 
 # 1 Introduction
 
