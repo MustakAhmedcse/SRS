@@ -63,7 +63,7 @@ Banglalink — Sales Commission Automation Platform
 - **8 Dashboard** — read-only role-scoped views
 - **9 Notification** — SMS + Email (sent directly by producer)
 - **10 Disbursement** — EV (auto + SMS) / POS (CSV), reconciliation
-- **11 Asynchronous Services & Events** — RabbitMQ topology, Python services, Hangfire workers
+- **11 Asynchronous Services & Events** — RabbitMQ topology, calc services, Hangfire workers
 - **12 Cross-cutting Concerns** — audit, error envelope, pagination, retention
 - **13 Module & Service Architecture** — .NET layering, workers, FE module map
 - **Appendix A** — IR reference (full self-contained IR contract)
@@ -125,7 +125,7 @@ The system is sized for **300–500 total users**, 30–50 peak concurrent, ~200
 | **EV / POS** | Electronic Value (automatic payout + SMS) / Point-of-Sale (CSV handoff). Mutually exclusive per report. |
 | **Channel type / channel code** | Channel type is a small lookup (Distributor / RSO / Retailer) — each report has one channel type. Channel code is the individual recipient identifier on each commission row. |
 | **SQL Gen Engine** | Python service that compiles the report configuration (IR) into SQL statements. |
-| **SQL Executor** | Python service that runs those SQL statements step by step and produces the commission amounts. |
+| **SQL Executor** | .NET service that runs those SQL statements step by step and produces the commission amounts. |
 | **SQLGlot** | Python SQL library used to build and validate SQL safely — no string concatenation. |
 | **Guardrail (G1–G4)** | Multi-KPI safety checks: pre-join uniqueness (G1), post-join row-count check (G2), demo-run per-step row counts (G3), reconciliation (G4). |
 | **OTP / SSO / JWT** | One-Time Password (2nd factor) / Single Sign-On (Central Login) / JSON Web Token (SalesCom session; 3-hour inactivity logout). |
@@ -164,9 +164,9 @@ SalesCom is a **layered, service-oriented** system. The request path is kept **t
 │  (21 tables) +   │   └────────────┬───────┬────────┘   └──────────────────┘
 │  per-run temp    │                │       │
 └──────────────────┘   ┌────────────▼──┐ ┌──▼──────────────────────┐
-                       │ SQL Generator │ │ SQL Executor            │  (Python:
-                       │ IR → SQL →    │ │ run_stages → output →   │   SQLGlot +
-                       │ section_wise_ │ │ final_commissions       │   SQLAlchemy)
+                       │ SQL Generator │ │ SQL Executor            │  Generator: Python
+                       │ IR → SQL →    │ │ run_stages → output →   │   (SQLGlot)
+                       │ section_wise_ │ │ final_commissions       │  Executor: .NET
                        │ report_sqls   │ └─────────────────────────┘
                        └───────────────┘
 
@@ -203,13 +203,27 @@ Everything is deployed in **Docker** except the production database (bare-metal 
 | Backend API | **C# · .NET (ASP.NET Core)** | Strong typing, mature DI, first-class background-job and messaging ecosystem; 4-layer clean architecture isolates the IR / trusted-path logic from infrastructure. |
 | Data access | **Dapper + EF Core** | Dapper for fast hand-tuned reads (lists, dashboard, big joins); **EF Core for the ORM + migrations** (schema as code, owns the `salescomdbtst` DDL). |
 | Background jobs | **Hangfire** (PostgreSQL-backed) | Scheduling, retries, timed jobs (report scheduler, disbursement timing, stale-run sweep, 30-day object purge) without a separate scheduler product. |
-| Calc engine | **Python + SQLGlot + SQLAlchemy** | SQLGlot builds SQL as an **AST** (no string concatenation → no injection) and re-parses it to enforce a **read-only allowlist**. Python is the natural home for the dynamic IR→SQL compiler. |
+| Calc engine | **Generator: Python + SQLGlot** · **Executor: .NET** | The Generator compiles the IR into SQL as an **AST** with SQLGlot (no string concatenation → no injection). The Executor (.NET) runs the stages under a least-privilege role with an **execute-time allowlist re-parse**, and writes `final_commissions` on the trusted path. |
 | Event bus | **RabbitMQ** | Priority queues give the locked single-run model (RunNow > Demo > Schedule) for free; decouples the thin API from heavy Python work. |
 | Database | **PostgreSQL (Percona 18, bare-metal)** | Window functions (`NTILE`, `PERCENT_RANK`) for Phase-3 ranking; JSONB for the IR; temp tables for stage outputs; `NUMERIC` for exact money. |
 | Object storage | **SeaweedFS (S3-compatible)** | Self-hosted S3 for uploads, stage outputs, POS CSVs; no cloud dependency. |
 | Auth | **Central Login SSO + OTP → SalesCom JWT** (3-hour inactivity logout) | Internal-only; reuses the company IdP; SalesCom issues its own JWT and never exposes the IdP token to the browser. |
 | ETL | **Apache Airflow** (shared) | Brings source data (DWH, In-house, vPeople, POSDMSDB) into prepared `data_sources` tables; long cohorts pre-computed here. |
 | Deployment | **Docker** (everything except the prod DB) | Each deployable (web, api, calc) ships as a container; local stack via `docker-compose`. |
+
+## 2.4 Object storage — SeaweedFS
+
+SeaweedFS is the **file store** for all binary artifacts (CSV uploads, per-stage run outputs, POS dump files), run on **one server**. Files are never kept in the database — only their **reference** (bucket + key, or file id) is stored on the row; the bytes live in SeaweedFS and are streamed over HTTP.
+
+**How files move in / out** — two compatible APIs:
+
+| Action | S3 API (port 8333, AWS SDK — the app's default) | Filer HTTP API (port 8888) |
+|---|---|---|
+| **Upload** | `PutObject(bucket, key, stream)` | `POST /upload` (multipart `file`) → returns a file id (`fid`) |
+| **Download** | `GetObject(bucket, key)` → stream | `GET /{fid}` → stream |
+| **File link** | `{s3-endpoint}/{bucket}/{key}` (or a short-lived presigned URL) | `{filer-url}/{fid}` |
+
+The app keeps only the **reference** on its rows — `report_supporting_uploads.object_bucket` / `object_key`, `run_stages.bucket` / `object_url` — and serves a file by reading it back through that reference and streaming the bytes to the browser with the original name (e.g. a run-stage CSV download, the POS file). **TTL** lets temporary artifacts auto-expire (works with the 30-day purge, 12.4).
 
 ---
 
@@ -1619,7 +1633,7 @@ One **durable direct exchange per domain**. Messages are persistent (`delivery_m
 | Exchange (direct, durable) | Routing key | Queue | Consumer | Server |
 |---|---|---|---|---|
 | `salescom.report` | `report.saved` | `q.sql-generate` | SQL Generator (Python) | AI01 |
-| `salescom.run` | `run.runnow` / `run.demo` / `run.schedule` | `q.run.high` / `q.run.mid` / `q.run.low` | SQL Executor (Python) | AI01 |
+| `salescom.run` | `run.runnow` / `run.demo` / `run.schedule` | `q.run.high` / `q.run.mid` / `q.run.low` | SQL Executor (.NET) | AI01 |
 | `salescom.run` | `run.completed` | `q.run-completed` | Web API | APP01/02 |
 | `salescom.approval` | `approval.completed` | `q.approval-completed` | Web API (disbursement-arming) | APP01/02 |
 | `salescom.disburse` | `ev.disburse` | `q.ev-disburse` | EV Worker (Python) | AI01 |
@@ -1686,7 +1700,7 @@ Compiles the IR into per-stage SQL and persists `section_wise_report_sqls` (froz
 
 > **`final_commissions` is never produced by generated SQL.** The last stage produces the final per-recipient projection; the trusted Executor path (11.7) reads it and writes `final_commissions` itself (D2).
 
-## 11.7 SQL Executor service (Python, AI01)
+## 11.7 SQL Executor service (.NET)
 
 Runs a report end-to-end: snapshot the frozen SQL, execute stage-by-stage in an isolated temp namespace, write `final_commissions`, clean up. Consumes the three `q.run.*` lanes (weighted drain).
 
@@ -1820,7 +1834,7 @@ Each layer depends only on the one below; the inner layers (Domain, Application)
 
 ## 13.2 Background Workers (Hangfire)
 
-Hangfire runs **inside the .NET app** (PostgreSQL-backed). Workers are timed/triggered; they never run the calc SQL (that's the Python Executor). **User-sync and POS disbursement are Airflow, not Hangfire** (4.5, 10.5).
+Hangfire runs **inside the .NET app** (PostgreSQL-backed). Workers are timed/triggered; they never run the calc SQL (that's the SQL Executor). **User-sync and POS disbursement are Airflow, not Hangfire** (4.5, 10.5).
 
 | Worker | Trigger | Owns | Publishes / calls |
 |---|---|---|---|
@@ -1829,7 +1843,7 @@ Hangfire runs **inside the .NET app** (PostgreSQL-backed). Workers are timed/tri
 | **StaleRunSweeper** | Every 5 min | Mark runs stuck Running past threshold as Failed; drop orphan temp schemas + uncleaned stages (11.7). | — |
 | **ObjectPurgeWorker** | **Daily (cron)** | Delete SeaweedFS objects older than **30 days** — `run_stages` outputs + Demo exports (retention policy, 12.4). **Disbursement artifacts (POS dump CSVs) are excluded.** | SeaweedFS (S3) |
 
-> The two **Python services** (SQL Generator, SQL Executor) are separate RabbitMQ-consumer processes, not Hangfire workers. The .NET side only *publishes* `report.saved` / `run.requested` and *consumes* `run.completed` / `approval.completed`.
+> The **SQL Generator (Python, SQLGlot)** and the **SQL Executor (.NET)** are separate RabbitMQ-consumer processes, not Hangfire workers. The Web API publishes `report.saved` / `run.requested` and consumes `run.completed` / `approval.completed`.
 
 ## 13.3 Frontend Module Map (Next.js, App Router)
 
