@@ -66,8 +66,8 @@ Banglalink — Sales Commission Automation Platform
 - **11 Asynchronous Services & Events** — RabbitMQ topology, Python services, Hangfire workers
 - **12 Cross-cutting Concerns** — audit, error envelope, pagination, retention
 - **13 Module & Service Architecture** — .NET layering, workers, FE module map
-- **14 Getting Started / Dev Setup** — repo layout, env, wiring, build order
-- **Appendix A** — IR reference (points to `IR_Schema_and_MultiKPI_Join.md`)
+- **14 Getting Started / Dev Setup** — repo layout, wiring, build order
+- **Appendix A** — IR reference (full self-contained IR contract)
 
 <!-- PAGE BREAK -->
 <!-- ===================== PAGE 4+ — BODY ===================== -->
@@ -116,7 +116,7 @@ The system is sized for **300–500 total users**, 30–50 peak concurrent, ~200
 |---|---|
 | **LLD** | Low-Level Design — this document. |
 | **SRS / HLD** | Software Requirements Specification / High-Level Design — the higher-level specs this LLD implements. |
-| **IR** | Intermediate Representation — the JSON form of a report's configuration, stored in the database. The full IR contract is in `IR_Schema_and_MultiKPI_Join.md` (Appendix A). |
+| **IR** | Intermediate Representation — the JSON form of a report's configuration, stored in the database. The full IR contract is in **Appendix A**. |
 | **Block** | A pipeline of steps computing one performance number (**achievement block**) or one payout (**incentive block**). |
 | **Stage** | One operation in a block: filter, combine, summarize, calculate, or modify (Phase 1); plus rank and others in later phases. Each stage is compiled into one SQL statement. |
 | **Grain** | The row-identity a block resolves to — for example, "one row per RSO". Fixed by the block's final summarize step. |
@@ -944,7 +944,7 @@ Per header cell, in order: trim + lowercase → replace each non-`[a-z0-9_]` run
 
 # 6 Report Management (Core)
 
-> **Scope.** The heart of SalesCom: the **5-step no-code wizard**, the **Save/Publish state machine**, and the **run execution lifecycle**. Tables: `report_setups`, `report_supporting_uploads`, `section_wise_report_sqls`, `report_runs`, `run_stages`, `final_commissions` (all 3). The wizard's achievement/incentive configuration **is** the IR (`report_setups.definition` JSONB) — this section says which IR part each step writes; the full IR contract is in `IR_Schema_and_MultiKPI_Join.md` (Appendix A).
+> **Scope.** The heart of SalesCom: the **5-step no-code wizard**, the **Save/Publish state machine**, and the **run execution lifecycle**. Tables: `report_setups`, `report_supporting_uploads`, `section_wise_report_sqls`, `report_runs`, `run_stages`, `final_commissions` (all 3). The wizard's achievement/incentive configuration **is** the IR (`report_setups.definition` JSONB) — this section says which IR part each step writes; the full IR contract is in **Appendix A**.
 
 ---
 
@@ -1681,7 +1681,7 @@ RabbitMQ is **at-least-once**, so any message can be redelivered. Every consumer
 Compiles the IR into per-stage SQL and persists `section_wise_report_sqls` (frozen at Final Save). Consumes `q.sql-generate`.
 
 1. Read `report_setups.definition` (IR) + `report_supporting_uploads` (to resolve `upload` sources → their `db_schema`/`db_table_name`).
-2. **Validate the IR** against the JSON Schema (`IR_Schema_and_MultiKPI_Join.md`). Schema error → failure notification + `audit_logs`, stop.
+2. **Validate the IR** against the JSON Schema (Appendix A). Schema error → failure notification + `audit_logs`, stop.
 3. **Build SQL with the SQLGlot AST — never string concatenation (D2).** Each block compiles to ordered stages, each materialising a temp `output_table_name`; every block ends in a `summarize` fixing its grain; block-to-block joins emit only on the grain key + the **G1** pre-join uniqueness guard.
 4. **Re-parse safety pass (D2 allowlist).** Re-parse each statement and assert only allowed nodes: `SELECT/WITH/JOIN/GROUP BY/aggregates/CASE/window functions` + `CREATE TEMP TABLE`/`DROP TABLE`. Block any other DML/DDL, non-allowlisted functions, and non-whitelisted identifiers — only registered `data_sources` + this report's upload tables are reachable. **All literals are bound parameters.**
 5. Write one `section_wise_report_sqls` row per stage; UNIQUE `(report_setup_id, stage_order)` makes regeneration an idempotent upsert (delete orphaned higher orders).
@@ -1885,41 +1885,7 @@ salescom/
 
 > **Everything runs in Docker except the production DB** (bare-metal Percona PostgreSQL 18). Locally Postgres runs in the compose stack.
 
-## 14.2 Environment Variables
-
-Per service (`.env` locally; secret store in prod). Names illustrative but stable.
-
-**`salescom-api` (.NET)**
-```
-DB__ConnectionString=Host=postgres;Database=salescom;Username=salescom_app;Password=...;SearchPath=salescomdbtst
-DB__ExecutorRole=salescom_exec          # least-privilege role for the Python Executor
-RABBITMQ__Uri=amqp://guest:guest@rabbitmq:5672/
-S3__Endpoint=http://seaweedfs:8333   S3__AccessKey=...   S3__SecretKey=...
-S3__Buckets__Uploads=salescom-uploads   S3__Buckets__StageOut=salescom-stageout
-JWT__Issuer=salescom   JWT__SigningKey=...   JWT__InactivityLogoutHours=3
-CENTRAL_LOGIN__BaseUrl=https://blposapi.banglalink.net   CENTRAL_LOGIN__AppName=...   CENTRAL_LOGIN__AppKey=...
-EV_API__BaseUrl=http://10.13.2.7:9898
-SMS__Host=172.16.7.210   SMS__Port=13082
-SMTP__Host=...   SMTP__Port=587   SMTP__From=salescom@banglalink.net
-```
-
-**`salescom-calc` (Python)**
-```
-DB_DSN=postgresql+psycopg://salescom_exec:...@postgres:5432/salescom   # least-privilege
-DB_SCHEMA=salescomdbtst   RABBITMQ_URI=amqp://guest:guest@rabbitmq:5672/
-S3_ENDPOINT=http://seaweedfs:8333   S3_ACCESS_KEY=...   S3_SECRET_KEY=...
-STAGE_TEMP_SCHEMA=run_temp   SQL_ALLOWLIST_STRICT=true   PYTHONUTF8=1
-```
-
-**`salescom-web` (Next.js)**
-```
-NEXT_PUBLIC_API_BASE=https://localhost:5001/api/v1   NEXT_PUBLIC_INACTIVITY_LOGOUT_MINUTES=180
-PERMISSION_DECRYPT_KEY=...   # server-side only (BFF) — decrypts the /auth/permissions blob
-```
-
-*(User-sync and POS disbursement run on Airflow with its own POS-DB connection string — separate infra, not in these services.)*
-
-## 14.3 Local Wiring
+## 14.2 Local Wiring
 
 Bring the stack up with `infra/docker-compose.yml`:
 
@@ -1944,7 +1910,7 @@ Bring the stack up with `infra/docker-compose.yml`:
 
 The **single-run model** = the Executor processes one `run.requested` at a time (advisory lock 11.7), draining high before mid before low.
 
-## 14.4 Recommended Build Order
+## 14.3 Recommended Build Order
 
 Construction sequence (the architecture supports the whole system now; this is build order, not a scope cut):
 
@@ -1967,16 +1933,16 @@ Construction sequence (the architecture supports the whole system now; this is b
 
 # Appendix A — IR Reference
 
-> **Authority.** The full IR contract — the `report_setups.definition` shape, the formal JSON Schema (draft 2020-12), every enum list, the operation catalogue, the multi-KPI join rule, and a complete worked example — lives in **`IR_Schema_and_MultiKPI_Join.md`**. This appendix only **summarises** the shape; where they differ, the annex wins.
+> This appendix is the **complete, self-contained IR contract** for `report_setups.definition` (JSONB) — shape, the operation set, the multi-KPI join rule, guardrails, and a worked example. No separate file is needed.
 
 ## A.1 Top-level shape
 
-Stored in `report_setups.definition` (JSONB):
 ```jsonc
 {
+  "ir_version": "1.0",
   "report":      { "name": "...", "channel": "RSO", "cycle": "Apr 2026",
                    "start_date": "2026-04-01", "end_date": "2026-04-30" },   // mirrors Step-1
-  "achievements": [ /* Block, ... */ ],   // Step-3: performance figures
+  "achievements": [ /* Block, ... */ ],   // Step-3: performance figures (≥1 required)
   "incentives":   [ /* Block, ... */ ],   // Step-4: payout logic
   "final_mapping": {                       // Step-4: how the last block becomes final_commissions
     "from_block": "INC1",
@@ -1992,48 +1958,144 @@ The report's **channel TYPE** comes from `report_setups.channel_type_id` → `fi
 A Block (same shape for achievement & incentive) — a `source` plus ordered `stages`, ending in a `summarize` that fixes the **grain**:
 ```jsonc
 {
-  "block_id": "ACH1",
+  "block_id": "ACH1",                                  // ^(ACH|INC)[0-9]+$
   "source": { "type": "data_source" | "upload" | "block", "ref": "ev_recharge_daily" },
-  "stages": [
-    { "op": "filter",    "...": "..." },
-    { "op": "combine",   "join_with": { "type": "...", "ref": "..." }, "match_on": ["RSO_CODE"], "how": "left" },
-    { "op": "summarize", "group_by": ["RSO_CODE"], "aggregates": [ { "fn": "sum", "col": "amount", "as": "Recharge" } ] },
-    { "op": "calculate", "mode": "formula" | "ifcase" | "map", "...": "..." },
-    { "op": "modify",    "...": "..." }
-  ],
-  "output_grain": ["RSO_CODE"],     // = the final summarize group_by
-  "outputs": [ "RSO_CODE", "Recharge", "RechargePct" ]
+  "stages": [ /* filter, combine, summarize, calculate, modify (in order) */ ],
+  "output_grain": ["RSO_CODE"],                        // = the final summarize group_by
+  "outputs": [ { "name": "RSO_CODE", "type": "text" }, { "name": "RE_PCT", "type": "numeric" } ]
 }
 ```
-**Operation types** (Phase 1): `filter`, `combine`, `summarize`, `calculate` (`formula`/`ifcase`/`map`), `modify`; **Phase 3 adds** `rank` (window functions `NTILE`, `PERCENT_RANK`). The IR *shape* is final now; only the op-list grows.
 
-## A.3 Multi-KPI join rule
+## A.3 Operation set (stage `op` types)
+
+Every stage is `{ "op": "<type>", ... }`. Phase 1 ships these; later phases *add* ops without changing the structure.
+
+| op | Purpose | Key fields | Value lists |
+|---|---|---|---|
+| `filter` | keep matching rows | `combine`, `conditions:[{column, operator, value, negate?}]` | `combine` ∈ AND/OR · `operator` ∈ equals, not_equals, gt, lt, gte, lte, between, is_one_of, not_in, is_null, not_null |
+| `combine` | join in more data | `join_with:{type, ref}`, `how`, `match_on:[{left, operator, right}]`, `bring:[...]` | `type` ∈ data_source/upload/block · `how` ∈ inner/left/right/full. A **block** join must be on the grain key (A.4). |
+| `summarize` | aggregate — **sets the block grain** | `group_by:[...]`, `aggregations:[{result_column, calc, source_column}]` | `calc` ∈ count, count_distinct, sum, avg, min, max |
+| `calculate` | derive a column | `result_column`, `mode`, + mode body | `mode` ∈ formula / ifcase / map |
+| `modify` | cast / rename | `changes:[{column, cast / rename}]` | cast ∈ text/numeric/integer/date/boolean |
+| `rank` *(Phase 3)* | top-N% / quartile | `partition_by`, `order_by`, `method`, `buckets`, `result_column` | `method` ∈ ntile/rank/row_number/percent_rank → PG window fn |
+
+**`calculate` modes:**
+- **`formula`** — safe math only: `+ - * /`, parentheses, numbers, column names, and `round, floor, ceil, abs, least, greatest, coalesce, nullif` (anything else is rejected). E.g. `round((ACHIEVEMENT/nullif(TARGET,0))*100)`; `least(x,200)` caps at 200 %.
+- **`ifcase`** — slab/category/tier: `cases:[{combine, when:[{column,operator,value}], then}]` + `else`. First match wins; `then` is a literal or `{ "column": "X" }` (`else` often `0` for amounts).
+- **`map`** — round/cast for output: `map:{value, decimals, rounding}` (e.g. `half_up`).
+
+## A.4 Multi-KPI join rule (how double-paying is prevented)
 
 - **Every block ends in a `summarize`** fixing its grain (e.g. "1 row per RSO"); `output_grain` = that group_by.
-- **Block-to-block joins must be on the grain key** (1:1), never a finer column.
+- **A block-to-block join (`combine` with `join_with.type = "block"`) must match on the grain key** → 1 row ↔ 1 row (no fan-out).
+- Raw-data joins happen **inside** a block, before its summarize, so any fan-out is absorbed by the aggregation.
 
-This guarantees no accidental row multiplication (fan-out) when combining KPIs.
+By forcing *summarize → then key-join*, the dangerous "1-per-RSO value × many-per-RSO rows then sum" case cannot occur.
 
-## A.4 Guardrails (G1–G4)
+## A.5 Guardrails (G1–G4)
 
 | Guard | Checks | When |
 |---|---|---|
-| **G1** | Pre-join uniqueness of the join key on each side | Generated into the SQL; checked at execute time |
+| **G1** | Pre-join uniqueness of the grain key on each side (else block the run) | Generated into the SQL; execute time |
 | **G2** | Post-join fan-out didn't exceed the expected grain cardinality | Execute time, per stage |
 | **G3** | Demo per-stage `output_table_name` row counts surfaced in the Run Log | Demo runs (6.7) |
 | **G4** | Reconciliation — disbursed total == `SUM(final_commissions.commission_amount)` | End of disbursement (10.6) |
 
-## A.5 IR → schema mapping
+## A.6 final_mapping → final_commissions
+
+```json
+{ "from_block": "INC1", "channel_code_column": "RSO_CODE",
+  "commission_amount_column": "Incentive", "channel_scope": "RSO" }
+```
+The engine groups `from_block` per `channel_code_column` → one `final_commissions` row per recipient. **Money:** `commission_amount` is `NUMERIC(18,4)`, rounded 2-dp half-up at write; a null / unmapped / duplicate `channel_code` = hard error → run fails (no partial payout).
+
+**IR → schema mapping:**
 
 | IR element | Lands in |
 |---|---|
 | `report.*` | `report_setups` basics (mirror of Step-1) |
 | `achievements[]`, `incentives[]`, `final_mapping` | `report_setups.definition` (JSONB) |
 | each compiled stage | one `section_wise_report_sqls` row (`stage_order`, `sql_text`) |
-| `final_mapping.channel_code_column` | `final_commissions.channel_code` (per-recipient) |
+| `final_mapping.channel_code_column` | `final_commissions.channel_code` |
 | `final_mapping.commission_amount_column` | `final_commissions.commission_amount` |
 | report's `channel_type_id` | `final_commissions.channel_id` (constant TYPE) |
 
+## A.7 Worked example (condensed) — "RSO Campaign GA Recharge LSO Apr26"
+
+Two achievement blocks (Recharge %, GA %) both summarized to **1 row per RSO_CODE**, joined 1:1 in an incentive block → category → amount. (`outputs` arrays omitted for brevity.)
+
+```jsonc
+{
+  "ir_version": "1.0",
+  "report": { "name": "RSO Campaign GA Recharge LSO Apr26", "channel": "RSO",
+              "commission_cycle": "Apr 2026", "start_date": "2026-04-01", "end_date": "2026-04-30" },
+
+  "achievements": [
+    { "block_id": "ACH1", "name": "Recharge Achievement",
+      "source": { "type": "data_source", "ref": "ev_lifting_daily_com" },
+      "stages": [
+        { "op": "filter", "combine": "AND", "conditions": [
+            { "column": "RECHARGE_DATE", "operator": "between", "value": ["2026-04-01","2026-04-30"] },
+            { "column": "CHANNEL_TYPE", "operator": "is_one_of", "value": ["D2RT","R2RT","SUD12AGENT"] } ] },
+        { "op": "combine", "join_with": { "type": "upload", "ref": "temp_for_rso_agent" }, "how": "inner",
+          "match_on": [ { "left": "receiver_number", "operator": "=", "right": "ret_msisdn" } ],
+          "bring": ["RSO_CODE","RECHARGE_TARGET","SEND_AMOUNT"] },
+        { "op": "summarize", "group_by": ["RSO_CODE"], "aggregations": [
+            { "result_column": "ACHIEVEMENT", "calc": "sum", "source_column": "SEND_AMOUNT" },
+            { "result_column": "TARGET", "calc": "max", "source_column": "RECHARGE_TARGET" } ] },
+        { "op": "calculate", "result_column": "RE_PCT", "mode": "formula",
+          "formula": "round( (ACHIEVEMENT / nullif(TARGET,0)) * 100 )" } ],
+      "output_grain": ["RSO_CODE"] },
+
+    { "block_id": "ACH2", "name": "GA Achievement",
+      "source": { "type": "data_source", "ref": "simrepository" },
+      "stages": [
+        { "op": "filter", "combine": "AND", "conditions": [
+            { "column": "FCD", "operator": "between", "value": ["2026-04-01","2026-04-30"] },
+            { "column": "SERVICE_TYPE", "operator": "is_one_of", "value": ["PREPAID","MNP_REGISTRATION"] } ] },
+        { "op": "combine", "join_with": { "type": "upload", "ref": "temp_rso_tar_camp_bundle" }, "how": "inner",
+          "match_on": [ { "left": "RETAILER_CODE", "operator": "=", "right": "retailer_code" } ],
+          "bring": ["RSO_CODE","GA_TARGET","MSISDN"] },
+        { "op": "summarize", "group_by": ["RSO_CODE"], "aggregations": [
+            { "result_column": "ACHIEVEMENT", "calc": "count_distinct", "source_column": "MSISDN" },
+            { "result_column": "TARGET", "calc": "max", "source_column": "GA_TARGET" } ] },
+        { "op": "calculate", "result_column": "GA_PCT", "mode": "formula",
+          "formula": "round( (ACHIEVEMENT / nullif(TARGET,0)) * 100 )" } ],
+      "output_grain": ["RSO_CODE"] }
+  ],
+
+  "incentives": [
+    { "block_id": "INC1", "name": "Categorisation Incentive",
+      "source": { "type": "block", "ref": "ACH1" },
+      "stages": [
+        { "op": "combine", "join_with": { "type": "block", "ref": "ACH2" }, "how": "inner",
+          "match_on": [ { "left": "ACH1.RSO_CODE", "operator": "=", "right": "ACH2.RSO_CODE" } ],
+          "bring": ["ACH2.GA_PCT"] },
+        { "op": "calculate", "result_column": "Category", "mode": "ifcase", "else": "None", "cases": [
+            { "combine": "AND", "when": [ { "column": "GA_PCT", "operator": "gte", "value": 100 },
+                { "column": "RE_PCT", "operator": "gte", "value": 100 } ], "then": "Platinum" },
+            { "combine": "AND", "when": [ { "column": "GA_PCT", "operator": "gte", "value": 95 },
+                { "column": "RE_PCT", "operator": "gte", "value": 95 } ], "then": "Gold" } ] },
+        { "op": "calculate", "result_column": "Incentive", "mode": "ifcase", "else": 0, "cases": [
+            { "when": [ { "column": "Category", "operator": "equals", "value": "Platinum" } ], "then": 8000 },
+            { "when": [ { "column": "Category", "operator": "equals", "value": "Gold" } ], "then": 7000 } ] } ],
+      "output_grain": ["RSO_CODE"] }
+  ],
+
+  "final_mapping": { "from_block": "INC1", "channel_code_column": "RSO_CODE",
+                     "commission_amount_column": "Incentive", "channel_scope": "RSO" }
+}
+```
+**Why it's safe:** ACH1 and ACH2 both summarize to grain `RSO_CODE`; INC1 joins them on `RSO_CODE` (block-to-block, 1:1) → no fan-out. G1 checks `RSO_CODE` is unique in both before the join.
+
+## A.8 Phase map (IR shape is final now)
+
+- **Phase 1** — `filter`, `combine`, `summarize`, `calculate` (formula/ifcase/map), `modify`, block-to-block join, `final_mapping`, guardrails G1–G4 (single & multi-KPI).
+- **Phase 2** — weighted multi-KPI pools, gate-zeroes-component, VLR penalty case, advanced external-config slabs.
+- **Phase 3** — `rank` (window functions), historical/cohort source reads, period-versioned rate lookup, cumulative deduction.
+
+The data model and IR structure **do not change** between phases — later phases only *add* operation types and source kinds.
+
 ---
 
-*End of SalesCom Low-Level Design (LLD) v2.0 — FINAL. Grounded in the real `salescomdbtst` schema (3). Authoritative IR contract: `IR_Schema_and_MultiKPI_Join.md`.*
+*End of SalesCom Low-Level Design (LLD) v2.0 — FINAL. Grounded in the real `salescomdbtst` schema (3). Full IR contract: Appendix A.*
