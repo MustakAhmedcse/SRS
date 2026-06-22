@@ -1,0 +1,1035 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeaweedFS Distributed File Storage System - Configuration Guide</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #10b981;
+            --bg-dark: #0f172a;
+            --bg-light: #f8fafc;
+            --text-main: #334155;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+            --code-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            padding: 0;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header / Cover Section */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--bg-dark));
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+        }
+
+        header h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .meta-item span {
+            display: block;
+            opacity: 0.7;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Typography */
+        h2.section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 8px;
+            margin-top: 50px;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+        }
+
+        .toc a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 14px 16px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Code blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: #f8fafc;
+            padding: 18px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: #e2e8f0;
+            color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        /* Document Info Footer Card */
+        .doc-footer {
+            background-color: white;
+            border-left: 4px solid var(--accent-color);
+            padding: 24px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 60px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 40px 20px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 20px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>SeaweedFS Distributed File Storage System</h1>
+        <h2>Complete Configuration Guide and ASP.NET Integration</h2>
+        <div class="meta-grid">
+            <div class="meta-item"><span>Version</span>Version: 1.3</div>
+            <div class="meta-item"><span>Created</span>June 11, 2026</div>
+            <div class="meta-item"><span>Status</span>Development Documentation</div>
+        </div>
+    </header>
+
+    <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+            <li><a href="#section1">Section 1: Introduction to SeaweedFS and Its Role</a></li>
+            <li><a href="#section2">Section 2: Core Architecture and System Components</a></li>
+            <li><a href="#section3">Section 3: Complete Docker Setup and Configuration</a></li>
+            <li><a href="#section4">Section 4: Understanding Replication Topology (001/010/100/110)</a></li>
+            <li><a href="#section5">Section 5: ASP.NET Integration and Implementation</a></li>
+            <li><a href="#section6">Section 6: File Upload/Download Workflow and Processes</a></li>
+            <li><a href="#section7">Section 7: Advanced Configuration and Customization</a></li>
+            <li><a href="#section8">Section 8: Troubleshooting, Debugging, and Monitoring</a></li>
+            <li><a href="#section9">Section 9: Performance Optimization and Scaling</a></li>
+            <li><a href="#section10">Section 10: Best Practices and Frequently Asked Questions</a></li>
+        </ul>
+    </div>
+
+    <!-- SECTION 1 -->
+    <h2 id="section1" class="section-title">Section 1: Introduction to SeaweedFS and Its Role</h2>
+    
+    <h3>1.1 What is SeaweedFS?</h3>
+    <p>SeaweedFS is a simple yet highly efficient distributed file storage system designed specifically for storing and managing billions of small files. Unlike traditional databases that treat files as Binary Large Objects (BLOBs), which causes significant performance and scalability issues, SeaweedFS is purpose-built for fast file serving at scale with minimal operational overhead.</p>
+    
+    <h3>1.2 Key Features and Advantages</h3>
+    <ul>
+        <li><strong>High Performance:</strong> Serves millions of files per day with minimal latency</li>
+        <li><strong>Scalability:</strong> Easily add new storage nodes without complex migration procedures</li>
+        <li><strong>Automatic Replication:</strong> Built-in data redundancy with configurable topology</li>
+        <li><strong>Low Cost:</strong> Uses commodity hardware and requires minimal maintenance</li>
+        <li><strong>Direct HTTP API:</strong> Simple REST API for easy integration with any application</li>
+        <li><strong>S3 Compatibility:</strong> AWS SDK support enables familiar development patterns</li>
+        <li><strong>Automatic Cleanup:</strong> TTL (Time To Live) support for temporary file management</li>
+    </ul>
+
+    <h3>1.3 Why SeaweedFS Instead of Traditional Databases?</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Traditional Database</th>
+                <th>SeaweedFS</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Speed</strong></td>
+                <td>BLOB storage causes query bottlenecks</td>
+                <td>Direct HTTP file serving, optimized for throughput</td>
+            </tr>
+            <tr>
+                <td><strong>Scaling</strong></td>
+                <td>Requires expensive hardware upgrades</td>
+                <td>Add commodity servers horizontally</td>
+            </tr>
+            <tr>
+                <td><strong>Replication</strong></td>
+                <td>Complex manual replication setup</td>
+                <td>Automatic, built-in replication</td>
+            </tr>
+            <tr>
+                <td><strong>Cost</strong></td>
+                <td>High operational and licensing costs</td>
+                <td>Low cost, open-source, minimal overhead</td>
+            </tr>
+            <tr>
+                <td><strong>Operations</strong></td>
+                <td>Complex backup and recovery procedures</td>
+                <td>Simple file-level operations</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>1.4 Suitable Use Cases</h3>
+    <p>SeaweedFS is ideal for the following scenarios:</p>
+    <ul>
+        <li>Image storage for user profiles, posts, and media galleries</li>
+        <li>Document management systems with file versioning</li>
+        <li>Video streaming platforms and video on demand services</li>
+        <li>Cloud backup and archival storage</li>
+        <li>CDN origin servers for content distribution</li>
+        <li>Temporary file storage with automatic expiration</li>
+        <li>Multi-tenant application file isolation</li>
+    </ul>
+
+    <!-- SECTION 2 -->
+    <h2 id="section2" class="section-title">Section 2: Core Architecture and System Components</h2>
+    
+    <h3>2.1 The Four Core Services</h3>
+    <p><strong>Master Server - The Cluster Orchestrator</strong><br>
+    The Master Server is the central coordinator for your entire SeaweedFS cluster. It maintains the overall cluster state, assigns storage locations for new files, monitors server health, and orchestrates replication. The Master Server is single-threaded for simplicity and reliability.</p>
+    
+    <p>Master Server Responsibilities:</p>
+    <ul>
+        <li>Assign unique File IDs and Volume IDs when files are uploaded</li>
+        <li>Determine which Volume Server will store each file based on replication policy</li>
+        <li>Monitor health of all Volume Servers through heartbeat checks</li>
+        <li>Manage automatic data replication across configured topology</li>
+        <li>Handle load balancing to prevent volume overflow</li>
+        <li>Coordinate failover when volumes become unavailable</li>
+        <li>Maintain cluster-wide configuration and metadata</li>
+    </ul>
+    <p>Ports: HTTP=9333, gRPC=19333 (Internal)</p>
+
+    <p><strong>Volume Servers - The Storage Nodes</strong><br>
+    Volume Servers are stateless storage nodes that hold actual file data. They are intentionally kept simple and stateless, which means they can be added, removed, or replaced without complex data migration. Each Volume Server can manage multiple volumes.</p>
+    <p>Volume Server Responsibilities:</p>
+    <ul>
+        <li>Store file data on local disk</li>
+        <li>Serve files via HTTP GET requests</li>
+        <li>Accept uploads via HTTP POST operations</li>
+        <li>Send periodic heartbeats to Master Server</li>
+        <li>Replicate data to other volumes based on Master instructions</li>
+        <li>Delete expired files based on TTL policies</li>
+        <li>Report disk usage and capacity to Master</li>
+    </ul>
+
+    <p><strong>Filer Server - The File System Interface</strong><br>
+    The Filer service provides a user-friendly file system interface. Instead of dealing with raw file IDs, applications interact with familiar directory paths and file metadata. Filer translates these human-readable paths to internal file IDs.</p>
+    <p>Filer Server Responsibilities:</p>
+    <ul>
+        <li>Maintain directory structure and file organization</li>
+        <li>Store and manage file metadata (creation time, size, owner)</li>
+        <li>Manage collections and bucket organization</li>
+        <li>Provide REST API for file operations</li>
+        <li>Support TTL-based file expiration</li>
+        <li>Implement access control and permissions</li>
+        <li>Integrate with Master and Volume Servers</li>
+    </ul>
+
+    <p><strong>S3 Service - AWS Compatibility Layer</strong><br>
+    The S3 service adds AWS S3 API compatibility to SeaweedFS. This allows existing applications built with AWS SDKs to work seamlessly without modification, reducing integration complexity and enabling code reuse.</p>
+
+    <h3>2.2 How Services Communicate</h3>
+    <p>Request flow in SeaweedFS:</p>
+    <pre>FILE UPLOAD:
+Client → Filer (POST /upload)
+    ↓
+Filer → Master (Which volume?)
+    ↓
+Master → Selects volumes based on replication policy
+    ↓
+Filer → Volume1, Volume2 (Write file)
+    ↓
+Volumes → Master (Acknowledged)
+    ↓
+Master → Filer (Return File ID)
+    ↓
+Filer → Client (File ID and metadata)
+
+FILE DOWNLOAD:
+Client → Filer (GET /file-id)
+    ↓
+Filer → Master (Where is this file?)
+    ↓
+Master → Returns volume location
+    ↓
+Filer → Volume (Fetch file)
+    ↓
+Volume → Filer → Client (Stream file)</pre>
+
+    <!-- SECTION 3 -->
+    <h2 id="section3" class="section-title">Section 3: Complete Docker Setup and Configuration</h2>
+    
+    <h3>3.1 Your Deployment Architecture</h3>
+    <p>You have two geographically distributed servers:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Server</th>
+                <th>IP Address</th>
+                <th>Location</th>
+                <th>Purpose</th>
+                <th>Services</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>PRIMARY</strong></td>
+                <td>27.147.159.197</td>
+                <td>Primary DC</td>
+                <td>Master + Storage</td>
+                <td>Master, Volume1, Volume2, Filer, S3</td>
+            </tr>
+            <tr>
+                <td><strong>SECONDARY</strong></td>
+                <td>27.147.159.196</td>
+                <td>Secondary DC</td>
+                <td>Storage Only</td>
+                <td>Volume-local1, Volume-local2</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>3.2 Why Two Servers?</h3>
+    <ul>
+        <li><strong>Geographic Distribution:</strong> Data survives single datacenter failures</li>
+        <li><strong>Rack Awareness:</strong> Replicas distributed across different racks</li>
+        <li><strong>Independent Scaling:</strong> Secondary can grow independently</li>
+        <li><strong>Single Master:</strong> Avoids split-brain issues with multiple masters</li>
+        <li><strong>Simplicity:</strong> Secondary servers don't need master complexity</li>
+    </ul>
+
+    <h3>3.3 Primary Server docker-compose.yml</h3>
+    <pre>version: '3.8'
+services:
+  master:
+    image: chrislusf/seaweedfs
+    container_name: weed-master
+    command: >
+      master
+      -ip.bind=0.0.0.0
+      -defaultReplication=010
+      -port=9333
+      -port.grpc=19333
+    ports:
+      - "9333:9333"
+      - "19333:19333"
+    networks:
+      - seaweedfs-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9333/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  volume1:
+    image: chrislusf/seaweedfs
+    container_name: weed-volume1
+    command: >
+      volume
+      -mserver=master:9333
+      -ip=volume1
+      -ip.bind=0.0.0.0
+      -port=8080
+      -dir=/data1
+      -dataCenter=dc1
+      -rack=rack1
+    volumes:
+      - ./volume-data1:/data1
+    ports:
+      - "8080:8080"
+    depends_on:
+      master:
+        condition: service_healthy
+    networks:
+      - seaweedfs-net
+  volume2:
+    image: chrislusf/seaweedfs
+    container_name: weed-volume2
+    command: >
+      volume
+      -mserver=master:9333
+      -ip=volume2
+      -ip.bind=0.0.0.0
+      -port=8081
+      -dir=/data2
+      -dataCenter=dc1
+      -rack=rack2
+    volumes:
+      - ./volume-data2:/data2
+    ports:
+      - "8081:8081"
+    depends_on:
+      master:
+        condition: service_healthy
+    networks:
+      - seaweedfs-net
+  filer:
+    image: chrislusf/seaweedfs
+    container_name: weed-filer
+    command: >
+      filer
+      -master=master:9333
+    ports:
+      - "8888:8888"
+    depends_on:
+      - master
+      - volume1
+      - volume2
+    networks:
+      - seaweedfs-net
+  s3:
+    image: chrislusf/seaweedfs
+    container_name: weed-s3
+    command: >
+      s3
+      -filer=filer:8888
+      -ip.bind=0.0.0.0
+      -port=8333
+      -config=/etc/seaweedfs/s3.json
+    ports:
+      - "8333:8333"
+    volumes:
+      - ./s3.json:/etc/seaweedfs/s3.json:ro
+    depends_on:
+      - master
+      - filer
+    networks:
+      - seaweedfs-net
+networks:
+  seaweedfs-net:
+    driver: bridge</pre>
+
+    <h3>3.4 Secondary Server docker-compose.yml</h3>
+    <pre>version: '3.8'
+services:
+  volume1:
+    image: chrislusf/seaweedfs
+    container_name: weed-volume-local1
+    user: "1017:1017"
+    command: >
+      volume
+      -mserver=27.147.159.197:9333
+      -ip=27.147.159.196
+      -ip.bind=0.0.0.0
+      -port=8080
+      -port.grpc=18080
+      -dir=/data1
+      -dataCenter=dc2
+      -rack=rack1
+    volumes:
+      - ./volume-data1:/data1
+    ports:
+      - "8080:8080"
+      - "18080:18080"
+  volume2:
+    image: chrislusf/seaweedfs
+    container_name: weed-volume-local2
+    user: "1017:1017"
+    command: >
+      volume
+      -mserver=27.147.159.197:9333
+      -ip=27.147.159.196
+      -ip.bind=0.0.0.0
+      -port=8081
+      -port.grpc=18081
+      -dir=/data2
+      -dataCenter=dc2
+      -rack=rack2
+    volumes:
+      - ./volume-data2:/data2
+    ports:
+      - "8081:8081"
+      - "18081:18081"</pre>
+
+    <h3>3.5 S3 Configuration</h3>
+    <pre>{
+  "identities": [
+    {
+      "name": "admin",
+      "credentials": [
+        {
+          "accessKey": "admin",
+          "secretKey": "admin123"
+        }
+      ],
+      "actions": [
+        "Admin",
+        "Read",
+        "Write",
+        "List",
+        "Tagging"
+      ]
+    }
+  ]
+}</pre>
+
+    <h3>3.6 Startup Procedure</h3>
+    <p>PRIMARY SERVER (27.147.159.197):<br>
+    1. <code>mkdir -p volume-data1 volume-data2</code><br>
+    2. <code>docker-compose up -d</code><br>
+    3. <code>curl http://127.0.0.1:9333/cluster/status</code> → Should return {"IsLeader": true}<br>
+    4. <code>curl http://127.0.0.1:9333/vol/status</code> → Should list volume1, volume2</p>
+
+    <p>SECONDARY SERVER (27.147.159.196):<br>
+    1. <code>mkdir -p volume-data1 volume-data2</code><br>
+    2. <code>docker-compose -f docker-compose-secondary.yml up -d</code><br>
+    3. <code>docker logs weed-volume-local1</code> → Should see "Heartbeat to 27.147.159.197:9333"</p>
+
+    <p>VERIFICATION:<br>
+    - Check Master UI: http://27.147.159.197:9333<br>
+    - All 4 volumes should appear in cluster status<br>
+    - dc1 volumes on primary, dc2 volumes on secondary</p>
+
+    <!-- SECTION 4 -->
+    <h2 id="section4" class="section-title">Section 4: Understanding Replication Topology</h2>
+    
+    <h3>4.1 Replication Strategy Format: XYZ</h3>
+    <p>SeaweedFS uses a 3-digit replication code:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Digit</th>
+                <th>Level</th>
+                <th>Meaning</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>X</strong></td>
+                <td>Datacenter</td>
+                <td>Extra copies in other datacenters</td>
+            </tr>
+            <tr>
+                <td><strong>Y</strong></td>
+                <td>Rack</td>
+                <td>Extra copies in different racks (same DC)</td>
+            </tr>
+            <tr>
+                <td><strong>Z</strong></td>
+                <td>Server</td>
+                <td>Extra copies on different servers (same rack)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>4.2 Your Configuration: 010</h3>
+    <p>0 = No extra datacenter copies<br>
+    1 = One extra copy in different rack (within same DC)<br>
+    0 = No extra server copies<br>
+    This means: Each file gets 2 copies - one in rack1 and one in rack2 within dc1.</p>
+
+    <h3>4.3 How Replication Works</h3>
+    <p>WHEN YOU UPLOAD "document.pdf" (2.5MB):<br>
+    1. Filer asks Master: "Where should I store this?"<br>
+    2. Master evaluates with 010 policy:<br>
+    &nbsp;&nbsp;&nbsp;- Available: Volume1 (dc1, rack1), Volume2 (dc1, rack2)<br>
+    &nbsp;&nbsp;&nbsp;- Chooses: Primary → Volume1, Replica → Volume2<br>
+    3. Filer writes:<br>
+    &nbsp;&nbsp;&nbsp;- 2.5MB → Volume1 (rack1)<br>
+    &nbsp;&nbsp;&nbsp;- 2.5MB → Volume2 (rack2)<br>
+    4. If Volume1 fails:<br>
+    &nbsp;&nbsp;&nbsp;- Data survives on Volume2<br>
+    &nbsp;&nbsp;&nbsp;- No data loss<br>
+    &nbsp;&nbsp;&nbsp;- New uploads skip Volume1<br>
+    This ensures file survival even if one volume fails.</p>
+
+    <h3>4.4 Alternative Strategies</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Strategy</th>
+                <th>Use Case</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>000</strong></td>
+                <td>Development/Testing only</td>
+                <td>Single copy - high risk</td>
+            </tr>
+            <tr>
+                <td><strong>001</strong></td>
+                <td>Very high availability</td>
+                <td>Same server, high cost</td>
+            </tr>
+            <tr>
+                <td><strong>010</strong></td>
+                <td>Recommended (our setup)</td>
+                <td>Balanced redundancy</td>
+            </tr>
+            <tr>
+                <td><strong>110</strong></td>
+                <td>Multi-datacenter</td>
+                <td>Extra protection</td>
+            </tr>
+            <tr>
+                <td><strong>200</strong></td>
+                <td>Disaster recovery</td>
+                <td>Expensive</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- SECTION 5 -->
+    <h2 id="section5" class="section-title">Section 5: ASP.NET Integration and Implementation</h2>
+    
+    <h3>5.1 Required Packages</h3>
+    <p>Install via NuGet:</p>
+    <pre>dotnet add package AWSSDK.S3
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL</pre>
+
+    <h3>5.2 Configuration (appsettings.json)</h3>
+    <pre>{
+  "SeaweedFS": {
+    "FilerUrl": "http://27.147.159.197:8888",
+    "S3Endpoint": "http://27.147.159.197:8333",
+    "S3AccessKey": "admin",
+    "S3SecretKey": "admin123",
+    "S3BucketName": "images"
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Port=5432;Database=SeaweedFS;User Id=postgres;Password=yourpassword;"
+  }
+}</pre>
+
+    <h3>5.3 Setup in Program.cs</h3>
+    <pre>var builder = WebApplicationBuilder.CreateBuilder(args);
+
+// Configure S3 Client
+var seaweedConfig = builder.Configuration.GetSection("SeaweedFS");
+var s3Client = new AmazonS3Client(
+    new BasicAWSCredentials(
+        seaweedConfig["S3AccessKey"],
+        seaweedConfig["S3SecretKey"]
+    ),
+    new AmazonS3Config
+    {
+        ServiceURL = seaweedConfig["S3Endpoint"],
+        ForcePathStyle = true
+    });
+builder.Services.AddSingleton&lt;IAmazonS3&gt;(s3Client);
+
+// Configure Database
+builder.Services.AddDbContext&lt;ApplicationDbContext&gt;(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddControllers();
+builder.Build().Run();</pre>
+
+    <h3>5.4 File Upload Controller</h3>
+    <pre>[HttpPost("upload")]
+public async Task&lt;IActionResult&gt; Upload(IFormFile file)
+{
+    var filerUrl = _config["SeaweedFS:FilerUrl"];
+    using var httpClient = new HttpClient();
+    using var content = new MultipartFormDataContent();
+    using var fileStream = file.OpenReadStream();
+    
+    content.Add(new StreamContent(fileStream), "file", file.FileName);
+    
+    var response = await httpClient.PostAsync($"{filerUrl}/upload", content);
+    var responseContent = await response.Content.ReadAsStringAsync();
+    var uploadResult = JsonConvert.DeserializeObject&lt;dynamic&gt;(responseContent);
+    
+    var fileMetadata = new FileMetadata
+    {
+        FileName = file.FileName,
+        FileSize = file.Length,
+        FileType = file.ContentType,
+        FID = uploadResult.fid,
+        UploadedAt = DateTime.UtcNow
+    };
+    
+    _context.FileMetadatas.Add(fileMetadata);
+    await _context.SaveChangesAsync();
+    
+    return Ok(new { fileId = uploadResult.fid });
+}</pre>
+
+    <h3>5.5 File Download Controller</h3>
+    <pre>[HttpGet("download/{fileId}")]
+public async Task&lt;IActionResult&gt; Download(string fileId)
+{
+    var fileMetadata = await _context.FileMetadatas
+        .FirstOrDefaultAsync(f => f.FID == fileId);
+        
+    if (fileMetadata == null)
+        return NotFound();
+        
+    var filerUrl = _config["SeaweedFS:FilerUrl"];
+    using var httpClient = new HttpClient();
+    var response = await httpClient.GetAsync($"{filerUrl}/{fileId}");
+    var fileContent = await response.Content.ReadAsByteArrayAsync();
+    
+    return File(fileContent, fileMetadata.FileType, fileMetadata.FileName);
+}</pre>
+
+    <!-- SECTION 6 -->
+    <h2 id="section6" class="section-title">Section 6: File Upload/Download Workflow and Processes</h2>
+    
+    <h3>6.1 Upload Process</h3>
+    <ol>
+        <li>User selects file in ASP.NET application</li>
+        <li>Application validates file (size, type, extension)</li>
+        <li>Application calls Filer: POST http://27.147.159.197:8888/upload</li>
+        <li>Filer receives and asks Master: "Where to store?"</li>
+        <li>Master checks replication (010) and selects volumes</li>
+        <li>Filer writes to Volume1 (rack1) and Volume2 (rack2)</li>
+        <li>Volumes acknowledge successfully</li>
+        <li>Master records file metadata</li>
+        <li>Filer returns File ID to application</li>
+        <li>Application saves metadata to database</li>
+        <li>Application confirms to user: "Upload complete"</li>
+    </ol>
+
+    <h3>6.2 Download Process</h3>
+    <ol>
+        <li>User requests file with File ID</li>
+        <li>Application queries database to find file</li>
+        <li>Application calls Filer: GET http://27.147.159.197:8888/{fileId}</li>
+        <li>Filer asks Master: "Where is this file?"</li>
+        <li>Master returns: Volume1 or Volume2 location</li>
+        <li>Filer fetches from primary Volume1 (or Volume2 if primary down)</li>
+        <li>Volume streams file to Filer</li>
+        <li>Filer streams to application</li>
+        <li>Application streams to user browser</li>
+        <li>Browser downloads file with original filename</li>
+    </ol>
+
+    <h3>6.3 Data Reliability</h3>
+    <p>With 010 replication:</p>
+    <ul>
+        <li><strong>Single volume failure:</strong> Data survives on replica in different rack</li>
+        <li><strong>Entire rack failure:</strong> Data lost if using 010 (no other backup)</li>
+        <li><strong>Add 3rd volume in dc2:</strong> Increases protection (consider upgrading to 100 or 110)</li>
+        <li><strong>Backup strategy:</strong> Regular backups to external storage recommended</li>
+    </ul>
+
+    <!-- SECTION 7 -->
+    <h2 id="section7" class="section-title">Section 7: Advanced Configuration and Customization</h2>
+    
+    <h3>7.1 Volume Size Configuration</h3>
+    <p>Default volume size is 30GB. To change:</p>
+    <p>Add to master command in docker-compose.yml:</p>
+    <pre>-volumeSizeLimitMB=102400    # 100GB per volume
+-volumeSizeLimitMB=51200     # 50GB per volume</pre>
+
+    <h3>7.2 TTL (Time To Live)</h3>
+    <p>Automatically delete files after specified time:</p>
+    <pre>POST /upload?ttl=3h   # Delete after 3 hours
+POST /upload?ttl=7d   # Delete after 7 days
+POST /upload?ttl=30m  # Delete after 30 minutes</pre>
+    <p>Useful for: Temporary uploads, caching, GDPR compliance</p>
+
+    <h3>7.3 Collections/Buckets</h3>
+    <p>Organize files into collections:</p>
+    <pre>POST /dir/make?collection=images
+POST /upload?collection=images
+GET /images/        # List collection</pre>
+
+    <!-- SECTION 8 -->
+    <h2 id="section8" class="section-title">Section 8: Troubleshooting, Debugging, and Monitoring</h2>
+    
+    <h3>8.1 Common Problems and Solutions</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Problem</th>
+                <th>Cause</th>
+                <th>Solution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Volumes not registering</td>
+                <td>Network/port blocked</td>
+                <td>Check firewall for gRPC ports 18080, 18081</td>
+            </tr>
+            <tr>
+                <td>Upload fails</td>
+                <td>Volumes full or Filer down</td>
+                <td>Check: curl :9333/vol/status, docker logs</td>
+            </tr>
+            <tr>
+                <td>Slow uploads</td>
+                <td>Network bandwidth</td>
+                <td>Check network speed between servers</td>
+            </tr>
+            <tr>
+                <td>Filer returns 500</td>
+                <td>Master unreachable</td>
+                <td>Verify master running: docker logs weed-master</td>
+            </tr>
+            <tr>
+                <td>File not found</td>
+                <td>File ID wrong or deleted</td>
+                <td>Check database for file metadata</td>
+            </tr>
+            <tr>
+                <td>Disk full error</td>
+                <td>Volume at capacity</td>
+                <td>Add new volumes or increase size</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>8.2 Checking Logs</h3>
+    <pre># Master logs
+docker logs weed-master -f
+# Volume logs
+docker logs weed-volume1 -f
+# All services
+docker-compose logs -f
+# Save to file
+docker logs weed-master > master.log</pre>
+
+    <h3>8.3 Health Checks</h3>
+    <pre># Master status
+curl http://27.147.159.197:9333/cluster/status
+# Volume status  
+curl http://127.0.0.1:8080/status
+# All volumes across cluster
+curl http://27.147.159.197:9333/vol/status
+# Filer availability
+curl http://127.0.0.1:8888/
+# S3 service health
+curl http://27.147.159.197:8333/health
+# Test upload
+curl -X POST -F "file=@test.txt" http://127.0.0.1:8888/upload</pre>
+
+    <!-- SECTION 9 -->
+    <h2 id="section9" class="section-title">Section 9: Performance Optimization and Scaling</h2>
+    
+    <h3>9.1 Performance Tuning</h3>
+    <ul>
+        <li>Monitor disk I/O - use iostat to check volume performance</li>
+        <li>Monitor network bandwidth - ensure sufficient capacity between servers</li>
+        <li>Implement connection pooling in ASP.NET HTTP clients</li>
+        <li>Use compression for large files when appropriate</li>
+        <li>Batch small file uploads together</li>
+        <li>Implement caching layer with CDN for frequently accessed files</li>
+        <li>Monitor Master Server CPU usage - should remain low</li>
+    </ul>
+
+    <h3>9.2 Scaling Strategies</h3>
+    <ul>
+        <li><strong>Vertical:</strong> Increase volume size limits or hardware resources</li>
+        <li><strong>Horizontal:</strong> Add new volume servers with proper datacenter/rack tagging</li>
+        <li><strong>Multi-region:</strong> Add entirely new datacenters for geographic distribution</li>
+        <li><strong>Load balancing:</strong> Run multiple Filers behind a load balancer</li>
+        <li><strong>Monitoring:</strong> Set up Prometheus/Grafana for metrics collection</li>
+    </ul>
+
+    <h3>9.3 When to Add Storage</h3>
+    <p>Add new volumes when:</p>
+    <ul>
+        <li>Total usage reaches 80% of capacity</li>
+        <li>Upload operations become slow</li>
+        <li>Master Server begins showing disk pressure</li>
+    </ul>
+
+    <!-- SECTION 10 -->
+    <h2 id="section10" class="section-title">Section 10: Best Practices and Frequently Asked Questions</h2>
+    
+    <h3>10.1 Best Practices</h3>
+    <ul>
+        <li>Always use replication - Never use 000 in production</li>
+        <li>Monitor actively - Set alerts for disk usage, errors, response times</li>
+        <li>Plan capacity - Upgrade before reaching critical limits</li>
+        <li>Regular backups - Test restore procedures quarterly</li>
+        <li>Load balance Filers - Avoid single point of failure</li>
+        <li>Cleanup old files - Use TTL for temporary data</li>
+        <li>Version control configs - Track docker-compose.yml changes</li>
+        <li>Secure credentials - Use secrets manager for S3 keys</li>
+        <li>Test failover - Practice disaster recovery procedures</li>
+    </ul>
+
+    <h3>10.2 Backup and Disaster Recovery</h3>
+    <p><strong>Backup Frequency:</strong> Daily for volumes, weekly for full backup<br>
+    <strong>What to backup:</strong> Volume data (/data1, /data2), database metadata<br>
+    <strong>Where:</strong> External storage (S3, cloud, external disk)<br>
+    <strong>Recovery:</strong> Restore volumes, restart services, resync metadata</p>
+
+    <h3>10.3 Security Considerations</h3>
+    <p><strong>Network:</strong> Keep SeaweedFS on internal network, use reverse proxy externally<br>
+    <strong>HTTPS:</strong> Use nginx with SSL/TLS in production<br>
+    <strong>Credentials:</strong> Store S3 keys in secrets manager, never in code<br>
+    <strong>Firewall:</strong> Allow only necessary ports, restrict by source IP<br>
+    <strong>Authentication:</strong> Implement at application layer, not SeaweedFS<br>
+    <strong>Encryption:</strong> Use HTTPS for transport security</p>
+
+    <h3>10.4 FAQ</h3>
+    <p><strong>How long are files stored?</strong><br> Permanently until deleted or TTL expires</p>
+    <p><strong>Can I use multiple Filers?</strong><br> Yes, put behind load balancer</p>
+    <p><strong>Max file size?</strong><br> Limited only by disk space, no hard limit</p>
+    <p><strong>Is S3 fully compatible?</strong><br> Most features work, some advanced features not supported</p>
+    <p><strong>Can I mix volumes of different sizes?</strong><br> Not recommended, keep consistent</p>
+    <p><strong>What if Master fails?</strong><br> Cluster read-only, optional failover with backup master</p>
+    <p><strong>Does SeaweedFS encrypt data?</strong><br> No, use HTTPS for transport, disk encryption for at-rest</p>
+    <p><strong>How do I migrate data?</strong><br> Copy files to new volume, or use S3 tools for bulk operations</p>
+
+    <div class="doc-footer">
+        <h3>Document Information</h3>
+        <p><strong>Version:</strong> 2.0<br>
+        <strong>Created:</strong> June 11, 2026<br>
+        <strong>Status:</strong> Team Documentation<br>
+        <strong>Primary Server:</strong> 27.147.159.197<br>
+        <strong>Secondary Server:</strong> 27.147.159.196<br>
+        For questions, contact the Development Team.</p>
+    </div>
+</div>
+
+</body>
+</html>
