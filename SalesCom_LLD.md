@@ -66,7 +66,6 @@ Banglalink — Sales Commission Automation Platform
 - **11 Asynchronous Services & Events** — RabbitMQ topology, Python services, Hangfire workers
 - **12 Cross-cutting Concerns** — audit, error envelope, pagination, retention
 - **13 Module & Service Architecture** — .NET layering, workers, FE module map
-- **14 Getting Started / Dev Setup** — repo layout, wiring, build order
 - **Appendix A** — IR reference (full self-contained IR contract)
 
 <!-- PAGE BREAK -->
@@ -740,7 +739,7 @@ Res `200`: `{ "permissions": "ENC:9c0a4f...e21b" }`. `401` · `403` (no rights).
 
 SalesCom uses **fine-grained, permission-based access**: every user action maps to one **permission** (a numeric code), and **both the frontend and the backend check the specific permission code** before allowing the action. SalesCom does **not** authorize by role name — the role is only a convenient bundle of permissions.
 
-**Permission catalog** (each action = one code; seeded in §14.4, codes illustrative):
+**Permission catalog** (each action = one code; codes illustrative):
 
 | Code | Permission | Guards |
 |---|---|---|
@@ -1860,77 +1859,6 @@ salescom-web/
 
 ---
 
-# 14 Getting Started / Dev Setup
-
-## 14.1 Repository Layout
-
-Three deployables + shared contracts (polyrepo, or one mono-repo with these folders):
-
-```
-salescom/
-├─ salescom-web/            # Next.js frontend (13.3)
-├─ salescom-api/            # .NET: SalesCom.Api / .Application / .Domain / .Infrastructure + SalesCom.sln
-├─ salescom-calc/           # Python calc engine
-│  ├─ generator/            # IR → SQL (SQLGlot) → section_wise_report_sqls
-│  ├─ executor/             # runs run_stages, temp tables → final_commissions handoff
-│  └─ common/               # IR models, allowlist validator, SQLAlchemy session
-├─ contracts/               # shared source of truth
-│  ├─ ir_schema.json        # JSON Schema for report_setups.definition
-│  ├─ openapi.yaml          # /api/v1 contract (DTOs, error envelope)
-│  ├─ events/               # RabbitMQ message schemas
-│  └─ ddl/                  # canonical salescomdbtst DDL (3) + seed scripts
-├─ infra/docker-compose.yml # local: postgres, rabbitmq, seaweedfs, api, web, calc
-└─ docs/                    # this LLD, IR_Schema, Commission_Logic_Catalog, SDD
-```
-
-> **Everything runs in Docker except the production DB** (bare-metal Percona PostgreSQL 18). Locally Postgres runs in the compose stack.
-
-## 14.2 Local Wiring
-
-Bring the stack up with `infra/docker-compose.yml`:
-
-1. **Postgres** first; an init job creates schema `salescomdbtst`, applies `contracts/ddl/` (schema + seed), and creates two roles: `salescom_app` (full DML on the 21 tables) and **`salescom_exec`** (least-privilege: `SELECT` on source/upload tables, `CREATE/DROP` only in `run_temp`, **no write** on the money tables — enforces D2).
-2. **RabbitMQ**; queues declared on first connect: `q.sql-generate`, `q.run.high`, `q.run.mid`, `q.run.low`, `q.ev-disburse`, `q.run-completed`, `q.approval-completed`, and each `q.<name>.dlq`. *(No POS or notify queue — POS is Airflow, notifications are the Hangfire outbox.)*
-3. **SeaweedFS**; buckets `salescom-uploads`, `salescom-stageout`.
-4. **salescom-api** connects to Postgres (both roles), RabbitMQ, SeaweedFS; runs EF Core migrations on startup in dev; starts the Hangfire server (Scheduler, DisbursementWorker, Notification drain, StaleRunSweeper).
-5. **salescom-calc** starts two consumers:
-   - *Generator* binds `q.sql-generate` ← `report.saved`: compile IR → SQL → `section_wise_report_sqls`.
-   - *Executor* binds `q.run.high/mid/low` ← `run.requested`: snapshot → `run_stages`, allowlist re-parse, execute in `run_temp`, record row counts, publish `run.completed` (the API does the trusted-path `final_commissions` write + post-run approval trigger).
-6. **salescom-web** points at the API base URL.
-
-**Message contracts** (`contracts/events/`):
-
-| Event | Queue(s) | Payload (minimal) | Producer → Consumer |
-|---|---|---|---|
-| `report.saved` | `q.sql-generate` | `{ reportSetupId, irVersion }` | Reports API → SQL Generator |
-| `run.requested` | `q.run.high` / `.mid` / `.low` | `{ runId, reportSetupId, runType }` | Runs API / Scheduler → Executor |
-| `run.completed` | `q.run-completed` | `{ runId, status, lastStageTable, rowCount }` | Executor → Runs API |
-| `approval.completed` | `q.approval-completed` | `{ reportSetupId, reportRunId, phase }` | Approval API → DisbursementWorker |
-| `ev.disburse` | `q.ev-disburse` | `{ runId }` | DisbursementWorker → EV Worker |
-
-The **single-run model** = the Executor processes one `run.requested` at a time (advisory lock 11.7), draining high before mid before low.
-
-## 14.3 Recommended Build Order
-
-Construction sequence (the architecture supports the whole system now; this is build order, not a scope cut):
-
-| # | Module | Done when |
-|---|---|---|
-| **1** | **Auth & session** — Central Login SSO+OTP → JWT, `/auth/me` + `/auth/permissions`, hourly Airflow user-sync (`users`/`user_rights`), `login_log`. | A user signs in, gets a JWT, `/auth/permissions` returns their permission codes; attempts land in `login_log`. |
-| **2** | **Seed / lookup** — `channels`, default approval flow/levels/users, the permission catalog (`rights_code` codes). | All FK targets exist; seed idempotent. |
-| **3** | **Data Source management** — never delete; can't deactivate if in use. | Admin registers/activates a `data_sources` row; a business user lists only active ones. |
-| **4** | **Supporting upload** — file → SeaweedFS → `report_supporting_uploads` → ingested DB table. | Upload produces a real `salescom_upload` table the wizard can join. |
-| **5** | **Wizard / IR** — validate IR against `ir_schema.json`; Final Save sets `is_setup_complete=true`, publishes `report.saved`. | A complete IR is saved + validated; `report.saved` published. |
-| **6** | **SQL Generator (Python)** — `report.saved` → IR → SQL → `section_wise_report_sqls` (Phase-1 ops first). | A worked IR compiles to correct per-stage SQL. |
-| **7** | **Run Executor (Python)** — snapshot → `run_stages`, allowlist re-parse, temp tables, guardrails, demo cap, `run.completed`; trusted path writes `final_commissions`. Pre-run checks Final/Scheduled only; Demo skips. | A Final run produces correct per-recipient `final_commissions`; Demo previews + never disburses. |
-| **8** | **Approval** — configurable flow/levels/users; one instance per report; sequential ascending; reject needs a comment; maker≠checker; `overall_status` 0→1→2→3→4. | A report walks to Post Approved (4) or back to Draft (0) with a full decision trail. |
-| **9** | **Disbursement** — only after full approval (`overall_status=4`); EV (auto + SMS) or POS (Airflow CSV dump), mutually exclusive, idempotent. | An approved run pays out via the chosen channel exactly once. |
-| **10** | **Dashboard & Notification** — reads all prior tables; SMS + email via `email_notifications` / `sms_notifications`. | Widgets render real data; notifications logged + delivered. |
-
-**Cross-cutting** (audit log, error envelope, pagination, RBAC middleware) is built **alongside step 1** and used by every later module.
-
----
-
 # Appendix A — IR Reference
 
 > This appendix is the **complete, self-contained IR contract** for `report_setups.definition` (JSONB) — shape, the operation set, the multi-KPI join rule, guardrails, and a worked example. No separate file is needed.
@@ -2087,14 +2015,6 @@ Two achievement blocks (Recharge %, GA %) both summarized to **1 row per RSO_COD
 }
 ```
 **Why it's safe:** ACH1 and ACH2 both summarize to grain `RSO_CODE`; INC1 joins them on `RSO_CODE` (block-to-block, 1:1) → no fan-out. G1 checks `RSO_CODE` is unique in both before the join.
-
-## A.8 Phase map (IR shape is final now)
-
-- **Phase 1** — `filter`, `combine`, `summarize`, `calculate` (formula/ifcase/map), `modify`, block-to-block join, `final_mapping`, guardrails G1–G4 (single & multi-KPI).
-- **Phase 2** — weighted multi-KPI pools, gate-zeroes-component, VLR penalty case, advanced external-config slabs.
-- **Phase 3** — `rank` (window functions), historical/cohort source reads, period-versioned rate lookup, cumulative deduction.
-
-The data model and IR structure **do not change** between phases — later phases only *add* operation types and source kinds.
 
 ---
 
