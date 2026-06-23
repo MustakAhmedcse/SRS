@@ -33,7 +33,7 @@ Banglalink — Sales Commission Automation Platform
 <w:p><w:pPr><w:spacing w:before="120" w:after="160"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:b/><w:color w:val="1F4E79"/><w:sz w:val="34"/></w:rPr><w:t xml:space="preserve">Document History</w:t></w:r></w:p>
 ```
 | SL | Date | Version | Description | Created / Modified by | Reviewed by |
-|----|------|---------|-------------|----------------------|-------------|
+|---|----------|-------|------------------|-------------|-----------|
 | 01 | 17-Jun-2026 | 1.0 | Initial draft | | |
 | 02 | 22-Jun-2026 | 2.0 | Final — grounded in the real `salescomdbtst` schema; consistency pass folded in | | |
 

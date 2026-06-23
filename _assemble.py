@@ -55,7 +55,7 @@ cover = (
 
 history = (
     "| SL | Date | Version | Description | Created / Modified by | Reviewed by |\n"
-    "|----|------|---------|-------------|----------------------|-------------|\n"
+    "|---|----------|-------|------------------|-------------|-----------|\n"
     "| 01 | 17-Jun-2026 | 1.0 | Initial draft | | |\n"
     "| 02 | 22-Jun-2026 | 2.0 | Final — grounded in the real `salescomdbtst` schema; consistency pass folded in | | |\n\n"
 )
